@@ -3,3 +3,8 @@
 ################################################################################
 
 /.vs
+/SchedulerJobs/.vs/SchedulerJobs
+/SchedulerJobs/SchedulerJobs.Common/bin/Debug
+/SchedulerJobs/SchedulerJobs.Common/obj
+/SchedulerJobs/SchedulerJobs.Services/bin/Debug
+/SchedulerJobs/SchedulerJobs.Services/obj
