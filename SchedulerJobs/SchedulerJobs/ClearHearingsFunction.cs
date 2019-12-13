@@ -6,14 +6,18 @@ using Willezone.Azure.WebJobs.Extensions.DependencyInjection;
 
 namespace SchedulerJobs
 {
-    
     public static class ClearHearingsFunction
     {
+        /// <summary>
+        /// Function is cleaning video hearings
+        /// </summary>
+        /// <param name="myTimer">Set time to run every day at 9:30 AM</param>
+        /// <param name="log"></param>
+        /// <param name="bookingApiService"></param>
         [FunctionName("ClearHearingsFunction")]
-        public static void Run([TimerTrigger("0 */5 * * * *")]TimerInfo myTimer,
+        public static void Run([TimerTrigger("0 30 9 * * *")]TimerInfo myTimer,
          ILogger log,
-         [Inject]IBookingApiService bookingApiService
-            )
+         [Inject]IBookingApiService bookingApiService)
         {
             if (myTimer.IsPastDue)
             {
