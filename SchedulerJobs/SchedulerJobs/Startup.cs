@@ -43,9 +43,9 @@ namespace SchedulerJobs
             services.AddSingleton(hearingServicesConfiguration);
             services.AddScoped<IAzureTokenProvider, AzureTokenProvider>();
 
-            services.AddScoped<BookingServiceTokenHandler>();
+            services.AddScoped<VideoServiceTokenHandler>();
             services.AddLogging(builder => { builder.SetMinimumLevel(LogLevel.Debug); });
-            services.AddScoped<IBookingApiService, BookingApiService>();
+            services.AddScoped<IVideoApiService, VideoApiService>();
         }
 
         private static HearingServicesConfiguration BuildHearingServicesConfiguration(ConfigLoader configLoader)

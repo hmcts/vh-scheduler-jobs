@@ -6,7 +6,7 @@
         public string ClientSecret { get; set; }
         public string Authority { get; set; }
         public string TenantId { get; set; }
-        public string BookingApiResourceId { get; set; }
+        public string VideoApiResourceId { get; set; }
         public string ApplicationInsights { get; set; }
     }
 }

@@ -10,7 +10,7 @@ using SchedulerJobs;
 
 namespace SchedulerJobs.UnitTests
 {
-    public class BookingServiceTokenHandlerTests
+    public class VideoServiceTokenHandlerTests
     {
         [Test]
         public void Should_add_authorization_header()
@@ -18,14 +18,14 @@ namespace SchedulerJobs.UnitTests
             var memoryCache = new Mock<IMemoryCache>().Object;
             var tokenProviderMock = new Mock<IAzureTokenProvider>();
             var azureTokenProvider = tokenProviderMock.Object;
-            new BookingServiceTokenHandler(
+            new VideoServiceTokenHandler(
                 new AzureAdConfiguration
                 {
                     Authority = "auth",
                     ClientId = "id",
                     ClientSecret = "secret",
                     TenantId = "tenant",
-                    BookingApiResourceId = "resourceid"
+                    VideoApiResourceId = "resourceid"
                 }, memoryCache, azureTokenProvider);
 
             tokenProviderMock.Setup(x => x.GetAuthorisationResult(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()));

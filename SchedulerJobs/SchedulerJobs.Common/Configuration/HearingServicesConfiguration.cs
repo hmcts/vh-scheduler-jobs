@@ -2,7 +2,7 @@
 {
     public class HearingServicesConfiguration
     {
-        public string BookingApiUrl { get; set; } = "https://localhost";
-        public bool EnableBookingApiStub { get; set; }
+        public string VideoApiUrl { get; set; } = "https://localhost";
+        public bool EnableVideoApiStub { get; set; }
     }
 }
