@@ -44,39 +44,43 @@
           "dependencies": {
             "Microsoft.Extensions.Caching.Abstractions": {
               "target": "Package",
-              "version": "[3.1.0, )"
+              "version": "[2.2.0, )"
             },
             "Microsoft.Extensions.Caching.Memory": {
               "target": "Package",
-              "version": "[3.1.0, )"
+              "version": "[2.2.0, )"
             },
             "Microsoft.Extensions.Configuration": {
               "target": "Package",
-              "version": "[3.1.0, )"
+              "version": "[2.2.0, )"
             },
             "Microsoft.Extensions.Configuration.Abstractions": {
               "target": "Package",
-              "version": "[3.1.0, )"
+              "version": "[2.2.0, )"
             },
             "Microsoft.Extensions.Configuration.Binder": {
               "target": "Package",
-              "version": "[3.1.0, )"
+              "version": "[2.2.4, )"
             },
             "Microsoft.Extensions.Configuration.EnvironmentVariables": {
               "target": "Package",
-              "version": "[3.1.0, )"
+              "version": "[2.2.4, )"
             },
             "Microsoft.Extensions.Configuration.Json": {
               "target": "Package",
-              "version": "[3.1.0, )"
+              "version": "[2.2.0, )"
             },
             "Microsoft.Extensions.Configuration.UserSecrets": {
               "target": "Package",
-              "version": "[3.1.0, )"
+              "version": "[2.2.0, )"
+            },
+            "Microsoft.Extensions.Options": {
+              "target": "Package",
+              "version": "[2.2.0, )"
             },
             "Microsoft.IdentityModel.Clients.ActiveDirectory": {
               "target": "Package",
-              "version": "[5.2.4, )"
+              "version": "[3.19.8, )"
             },
             "Microsoft.NETCore.App": {
               "suppressParent": "All",
@@ -87,6 +91,10 @@
             "Newtonsoft.Json": {
               "target": "Package",
               "version": "[11.0.2, )"
+            },
+            "SonarAnalyzer.CSharp": {
+              "target": "Package",
+              "version": "[7.13.0.8313, )"
             }
           },
           "imports": [
@@ -179,7 +187,7 @@
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
-          "netcoreapp3.0"
+          "netcoreapp2.2"
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
@@ -187,7 +195,7 @@
           "https://hmctsreform.pkgs.visualstudio.com/_packaging/packages.shared.libraries/nuget/v3/index.json": {}
         },
         "frameworks": {
-          "netcoreapp3.0": {
+          "netcoreapp2.2": {
             "projectReferences": {
               "C:\\Users\\bvalk\\Documents\\GitHub\\vh-scheduler-jobs\\SchedulerJobs\\SchedulerJobs.Common\\SchedulerJobs.Common.csproj": {
                 "projectPath": "C:\\Users\\bvalk\\Documents\\GitHub\\vh-scheduler-jobs\\SchedulerJobs\\SchedulerJobs.Common\\SchedulerJobs.Common.csproj"
@@ -205,7 +213,7 @@
         }
       },
       "frameworks": {
-        "netcoreapp3.0": {
+        "netcoreapp2.2": {
           "dependencies": {
             "FluentAssertions": {
               "target": "Package",
@@ -214,6 +222,12 @@
             "Microsoft.NET.Test.Sdk": {
               "target": "Package",
               "version": "[16.2.0, )"
+            },
+            "Microsoft.NETCore.App": {
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[2.2.0, )",
+              "autoReferenced": true
             },
             "Moq": {
               "target": "Package",
@@ -242,11 +256,6 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
-          "frameworkReferences": {
-            "Microsoft.NETCore.App": {
-              "privateAssets": "all"
-            }
-          },
           "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.0.100\\RuntimeIdentifierGraph.json"
         }
       }
@@ -296,31 +305,27 @@
       "frameworks": {
         "netcoreapp2.2": {
           "dependencies": {
-            "Microsoft.Azure.WebJobs.Extensions.ServiceBus": {
+            "Microsoft.ApplicationInsights.AspNetCore": {
               "target": "Package",
-              "version": "[4.0.0, )"
+              "version": "[2.12.0, )"
             },
             "Microsoft.Extensions.DependencyInjection": {
               "target": "Package",
-              "version": "[3.1.0, )"
+              "version": "[2.2.0, )"
             },
             "Microsoft.Extensions.Http": {
               "target": "Package",
-              "version": "[3.1.0, )"
+              "version": "[2.2.0, )"
             },
             "Microsoft.NET.Sdk.Functions": {
               "target": "Package",
-              "version": "[1.0.29, )"
+              "version": "[1.0.27, )"
             },
             "Microsoft.NETCore.App": {
               "suppressParent": "All",
               "target": "Package",
               "version": "[2.2.0, )",
               "autoReferenced": true
-            },
-            "Newtonsoft.Json": {
-              "target": "Package",
-              "version": "[11.0.2, )"
             },
             "Willezone.Azure.WebJobs.Extensions.DependencyInjection": {
               "target": "Package",

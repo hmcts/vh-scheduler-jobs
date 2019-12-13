@@ -4,7 +4,9 @@
 
 /.vs
 /SchedulerJobs/.vs/SchedulerJobs
-/SchedulerJobs/SchedulerJobs.Common/bin/Debug
+/SchedulerJobs/SchedulerJobs.Common/bin
 /SchedulerJobs/SchedulerJobs.Common/obj
-/SchedulerJobs/SchedulerJobs.Services/bin/Debug
+/SchedulerJobs/SchedulerJobs.Services/bin
 /SchedulerJobs/SchedulerJobs.Services/obj
+/SchedulerJobs/SchedulerJobs.UnitTests/bin
+/SchedulerJobs/SchedulerJobs.UnitTests/obj

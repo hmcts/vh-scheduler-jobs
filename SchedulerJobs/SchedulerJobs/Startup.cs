@@ -1,11 +1,14 @@
-﻿using Microsoft.Azure.WebJobs;
+﻿using Microsoft.ApplicationInsights.Extensibility;
+using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using SchedulerJobs;
 using SchedulerJobs.Common.Configuration;
 using SchedulerJobs.Common.Security;
+using SchedulerJobs.Service;
 using SchedulerJobs.Services;
 using Willezone.Azure.WebJobs.Extensions.DependencyInjection;
 
@@ -14,11 +17,17 @@ namespace SchedulerJobs
 {
     public class Startup : IWebJobsStartup
     {
-        public void Configure(IWebJobsBuilder builder) =>
+        public void Configure(IWebJobsBuilder builder)
+        {
+            builder.AddTimers();
             builder.AddDependencyInjection(ConfigureServices);
+        }
 
         public static void ConfigureServices(IServiceCollection services)
         {
+            services.AddApplicationInsightsTelemetry();
+            services.AddSingleton<ITelemetryInitializer>(new CloudRoleNameInitializer());
+
             services.AddMemoryCache();
             var configLoader = new ConfigLoader();
             // need to check if bind works for both tests and host
@@ -36,16 +45,7 @@ namespace SchedulerJobs
 
             services.AddScoped<BookingServiceTokenHandler>();
             services.AddLogging(builder => { builder.SetMinimumLevel(LogLevel.Debug); });
-
-            if (hearingServicesConfiguration.EnableBookingApiStub)
-            {
-                services.AddScoped<IBookingApiService, BookingApiServiceFake>();
-            }
-            else
-            {
-                services.AddHttpClient<IBookingApiService, BookingApiService>()
-                    .AddHttpMessageHandler<BookingServiceTokenHandler>();
-            }
+            services.AddScoped<IBookingApiService, BookingApiService>();
         }
 
         private static HearingServicesConfiguration BuildHearingServicesConfiguration(ConfigLoader configLoader)
