@@ -7,15 +7,15 @@ using SchedulerJobs.Common.Security;
 
 namespace SchedulerJobs
 {
-    public class BookingServiceTokenHandler : DelegatingHandler
+    public class VideoServiceTokenHandler : DelegatingHandler
     {
         private readonly IMemoryCache _memoryCache;
         private readonly IAzureTokenProvider _azureTokenProvider;
         private readonly AzureAdConfiguration _azureAdConfiguration;
 
-        private const string TokenCacheKey = "BookingApiServiceToken";
+        private const string TokenCacheKey = "VideoApiServiceToken";
 
-        public BookingServiceTokenHandler(AzureAdConfiguration azureAdConfiguration,
+        public VideoServiceTokenHandler(AzureAdConfiguration azureAdConfiguration,
             IMemoryCache memoryCache,
             IAzureTokenProvider azureTokenProvider)
         {
@@ -31,7 +31,7 @@ namespace SchedulerJobs
             if (string.IsNullOrEmpty(token))
             {
                 var authenticationResult = _azureTokenProvider.GetAuthorisationResult(_azureAdConfiguration.ClientId,
-                    _azureAdConfiguration.ClientSecret, _azureAdConfiguration.BookingApiResourceId);
+                    _azureAdConfiguration.ClientSecret, _azureAdConfiguration.VideoApiResourceId);
                 token = authenticationResult.AccessToken;
                 var tokenExpireDateTime = authenticationResult.ExpiresOn.DateTime.AddMinutes(-1);
                 _memoryCache.Set(TokenCacheKey, token, tokenExpireDateTime);

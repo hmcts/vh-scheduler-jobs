@@ -1,10 +1,10 @@
 ﻿namespace SchedulerJobs.Services
 {
-    public interface IBookingApiService
+    public interface IVideoApiService
     {
         void ClearHearings();
     }
-    public class BookingApiService : IBookingApiService
+    public class VideoApiService : IVideoApiService
     {
         public void ClearHearings()
         {
