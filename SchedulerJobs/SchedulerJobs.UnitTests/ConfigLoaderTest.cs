@@ -1,6 +1,6 @@
 ﻿using FluentAssertions;
 using NUnit.Framework;
-using SchedulerJobs.Common.Configuration;
+using SchedulerJobs.Service;
 
 namespace SchedulerJobs.UnitTests
 {

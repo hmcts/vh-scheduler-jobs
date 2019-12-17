@@ -11,6 +11,7 @@ using SchedulerJobs.Common.Security;
 using SchedulerJobs.Service;
 using SchedulerJobs.Services;
 using Willezone.Azure.WebJobs.Extensions.DependencyInjection;
+using Microsoft.Extensions.Configuration.AzureAppConfiguration;
 
 [assembly: WebJobsStartup(typeof(Startup))]
 namespace SchedulerJobs
@@ -31,8 +32,10 @@ namespace SchedulerJobs
             services.AddMemoryCache();
             var configLoader = new ConfigLoader();
             // need to check if bind works for both tests and host
+
             var adConfiguration = configLoader.Configuration.GetSection("AzureAd")
                 .Get<AzureAdConfiguration>() ?? BuildAdConfiguration(configLoader);
+
 
             services.AddSingleton(adConfiguration);
 
