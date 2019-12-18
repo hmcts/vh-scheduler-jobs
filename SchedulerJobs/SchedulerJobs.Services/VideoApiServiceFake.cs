@@ -1,9 +1,27 @@
-﻿namespace SchedulerJobs.Services
+﻿using System;
+using System.Collections.Generic;
+using System.Net;
+using System.Threading.Tasks;
+using SchedulerJobs.Services.VideoApi.Contracts;
+
+namespace SchedulerJobs.Services
 {
     public class VideoApiServiceFake : IVideoApiService
     {
-        void IVideoApiService.ClearHearings()
+        public Task CloseConference(Guid conferenceId)
         {
+            return Task.FromResult(HttpStatusCode.OK);
+        }
+
+        public Task<List<ConferenceSummaryResponse>> GetOpenConferencesByScheduledDate(DateTime scheduledDate)
+        {
+            return Task.FromResult(new List<ConferenceSummaryResponse>
+            {
+                new ConferenceSummaryResponse
+                {
+                    Id = Guid.NewGuid()
+                }
+            });
         }
     }
 }

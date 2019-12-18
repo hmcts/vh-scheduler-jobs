@@ -20,23 +20,31 @@ namespace SchedulerJobs.Service
 
             Configuration = configRootBuilder.Build();
 
-            //AzureServiceTokenProvider azpv = new AzureServiceTokenProvider();
-            //keyVaultClient = new KeyVaultClient(
-            //        new KeyVaultClient.AuthenticationCallback(azpv.KeyVaultTokenCallback));
+            KeyVaultClient keyVaultClient = null;
 
-            KeyVaultClient keyVaultClient = new KeyVaultClient(async (authority, resource, scope) =>
-                {
-                    var adCredential = new ClientCredential(Configuration["KeyVault:ClientId"], Configuration["KeyVault:ClientSecret"]);
-                    var authenticationContext = new AuthenticationContext(authority, null);
-                    return (await authenticationContext.AcquireTokenAsync(resource, adCredential)).AccessToken;
-                });
-           
+            bool isDevelopment = Environment.GetEnvironmentVariable("Development", EnvironmentVariableTarget.Process) == null || bool.Parse(Environment.GetEnvironmentVariable("Development", EnvironmentVariableTarget.Process));
+
+            if (!isDevelopment)
+            {
+                AzureServiceTokenProvider azpv = new AzureServiceTokenProvider();
+                keyVaultClient = new KeyVaultClient(
+                        new KeyVaultClient.AuthenticationCallback(azpv.KeyVaultTokenCallback));
+            }
+            else
+            {
+                keyVaultClient = new KeyVaultClient(async (authority, resource, scope) =>
+                    {
+                        var adCredential = new ClientCredential(Configuration["KeyVault:ClientId"], Configuration["KeyVault:ClientSecret"]);
+                        var authenticationContext = new AuthenticationContext(authority, null);
+                        return (await authenticationContext.AcquireTokenAsync(resource, adCredential)).AccessToken;
+                    });
+            }
 
             configRootBuilder.AddAzureAppConfiguration(options =>
             {
 
                 options.Connect(Configuration["ConnectionStrings:AppConfig"])
-                      // .Select(KeyFilter.Any, Configuration["AppName"])
+                       // .Select(KeyFilter.Any, Configuration["AppName"])
                        .UseAzureKeyVault(keyVaultClient);
             });
 

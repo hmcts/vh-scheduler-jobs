@@ -1,5 +1,4 @@
-﻿using Microsoft.ApplicationInsights.Extensibility;
-using Microsoft.Azure.WebJobs;
+﻿using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -11,7 +10,6 @@ using SchedulerJobs.Common.Security;
 using SchedulerJobs.Service;
 using SchedulerJobs.Services;
 using Willezone.Azure.WebJobs.Extensions.DependencyInjection;
-using Microsoft.Extensions.Configuration.AzureAppConfiguration;
 
 [assembly: WebJobsStartup(typeof(Startup))]
 namespace SchedulerJobs
@@ -26,16 +24,12 @@ namespace SchedulerJobs
 
         public static void ConfigureServices(IServiceCollection services)
         {
-            services.AddApplicationInsightsTelemetry();
-            services.AddSingleton<ITelemetryInitializer>(new CloudRoleNameInitializer());
-
             services.AddMemoryCache();
             var configLoader = new ConfigLoader();
             // need to check if bind works for both tests and host
 
             var adConfiguration = configLoader.Configuration.GetSection("AzureAd")
                 .Get<AzureAdConfiguration>() ?? BuildAdConfiguration(configLoader);
-
 
             services.AddSingleton(adConfiguration);
 
@@ -47,8 +41,19 @@ namespace SchedulerJobs
             services.AddScoped<IAzureTokenProvider, AzureTokenProvider>();
 
             services.AddScoped<VideoServiceTokenHandler>();
-            services.AddLogging(builder => { builder.SetMinimumLevel(LogLevel.Debug); });
-            services.AddScoped<IVideoApiService, VideoApiService>();
+           services.AddLogging(builder => { builder.SetMinimumLevel(LogLevel.Debug); });
+
+            services.AddScoped<ICloseConferenceService, CloseConferenceService>();
+
+            if (hearingServicesConfiguration.EnableVideoApiStub)
+            {
+                services.AddScoped<IVideoApiService, VideoApiServiceFake>();
+            }
+            else
+            {
+                services.AddHttpClient<IVideoApiService, VideoApiService>()
+                    .AddHttpMessageHandler<VideoServiceTokenHandler>();
+            }
         }
 
         private static HearingServicesConfiguration BuildHearingServicesConfiguration(ConfigLoader configLoader)

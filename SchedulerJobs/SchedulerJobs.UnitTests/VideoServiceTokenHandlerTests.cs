@@ -25,8 +25,12 @@ namespace SchedulerJobs.UnitTests
                     ClientId = "id",
                     ClientSecret = "secret",
                     TenantId = "tenant",
+                   
+                }, memoryCache, azureTokenProvider,
+                new HearingServicesConfiguration
+                {
                     VideoApiResourceId = "resourceid"
-                }, memoryCache, azureTokenProvider);
+                });
 
             tokenProviderMock.Setup(x => x.GetAuthorisationResult(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()));
         }
