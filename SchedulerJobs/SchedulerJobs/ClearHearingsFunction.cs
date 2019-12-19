@@ -12,22 +12,22 @@ namespace SchedulerJobs
         /// <summary>
         /// Function is cleaning video hearings
         /// </summary>
-        /// <param name="myTimer">Set time to run every day at 9:30 AM</param>
+        /// <param name="myTimer">Set time to run every day at 5:30 AM</param>
         /// <param name="closeConferenceService"></param>
         [FunctionName("ClearHearingsFunction")]
-        //  public static void Run([TimerTrigger("0 30 9 * * *")]TimerInfo myTimer,
-        public static async Task Run([TimerTrigger("0 */5 * * * *")]TimerInfo myTimer,
+         public static async Task Run([TimerTrigger("0 30 5 * * *")]TimerInfo myTimer,
          ILogger log,
          [Inject]ICloseConferenceService closeConferenceService)
         {
-            if (myTimer.IsPastDue)
+            if (myTimer != null && myTimer.IsPastDue)
             {
                  log.LogInformation("Timer is running late");
             }
 
-            log.LogInformation($"Timer trigger function executed at: {DateTime.Now}");
+            var fromDate = DateTime.UtcNow;
+            log.LogTrace($"Timer trigger function executed at: {fromDate}");
 
-            await closeConferenceService.CloseConferencesAsync(DateTime.UtcNow).ConfigureAwait(false);
+            await closeConferenceService.CloseConferencesAsync(fromDate).ConfigureAwait(false);
         }
     }
 }

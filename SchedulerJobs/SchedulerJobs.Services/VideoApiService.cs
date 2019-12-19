@@ -33,7 +33,7 @@ namespace SchedulerJobs.Services
 
         public async Task CloseConference(Guid conferenceId)
         {
-            _log.LogInformation($"Close conference by Id {conferenceId}");
+            _log.LogTrace($"Close conference by Id {conferenceId}");
             var uriString = _apiUriFactory.ConferenceEndpoints.CloseConference(conferenceId);
             var response = await _httpClient.GetAsync(uriString).ConfigureAwait(false);
             response.EnsureSuccessStatusCode();
@@ -41,7 +41,7 @@ namespace SchedulerJobs.Services
 
         public async Task<List<ConferenceSummaryResponse>> GetOpenConferencesByScheduledDate(DateTime scheduledDate)
         {
-            _log.LogInformation($"Getting conference by scheduledDate {scheduledDate}");
+            _log.LogTrace($"Getting conference by scheduledDate {scheduledDate}");
             var uriString = _apiUriFactory.ConferenceEndpoints.GetOpenConferencesByScheduledDate(scheduledDate.ToString());
             var response = await _httpClient.GetAsync(uriString).ConfigureAwait(false);
             response.EnsureSuccessStatusCode();
