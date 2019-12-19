@@ -21,7 +21,7 @@ namespace SchedulerJobs
         {
             if (myTimer != null && myTimer.IsPastDue)
             {
-                 log.LogInformation("Timer is running late");
+                 log.LogTrace("Timer is running late");
             }
 
             var fromDate = DateTime.UtcNow;
