@@ -7,12 +7,20 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+		<PackageReference Include="coverlet.msbuild" Version="2.7.0">
+		  <PrivateAssets>all</PrivateAssets>
+		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
 		<PackageReference Include="FluentAssertions" Version="5.9.0" />
 		<PackageReference Include="Moq" Version="4.13.1" />
 		<PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
 		<PackageReference Include="nunit" Version="3.12.0" />
 		<PackageReference Include="NUnit3TestAdapter" Version="3.13.0" />
-		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.2.0" />
+		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.0.1" />
+		<PackageReference Include="dotnet-reportgenerator-cli" Version="4.1.4" />
+		<PackageReference Include="Microsoft.IdentityModel.Clients.ActiveDirectory" Version="3.19.8" />
+		<PackageReference Include="Microsoft.TestPlatform" Version="16.0.1" />
+		<PackageReference Include="NBuilder" Version="6.0.0" />
 	</ItemGroup>
 
 	<ItemGroup>
