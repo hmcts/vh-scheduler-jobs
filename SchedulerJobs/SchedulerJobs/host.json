@@ -1,12 +1,4 @@
 {
-    "version": "2.0",
-    "logging": {
-        "fileLoggingMode": "always",
-        "logLevel": {
-            "default": "Information",
-            "Host.Results": "Error",
-            "Function": "Error",
-            "Host.Aggregator": "Trace"
-        }
-    }
+    "version": "2.0"
+    
 }
