@@ -1,0 +1,37 @@
+# Set variables once
+variables:
+  solutionType: DotNetCore # angularDotNetCore, dotNetCore, angular
+  apiDirectory: 'SchedulerJobs/SchedulerJobs'
+  sonarCloudExtraProperties: |
+    sonar.cs.opencover.reportsPaths=$(Common.TestResultsDirectory)\Coverage\coverage.opencover.xml
+    sonar.coverage.exclusions=**/VideoApiService.cs, **/Startup.cs, **/Testing.Common/**, **/SchedulerJobs.Common/ApiHelper/**, **/SchedulerJobs.Common/Helper/Configuration/**, **/SchedulerJobs.Common/Helper/Security/**
+  coverletCoverageExclusions: '[*]SchedulerJobs.Common.*,[SchedulerJobs.Services]SchedulerJobs.Services.VideoApiService,[*]SchedulerJobs.UnitTests.*,[SchedulerJobs.Services]SchedulerJobs.Services.VideoApiServiceFake'
+
+
+# GitHub Repo that conatins build templates. Reference https://docs.microsoft.com/en-us/azure/devops/pipelines/process/templates?view=vsts#using-other-repositories
+resources:
+  repositories:
+  - repository: azureDevOpsTemplates
+    type: github
+    name: hmcts/azure-devops-templates
+    ref: refs/heads/master # ref name to use, defaults to 'refs/heads/master'
+    endpoint: 'GitHubDevOps'
+
+trigger:
+  branches:
+    include:
+    - master
+  tags:
+    include:
+    - v*
+pr:
+  - master
+
+jobs:
+  
+- template: jobs/angularDotNetCore.yml@azureDevOpsTemplates # Template reference
+  parameters:
+    sonarCloudExtraProperties: $(sonarCloudExtraProperties)
+    integrationTestsAppSettingsTransform: $(integrationTestsAppSettingsTransform)
+    coverletCoverageExclusions: $(coverletCoverageExclusions)
+    apiDirectory: $(apiDirectory)
