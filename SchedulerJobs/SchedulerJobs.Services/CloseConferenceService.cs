@@ -24,9 +24,11 @@ namespace SchedulerJobs.Services
 
             if (conferences != null && conferences.Any())
             {
-                conferences.ForEach(async s =>
+                conferences.ForEach(async s => {
 
-                    await _videoApiService.CloseConference(s.Id)
+                    await _videoApiService.CloseConference(s.Id);
+                    await _videoApiService.RemoveVirtualCourtRoom(s.HearingRefId);
+                    }
                 );
             }
         }

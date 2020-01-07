@@ -14,6 +14,8 @@ namespace SchedulerJobs.Services
         Task<List<ConferenceSummaryResponse>> GetOpenConferencesByScheduledDate(DateTime scheduledDate);
         
         Task CloseConference(Guid conferenceId);
+
+        Task RemoveVirtualCourtRoom(Guid hearingRefId);
     }
     public class VideoApiService : IVideoApiService
     {
@@ -48,5 +50,14 @@ namespace SchedulerJobs.Services
             var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
             return ApiRequestHelper.DeserialiseSnakeCaseJsonToResponse<List<ConferenceSummaryResponse>>(content);
         }
+
+        public async Task RemoveVirtualCourtRoom(Guid hearingRefId)
+        {
+            _log.LogTrace($"Remove virtual court room by Id {hearingRefId}");
+            var uriString = _apiUriFactory.VirtualCourtRoomEndpoints.RemoveVirtualCourtRoom(hearingRefId);
+            var response = await _httpClient.GetAsync(uriString).ConfigureAwait(false);
+            response.EnsureSuccessStatusCode();
+        }
+
     }
 }
