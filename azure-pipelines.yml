@@ -31,7 +31,6 @@ jobs:
   
 - template: jobs/angularDotNetCore.yml@azureDevOpsTemplates # Template reference
   parameters:
-    sonarCloudProjectKey: vh-scheduler-jobs
     sonarCloudExtraProperties: $(sonarCloudExtraProperties)
     integrationTestsAppSettingsTransform: $(integrationTestsAppSettingsTransform)
     coverletCoverageExclusions: $(coverletCoverageExclusions)
