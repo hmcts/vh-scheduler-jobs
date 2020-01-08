@@ -15,6 +15,7 @@ namespace SchedulerJobs.Services.VideoApi.Contracts
         public ConferenceState Status { get; set; }
         public List<ParticipantSummaryResponse> Participants { get; set; }
         public int PendingTasks { get; set; }
+        public Guid HearingRefId { get; set; }
     }
 
     public enum ConferenceState

@@ -23,5 +23,10 @@ namespace SchedulerJobs.Services
                 }
             });
         }
+
+        public Task RemoveVirtualCourtRoom(Guid hearingRefId)
+        {
+            return Task.FromResult(HttpStatusCode.OK);
+        }
     }
 }

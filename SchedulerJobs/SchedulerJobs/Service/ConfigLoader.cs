@@ -44,7 +44,6 @@ namespace SchedulerJobs.Service
             {
 
                 options.Connect(Configuration["ConnectionStrings:AppConfig"])
-                       // .Select(KeyFilter.Any, Configuration["AppName"])
                        .UseAzureKeyVault(keyVaultClient);
             });
 
