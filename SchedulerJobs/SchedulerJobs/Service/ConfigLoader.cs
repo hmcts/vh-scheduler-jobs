@@ -44,7 +44,9 @@ namespace SchedulerJobs.Service
             {
 
                 options.Connect(Configuration["ConnectionStrings:AppConfig"])
-                       .UseAzureKeyVault(keyVaultClient);
+                .Use(KeyFilter.Any)
+                .Use(KeyFilter.Any, labelFilter: "scheduler-jobs")
+                .UseAzureKeyVault(keyVaultClient);
             });
 
             Configuration = configRootBuilder.Build();
