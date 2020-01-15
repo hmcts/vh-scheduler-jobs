@@ -29,7 +29,7 @@ namespace SchedulerJobs.UnitTests.ClearHearingsFunction
             var logger = (LoggerFake)TestFactory.CreateLogger(LoggerTypes.List);
             await SchedulerJobs.ClearHearingsFunction.Run(null, logger, new CloseConferenceService(VideoApiServiceMock.Object));
             var msg = logger.Logs[0];
-            Assert.IsTrue(msg.Contains("Timer trigger function executed at:"));
+            Assert.IsTrue(msg.Contains("Close hearings function executed at"));
         }
     }
 }
