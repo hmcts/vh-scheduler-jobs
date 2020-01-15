@@ -26,7 +26,7 @@ namespace SchedulerJobs.Service
 
             if (!isDevelopment)
             {
-                AzureServiceTokenProvider azpv = new AzureServiceTokenProvider();
+                AzureServiceTokenProvider azpv = new AzureServiceTokenProvider($"RunAs = App; AppId ={Configuration["KeyVault:ClientId"]}");
                 keyVaultClient = new KeyVaultClient(
                         new KeyVaultClient.AuthenticationCallback(azpv.KeyVaultTokenCallback));
             }
@@ -44,8 +44,8 @@ namespace SchedulerJobs.Service
             {
 
                 options.Connect(Configuration["ConnectionStrings:AppConfig"])
-                .Use(KeyFilter.Any)
-                .Use(KeyFilter.Any, labelFilter: "scheduler-jobs")
+                .Select(KeyFilter.Any)
+                .Select(KeyFilter.Any, labelFilter: "scheduler-jobs")
                 .UseAzureKeyVault(keyVaultClient);
             });
 
