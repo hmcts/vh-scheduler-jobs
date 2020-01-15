@@ -22,23 +22,9 @@ namespace SchedulerJobs.Service
 
             KeyVaultClient keyVaultClient = null;
 
-            bool isDevelopment = Environment.GetEnvironmentVariable("Development", EnvironmentVariableTarget.Process) == null || bool.Parse(Environment.GetEnvironmentVariable("Development", EnvironmentVariableTarget.Process));
-
-            if (!isDevelopment)
-            {
-                AzureServiceTokenProvider azpv = new AzureServiceTokenProvider($"RunAs = App; AppId ={Configuration["KeyVault:ClientId"]}");
-                keyVaultClient = new KeyVaultClient(
-                        new KeyVaultClient.AuthenticationCallback(azpv.KeyVaultTokenCallback));
-            }
-            else
-            {
-                keyVaultClient = new KeyVaultClient(async (authority, resource, scope) =>
-                    {
-                        var adCredential = new ClientCredential(Configuration["KeyVault:ClientId"], Configuration["KeyVault:ClientSecret"]);
-                        var authenticationContext = new AuthenticationContext(authority, null);
-                        return (await authenticationContext.AcquireTokenAsync(resource, adCredential)).AccessToken;
-                    });
-            }
+            AzureServiceTokenProvider azpv = new AzureServiceTokenProvider($"RunAs = App; AppId ={Configuration["KeyVault:ClientId"]}");
+            keyVaultClient = new KeyVaultClient(
+                    new KeyVaultClient.AuthenticationCallback(azpv.KeyVaultTokenCallback));
 
             configRootBuilder.AddAzureAppConfiguration(options =>
             {
