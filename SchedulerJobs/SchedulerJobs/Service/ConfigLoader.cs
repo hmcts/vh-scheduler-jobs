@@ -31,7 +31,7 @@ namespace SchedulerJobs.Service
 
                 options.Connect(Configuration["ConnectionStrings:AppConfig"])
                 .Select(KeyFilter.Any)
-                .Select(KeyFilter.Any, labelFilter: "scheduler-jobs")
+                .Select(KeyFilter.Any, labelFilter: "vh-scheduler-jobs")
                 .UseAzureKeyVault(keyVaultClient);
             });
 
