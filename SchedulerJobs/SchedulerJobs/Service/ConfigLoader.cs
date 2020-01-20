@@ -14,12 +14,10 @@ namespace SchedulerJobs.Service
         public ConfigLoader()
         {
             var configRootBuilder = new ConfigurationBuilder()
-                   .AddJsonFile("local.settings.json", optional: true, reloadOnChange: true)
-                   .AddEnvironmentVariables();
+        .AddJsonFile("local.settings.json", optional: true, reloadOnChange: true)
+        .AddEnvironmentVariables()
+        .AddUserSecrets<Startup>();
 
-            bool isDevelopment = Environment.GetEnvironmentVariable("Development", EnvironmentVariableTarget.Process) == null || bool.Parse(Environment.GetEnvironmentVariable("Development", EnvironmentVariableTarget.Process));
-
-            if (!isDevelopment) { configRootBuilder.AddUserSecrets<Startup>(); }
 
             Configuration = configRootBuilder.Build();
 
