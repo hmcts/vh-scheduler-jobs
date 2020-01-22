@@ -15,8 +15,8 @@ namespace SchedulerJobs
         /// <param name="myTimer">Set time to run every day at 4:00 AM</param>
         /// <param name="closeConferenceService"></param>
         [FunctionName("ClearHearingsFunction")]
-          public static async Task Run([TimerTrigger("0 0 4 * * *")]TimerInfo myTimer,
-         ILogger log,
+        public static async Task Run([TimerTrigger("0 0 4 * * *")]TimerInfo myTimer,
+        ILogger log,
          [Inject]ICloseConferenceService closeConferenceService)
         {
             if (myTimer != null && myTimer.IsPastDue)
@@ -24,7 +24,7 @@ namespace SchedulerJobs
                 log.LogTrace("Closed hearings function running late");
             }
 
-            var fromDate = DateTime.UtcNow;
+            var fromDate = DateTime.UtcNow.AddHours(-14);
 
             var conferencesCount = await closeConferenceService.CloseConferencesAsync(fromDate).ConfigureAwait(false);
             log.LogTrace($"Close hearings function executed at : {fromDate} and  {conferencesCount} hearings closed");

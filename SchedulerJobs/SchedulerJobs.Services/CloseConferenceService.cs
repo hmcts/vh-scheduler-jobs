@@ -7,7 +7,7 @@ namespace SchedulerJobs.Services
 {
     public interface ICloseConferenceService
     {
-        Task<int> CloseConferencesAsync(DateTime date);
+        Task<int> CloseConferencesAsync(DateTime fromDate);
     }
 
     public class CloseConferenceService : ICloseConferenceService
@@ -18,9 +18,9 @@ namespace SchedulerJobs.Services
             _videoApiService = videoApiService;
         }
 
-        public async Task<int> CloseConferencesAsync(DateTime date)
+        public async Task<int> CloseConferencesAsync(DateTime fromDate)
         {
-            var conferences = await _videoApiService.GetOpenConferencesByScheduledDate(date);
+            var conferences = await _videoApiService.GetOpenConferencesByScheduledDate(fromDate);
             var conferenceCount = 0;
             if (conferences != null && conferences.Any())
             {
