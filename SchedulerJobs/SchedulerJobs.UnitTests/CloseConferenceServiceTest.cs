@@ -1,15 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
-using Microsoft.Extensions.Caching.Memory;
+using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
-using SchedulerJobs.Common.Configuration;
-using SchedulerJobs.Common.Security;
-using SchedulerJobs;
 using SchedulerJobs.Services;
 using SchedulerJobs.Services.VideoApi.Contracts;
-using System.Threading.Tasks;
 
 namespace SchedulerJobs.UnitTests
 {
