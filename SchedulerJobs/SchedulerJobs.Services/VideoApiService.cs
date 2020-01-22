@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Net.Http;
 using System.Threading.Tasks;
+using System.Web;
 using Microsoft.Extensions.Logging;
 using SchedulerJobs.Common.ApiHelper;
 using SchedulerJobs.Common.Configuration;
@@ -37,14 +39,17 @@ namespace SchedulerJobs.Services
         {
             _log.LogTrace($"Close conference by Id {conferenceId}");
             var uriString = _apiUriFactory.ConferenceEndpoints.CloseConference(conferenceId);
-            var response = await _httpClient.GetAsync(uriString).ConfigureAwait(false);
+            var response = await _httpClient.PutAsync(uriString, null).ConfigureAwait(false);
             response.EnsureSuccessStatusCode();
         }
 
         public async Task<List<ConferenceSummaryResponse>> GetOpenConferencesByScheduledDate(DateTime scheduledDate)
         {
             _log.LogTrace($"Getting conference by scheduledDate {scheduledDate}");
-            var uriString = _apiUriFactory.ConferenceEndpoints.GetOpenConferencesByScheduledDate(scheduledDate.ToString());
+
+            var dateOut = scheduledDate.ToString("o");
+
+            var uriString = _apiUriFactory.ConferenceEndpoints.GetOpenConferencesByScheduledDate(dateOut);
             var response = await _httpClient.GetAsync(uriString).ConfigureAwait(false);
             response.EnsureSuccessStatusCode();
             var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
@@ -55,7 +60,7 @@ namespace SchedulerJobs.Services
         {
             _log.LogTrace($"Remove virtual court room by Id {hearingRefId}");
             var uriString = _apiUriFactory.VirtualCourtRoomEndpoints.RemoveVirtualCourtRoom(hearingRefId);
-            var response = await _httpClient.GetAsync(uriString).ConfigureAwait(false);
+            var response = await _httpClient.DeleteAsync(uriString).ConfigureAwait(false);
             response.EnsureSuccessStatusCode();
         }
 
