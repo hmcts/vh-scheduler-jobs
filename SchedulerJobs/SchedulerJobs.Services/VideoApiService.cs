@@ -13,7 +13,7 @@ namespace SchedulerJobs.Services
 {
     public interface IVideoApiService
     {
-        Task<List<ConferenceSummaryResponse>> GetOpenConferencesByScheduledDate(DateTime scheduledDate);
+        Task<List<ConferenceSummaryResponse>> GetOpenConferencesByScheduledDate(DateTime fromDate);
         
         Task CloseConference(Guid conferenceId);
 
@@ -43,11 +43,11 @@ namespace SchedulerJobs.Services
             response.EnsureSuccessStatusCode();
         }
 
-        public async Task<List<ConferenceSummaryResponse>> GetOpenConferencesByScheduledDate(DateTime scheduledDate)
+        public async Task<List<ConferenceSummaryResponse>> GetOpenConferencesByScheduledDate(DateTime fromDate)
         {
-            _log.LogTrace($"Getting conference by scheduledDate {scheduledDate}");
+            _log.LogTrace($"Getting conference by scheduledDate {fromDate}");
 
-            var dateOut = scheduledDate.ToString("o");
+            var dateOut = fromDate.ToString("o");
 
             var uriString = _apiUriFactory.ConferenceEndpoints.GetOpenConferencesByScheduledDate(dateOut);
             var response = await _httpClient.GetAsync(uriString).ConfigureAwait(false);
