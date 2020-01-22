@@ -13,7 +13,7 @@ namespace SchedulerJobs.Services
             return Task.FromResult(HttpStatusCode.OK);
         }
 
-        public Task<List<ConferenceSummaryResponse>> GetOpenConferencesByScheduledDate(DateTime scheduledDate)
+        public Task<List<ConferenceSummaryResponse>> GetExpiredOpenConferences()
         {
             return Task.FromResult(new List<ConferenceSummaryResponse>
             {
@@ -22,11 +22,6 @@ namespace SchedulerJobs.Services
                     Id = Guid.NewGuid()
                 }
             });
-        }
-
-        public Task RemoveVirtualCourtRoom(Guid hearingRefId)
-        {
-            return Task.FromResult(HttpStatusCode.OK);
         }
     }
 }

@@ -6,12 +6,9 @@ namespace SchedulerJobs.Common.ApiHelper
     {
         public ConferenceEndpoints ConferenceEndpoints { get; }
 
-        public VirtualCourtRoomEndpoints VirtualCourtRoomEndpoints { get; }
-
         public ApiUriFactory()
         {
             ConferenceEndpoints = new ConferenceEndpoints();
-            VirtualCourtRoomEndpoints = new VirtualCourtRoomEndpoints();
         }
     }
 
@@ -20,15 +17,8 @@ namespace SchedulerJobs.Common.ApiHelper
         private string ApiRoot => "conferences";
         public string UpdateConference => $"{ApiRoot}";
 
-        public string GetOpenConferencesByScheduledDate(string scheduledDate) => $"{ApiRoot}/fromdate?scheduledDate={scheduledDate}";
+        public string GetExpiredOpenConferences() => $"{ApiRoot}/fromdate";
 
         public string CloseConference(Guid conferenceId) => $"{ApiRoot}/{conferenceId}/close";
-    }
-
-    public class VirtualCourtRoomEndpoints
-    {
-        private string ApiRoot => "virtualCourtRooms";
-
-        public string RemoveVirtualCourtRoom(Guid virtualCourtRoomId) => $"{ApiRoot}/{virtualCourtRoomId}/";
     }
 }

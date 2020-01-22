@@ -11,9 +11,9 @@ namespace SchedulerJobs.UnitTests
     [TestFixture]
     public class CloseConferenceServiceTest
     {
-        private  Mock<IVideoApiService> _videoApiService;
-        private  ICloseConferenceService _closeConferenceService;
-       
+        private Mock<IVideoApiService> _videoApiService;
+        private ICloseConferenceService _closeConferenceService;
+
         [SetUp]
         public void Setup()
         {
@@ -28,12 +28,10 @@ namespace SchedulerJobs.UnitTests
             _closeConferenceService = new CloseConferenceService(_videoApiService.Object);
 
             var conferences = new List<ConferenceSummaryResponse>();
-            _videoApiService.Setup(x => x.GetOpenConferencesByScheduledDate(It.IsAny<DateTime>())).Returns(Task.FromResult(conferences));
+            _videoApiService.Setup(x => x.GetExpiredOpenConferences()).Returns(Task.FromResult(conferences));
 
-            _closeConferenceService.CloseConferencesAsync(DateTime.Now);
+            _closeConferenceService.CloseConferencesAsync();
             _videoApiService.Verify(x => x.CloseConference(It.IsAny<Guid>()), Times.Never);
-            _videoApiService.Verify(x => x.RemoveVirtualCourtRoom(It.IsAny<Guid>()), Times.Never);
-
         }
 
         [Test]
@@ -43,12 +41,10 @@ namespace SchedulerJobs.UnitTests
             _closeConferenceService = new CloseConferenceService(_videoApiService.Object);
 
             List<ConferenceSummaryResponse> conferences = null;
-            _videoApiService.Setup(x => x.GetOpenConferencesByScheduledDate(It.IsAny<DateTime>())).Returns(Task.FromResult(conferences));
+            _videoApiService.Setup(x => x.GetExpiredOpenConferences()).Returns(Task.FromResult(conferences));
 
-            _closeConferenceService.CloseConferencesAsync(DateTime.Now);
+            _closeConferenceService.CloseConferencesAsync();
             _videoApiService.Verify(x => x.CloseConference(It.IsAny<Guid>()), Times.Never);
-            _videoApiService.Verify(x => x.RemoveVirtualCourtRoom(It.IsAny<Guid>()), Times.Never);
-
         }
 
         [Test]
@@ -60,12 +56,10 @@ namespace SchedulerJobs.UnitTests
                 Id = new Guid("a02dea09-4442-424d-bcaa-033d703e5cb7"),
             };
             var conferences = new List<ConferenceSummaryResponse> { response };
-            _videoApiService.Setup(x => x.GetOpenConferencesByScheduledDate(It.IsAny<DateTime>())).Returns(Task.FromResult(conferences));
+            _videoApiService.Setup(x => x.GetExpiredOpenConferences()).Returns(Task.FromResult(conferences));
 
-            _closeConferenceService.CloseConferencesAsync(DateTime.Now);
+            _closeConferenceService.CloseConferencesAsync();
             _videoApiService.Verify(x => x.CloseConference(It.IsAny<Guid>()), Times.AtLeastOnce);
-            _videoApiService.Verify(x => x.RemoveVirtualCourtRoom(It.IsAny<Guid>()), Times.AtLeastOnce);
-
         }
     }
 }

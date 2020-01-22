@@ -20,7 +20,7 @@ namespace SchedulerJobs.UnitTests.ClearHearingsFunction
         {
             VideoApiServiceMock = new Mock<IVideoApiService>();
             var result = Task.FromResult(new List<ConferenceSummaryResponse>());
-            VideoApiServiceMock.Setup(x => x.GetOpenConferencesByScheduledDate(DateTime.UtcNow)).Returns(result);
+            VideoApiServiceMock.Setup(x => x.GetExpiredOpenConferences()).Returns(result);
         }
 
         [Test]
@@ -29,7 +29,7 @@ namespace SchedulerJobs.UnitTests.ClearHearingsFunction
             var logger = (LoggerFake)TestFactory.CreateLogger(LoggerTypes.List);
             await SchedulerJobs.ClearHearingsFunction.Run(null, logger, new CloseConferenceService(VideoApiServiceMock.Object));
             var msg = logger.Logs[0];
-            Assert.IsTrue(msg.Contains("Close hearings function executed at"));
+            Assert.IsTrue(msg.Contains("Close hearings function executed"));
         }
     }
 }

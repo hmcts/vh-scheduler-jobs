@@ -24,10 +24,8 @@ namespace SchedulerJobs
                 log.LogTrace("Closed hearings function running late");
             }
 
-            var fromDate = DateTime.UtcNow.AddHours(-14);
-
-            var conferencesCount = await closeConferenceService.CloseConferencesAsync(fromDate).ConfigureAwait(false);
-            log.LogTrace($"Close hearings function executed at : {fromDate} and  {conferencesCount} hearings closed");
+            var conferencesCount = await closeConferenceService.CloseConferencesAsync().ConfigureAwait(false);
+            log.LogTrace($"Close hearings function executed and  {conferencesCount} hearings closed");
         }
     }
 }
