@@ -23,7 +23,7 @@ namespace SchedulerJobs.Service
 
             KeyVaultClient keyVaultClient = null;
 
-            AzureServiceTokenProvider azpv = new AzureServiceTokenProvider($"RunAs = App; AppId ={Configuration["KeyVault:ClientId"]}");
+            AzureServiceTokenProvider azpv = new AzureServiceTokenProvider();
             keyVaultClient = new KeyVaultClient(
                     new KeyVaultClient.AuthenticationCallback(azpv.KeyVaultTokenCallback));
 

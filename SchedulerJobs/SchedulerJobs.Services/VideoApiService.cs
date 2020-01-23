@@ -11,11 +11,9 @@ namespace SchedulerJobs.Services
 {
     public interface IVideoApiService
     {
-        Task<List<ConferenceSummaryResponse>> GetOpenConferencesByScheduledDate(DateTime scheduledDate);
-        
-        Task CloseConference(Guid conferenceId);
+        Task<List<ExpiredConferencesResponse>> GetExpiredOpenConferences();
 
-        Task RemoveVirtualCourtRoom(Guid hearingRefId);
+        Task CloseConference(Guid conferenceId);
     }
     public class VideoApiService : IVideoApiService
     {
@@ -37,27 +35,19 @@ namespace SchedulerJobs.Services
         {
             _log.LogTrace($"Close conference by Id {conferenceId}");
             var uriString = _apiUriFactory.ConferenceEndpoints.CloseConference(conferenceId);
-            var response = await _httpClient.GetAsync(uriString).ConfigureAwait(false);
+            var response = await _httpClient.PutAsync(uriString, null).ConfigureAwait(false);
             response.EnsureSuccessStatusCode();
         }
 
-        public async Task<List<ConferenceSummaryResponse>> GetOpenConferencesByScheduledDate(DateTime scheduledDate)
+        public async Task<List<ExpiredConferencesResponse>> GetExpiredOpenConferences()
         {
-            _log.LogTrace($"Getting conference by scheduledDate {scheduledDate}");
-            var uriString = _apiUriFactory.ConferenceEndpoints.GetOpenConferencesByScheduledDate(scheduledDate.ToString());
+            _log.LogTrace($"Getting expired open conferences");
+
+            var uriString = _apiUriFactory.ConferenceEndpoints.GetExpiredOpenConferences();
             var response = await _httpClient.GetAsync(uriString).ConfigureAwait(false);
             response.EnsureSuccessStatusCode();
             var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-            return ApiRequestHelper.DeserialiseSnakeCaseJsonToResponse<List<ConferenceSummaryResponse>>(content);
+            return ApiRequestHelper.DeserialiseSnakeCaseJsonToResponse<List<ExpiredConferencesResponse>>(content);
         }
-
-        public async Task RemoveVirtualCourtRoom(Guid hearingRefId)
-        {
-            _log.LogTrace($"Remove virtual court room by Id {hearingRefId}");
-            var uriString = _apiUriFactory.VirtualCourtRoomEndpoints.RemoveVirtualCourtRoom(hearingRefId);
-            var response = await _httpClient.GetAsync(uriString).ConfigureAwait(false);
-            response.EnsureSuccessStatusCode();
-        }
-
     }
 }

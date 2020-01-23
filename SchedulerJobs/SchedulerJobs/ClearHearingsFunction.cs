@@ -16,7 +16,7 @@ namespace SchedulerJobs
         /// <param name="closeConferenceService"></param>
         [FunctionName("ClearHearingsFunction")]
         public static async Task Run([TimerTrigger("0 0 4 * * *")]TimerInfo myTimer,
-         ILogger log,
+        ILogger log,
          [Inject]ICloseConferenceService closeConferenceService)
         {
             if (myTimer != null && myTimer.IsPastDue)
@@ -24,10 +24,8 @@ namespace SchedulerJobs
                 log.LogTrace("Closed hearings function running late");
             }
 
-            var fromDate = DateTime.UtcNow;
-
-            var conferencesCount = await closeConferenceService.CloseConferencesAsync(fromDate).ConfigureAwait(false);
-            log.LogTrace($"Close hearings function executed at : {fromDate} and  {conferencesCount} hearings closed");
+            var conferencesCount = await closeConferenceService.CloseConferencesAsync().ConfigureAwait(false);
+            log.LogTrace($"Close hearings function executed and  {conferencesCount} hearings closed");
         }
     }
 }

@@ -41,19 +41,12 @@ namespace SchedulerJobs
             services.AddScoped<IAzureTokenProvider, AzureTokenProvider>();
 
             services.AddScoped<VideoServiceTokenHandler>();
-           services.AddLogging(builder => { builder.SetMinimumLevel(LogLevel.Debug); });
+            services.AddLogging(builder => { builder.SetMinimumLevel(LogLevel.Debug); });
 
             services.AddScoped<ICloseConferenceService, CloseConferenceService>();
 
-            if (hearingServicesConfiguration.EnableVideoApiStub)
-            {
-                services.AddScoped<IVideoApiService, VideoApiServiceFake>();
-            }
-            else
-            {
-                services.AddHttpClient<IVideoApiService, VideoApiService>()
-                    .AddHttpMessageHandler<VideoServiceTokenHandler>();
-            }
+            services.AddHttpClient<IVideoApiService, VideoApiService>()
+                .AddHttpMessageHandler<VideoServiceTokenHandler>();
         }
 
         private static HearingServicesConfiguration BuildHearingServicesConfiguration(ConfigLoader configLoader)

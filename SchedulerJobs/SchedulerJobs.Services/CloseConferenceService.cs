@@ -7,7 +7,7 @@ namespace SchedulerJobs.Services
 {
     public interface ICloseConferenceService
     {
-        Task<int> CloseConferencesAsync(DateTime date);
+        Task<int> CloseConferencesAsync();
     }
 
     public class CloseConferenceService : ICloseConferenceService
@@ -18,19 +18,17 @@ namespace SchedulerJobs.Services
             _videoApiService = videoApiService;
         }
 
-        public async Task<int> CloseConferencesAsync(DateTime date)
+        public async Task<int> CloseConferencesAsync()
         {
-            var conferences = await _videoApiService.GetOpenConferencesByScheduledDate(date);
+            var conferences = await _videoApiService.GetExpiredOpenConferences();
             var conferenceCount = 0;
             if (conferences != null && conferences.Any())
             {
                 conferenceCount = conferences.Count;
-                conferences.ForEach(async s => {
-
+                conferences.ForEach(async s =>
+                {
                     await _videoApiService.CloseConference(s.Id);
-                    await _videoApiService.RemoveVirtualCourtRoom(s.HearingRefId);
-                    }
-                );
+                });
             }
 
             return conferenceCount;
