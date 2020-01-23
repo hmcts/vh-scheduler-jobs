@@ -13,11 +13,11 @@ namespace SchedulerJobs.Services
             return Task.FromResult(HttpStatusCode.OK);
         }
 
-        public Task<List<ConferenceSummaryResponse>> GetExpiredOpenConferences()
+        public Task<List<ExpiredConferencesResponse>> GetExpiredOpenConferences()
         {
-            return Task.FromResult(new List<ConferenceSummaryResponse>
+            return Task.FromResult(new List<ExpiredConferencesResponse>
             {
-                new ConferenceSummaryResponse
+                new ExpiredConferencesResponse
                 {
                     Id = Guid.NewGuid()
                 }

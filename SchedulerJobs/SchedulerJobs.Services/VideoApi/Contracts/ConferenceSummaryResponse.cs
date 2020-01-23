@@ -1,21 +1,18 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace SchedulerJobs.Services.VideoApi.Contracts
 {
-    public class ConferenceSummaryResponse
+    public class ExpiredConferencesResponse
     {
+        /// <summary>
+        /// The conference's UUID
+        /// </summary>
         public Guid Id { get; set; }
-        public DateTime ScheduledDateTime { get; set; }
-        public DateTime? ClosedDateTime { get; set; }
-        public string CaseType { get; set; }
-        public string CaseNumber { get; set; }
-        public string CaseName { get; set; }
-        public int ScheduledDuration { get; set; }
-        public ConferenceState Status { get; set; }
-        public List<ParticipantSummaryResponse> Participants { get; set; }
-        public int PendingTasks { get; set; }
-        public Guid HearingRefId { get; set; }
+
+        /// <summary>
+        /// The current conference status
+        /// </summary>
+        public ConferenceState CurrentStatus { get; set; }
     }
 
     public enum ConferenceState

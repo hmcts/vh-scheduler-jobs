@@ -19,7 +19,7 @@ namespace SchedulerJobs.UnitTests.ClearHearingsFunction
         public void Setup()
         {
             VideoApiServiceMock = new Mock<IVideoApiService>();
-            var result = Task.FromResult(new List<ConferenceSummaryResponse>());
+            var result = Task.FromResult(new List<ExpiredConferencesResponse>());
             VideoApiServiceMock.Setup(x => x.GetExpiredOpenConferences()).Returns(result);
         }
 

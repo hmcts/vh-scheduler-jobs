@@ -11,7 +11,7 @@ namespace SchedulerJobs.Services
 {
     public interface IVideoApiService
     {
-        Task<List<ConferenceSummaryResponse>> GetExpiredOpenConferences();
+        Task<List<ExpiredConferencesResponse>> GetExpiredOpenConferences();
 
         Task CloseConference(Guid conferenceId);
     }
@@ -39,7 +39,7 @@ namespace SchedulerJobs.Services
             response.EnsureSuccessStatusCode();
         }
 
-        public async Task<List<ConferenceSummaryResponse>> GetExpiredOpenConferences()
+        public async Task<List<ExpiredConferencesResponse>> GetExpiredOpenConferences()
         {
             _log.LogTrace($"Getting expired open conferences");
 
@@ -47,7 +47,7 @@ namespace SchedulerJobs.Services
             var response = await _httpClient.GetAsync(uriString).ConfigureAwait(false);
             response.EnsureSuccessStatusCode();
             var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-            return ApiRequestHelper.DeserialiseSnakeCaseJsonToResponse<List<ConferenceSummaryResponse>>(content);
+            return ApiRequestHelper.DeserialiseSnakeCaseJsonToResponse<List<ExpiredConferencesResponse>>(content);
         }
     }
 }

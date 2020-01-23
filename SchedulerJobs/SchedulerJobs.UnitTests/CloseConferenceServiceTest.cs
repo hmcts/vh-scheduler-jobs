@@ -27,7 +27,7 @@ namespace SchedulerJobs.UnitTests
             _videoApiService = new Mock<IVideoApiService>();
             _closeConferenceService = new CloseConferenceService(_videoApiService.Object);
 
-            var conferences = new List<ConferenceSummaryResponse>();
+            var conferences = new List<ExpiredConferencesResponse>();
             _videoApiService.Setup(x => x.GetExpiredOpenConferences()).Returns(Task.FromResult(conferences));
 
             _closeConferenceService.CloseConferencesAsync();
@@ -40,7 +40,7 @@ namespace SchedulerJobs.UnitTests
             _videoApiService = new Mock<IVideoApiService>();
             _closeConferenceService = new CloseConferenceService(_videoApiService.Object);
 
-            List<ConferenceSummaryResponse> conferences = null;
+            List<ExpiredConferencesResponse> conferences = null;
             _videoApiService.Setup(x => x.GetExpiredOpenConferences()).Returns(Task.FromResult(conferences));
 
             _closeConferenceService.CloseConferencesAsync();
@@ -50,12 +50,11 @@ namespace SchedulerJobs.UnitTests
         [Test]
         public void Close_conferences_and_remove_virtual_court_rooms()
         {
-            var response = new ConferenceSummaryResponse
+            var response = new ExpiredConferencesResponse
             {
-                HearingRefId = new Guid("45857c71-b47e-48a4-9434-006cc49d8a3b"),
                 Id = new Guid("a02dea09-4442-424d-bcaa-033d703e5cb7"),
             };
-            var conferences = new List<ConferenceSummaryResponse> { response };
+            var conferences = new List<ExpiredConferencesResponse> { response };
             _videoApiService.Setup(x => x.GetExpiredOpenConferences()).Returns(Task.FromResult(conferences));
 
             _closeConferenceService.CloseConferencesAsync();
