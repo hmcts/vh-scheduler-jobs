@@ -55,11 +55,7 @@ namespace SchedulerJobs.UnitTests
                 Id = new Guid("a02dea09-4442-424d-bcaa-033d703e5cb7"),
                 CurrentStatus = ConferenceState.InSession
             };
-
-            // for coverage
-            Assert.AreEqual(ConferenceState.InSession, response.CurrentStatus);
-            Assert.AreEqual("a02dea09-4442-424d-bcaa-033d703e5cb7", response.Id.ToString());
-
+           
             var conferences = new List<ExpiredConferencesResponse> { response };
             _videoApiService.Setup(x => x.GetExpiredOpenConferences()).Returns(Task.FromResult(conferences));
 
