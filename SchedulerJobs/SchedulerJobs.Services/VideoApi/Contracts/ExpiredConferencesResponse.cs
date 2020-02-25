@@ -8,11 +8,6 @@ namespace SchedulerJobs.Services.VideoApi.Contracts
         /// The conference's UUID
         /// </summary>
         public Guid Id { get; set; }
-
-        /// <summary>
-        /// The current conference status
-        /// </summary>
-        public ConferenceState CurrentStatus { get; set; }
     }
 
     public enum ConferenceState

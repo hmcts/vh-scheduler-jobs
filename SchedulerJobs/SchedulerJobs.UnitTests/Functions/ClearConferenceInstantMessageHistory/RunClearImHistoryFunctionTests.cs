@@ -6,7 +6,6 @@ using FluentAssertions;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Timers;
 using Moq;
-using NCrontab;
 using NUnit.Framework;
 using SchedulerJobs.Services;
 using SchedulerJobs.Services.VideoApi.Contracts;
@@ -23,7 +22,7 @@ namespace SchedulerJobs.UnitTests.Functions.ClearConferenceInstantMessageHistory
         public void Setup()
         {
             VideoApiServiceMock = new Mock<IVideoApiService>();
-            _timerInfo = new TimerInfo(new CronSchedule(CrontabSchedule.Parse("0 0 * * * ")), new ScheduleStatus());
+            _timerInfo = new TimerInfo(new ScheduleStub(), new ScheduleStatus(), true);
         }
 
         [Test]
@@ -36,7 +35,8 @@ namespace SchedulerJobs.UnitTests.Functions.ClearConferenceInstantMessageHistory
             var logger = (LoggerFake)TestFactory.CreateLogger(LoggerTypes.List);
             
             await SchedulerJobs.Functions.ClearConferenceInstantMessageHistory.RunAsync(_timerInfo, logger, new ClearConferenceChatHistoryService(VideoApiServiceMock.Object));
-            logger.Logs.Last().Should().Be("Cleared chat history for closed conferences");
+            logger.GetLoggedMessages().First().Should().Be("Timer is running late!");
+            logger.GetLoggedMessages().Last().Should().Be("Cleared chat history for closed conferences");
 
             VideoApiServiceMock.Verify(x => x.ClearConferenceChatHistory(It.IsIn<Guid>(ids)), Times.Exactly(ids.Count));
         }

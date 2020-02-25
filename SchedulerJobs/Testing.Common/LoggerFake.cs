@@ -6,7 +6,7 @@ namespace Testing.Common
 {
     public class LoggerFake: ILogger
     {
-        public readonly IList<string> Logs;
+        private readonly IList<string> _logs;
 
         /// <summary>
         /// Points to the static instance on the NullScope class to allow the test to function
@@ -20,7 +20,7 @@ namespace Testing.Common
 
         public LoggerFake()
         {
-            Logs = new List<string>();
+            _logs = new List<string>();
         }
 
         public void Log<TState>(LogLevel logLevel,
@@ -30,8 +30,10 @@ namespace Testing.Common
                                 Func<TState, Exception, string> formatter)
         {
             var message = formatter(state, exception);
-            Logs.Add(message);
+            _logs.Add(message);
         }
+
+        public IList<string> GetLoggedMessages() => _logs;
     }
 
     public enum LoggerTypes

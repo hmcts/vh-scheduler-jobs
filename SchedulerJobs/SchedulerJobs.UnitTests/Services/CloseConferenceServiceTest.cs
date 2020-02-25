@@ -52,7 +52,6 @@ namespace SchedulerJobs.UnitTests.Services
             var response = new ExpiredConferencesResponse
             {
                 Id = new Guid("a02dea09-4442-424d-bcaa-033d703e5cb7"),
-                CurrentStatus = ConferenceState.InSession
             };
            
             var conferences = new List<ExpiredConferencesResponse> { response };

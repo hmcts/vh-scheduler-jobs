@@ -10,7 +10,11 @@ namespace SchedulerJobs.Functions
     public static class ClearConferenceInstantMessageHistory
     {
         [FunctionName("ClearConferenceInstantMessageHistory")]
-        public static async Task RunAsync([TimerTrigger("0 0 * * * *")] 
+        public static async Task RunAsync([TimerTrigger("0 0 * * * *"
+#if DEBUG
+                , RunOnStartup=true
+#endif
+            ),] 
             TimerInfo myTimer, 
             ILogger log,
             [Inject]IClearConferenceChatHistoryService clearConferenceChatHistoryService
