@@ -1,11 +1,10 @@
-using System;
 using System.Threading.Tasks;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Logging;
 using SchedulerJobs.Services;
 using Willezone.Azure.WebJobs.Extensions.DependencyInjection;
 
-namespace SchedulerJobs
+namespace SchedulerJobs.Functions
 {
     public static class ClearHearingsFunction
     {
@@ -13,6 +12,7 @@ namespace SchedulerJobs
         /// Function is cleaning video hearings
         /// </summary>
         /// <param name="myTimer">Set time to run every day at 4:00 AM</param>
+        /// <param name="log"></param>
         /// <param name="closeConferenceService"></param>
         [FunctionName("ClearHearingsFunction")]
         public static async Task Run([TimerTrigger("0 0 4 * * *")]TimerInfo myTimer,

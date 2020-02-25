@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Microsoft.Extensions.Caching.Memory;
+﻿using Microsoft.Extensions.Caching.Memory;
 using Moq;
 using NUnit.Framework;
+using SchedulerJobs.Common.ApiHelper;
 using SchedulerJobs.Common.Configuration;
 using SchedulerJobs.Common.Security;
-using SchedulerJobs;
 
-namespace SchedulerJobs.UnitTests
+namespace SchedulerJobs.UnitTests.Common.ApiHelper
 {
     public class VideoServiceTokenHandlerTests
     {

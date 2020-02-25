@@ -3,7 +3,7 @@ using NUnit.Framework;
 using SchedulerJobs.Common.Configuration;
 using SchedulerJobs.Common.Security;
 
-namespace SchedulerJobs.UnitTests
+namespace SchedulerJobs.UnitTests.Common.Security
 {
     public class AzureTokenProviderTests
     {

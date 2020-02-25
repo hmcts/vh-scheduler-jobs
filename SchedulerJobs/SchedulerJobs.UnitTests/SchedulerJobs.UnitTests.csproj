@@ -26,6 +26,7 @@
 	<ItemGroup>
 		<ProjectReference Include="..\SchedulerJobs.Common\SchedulerJobs.Common.csproj" />
 		<ProjectReference Include="..\SchedulerJobs\SchedulerJobs.csproj" />
+		<ProjectReference Include="..\Testing.Common\Testing.Common.csproj" />
 
 	</ItemGroup>
 

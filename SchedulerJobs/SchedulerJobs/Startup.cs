@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using SchedulerJobs;
+using SchedulerJobs.Common.ApiHelper;
 using SchedulerJobs.Common.Configuration;
 using SchedulerJobs.Common.Security;
 using SchedulerJobs.Service;

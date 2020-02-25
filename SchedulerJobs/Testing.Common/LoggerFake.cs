@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using Microsoft.Extensions.Logging;
 
-namespace SchedulerJobs.UnitTests
+namespace Testing.Common
 {
     public class LoggerFake: ILogger
     {
-        public IList<string> Logs;
+        public readonly IList<string> Logs;
 
         /// <summary>
         /// Points to the static instance on the NullScope class to allow the test to function
@@ -20,7 +20,7 @@ namespace SchedulerJobs.UnitTests
 
         public LoggerFake()
         {
-            this.Logs = new List<string>();
+            Logs = new List<string>();
         }
 
         public void Log<TState>(LogLevel logLevel,
@@ -29,8 +29,8 @@ namespace SchedulerJobs.UnitTests
                                 Exception exception,
                                 Func<TState, Exception, string> formatter)
         {
-            string message = formatter(state, exception);
-            this.Logs.Add(message);
+            var message = formatter(state, exception);
+            Logs.Add(message);
         }
     }
 

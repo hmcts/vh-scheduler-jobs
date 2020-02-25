@@ -1,17 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
+using FluentAssertions;
 using Moq;
 using NUnit.Framework;
-using SchedulerJobs;
 using SchedulerJobs.Services;
 using SchedulerJobs.Services.VideoApi.Contracts;
+using Testing.Common;
 
-namespace SchedulerJobs.UnitTests.ClearHearingsFunction
+namespace SchedulerJobs.UnitTests.Functions.ClearHearingsFunction
 {
-    public class RunTests
+    public class RunCloseExpiredFunctionTests
     {
         protected Mock<IVideoApiService> VideoApiServiceMock { get; set; }
 
@@ -27,9 +26,8 @@ namespace SchedulerJobs.UnitTests.ClearHearingsFunction
         public async Task Timer_should_log_message()
         {
             var logger = (LoggerFake)TestFactory.CreateLogger(LoggerTypes.List);
-            await SchedulerJobs.ClearHearingsFunction.Run(null, logger, new CloseConferenceService(VideoApiServiceMock.Object));
-            var msg = logger.Logs[0];
-            Assert.IsTrue(msg.Contains("Close hearings function executed"));
+            await SchedulerJobs.Functions.ClearHearingsFunction.Run(null, logger, new CloseConferenceService(VideoApiServiceMock.Object));
+            logger.Logs.Last().Should().StartWith("Close hearings function executed");
         }
     }
 }
