@@ -19,7 +19,7 @@ namespace SchedulerJobs.Services
 
         public async Task ClearChatHistoryForClosedConferences()
         {
-            var conferences = await _videoApiService.GetClosedConferencesToClear();
+            var conferences = await _videoApiService.GetClosedConferencesToClearInstantMessageHistory();
             var tasks = conferences.Select(c => _videoApiService.ClearConferenceChatHistory(c.Id)).ToArray();
             Task.WaitAll(tasks);
         }

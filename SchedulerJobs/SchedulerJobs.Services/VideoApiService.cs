@@ -23,7 +23,7 @@ namespace SchedulerJobs.Services
         /// Gets a list of conferences that have been closed for more than 30 minutes
         /// </summary>
         /// <returns></returns>
-        Task<List<ClosedConferencesResponse>> GetClosedConferencesToClear();
+        Task<List<ClosedConferencesResponse>> GetClosedConferencesToClearInstantMessageHistory();
 
         Task ClearConferenceChatHistory(Guid conferenceId);
     }
@@ -51,7 +51,7 @@ namespace SchedulerJobs.Services
             response.EnsureSuccessStatusCode();
         }
 
-        public async Task<List<ClosedConferencesResponse>> GetClosedConferencesToClear()
+        public async Task<List<ClosedConferencesResponse>> GetClosedConferencesToClearInstantMessageHistory()
         {
             _log.LogTrace($"Getting conferences that have been closed for more than 30 minutes");
             var uriString = _apiUriFactory.ConferenceEndpoints.GetClosedConferencesWithInstantMessageHistory();

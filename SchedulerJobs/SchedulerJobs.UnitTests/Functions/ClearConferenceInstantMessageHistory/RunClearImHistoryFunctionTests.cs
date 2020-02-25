@@ -30,7 +30,7 @@ namespace SchedulerJobs.UnitTests.Functions.ClearConferenceInstantMessageHistory
         {
             var conferences = Builder<ClosedConferencesResponse>.CreateListOfSize(10).All()
                 .With(x => x.Id = Guid.NewGuid()).Build().ToList();
-            VideoApiServiceMock.Setup(x => x.GetClosedConferencesToClear()).ReturnsAsync(conferences);
+            VideoApiServiceMock.Setup(x => x.GetClosedConferencesToClearInstantMessageHistory()).ReturnsAsync(conferences);
             var ids = conferences.Select(x => x.Id).ToList();
             var logger = (LoggerFake)TestFactory.CreateLogger(LoggerTypes.List);
             
