@@ -2,6 +2,9 @@
 
 namespace SchedulerJobs.Services.VideoApi.Contracts
 {
+    /// <summary>
+    /// A conference that needs to be closed because it has been open for too long.
+    /// </summary>
     public class ExpiredConferencesResponse
     {
         /// <summary>

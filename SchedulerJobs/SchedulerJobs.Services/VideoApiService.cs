@@ -23,7 +23,7 @@ namespace SchedulerJobs.Services
         /// Gets a list of conferences that have been closed for more than 30 minutes
         /// </summary>
         /// <returns></returns>
-        Task<List<ClosedConferencesResponse>> GetClosedConferencesToClearInstantMessageHistory();
+        Task<List<ClosedConferenceWithImHistoryResponse>> GetClosedConferencesToClearInstantMessageHistory();
 
         Task ClearConferenceChatHistory(Guid conferenceId);
     }
@@ -51,14 +51,14 @@ namespace SchedulerJobs.Services
             response.EnsureSuccessStatusCode();
         }
 
-        public async Task<List<ClosedConferencesResponse>> GetClosedConferencesToClearInstantMessageHistory()
+        public async Task<List<ClosedConferenceWithImHistoryResponse>> GetClosedConferencesToClearInstantMessageHistory()
         {
             _log.LogTrace($"Getting conferences that have been closed for more than 30 minutes");
             var uriString = _apiUriFactory.ConferenceEndpoints.GetClosedConferencesWithInstantMessageHistory();
             var response = await _httpClient.GetAsync(uriString);
             response.EnsureSuccessStatusCode();
             var content = await response.Content.ReadAsStringAsync();
-            return ApiRequestHelper.DeserialiseSnakeCaseJsonToResponse<List<ClosedConferencesResponse>>(content);
+            return ApiRequestHelper.DeserialiseSnakeCaseJsonToResponse<List<ClosedConferenceWithImHistoryResponse>>(content);
         }
 
         public async Task ClearConferenceChatHistory(Guid conferenceId)

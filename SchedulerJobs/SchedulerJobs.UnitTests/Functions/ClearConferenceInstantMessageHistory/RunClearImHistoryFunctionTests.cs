@@ -28,7 +28,7 @@ namespace SchedulerJobs.UnitTests.Functions.ClearConferenceInstantMessageHistory
         [Test]
         public async Task Timer_should_log_message()
         {
-            var conferences = Builder<ClosedConferencesResponse>.CreateListOfSize(10).All()
+            var conferences = Builder<ClosedConferenceWithImHistoryResponse>.CreateListOfSize(10).All()
                 .With(x => x.Id = Guid.NewGuid()).Build().ToList();
             VideoApiServiceMock.Setup(x => x.GetClosedConferencesToClearInstantMessageHistory()).ReturnsAsync(conferences);
             var ids = conferences.Select(x => x.Id).ToList();
