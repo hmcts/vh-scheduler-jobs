@@ -2,17 +2,15 @@
 
 namespace SchedulerJobs.Services.VideoApi.Contracts
 {
+    /// <summary>
+    /// A conference that needs to be closed because it has been open for too long.
+    /// </summary>
     public class ExpiredConferencesResponse
     {
         /// <summary>
         /// The conference's UUID
         /// </summary>
         public Guid Id { get; set; }
-
-        /// <summary>
-        /// The current conference status
-        /// </summary>
-        public ConferenceState CurrentStatus { get; set; }
     }
 
     public enum ConferenceState

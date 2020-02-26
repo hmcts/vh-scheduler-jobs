@@ -11,9 +11,21 @@ namespace SchedulerJobs.Services
 {
     public interface IVideoApiService
     {
+        /// <summary>
+        /// Get a list of conferences that are still open but expected to be closed.
+        /// </summary>
+        /// <returns></returns>
         Task<List<ExpiredConferencesResponse>> GetExpiredOpenConferences();
 
         Task CloseConference(Guid conferenceId);
+
+        /// <summary>
+        /// Gets a list of conferences that have been closed for more than 30 minutes
+        /// </summary>
+        /// <returns></returns>
+        Task<List<ClosedConferenceWithImHistoryResponse>> GetClosedConferencesToClearInstantMessageHistory();
+
+        Task ClearConferenceChatHistory(Guid conferenceId);
     }
     public class VideoApiService : IVideoApiService
     {
@@ -36,6 +48,24 @@ namespace SchedulerJobs.Services
             _log.LogTrace($"Close conference by Id {conferenceId}");
             var uriString = _apiUriFactory.ConferenceEndpoints.CloseConference(conferenceId);
             var response = await _httpClient.PutAsync(uriString, null).ConfigureAwait(false);
+            response.EnsureSuccessStatusCode();
+        }
+
+        public async Task<List<ClosedConferenceWithImHistoryResponse>> GetClosedConferencesToClearInstantMessageHistory()
+        {
+            _log.LogTrace($"Getting conferences that have been closed for more than 30 minutes");
+            var uriString = _apiUriFactory.ConferenceEndpoints.GetClosedConferencesWithInstantMessageHistory();
+            var response = await _httpClient.GetAsync(uriString);
+            response.EnsureSuccessStatusCode();
+            var content = await response.Content.ReadAsStringAsync();
+            return ApiRequestHelper.DeserialiseSnakeCaseJsonToResponse<List<ClosedConferenceWithImHistoryResponse>>(content);
+        }
+
+        public async Task ClearConferenceChatHistory(Guid conferenceId)
+        {
+            _log.LogTrace($"Close conference by Id {conferenceId}");
+            var uriString = _apiUriFactory.ConferenceEndpoints.ClearConferenceChatHistory(conferenceId);
+            var response = await _httpClient.DeleteAsync(uriString).ConfigureAwait(false);
             response.EnsureSuccessStatusCode();
         }
 

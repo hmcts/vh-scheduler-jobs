@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SchedulerJobs.UnitTests
+namespace Testing.Common
 {
 #pragma warning disable S3881 // "IDisposable" should be implemented correctly
     public class NullScope : IDisposable

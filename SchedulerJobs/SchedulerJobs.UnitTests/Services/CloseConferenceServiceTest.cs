@@ -6,7 +6,7 @@ using NUnit.Framework;
 using SchedulerJobs.Services;
 using SchedulerJobs.Services.VideoApi.Contracts;
 
-namespace SchedulerJobs.UnitTests
+namespace SchedulerJobs.UnitTests.Services
 {
     [TestFixture]
     public class CloseConferenceServiceTest
@@ -40,8 +40,7 @@ namespace SchedulerJobs.UnitTests
             _videoApiService = new Mock<IVideoApiService>();
             _closeConferenceService = new CloseConferenceService(_videoApiService.Object);
 
-            List<ExpiredConferencesResponse> conferences = null;
-            _videoApiService.Setup(x => x.GetExpiredOpenConferences()).Returns(Task.FromResult(conferences));
+            _videoApiService.Setup(x => x.GetExpiredOpenConferences()).Returns(Task.FromResult((List<ExpiredConferencesResponse>) null));
 
             _closeConferenceService.CloseConferencesAsync();
             _videoApiService.Verify(x => x.CloseConference(It.IsAny<Guid>()), Times.Never);
@@ -53,7 +52,6 @@ namespace SchedulerJobs.UnitTests
             var response = new ExpiredConferencesResponse
             {
                 Id = new Guid("a02dea09-4442-424d-bcaa-033d703e5cb7"),
-                CurrentStatus = ConferenceState.InSession
             };
            
             var conferences = new List<ExpiredConferencesResponse> { response };

@@ -5,7 +5,7 @@ using Microsoft.Extensions.Caching.Memory;
 using SchedulerJobs.Common.Configuration;
 using SchedulerJobs.Common.Security;
 
-namespace SchedulerJobs
+namespace SchedulerJobs.Common.ApiHelper
 {
     public class VideoServiceTokenHandler : DelegatingHandler
     {
