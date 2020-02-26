@@ -18,7 +18,7 @@ namespace SchedulerJobs.Common.ApiHelper
         public string UpdateConference => $"{ApiRoot}";
         public string GetExpiredOpenConferences() => $"{ApiRoot}/expired";
         public string CloseConference(Guid conferenceId) => $"{ApiRoot}/{conferenceId}/close";
-        public string ClearConferenceChatHistory(Guid conferenceId) => $"{ApiRoot}/{conferenceId}/messages";
+        public string ClearConferenceChatHistory(Guid conferenceId) => $"{ApiRoot}/{conferenceId}/instantmessages";
         public string GetClosedConferencesWithInstantMessageHistory() => $"{ApiRoot}/ExpiredIM";
     }
 }
