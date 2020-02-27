@@ -45,6 +45,7 @@ namespace SchedulerJobs
             services.AddLogging(builder => { builder.SetMinimumLevel(LogLevel.Debug); });
 
             services.AddScoped<ICloseConferenceService, CloseConferenceService>();
+            services.AddScoped<IClearConferenceChatHistoryService, ClearConferenceChatHistoryService>();
 
             services.AddHttpClient<IVideoApiService, VideoApiService>()
                 .AddHttpMessageHandler<VideoServiceTokenHandler>();
