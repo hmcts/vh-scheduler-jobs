@@ -11,11 +11,11 @@ namespace SchedulerJobs.Functions
         /// <summary>
         /// Function is cleaning video hearings
         /// </summary>
-        /// <param name="myTimer">Set time to run every day at 4:00 AM</param>
+        /// <param name="myTimer">Set time to run every day at 4:40 AM</param>
         /// <param name="log"></param>
         /// <param name="closeConferenceService"></param>
         [FunctionName("ClearHearingsFunction")]
-        public static async Task Run([TimerTrigger("0 0 4 * * *")]TimerInfo myTimer,
+        public static async Task Run([TimerTrigger("0 40 4 * * *")]TimerInfo myTimer,
         ILogger log,
          [Inject]ICloseConferenceService closeConferenceService)
         {
