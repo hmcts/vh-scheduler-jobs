@@ -20,5 +20,7 @@ namespace SchedulerJobs.Common.ApiHelper
         public string CloseConference(Guid conferenceId) => $"{ApiRoot}/{conferenceId}/close";
         public string ClearConferenceChatHistory(Guid conferenceId) => $"{ApiRoot}/{conferenceId}/instantmessages";
         public string GetClosedConferencesWithInstantMessageHistory() => $"{ApiRoot}/ExpiredIM";
+        public string GetExpiredAudiorecordingConferences => $"{ApiRoot}/audiorecording/expired";
+        public string DeleteAudioApplication(Guid hearingId) => $"{ApiRoot}/audioapplications/{hearingId}";
     }
 }

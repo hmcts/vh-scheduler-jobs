@@ -26,7 +26,21 @@ namespace SchedulerJobs.Services
         Task<List<ClosedConferenceWithImHistoryResponse>> GetClosedConferencesToClearInstantMessageHistory();
 
         Task ClearConferenceChatHistory(Guid conferenceId);
+
+        /// <summary>
+        /// Get a list of conferences 14 hours ago with audiorecording and status greater then zero
+        /// </summary>
+        /// <returns>The list of ExpiredConferencesResponse</returns>
+        Task<List<ExpiredConferencesResponse>> GetExpiredAudiorecordingConferences();
+
+        /// <summary>
+        /// Check if audio file is created and delete audio application from wowza 
+        /// </summary>
+        /// <param name="hearingId"></param>
+        /// <returns></returns>
+        Task DeleteAudiorecordingApplication(Guid hearingId);
     }
+
     public class VideoApiService : IVideoApiService
     {
         private readonly HttpClient _httpClient;
@@ -74,10 +88,31 @@ namespace SchedulerJobs.Services
             _log.LogTrace($"Getting expired open conferences");
 
             var uriString = _apiUriFactory.ConferenceEndpoints.GetExpiredOpenConferences();
+            return await GetListExpiredConferencesResponse(uriString);
+        }
+
+        public async Task<List<ExpiredConferencesResponse>> GetExpiredAudiorecordingConferences()
+        {
+            _log.LogTrace($"Getting expired audiorecording conferences");
+
+            var uriString = _apiUriFactory.ConferenceEndpoints.GetExpiredAudiorecordingConferences;
+            return await GetListExpiredConferencesResponse(uriString);
+        }
+
+        private async Task<List<ExpiredConferencesResponse>> GetListExpiredConferencesResponse(string uriString)
+        {
             var response = await _httpClient.GetAsync(uriString).ConfigureAwait(false);
             response.EnsureSuccessStatusCode();
             var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
             return ApiRequestHelper.DeserialiseSnakeCaseJsonToResponse<List<ExpiredConferencesResponse>>(content);
+        }
+
+        public async Task DeleteAudiorecordingApplication(Guid hearingId)
+        {
+            _log.LogTrace($"Delete audiorecording application  by hearing Id {hearingId}");
+            var uriString = _apiUriFactory.ConferenceEndpoints.DeleteAudioApplication(hearingId);
+            var response = await _httpClient.PutAsync(uriString, null).ConfigureAwait(false);
+            response.EnsureSuccessStatusCode();
         }
     }
 }

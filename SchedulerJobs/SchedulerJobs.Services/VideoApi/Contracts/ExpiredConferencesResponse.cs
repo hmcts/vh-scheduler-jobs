@@ -11,6 +11,11 @@ namespace SchedulerJobs.Services.VideoApi.Contracts
         /// The conference's UUID
         /// </summary>
         public Guid Id { get; set; }
+
+        /// <summary>
+        /// The hearing id
+        /// </summary>
+        public Guid HearingId { get; set; }
     }
 
     public enum ConferenceState
