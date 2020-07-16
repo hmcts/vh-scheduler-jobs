@@ -48,7 +48,7 @@ namespace SchedulerJobs.Services
                     {
                         await _videoApiService.DeleteAudiorecordingApplication(s.HearingId);
                     }
-                    catch (Exception ex)
+                    catch (Exception)
                     {
                         conferencesCount--;
                     }
