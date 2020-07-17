@@ -101,9 +101,9 @@ namespace SchedulerJobs.Services
 
         private async Task<List<ExpiredConferencesResponse>> GetListExpiredConferencesResponse(string uriString)
         {
-            var response = await _httpClient.GetAsync(uriString).ConfigureAwait(false);
+            var response = await _httpClient.GetAsync(uriString);
             response.EnsureSuccessStatusCode();
-            var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+            var content = await response.Content.ReadAsStringAsync();
             return ApiRequestHelper.DeserialiseSnakeCaseJsonToResponse<List<ExpiredConferencesResponse>>(content);
         }
 
@@ -111,7 +111,7 @@ namespace SchedulerJobs.Services
         {
             _log.LogTrace($"Delete audiorecording application  by hearing Id {hearingId}");
             var uriString = _apiUriFactory.ConferenceEndpoints.DeleteAudioApplication(hearingId);
-            var response = await _httpClient.PutAsync(uriString, null).ConfigureAwait(false);
+            var response = await _httpClient.DeleteAsync(uriString);
             response.EnsureSuccessStatusCode();
         }
     }
