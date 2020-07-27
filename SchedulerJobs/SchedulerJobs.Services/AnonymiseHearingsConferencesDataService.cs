@@ -23,9 +23,9 @@ namespace SchedulerJobs.Services
         {
             await DeleteUserAsync();
 
-            await _videoApiService.AnonymiseConferences();
+            await _videoApiService.AnonymiseConferencesAsync();
 
-            await _bookingsApiService.AnonymiseHearings();
+            await _bookingsApiService.AnonymiseHearingsAsync();
         }
 
         private async Task DeleteUserAsync()
@@ -33,10 +33,10 @@ namespace SchedulerJobs.Services
             // delete users from AAD.
             // get users that do not have hearings in the future and have had hearing more than 3 months in the past. 
             // (exclude judges, vhos, test users, performance test users.
-            var usersToDelete = await _bookingsApiService.GetUsersWithClosedConferences();
-            if (usersToDelete != null)
+            var usersToDelete = await _bookingsApiService.GetUsersWithClosedConferencesAsync();
+            if (usersToDelete != null && usersToDelete.Usernames != null)
             {
-                foreach (var username in usersToDelete.Username)
+                foreach (var username in usersToDelete.Usernames)
                 {
                     await _userApiService.DeleteUserAsync(username);
                 }

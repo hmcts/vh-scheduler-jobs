@@ -43,7 +43,7 @@ namespace SchedulerJobs.Services
         /// <summary>
         /// Anonymises the conference and participant data for conferences older than 3 months.
         /// </summary>
-        Task AnonymiseConferences();
+        Task AnonymiseConferencesAsync();
     }
 
     public class VideoApiService : IVideoApiService
@@ -120,7 +120,7 @@ namespace SchedulerJobs.Services
             response.EnsureSuccessStatusCode();
         }
 
-        public async Task AnonymiseConferences()
+        public async Task AnonymiseConferencesAsync()
         {
             _log.LogInformation($"VideoApiService: Executing AnonymiseConferences at: {DateTime.UtcNow}");
             _log.LogTrace($"Scheduler: Anonymise old conferences");

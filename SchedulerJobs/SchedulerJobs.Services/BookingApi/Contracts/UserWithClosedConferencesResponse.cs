@@ -10,6 +10,6 @@ namespace SchedulerJobs.Services.BookingApi.Contracts
         /// <summary>
         /// The usernames to remove from Aad
         /// </summary>
-        public IList<string> Username { get; set; }
+        public IList<string> Usernames { get; set; }
     }
 }

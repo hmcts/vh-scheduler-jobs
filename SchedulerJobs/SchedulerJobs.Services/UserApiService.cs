@@ -20,18 +20,19 @@ namespace SchedulerJobs.Services
         private readonly HttpClient _httpClient;
         private readonly ILogger _log;
         private readonly ApiUriFactory _apiUriFactory;
+        private readonly ILogger<UserApiService> _logger;
         public UserApiService(HttpClient httpClient, HearingServicesConfiguration hearingServicesConfiguration,
-            ILoggerFactory factory)
+            ILogger<UserApiService> logger)
         {
             _httpClient = httpClient;
-            _log = factory.CreateLogger<BookingsApiService>();
             _httpClient.BaseAddress = new Uri(hearingServicesConfiguration.UserApiUrl);
             _apiUriFactory = new ApiUriFactory();
+            _logger = logger;
         }
         public async Task DeleteUserAsync(string username)
         {
-            _log.LogInformation($"UserApiService: Executing DeleteUserAsync for { username } at: {DateTime.UtcNow}");
-            _log.LogTrace($"Delete AD user with username {username}");
+            _logger.LogInformation($"UserApiService: Executing DeleteUserAsync for { username } at: {DateTime.UtcNow}");
+            _logger.LogTrace($"Delete AD user with username {username}");
             var uriString = _apiUriFactory.UserEndpoints.DeleteUser(username);
             var response = await _httpClient.DeleteAsync(uriString);
             response.EnsureSuccessStatusCode();

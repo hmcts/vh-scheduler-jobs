@@ -12,11 +12,11 @@ namespace SchedulerJobs.Functions
         /// <summary>
         /// Function to anonymise hearing and conference data older than three months
         /// </summary>
-        /// <param name="myTimer">Set time to run every day at 1:10 AM</param>
+        /// <param name="myTimer">Set time to run every day at 5:30 AM</param>
         /// <param name="log"></param>
         /// <param name="anonymiseHearingsConferencesDataService"></param>
         [FunctionName("AnonymiseHearingsConferencesAndDeleteAadUsersFunction")]
-        public static async Task Run([TimerTrigger("* */5 * * * *")]TimerInfo myTimer, 
+        public static async Task Run([TimerTrigger("0 30 5 * * *")]TimerInfo myTimer, 
             ILogger log, 
             [Inject] IAnonymiseHearingsConferencesDataService anonymiseHearingsConferencesDataService)
         {

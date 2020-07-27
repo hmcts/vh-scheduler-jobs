@@ -27,12 +27,12 @@ namespace SchedulerJobs.UnitTests.Functions.AnonymiseHearingsConferencesAndDelet
             _userApiServiceMock = new Mock<IUserApiService>();
 
             var usernames = new UserWithClosedConferencesResponse();
-            usernames.Username = new List<string>();
-            usernames.Username.Add("username1@email.com");
-            usernames.Username.Add("username2@email.com");
-            usernames.Username.Add("username3@email.com");
+            usernames.Usernames = new List<string>();
+            usernames.Usernames.Add("username1@email.com");
+            usernames.Usernames.Add("username2@email.com");
+            usernames.Usernames.Add("username3@email.com");
 
-            _bookingApiServiceMock.Setup(x => x.GetUsersWithClosedConferences()).ReturnsAsync(usernames);
+            _bookingApiServiceMock.Setup(x => x.GetUsersWithClosedConferencesAsync()).ReturnsAsync(usernames);
         }
 
         [Test]

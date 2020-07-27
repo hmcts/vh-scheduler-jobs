@@ -28,17 +28,17 @@ namespace SchedulerJobs.UnitTests.Services
         public void Should_anonymise_the_old_hearings_and_conferences()
         {
             var usernames = new UserWithClosedConferencesResponse();
-            usernames.Username = new List<string>();
-            usernames.Username.Add("username1@email.com");
-            usernames.Username.Add("username2@email.com");
-            usernames.Username.Add("username3@email.com");
-            _bookingApiService.Setup(x => x.GetUsersWithClosedConferences()).ReturnsAsync(usernames);
+            usernames.Usernames = new List<string>();
+            usernames.Usernames.Add("username1@email.com");
+            usernames.Usernames.Add("username2@email.com");
+            usernames.Usernames.Add("username3@email.com");
+            _bookingApiService.Setup(x => x.GetUsersWithClosedConferencesAsync()).ReturnsAsync(usernames);
 
             _anonymiseHearingsConferencesDataService.AnonymiseHearingsConferencesDataAsync();
 
             _userApiService.Verify(x => x.DeleteUserAsync(It.IsAny<string>()), Times.Exactly(3));
-            _videoApiService.Verify(x => x.AnonymiseConferences(), Times.Once);
-            _bookingApiService.Verify(x => x.AnonymiseHearings(), Times.Once);
+            _videoApiService.Verify(x => x.AnonymiseConferencesAsync(), Times.Once);
+            _bookingApiService.Verify(x => x.AnonymiseHearingsAsync(), Times.Once);
         }
     }
 }

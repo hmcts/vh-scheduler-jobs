@@ -10,38 +10,38 @@ namespace SchedulerJobs.Services
 {
     public interface IBookingsApiService
     {
-        Task<UserWithClosedConferencesResponse> GetUsersWithClosedConferences();
+        Task<UserWithClosedConferencesResponse> GetUsersWithClosedConferencesAsync();
         /// <summary>
         /// Anonymises the hearing, case, person, organisation and participant data for hearings older than 3 months.
         /// </summary>
-        Task AnonymiseHearings();
+        Task AnonymiseHearingsAsync();
     }
     public class BookingsApiService : IBookingsApiService
     {
         private readonly HttpClient _httpClient;
-        private readonly ILogger _log;
         private readonly ApiUriFactory _apiUriFactory;
+        private readonly ILogger<BookingsApiService> _logger;
         public BookingsApiService(HttpClient httpClient, HearingServicesConfiguration hearingServicesConfiguration,
-            ILoggerFactory factory)
+            ILogger<BookingsApiService> logger)
         {
             _httpClient = httpClient;
-            _log = factory.CreateLogger<BookingsApiService>();
             _httpClient.BaseAddress = new Uri(hearingServicesConfiguration.BookingsApiUrl);
             _apiUriFactory = new ApiUriFactory();
+            _logger = logger;
         }
-        public async Task AnonymiseHearings()
+        public async Task AnonymiseHearingsAsync()
         {
-            _log.LogInformation($"BookingsApiService: Executing AnonymiseHearings at: {DateTime.UtcNow}");
-            _log.LogTrace($"Scheduler: Anonymise old hearings");
+            _logger.LogInformation($"BookingsApiService: Executing AnonymiseHearings at: {DateTime.UtcNow}");
+            _logger.LogTrace($"Scheduler: Anonymise old hearings");
             var uriString = _apiUriFactory.HearingsEndpoints.AnonymiseHearings();
             var response = await _httpClient.PatchAsync(uriString, null);
             response.EnsureSuccessStatusCode();
         }
 
-        public async Task<UserWithClosedConferencesResponse> GetUsersWithClosedConferences()
+        public async Task<UserWithClosedConferencesResponse> GetUsersWithClosedConferencesAsync()
         {
-            _log.LogInformation($"BookingsApiService: Executing GetUsersWithClosedconferences at: {DateTime.UtcNow}");
-            _log.LogTrace($"Scheduler: Retrieve list of users with closed hearings and no future hearings.");
+            _logger.LogInformation($"BookingsApiService: Executing GetUsersWithClosedconferences at: {DateTime.UtcNow}");
+            _logger.LogTrace($"Scheduler: Retrieve list of users with closed hearings and no future hearings.");
             var uriString = _apiUriFactory.PersonsEndpoints.GetUserWithClosedHearings();
 
             var response = await _httpClient.GetAsync(uriString);
