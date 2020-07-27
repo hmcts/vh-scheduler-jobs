@@ -13,7 +13,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SchedulerJobs", "SchedulerJ
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SchedulerJobs.UnitTests", "SchedulerJobs.UnitTests\SchedulerJobs.UnitTests.csproj", "{C1F145A9-1448-4E1D-BF27-68610F33A555}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Testing.Common", "Testing.Common\Testing.Common.csproj", "{09BD1A43-96F3-410E-B972-BB92728551AE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Testing.Common", "Testing.Common\Testing.Common.csproj", "{09BD1A43-96F3-410E-B972-BB92728551AE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
