@@ -37,7 +37,6 @@ namespace SchedulerJobs.Services
             var response = await _httpClient.PatchAsync(uriString, null);
             response.EnsureSuccessStatusCode();
         }
-
         public async Task<UserWithClosedConferencesResponse> GetUsersWithClosedConferencesAsync()
         {
             _logger.LogInformation($"BookingsApiService: Executing GetUsersWithClosedconferences at: {DateTime.UtcNow}");

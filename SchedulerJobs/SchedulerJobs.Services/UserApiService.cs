@@ -18,7 +18,6 @@ namespace SchedulerJobs.Services
     public class UserApiService : IUserApiService
     {
         private readonly HttpClient _httpClient;
-        private readonly ILogger _log;
         private readonly ApiUriFactory _apiUriFactory;
         private readonly ILogger<UserApiService> _logger;
         public UserApiService(HttpClient httpClient, HearingServicesConfiguration hearingServicesConfiguration,
