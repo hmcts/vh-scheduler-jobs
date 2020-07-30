@@ -125,7 +125,7 @@ namespace SchedulerJobs.Services
             _log.LogInformation($"VideoApiService: Executing AnonymiseConferences at: {DateTime.UtcNow}");
             _log.LogTrace($"Scheduler: Anonymise old conferences");
             var uriString = _apiUriFactory.ConferenceEndpoints.AnonymiseConferences;
-            var response = await _httpClient.PostAsync(uriString, null);
+            var response = await _httpClient.PatchAsync(uriString, null);
             response.EnsureSuccessStatusCode();
         }
     }
