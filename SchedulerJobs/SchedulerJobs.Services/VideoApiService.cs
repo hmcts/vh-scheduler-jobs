@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Net.Http;
-using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using SchedulerJobs.Common.ApiHelper;
 using SchedulerJobs.Common.Configuration;
 using SchedulerJobs.Services.VideoApi.Contracts;
+using System;
+using System.Collections.Generic;
+using System.Net.Http;
+using System.Threading.Tasks;
 
 namespace SchedulerJobs.Services
 {
@@ -39,6 +39,11 @@ namespace SchedulerJobs.Services
         /// <param name="hearingId"></param>
         /// <returns></returns>
         Task DeleteAudiorecordingApplication(Guid hearingId);
+
+        /// <summary>
+        /// Anonymises the conference and participant data for conferences older than 3 months.
+        /// </summary>
+        Task AnonymiseConferencesAsync();
     }
 
     public class VideoApiService : IVideoApiService
@@ -109,9 +114,18 @@ namespace SchedulerJobs.Services
 
         public async Task DeleteAudiorecordingApplication(Guid hearingId)
         {
-            _log.LogTrace($"Delete audiorecording application  by hearing Id {hearingId}");
+            _log.LogTrace($"Delete audiorecording application by hearing Id {hearingId}");
             var uriString = _apiUriFactory.ConferenceEndpoints.DeleteAudioApplication(hearingId);
             var response = await _httpClient.DeleteAsync(uriString);
+            response.EnsureSuccessStatusCode();
+        }
+
+        public async Task AnonymiseConferencesAsync()
+        {
+            _log.LogInformation($"VideoApiService: Executing AnonymiseConferences at: {DateTime.UtcNow}");
+            _log.LogTrace($"Scheduler: Anonymise old conferences");
+            var uriString = _apiUriFactory.ConferenceEndpoints.AnonymiseConferences;
+            var response = await _httpClient.PatchAsync(uriString, null);
             response.EnsureSuccessStatusCode();
         }
     }

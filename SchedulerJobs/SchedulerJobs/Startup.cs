@@ -42,13 +42,22 @@ namespace SchedulerJobs
             services.AddScoped<IAzureTokenProvider, AzureTokenProvider>();
 
             services.AddScoped<VideoServiceTokenHandler>();
+            services.AddScoped<BookingsServiceTokenHandler>();
+            services.AddScoped<UserServiceTokenHandler>();
             services.AddLogging(builder => { builder.SetMinimumLevel(LogLevel.Debug); });
 
             services.AddScoped<ICloseConferenceService, CloseConferenceService>();
             services.AddScoped<IClearConferenceChatHistoryService, ClearConferenceChatHistoryService>();
+            services.AddScoped<IAnonymiseHearingsConferencesDataService, AnonymiseHearingsConferencesDataService>();
 
             services.AddHttpClient<IVideoApiService, VideoApiService>()
                 .AddHttpMessageHandler<VideoServiceTokenHandler>();
+
+            services.AddHttpClient<IBookingsApiService, BookingsApiService>()
+                .AddHttpMessageHandler<BookingsServiceTokenHandler>();
+
+            services.AddHttpClient<IUserApiService, UserApiService>()
+                .AddHttpMessageHandler<UserServiceTokenHandler>();
         }
 
         private static HearingServicesConfiguration BuildHearingServicesConfiguration(ConfigLoader configLoader)
