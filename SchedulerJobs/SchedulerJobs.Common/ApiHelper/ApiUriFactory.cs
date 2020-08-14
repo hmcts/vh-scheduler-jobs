@@ -29,6 +29,7 @@ namespace SchedulerJobs.Common.ApiHelper
         public string GetExpiredAudiorecordingConferences => $"{ApiRoot}/audiorecording/expired";
         public string DeleteAudioApplication(Guid hearingId) => $"{ApiRoot}/audioapplications/{hearingId}";
         public string AnonymiseConferences => $"{ApiRoot}/anonymiseconferences";
+        public string RemoveHeartbeatsForconferences => $"{ApiRoot}/expiredHearbeats";
     }
 
     public class HearingsEndpoints

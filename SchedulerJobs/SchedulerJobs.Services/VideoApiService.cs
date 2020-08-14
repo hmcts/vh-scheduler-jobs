@@ -39,11 +39,15 @@ namespace SchedulerJobs.Services
         /// <param name="hearingId"></param>
         /// <returns></returns>
         Task DeleteAudiorecordingApplication(Guid hearingId);
-
         /// <summary>
         /// Anonymises the conference and participant data for conferences older than 3 months.
         /// </summary>
         Task AnonymiseConferencesAsync();
+        /// <summary>
+        /// This function removes heartbeats for conferences older than 14 days
+        /// </summary>
+        /// <returns></returns>
+        Task RemoveHeartbeatsForConferencesAsync();
     }
 
     public class VideoApiService : IVideoApiService
@@ -126,6 +130,14 @@ namespace SchedulerJobs.Services
             _log.LogTrace($"Scheduler: Anonymise old conferences");
             var uriString = _apiUriFactory.ConferenceEndpoints.AnonymiseConferences;
             var response = await _httpClient.PatchAsync(uriString, null);
+            response.EnsureSuccessStatusCode();
+        }
+
+        public async Task RemoveHeartbeatsForConferencesAsync()
+        {
+            _log.LogTrace($"Remove heartbeats for conferences older than 14 days");
+            var uriString = _apiUriFactory.ConferenceEndpoints.RemoveHeartbeatsForconferences;
+            var response = await _httpClient.DeleteAsync(uriString);
             response.EnsureSuccessStatusCode();
         }
     }
