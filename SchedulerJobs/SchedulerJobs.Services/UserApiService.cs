@@ -33,7 +33,7 @@ namespace SchedulerJobs.Services
             _logger.LogInformation($"UserApiService: Executing DeleteUserAsync for { username } at: {DateTime.UtcNow}");
             _logger.LogTrace($"Delete AD user with username {username}");
             var uriString = _apiUriFactory.UserEndpoints.DeleteUser(username);
-            var response = await _httpClient.DeleteAsync(uriString);
+            await _httpClient.DeleteAsync(uriString);
         }
     }
 }
