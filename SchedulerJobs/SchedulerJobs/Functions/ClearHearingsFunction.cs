@@ -15,7 +15,7 @@ namespace SchedulerJobs.Functions
         /// <param name="log"></param>
         /// <param name="closeConferenceService"></param>
         [FunctionName("ClearHearingsFunction")]
-        public static async Task Run([TimerTrigger("0 40 4 * * *")]TimerInfo myTimer,
+        public static async Task Run([TimerTrigger("0 0 23 * * *")]TimerInfo myTimer,
         ILogger log,
          [Inject]ICloseConferenceService closeConferenceService)
         {
