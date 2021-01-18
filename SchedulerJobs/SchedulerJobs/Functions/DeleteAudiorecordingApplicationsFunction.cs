@@ -9,7 +9,7 @@ namespace SchedulerJobs.Functions
     public static class DeleteAudiorecordingApplicationsFunction
     {
         [FunctionName("DeleteAudiorecordingApplicationsFunction")]
-        public static async Task Run([TimerTrigger("0 0 2 * * *")]TimerInfo myTimer,
+        public static async Task Run([TimerTrigger("0 0 22 * * *")]TimerInfo myTimer,
         ILogger log,
             [Inject]ICloseConferenceService closeConferenceService)
         {
