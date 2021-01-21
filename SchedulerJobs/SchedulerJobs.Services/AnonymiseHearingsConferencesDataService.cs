@@ -17,11 +17,12 @@ namespace SchedulerJobs.Services
         private readonly ILogger<AnonymiseHearingsConferencesDataService> _logger;
         
         public AnonymiseHearingsConferencesDataService(IVideoApiService videoApiService, IBookingsApiService bookingsApiService,
-            IUserApiService userApiService)
+            IUserApiService userApiService, ILogger<AnonymiseHearingsConferencesDataService> logger)
         {
             _videoApiService = videoApiService;
             _bookingsApiService = bookingsApiService;
             _userApiService = userApiService;
+            _logger = logger;
         }
         public async Task AnonymiseHearingsConferencesDataAsync()
         {
