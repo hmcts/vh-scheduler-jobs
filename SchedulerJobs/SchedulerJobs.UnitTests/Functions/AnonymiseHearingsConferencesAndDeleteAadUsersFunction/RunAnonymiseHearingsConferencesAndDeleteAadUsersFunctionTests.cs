@@ -8,6 +8,7 @@ using SchedulerJobs.Services.BookingApi.Contracts;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using Testing.Common;
 
 namespace SchedulerJobs.UnitTests.Functions.AnonymiseHearingsConferencesAndDeleteAadUsersFunction
@@ -17,6 +18,7 @@ namespace SchedulerJobs.UnitTests.Functions.AnonymiseHearingsConferencesAndDelet
         private Mock<IVideoApiService> _videoApiServiceMock;
         private Mock<IBookingsApiService> _bookingApiServiceMock;
         private Mock<IUserApiService> _userApiServiceMock;
+        private Mock<ILogger<AnonymiseHearingsConferencesDataService>> _loggerMock;
         private readonly TimerInfo _timerInfo = new TimerInfo(new ScheduleStub(), new ScheduleStatus(), true);
 
         [SetUp]
@@ -25,6 +27,7 @@ namespace SchedulerJobs.UnitTests.Functions.AnonymiseHearingsConferencesAndDelet
             _videoApiServiceMock = new Mock<IVideoApiService>();
             _bookingApiServiceMock = new Mock<IBookingsApiService>();
             _userApiServiceMock = new Mock<IUserApiService>();
+            _loggerMock = new Mock<ILogger<AnonymiseHearingsConferencesDataService>>();
 
             var usernames = new UserWithClosedConferencesResponse();
             usernames.Usernames = new List<string>();
@@ -40,7 +43,7 @@ namespace SchedulerJobs.UnitTests.Functions.AnonymiseHearingsConferencesAndDelet
         {
             var logger = (LoggerFake)TestFactory.CreateLogger(LoggerTypes.List);
             await SchedulerJobs.Functions.AnonymiseHearingsConferencesAndDeleteAadUsersFunction.Run(_timerInfo, logger,
-                new AnonymiseHearingsConferencesDataService(_videoApiServiceMock.Object, _bookingApiServiceMock.Object, _userApiServiceMock.Object));
+                new AnonymiseHearingsConferencesDataService(_videoApiServiceMock.Object, _bookingApiServiceMock.Object, _userApiServiceMock.Object, _loggerMock.Object));
             logger.GetLoggedMessages().Last().Should()
                 .StartWith("Data anonymised for hearings, conferences older than 3 months.");
         }
