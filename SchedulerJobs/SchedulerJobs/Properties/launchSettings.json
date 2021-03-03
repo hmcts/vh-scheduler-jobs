@@ -1,0 +1,13 @@
+{
+  "profiles": {
+    "SchedulerJobs": {
+      "commandName": "Project"
+    },
+    "Docker": {
+      "commandName": "Docker",
+      "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}",
+      "httpPort": 30481,
+      "useSSL": false
+    }
+  }
+}
