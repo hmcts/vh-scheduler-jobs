@@ -4,6 +4,7 @@ using SchedulerJobs.Services;
 using SchedulerJobs.Services.BookingApi.Contracts;
 using System;
 using System.Collections.Generic;
+using Microsoft.Extensions.Logging;
 
 namespace SchedulerJobs.UnitTests.Services
 {
@@ -12,6 +13,7 @@ namespace SchedulerJobs.UnitTests.Services
         private Mock<IVideoApiService> _videoApiService;
         private Mock<IBookingsApiService> _bookingApiService;
         private Mock<IUserApiService> _userApiService;
+        private Mock<ILogger<AnonymiseHearingsConferencesDataService>> _loggerMock;
         private IAnonymiseHearingsConferencesDataService _anonymiseHearingsConferencesDataService;
 
         [SetUp]
@@ -20,8 +22,9 @@ namespace SchedulerJobs.UnitTests.Services
             _userApiService = new Mock<IUserApiService>();
             _bookingApiService = new Mock<IBookingsApiService>();
             _videoApiService = new Mock<IVideoApiService>();
+            _loggerMock = new Mock<ILogger<AnonymiseHearingsConferencesDataService>>();
             _anonymiseHearingsConferencesDataService = new AnonymiseHearingsConferencesDataService(_videoApiService.Object,
-                _bookingApiService.Object, _userApiService.Object);
+                _bookingApiService.Object, _userApiService.Object, _loggerMock.Object);
         }
 
         [Test]
