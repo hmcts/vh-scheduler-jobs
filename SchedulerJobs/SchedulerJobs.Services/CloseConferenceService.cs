@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using VideoApi.Client;
 
 namespace SchedulerJobs.Services
 {
@@ -12,24 +13,24 @@ namespace SchedulerJobs.Services
 
     public class CloseConferenceService : ICloseConferenceService
     {
-        private readonly IVideoApiService _videoApiService;
+        private readonly IVideoApiClient _videoApiClient;
 
-        public CloseConferenceService(IVideoApiService videoApiService)
+        public CloseConferenceService(IVideoApiClient videoApiClient)
         {
-            _videoApiService = videoApiService;
+            _videoApiClient = videoApiClient;
         }
 
         public async Task<int> CloseConferencesAsync()
         {
-            var conferences = await _videoApiService.GetExpiredOpenConferences();
+            var conferences = await _videoApiClient.GetExpiredOpenConferencesAsync();
             var conferenceCount = 0;
             if (conferences != null && conferences.Any())
             {
                 conferenceCount = conferences.Count;
-                conferences.ForEach(async s =>
+                foreach (var conference in conferences)
                 {
-                    await _videoApiService.CloseConference(s.Id);
-                });
+                    await _videoApiClient.CloseConferenceAsync(conference.Id);
+                }
             }
 
             return conferenceCount;
@@ -37,22 +38,22 @@ namespace SchedulerJobs.Services
 
         public async Task<int> DeleteAudiorecordingApplicationsAsync()
         {
-            var conferences = await _videoApiService.GetExpiredAudiorecordingConferences();
+            var conferences = await _videoApiClient.GetExpiredAudiorecordingConferencesAsync();
             var conferencesCount = 0;
             if (conferences != null && conferences.Any())
             {
                 conferencesCount = conferences.Count;
-                conferences.ForEach(async s =>
+                foreach (var conference in conferences)
                 {
                     try
                     {
-                        await _videoApiService.DeleteAudiorecordingApplication(s.HearingId);
+                        await _videoApiClient.DeleteAudioApplicationAsync(conference.HearingId);
                     }
                     catch (Exception)
                     {
                         conferencesCount--;
                     }
-                });
+                }
             }
 
             return conferencesCount;

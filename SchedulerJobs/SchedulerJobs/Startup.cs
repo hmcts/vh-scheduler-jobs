@@ -1,4 +1,5 @@
-﻿using Microsoft.Azure.WebJobs;
+﻿using BookingsApi.Client;
+using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -10,6 +11,8 @@ using SchedulerJobs.Common.Configuration;
 using SchedulerJobs.Common.Security;
 using SchedulerJobs.Service;
 using SchedulerJobs.Services;
+using UserApi.Client;
+using VideoApi.Client;
 using Willezone.Azure.WebJobs.Extensions.DependencyInjection;
 
 [assembly: WebJobsStartup(typeof(Startup))]
@@ -51,13 +54,13 @@ namespace SchedulerJobs
             services.AddScoped<IAnonymiseHearingsConferencesDataService, AnonymiseHearingsConferencesDataService>();
             services.AddScoped<IRemoveHeartbeatsForConferencesService, RemoveHeartbeatsForConferencesService>();
 
-            services.AddHttpClient<IVideoApiService, VideoApiService>()
+            services.AddHttpClient<IVideoApiClient, VideoApiClient>()
                 .AddHttpMessageHandler<VideoServiceTokenHandler>();
 
-            services.AddHttpClient<IBookingsApiService, BookingsApiService>()
+            services.AddHttpClient<IBookingsApiClient, BookingsApiClient>()
                 .AddHttpMessageHandler<BookingsServiceTokenHandler>();
 
-            services.AddHttpClient<IUserApiService, UserApiService>()
+            services.AddHttpClient<IUserApiClient, UserApiClient>()
                 .AddHttpMessageHandler<UserServiceTokenHandler>();
         }
 

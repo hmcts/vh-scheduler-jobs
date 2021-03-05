@@ -24,7 +24,7 @@ namespace SchedulerJobs.Functions
                 log.LogTrace("Closed hearings function running late");
             }
 
-            var conferencesCount = await closeConferenceService.CloseConferencesAsync().ConfigureAwait(false);
+            var conferencesCount = await closeConferenceService.CloseConferencesAsync();
             log.LogTrace($"Close hearings function executed and  {conferencesCount} hearings closed");
         }
     }
