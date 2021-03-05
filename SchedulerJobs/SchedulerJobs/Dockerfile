@@ -6,7 +6,6 @@ WORKDIR /version
 COPY .git .git
 RUN /tools/dotnet-gitversion /ensureassemblyinfo /updateassemblyinfo AssemblyInfo.cs /nofetch /config /GitVersion.yml
 
-
 FROM mcr.microsoft.com/dotnet/core/sdk:${SDK_VERSION} AS build
 RUN mkdir -p /home/site/wwwroot
 COPY SchedulerJobs .
