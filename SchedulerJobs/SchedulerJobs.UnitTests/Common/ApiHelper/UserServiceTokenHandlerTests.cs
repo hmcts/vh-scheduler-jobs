@@ -17,7 +17,6 @@ namespace SchedulerJobs.UnitTests.Common.ApiHelper
             var azureTokenProvider = tokenProviderMock.Object;
             new UserServiceTokenHandler(new AzureAdConfiguration
             {
-                Authority = "auth",
                 ClientId = "id",
                 ClientSecret = "secret",
                 TenantId = "tenant",

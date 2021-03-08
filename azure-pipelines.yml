@@ -46,10 +46,10 @@ parameters:
     
     # AzureAd
     - name: AzureAd:ClientId
-      value: vh-booking-queue-subscriber-appid
+      value: vh-scheduler-jobs-appid
       secret: true
     - name: AzureAd:ClientSecret
-      value: vh-booking-queue-subscriber-key
+      value: vh-scheduler-jobs-key
       secret: true
     - name: AzureAd:TenantId
       value: tenantid
@@ -127,7 +127,7 @@ extends:
         - group: vh-domains-and-urls
         - group: vh-apps-settings-generic
         - group: vh-preview
-        - group: vh-booking-queue-subscriber
+        - group: vh-scheduler-jobs
       coverletCoverageExclusions:
         - "[*]SchedulerJobs.Common.*"
         - "[*]SchedulerJobs.UnitTests.*"
@@ -142,14 +142,14 @@ extends:
       subscription: $(pr_Subscription)
       secrets_KeyVault: $(pr_Secret_KeyVault)
       secrets_Subscription: $(pr_Secret_Subscription)
-      devOpsResource: vh_booking_queue_subscriber
-      appName: vh-booking-queue-subscriber-$(environment)
-      resourceGroup: vh-booking-queue-subscriber-$(environment)
+      devOpsResource: vh_scheduler_jobs
+      appName: vh-scheduler-jobs-$(environment)
+      resourceGroup: vh-scheduler-jobs-dev-$(environment)
       variables:
         - group: vh-domains-and-urls
         - group: vh-apps-settings-generic
         - group: vh-preview
-        - group: vh-booking-queue-subscriber
+        - group: vh-scheduler-jobs
       appSettings: ${{ parameters.appSettings }}
       dependentApps:
         - name: vh-bookings-api-$(environment)
