@@ -55,13 +55,34 @@ namespace SchedulerJobs
             services.AddScoped<IRemoveHeartbeatsForConferencesService, RemoveHeartbeatsForConferencesService>();
 
             services.AddHttpClient<IVideoApiClient, VideoApiClient>()
-                .AddHttpMessageHandler<VideoServiceTokenHandler>();
+                .AddHttpMessageHandler<VideoServiceTokenHandler>()
+                .AddTypedClient(httpClient =>
+                {
+                    var client = VideoApiClient.GetClient(httpClient);
+                    client.BaseUrl = hearingServicesConfiguration.VideoApiUrl;
+                    client.ReadResponseAsString = true;
+                    return (IVideoApiClient) client;
+                });
 
             services.AddHttpClient<IBookingsApiClient, BookingsApiClient>()
-                .AddHttpMessageHandler<BookingsServiceTokenHandler>();
+                .AddHttpMessageHandler<BookingsServiceTokenHandler>()
+                .AddTypedClient(httpClient =>
+                {
+                    var client = BookingsApiClient.GetClient(httpClient);
+                    client.BaseUrl = hearingServicesConfiguration.BookingsApiUrl;
+                    client.ReadResponseAsString = true;
+                    return (IBookingsApiClient) client;
+                });
 
             services.AddHttpClient<IUserApiClient, UserApiClient>()
-                .AddHttpMessageHandler<UserServiceTokenHandler>();
+                .AddHttpMessageHandler<UserServiceTokenHandler>()
+                .AddTypedClient(httpClient =>
+                {
+                    var client = UserApiClient.GetClient(httpClient);
+                    client.BaseUrl = hearingServicesConfiguration.UserApiUrl;
+                    client.ReadResponseAsString = true;
+                    return (IUserApiClient) client;
+                });
         }
 
         private static HearingServicesConfiguration BuildHearingServicesConfiguration(ConfigLoader configLoader)
