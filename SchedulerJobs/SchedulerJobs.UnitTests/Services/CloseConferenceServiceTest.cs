@@ -4,46 +4,47 @@ using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
 using SchedulerJobs.Services;
-using SchedulerJobs.Services.VideoApi.Contracts;
+using VideoApi.Client;
+using VideoApi.Contract.Responses;
 
 namespace SchedulerJobs.UnitTests.Services
 {
     [TestFixture]
     public class CloseConferenceServiceTest
     {
-        private Mock<IVideoApiService> _videoApiService;
+        private Mock<IVideoApiClient> _videoApiClient;
         private ICloseConferenceService _closeConferenceService;
 
         [SetUp]
         public void Setup()
         {
-            _videoApiService = new Mock<IVideoApiService>();
-            _closeConferenceService = new CloseConferenceService(_videoApiService.Object);
+            _videoApiClient = new Mock<IVideoApiClient>();
+            _closeConferenceService = new CloseConferenceService(_videoApiClient.Object);
         }
 
         [Test]
         public void Empty_list_of_conferences_and_nothing_done()
         {
-            _videoApiService = new Mock<IVideoApiService>();
-            _closeConferenceService = new CloseConferenceService(_videoApiService.Object);
+            _videoApiClient = new Mock<IVideoApiClient>();
+            _closeConferenceService = new CloseConferenceService(_videoApiClient.Object);
 
             var conferences = new List<ExpiredConferencesResponse>();
-            _videoApiService.Setup(x => x.GetExpiredOpenConferences()).Returns(Task.FromResult(conferences));
+            _videoApiClient.Setup(x => x.GetExpiredOpenConferencesAsync()).ReturnsAsync(conferences);
 
             _closeConferenceService.CloseConferencesAsync();
-            _videoApiService.Verify(x => x.CloseConference(It.IsAny<Guid>()), Times.Never);
+            _videoApiClient.Verify(x => x.CloseConferenceAsync(It.IsAny<Guid>()), Times.Never);
         }
 
         [Test]
         public void Conferences_is_null_and_nothing_done()
         {
-            _videoApiService = new Mock<IVideoApiService>();
-            _closeConferenceService = new CloseConferenceService(_videoApiService.Object);
+            _videoApiClient = new Mock<IVideoApiClient>();
+            _closeConferenceService = new CloseConferenceService(_videoApiClient.Object);
 
-            _videoApiService.Setup(x => x.GetExpiredOpenConferences()).Returns(Task.FromResult((List<ExpiredConferencesResponse>) null));
+            _videoApiClient.Setup(x => x.GetExpiredOpenConferencesAsync()).ReturnsAsync((List<ExpiredConferencesResponse>) null);
 
             _closeConferenceService.CloseConferencesAsync();
-            _videoApiService.Verify(x => x.CloseConference(It.IsAny<Guid>()), Times.Never);
+            _videoApiClient.Verify(x => x.CloseConferenceAsync(It.IsAny<Guid>()), Times.Never);
         }
 
         [Test]
@@ -55,36 +56,36 @@ namespace SchedulerJobs.UnitTests.Services
             };
            
             var conferences = new List<ExpiredConferencesResponse> { response };
-            _videoApiService.Setup(x => x.GetExpiredOpenConferences()).Returns(Task.FromResult(conferences));
+            _videoApiClient.Setup(x => x.GetExpiredOpenConferencesAsync()).ReturnsAsync(conferences);
 
             _closeConferenceService.CloseConferencesAsync();
-            _videoApiService.Verify(x => x.CloseConference(It.IsAny<Guid>()), Times.AtLeastOnce);
+            _videoApiClient.Verify(x => x.CloseConferenceAsync(It.IsAny<Guid>()), Times.AtLeastOnce);
         }
 
         [Test]
         public void Should_return_empty_list_of_closed_conferences()
         {
-            _videoApiService = new Mock<IVideoApiService>();
-            _closeConferenceService = new CloseConferenceService(_videoApiService.Object);
+            _videoApiClient = new Mock<IVideoApiClient>();
+            _closeConferenceService = new CloseConferenceService(_videoApiClient.Object);
 
             var conferences = new List<ExpiredConferencesResponse>();
-            _videoApiService.Setup(x => x.GetExpiredAudiorecordingConferences()).Returns(Task.FromResult(conferences));
+            _videoApiClient.Setup(x => x.GetExpiredAudiorecordingConferencesAsync()).ReturnsAsync(conferences);
 
             var result =_closeConferenceService.DeleteAudiorecordingApplicationsAsync();
-            _videoApiService.Verify(x => x.DeleteAudiorecordingApplication(It.IsAny<Guid>()), Times.Never);
+            _videoApiClient.Verify(x => x.DeleteAudioApplicationAsync(It.IsAny<Guid>()), Times.Never);
             Assert.AreEqual(0, result.Result);
         }
 
         [Test]
         public void Should_return_null_for_closed_conferences_and_nothing_done()
         {
-            _videoApiService = new Mock<IVideoApiService>();
-            _closeConferenceService = new CloseConferenceService(_videoApiService.Object);
+            _videoApiClient = new Mock<IVideoApiClient>();
+            _closeConferenceService = new CloseConferenceService(_videoApiClient.Object);
 
-            _videoApiService.Setup(x => x.GetExpiredAudiorecordingConferences()).Returns(Task.FromResult((List<ExpiredConferencesResponse>)null));
+            _videoApiClient.Setup(x => x.GetExpiredAudiorecordingConferencesAsync()).ReturnsAsync((List<ExpiredConferencesResponse>)null);
 
             var result = _closeConferenceService.DeleteAudiorecordingApplicationsAsync();
-            _videoApiService.Verify(x => x.DeleteAudiorecordingApplication(It.IsAny<Guid>()), Times.Never);
+            _videoApiClient.Verify(x => x.DeleteAudioApplicationAsync(It.IsAny<Guid>()), Times.Never);
             Assert.AreEqual(0, result.Result);
         }
 
@@ -97,10 +98,10 @@ namespace SchedulerJobs.UnitTests.Services
             };
 
             var conferences = new List<ExpiredConferencesResponse> { response };
-            _videoApiService.Setup(x => x.GetExpiredAudiorecordingConferences()).Returns(Task.FromResult(conferences));
+            _videoApiClient.Setup(x => x.GetExpiredAudiorecordingConferencesAsync()).ReturnsAsync(conferences);
 
            var result = _closeConferenceService.DeleteAudiorecordingApplicationsAsync();
-            _videoApiService.Verify(x => x.DeleteAudiorecordingApplication(It.IsAny<Guid>()), Times.AtLeastOnce);
+            _videoApiClient.Verify(x => x.DeleteAudioApplicationAsync(It.IsAny<Guid>()), Times.AtLeastOnce);
             Assert.AreEqual(1, result.Result);
         }
 
@@ -113,10 +114,10 @@ namespace SchedulerJobs.UnitTests.Services
             };
 
             var conferences = new List<ExpiredConferencesResponse> { response };
-            _videoApiService.Setup(x => x.GetExpiredAudiorecordingConferences()).Returns(Task.FromResult(conferences));
-            _videoApiService.Setup(x => x.DeleteAudiorecordingApplication(It.IsAny<Guid>())).Throws(new Exception());
+            _videoApiClient.Setup(x => x.GetExpiredAudiorecordingConferencesAsync()).ReturnsAsync(conferences);
+            _videoApiClient.Setup(x => x.DeleteAudioApplicationAsync(It.IsAny<Guid>())).Throws(new Exception());
             var result = _closeConferenceService.DeleteAudiorecordingApplicationsAsync();
-            _videoApiService.Verify(x => x.DeleteAudiorecordingApplication(It.IsAny<Guid>()), Times.AtLeastOnce);
+            _videoApiClient.Verify(x => x.DeleteAudioApplicationAsync(It.IsAny<Guid>()), Times.AtLeastOnce);
             Assert.AreEqual(0, result.Result);
         }
     }

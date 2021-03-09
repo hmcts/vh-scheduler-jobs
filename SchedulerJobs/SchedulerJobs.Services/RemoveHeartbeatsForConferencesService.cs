@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using VideoApi.Client;
 
 namespace SchedulerJobs.Services
 {
@@ -8,14 +9,16 @@ namespace SchedulerJobs.Services
     }
     public class RemoveHeartbeatsForConferencesService : IRemoveHeartbeatsForConferencesService
     {
-        private readonly IVideoApiService _videoApiService;
-        public RemoveHeartbeatsForConferencesService(IVideoApiService videoApiService)
+        private readonly IVideoApiClient _videoApiClient;
+
+        public RemoveHeartbeatsForConferencesService(IVideoApiClient videoApiClient)
         {
-            _videoApiService = videoApiService;
+            _videoApiClient = videoApiClient;
         }
+
         public async Task RemoveHeartbeatsForConferencesAsync()
         {
-            await _videoApiService.RemoveHeartbeatsForConferencesAsync();
+            await _videoApiClient.RemoveHeartbeatsForConferencesAsync();
         }
     }
 }

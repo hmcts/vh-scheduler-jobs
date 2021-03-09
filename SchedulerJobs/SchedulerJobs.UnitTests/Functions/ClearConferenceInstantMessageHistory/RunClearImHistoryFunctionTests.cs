@@ -8,37 +8,38 @@ using Microsoft.Azure.WebJobs.Extensions.Timers;
 using Moq;
 using NUnit.Framework;
 using SchedulerJobs.Services;
-using SchedulerJobs.Services.VideoApi.Contracts;
 using Testing.Common;
+using VideoApi.Client;
+using VideoApi.Contract.Responses;
 
 namespace SchedulerJobs.UnitTests.Functions.ClearConferenceInstantMessageHistory
 {
     public class RunClearImHistoryFunctionTests
     {
-        private Mock<IVideoApiService> VideoApiServiceMock { get; set; }
+        private Mock<IVideoApiClient> VideoApiClientMock { get; set; }
         private TimerInfo _timerInfo;
 
         [SetUp]
         public void Setup()
         {
-            VideoApiServiceMock = new Mock<IVideoApiService>();
+            VideoApiClientMock = new Mock<IVideoApiClient>();
             _timerInfo = new TimerInfo(new ScheduleStub(), new ScheduleStatus(), true);
         }
 
         [Test]
         public async Task Timer_should_log_message()
         {
-            var conferences = Builder<ClosedConferenceWithImHistoryResponse>.CreateListOfSize(10).All()
+            var conferences = Builder<ClosedConferencesResponse>.CreateListOfSize(10).All()
                 .With(x => x.Id = Guid.NewGuid()).Build().ToList();
-            VideoApiServiceMock.Setup(x => x.GetClosedConferencesToClearInstantMessageHistory()).ReturnsAsync(conferences);
+            VideoApiClientMock.Setup(x => x.GetClosedConferencesWithInstantMessagesAsync()).ReturnsAsync(conferences);
             var ids = conferences.Select(x => x.Id).ToList();
             var logger = (LoggerFake)TestFactory.CreateLogger(LoggerTypes.List);
             
-            await SchedulerJobs.Functions.ClearConferenceInstantMessageHistory.RunAsync(_timerInfo, logger, new ClearConferenceChatHistoryService(VideoApiServiceMock.Object));
+            await SchedulerJobs.Functions.ClearConferenceInstantMessageHistory.RunAsync(_timerInfo, logger, new ClearConferenceChatHistoryService(VideoApiClientMock.Object));
             logger.GetLoggedMessages().First().Should().Be("Timer is running late!");
             logger.GetLoggedMessages().Last().Should().Be("Cleared chat history for closed conferences");
 
-            VideoApiServiceMock.Verify(x => x.ClearConferenceChatHistory(It.IsIn<Guid>(ids)), Times.Exactly(ids.Count));
+            VideoApiClientMock.Verify(x => x.RemoveInstantMessagesAsync(It.IsIn<Guid>(ids)), Times.Exactly(ids.Count));
         }
     }
 }

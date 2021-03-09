@@ -13,7 +13,6 @@ namespace SchedulerJobs.UnitTests.Common.Security
             var azureTokenProvider = new AzureTokenProvider(
                 new AzureAdConfiguration
                 {
-                    Authority = "https://login.bbc.com/",
                     TenantId = "teanantid"
                 });
 

@@ -1,27 +1,29 @@
-﻿using Moq;
+﻿using BookingsApi.Client;
+using BookingsApi.Contract.Responses;
+using Moq;
 using NUnit.Framework;
 using SchedulerJobs.Services;
-using SchedulerJobs.Services.BookingApi.Contracts;
-using System;
 using System.Collections.Generic;
+using UserApi.Client;
+using VideoApi.Client;
 
 namespace SchedulerJobs.UnitTests.Services
 {
     public class AnonymiseHearingsConferencesDataServiceTests
     {
-        private Mock<IVideoApiService> _videoApiService;
-        private Mock<IBookingsApiService> _bookingApiService;
-        private Mock<IUserApiService> _userApiService;
+        private Mock<IVideoApiClient> _videoApiClient;
+        private Mock<IBookingsApiClient> _bookingApiClient;
+        private Mock<IUserApiClient> _userApiClient;
         private IAnonymiseHearingsConferencesDataService _anonymiseHearingsConferencesDataService;
 
         [SetUp]
         public void Setup()
         {
-            _userApiService = new Mock<IUserApiService>();
-            _bookingApiService = new Mock<IBookingsApiService>();
-            _videoApiService = new Mock<IVideoApiService>();
-            _anonymiseHearingsConferencesDataService = new AnonymiseHearingsConferencesDataService(_videoApiService.Object,
-                _bookingApiService.Object, _userApiService.Object);
+            _userApiClient = new Mock<IUserApiClient>();
+            _bookingApiClient = new Mock<IBookingsApiClient>();
+            _videoApiClient = new Mock<IVideoApiClient>();
+            _anonymiseHearingsConferencesDataService = new AnonymiseHearingsConferencesDataService(_videoApiClient.Object,
+                _bookingApiClient.Object, _userApiClient.Object);
         }
 
         [Test]
@@ -32,13 +34,13 @@ namespace SchedulerJobs.UnitTests.Services
             usernames.Usernames.Add("username1@email.com");
             usernames.Usernames.Add("username2@email.com");
             usernames.Usernames.Add("username3@email.com");
-            _bookingApiService.Setup(x => x.GetUsersWithClosedConferencesAsync()).ReturnsAsync(usernames);
+            _bookingApiClient.Setup(x => x.GetPersonByClosedHearingsAsync()).ReturnsAsync(usernames);
 
             _anonymiseHearingsConferencesDataService.AnonymiseHearingsConferencesDataAsync();
 
-            _userApiService.Verify(x => x.DeleteUserAsync(It.IsAny<string>()), Times.Exactly(3));
-            _videoApiService.Verify(x => x.AnonymiseConferencesAsync(), Times.Once);
-            _bookingApiService.Verify(x => x.AnonymiseHearingsAsync(), Times.Once);
+            _userApiClient.Verify(x => x.DeleteUserAsync(It.IsAny<string>()), Times.Exactly(3));
+            _videoApiClient.Verify(x => x.AnonymiseConferencesAsync(), Times.Once);
+            _bookingApiClient.Verify(x => x.AnonymiseHearingsAsync(), Times.Once);
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using Microsoft.Azure.WebJobs;
+﻿using BookingsApi.Client;
+using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -10,6 +11,8 @@ using SchedulerJobs.Common.Configuration;
 using SchedulerJobs.Common.Security;
 using SchedulerJobs.Service;
 using SchedulerJobs.Services;
+using UserApi.Client;
+using VideoApi.Client;
 using Willezone.Azure.WebJobs.Extensions.DependencyInjection;
 
 [assembly: WebJobsStartup(typeof(Startup))]
@@ -51,14 +54,35 @@ namespace SchedulerJobs
             services.AddScoped<IAnonymiseHearingsConferencesDataService, AnonymiseHearingsConferencesDataService>();
             services.AddScoped<IRemoveHeartbeatsForConferencesService, RemoveHeartbeatsForConferencesService>();
 
-            services.AddHttpClient<IVideoApiService, VideoApiService>()
-                .AddHttpMessageHandler<VideoServiceTokenHandler>();
+            services.AddHttpClient<IVideoApiClient, VideoApiClient>()
+                .AddHttpMessageHandler<VideoServiceTokenHandler>()
+                .AddTypedClient(httpClient =>
+                {
+                    var client = VideoApiClient.GetClient(httpClient);
+                    client.BaseUrl = hearingServicesConfiguration.VideoApiUrl;
+                    client.ReadResponseAsString = true;
+                    return (IVideoApiClient) client;
+                });
 
-            services.AddHttpClient<IBookingsApiService, BookingsApiService>()
-                .AddHttpMessageHandler<BookingsServiceTokenHandler>();
+            services.AddHttpClient<IBookingsApiClient, BookingsApiClient>()
+                .AddHttpMessageHandler<BookingsServiceTokenHandler>()
+                .AddTypedClient(httpClient =>
+                {
+                    var client = BookingsApiClient.GetClient(httpClient);
+                    client.BaseUrl = hearingServicesConfiguration.BookingsApiUrl;
+                    client.ReadResponseAsString = true;
+                    return (IBookingsApiClient) client;
+                });
 
-            services.AddHttpClient<IUserApiService, UserApiService>()
-                .AddHttpMessageHandler<UserServiceTokenHandler>();
+            services.AddHttpClient<IUserApiClient, UserApiClient>()
+                .AddHttpMessageHandler<UserServiceTokenHandler>()
+                .AddTypedClient(httpClient =>
+                {
+                    var client = UserApiClient.GetClient(httpClient);
+                    client.BaseUrl = hearingServicesConfiguration.UserApiUrl;
+                    client.ReadResponseAsString = true;
+                    return (IUserApiClient) client;
+                });
         }
 
         private static HearingServicesConfiguration BuildHearingServicesConfiguration(ConfigLoader configLoader)

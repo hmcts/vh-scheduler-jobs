@@ -1,5 +1,6 @@
 using System.Linq;
 using System.Threading.Tasks;
+using VideoApi.Client;
 
 namespace SchedulerJobs.Services
 {
@@ -10,17 +11,17 @@ namespace SchedulerJobs.Services
     
     public class ClearConferenceChatHistoryService : IClearConferenceChatHistoryService
     {
-        private readonly IVideoApiService _videoApiService;
+        private readonly IVideoApiClient _videoApiClient;
 
-        public ClearConferenceChatHistoryService(IVideoApiService videoApiService)
+        public ClearConferenceChatHistoryService(IVideoApiClient videoApiClient)
         {
-            _videoApiService = videoApiService;
+            _videoApiClient = videoApiClient;
         }
 
         public async Task ClearChatHistoryForClosedConferences()
         {
-            var conferences = await _videoApiService.GetClosedConferencesToClearInstantMessageHistory();
-            var tasks = conferences.Select(c => _videoApiService.ClearConferenceChatHistory(c.Id)).ToArray();
+            var conferences = await _videoApiClient.GetClosedConferencesWithInstantMessagesAsync();
+            var tasks = conferences.Select(c => _videoApiClient.RemoveInstantMessagesAsync(c.Id)).ToArray();
             Task.WaitAll(tasks);
         }
     }

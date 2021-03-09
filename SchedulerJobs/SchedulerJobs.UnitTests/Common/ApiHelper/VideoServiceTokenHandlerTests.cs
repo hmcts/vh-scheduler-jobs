@@ -18,7 +18,6 @@ namespace SchedulerJobs.UnitTests.Common.ApiHelper
             new VideoServiceTokenHandler(
                 new AzureAdConfiguration
                 {
-                    Authority = "auth",
                     ClientId = "id",
                     ClientSecret = "secret",
                     TenantId = "tenant",
