@@ -1,31 +1,33 @@
 using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Logging;
 using SchedulerJobs.Services;
-using System;
 using System.Threading.Tasks;
-using Willezone.Azure.WebJobs.Extensions.DependencyInjection;
 
 namespace SchedulerJobs.Functions
 {
-    public static class AnonymiseHearingsConferencesAndDeleteAadUsersFunction
+    public class AnonymiseHearingsConferencesAndDeleteAadUsersFunction
     {
+        private readonly IAnonymiseHearingsConferencesDataService _anonymiseHearingsConferencesDataService;
+
+        public AnonymiseHearingsConferencesAndDeleteAadUsersFunction(IAnonymiseHearingsConferencesDataService anonymiseHearingsConferencesDataService)
+        {
+            _anonymiseHearingsConferencesDataService = anonymiseHearingsConferencesDataService;
+        }
+
         /// <summary>
         /// Function to anonymise hearing and conference data older than three months
         /// </summary>
         /// <param name="myTimer">Set time to run every day at 5:30 AM</param>
         /// <param name="log"></param>
-        /// <param name="anonymiseHearingsConferencesDataService"></param>
         [FunctionName("AnonymiseHearingsConferencesAndDeleteAadUsersFunction")]
-        public static async Task Run([TimerTrigger("0 30 5 * * *")]TimerInfo myTimer, 
-            ILogger log, 
-            [Inject] IAnonymiseHearingsConferencesDataService anonymiseHearingsConferencesDataService)
+        public async Task Run([TimerTrigger("0 30 5 * * *")]TimerInfo myTimer, ILogger log)
         {
             if (myTimer != null && myTimer.IsPastDue)
             {
                 log.LogTrace("Anonymise data function running late");
             }
-            log.LogInformation($"C# Timer trigger function executed at: {DateTime.UtcNow}");
-            await anonymiseHearingsConferencesDataService.AnonymiseHearingsConferencesDataAsync().ConfigureAwait(false);
+
+            await _anonymiseHearingsConferencesDataService.AnonymiseHearingsConferencesDataAsync().ConfigureAwait(false);
             log.LogInformation("Data anonymised for hearings, conferences older than 3 months.");
         }
     }

@@ -21,7 +21,7 @@ namespace SchedulerJobs.UnitTests.Common.ApiHelper
                 ClientSecret = "secret",
                 TenantId = "tenant",
             }, memoryCache, azureTokenProvider,
-            new HearingServicesConfiguration { BookingsApiResourceId = "resourceid" });
+            new ServicesConfiguration { BookingsApiResourceId = "resourceid" });
             tokenProviderMock.Setup(x => x.GetAuthorisationResult(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()));
         }
     }

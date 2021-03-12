@@ -8,7 +8,6 @@ using System;
 using System.Net;
 using System.Reflection;
 using System.Threading.Tasks;
-using Willezone.Azure.WebJobs.Extensions.DependencyInjection;
 using VideoApi.Client;
 using UserApi.Client;
 using BookingsApi.Client;
@@ -17,9 +16,20 @@ namespace BookingQueueSubscriber
 {
     public class HealthCheckFunction
     {
+        private readonly IUserApiClient _userApiClient;
+        private readonly IBookingsApiClient _bookingsApiClient;
+        private readonly IVideoApiClient _videoApiClient;
+
+        public HealthCheckFunction(IUserApiClient userApiClient, IBookingsApiClient bookingsApiClient, IVideoApiClient videoApiClient)
+        {
+            _userApiClient = userApiClient;
+            _bookingsApiClient = bookingsApiClient;
+            _videoApiClient = videoApiClient;
+        }
+
         [FunctionName("HealthCheck")]
         public async Task<IActionResult> HealthCheck(
-           [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "health/liveness")] HttpRequest req, ILogger log, [Inject] IVideoApiClient videoApiClient, [Inject] IUserApiClient userApiClient, [Inject] IBookingsApiClient bookingsApiClient)
+           [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "health/liveness")] HttpRequest req, ILogger log)
         {
             var response = new HealthCheckResponse
             {
@@ -31,7 +41,7 @@ namespace BookingQueueSubscriber
 
             try
             {
-                await videoApiClient.GetExpiredOpenConferencesAsync();
+                await _videoApiClient.GetExpiredOpenConferencesAsync();
             }
             catch (Exception ex)
             {
@@ -41,7 +51,7 @@ namespace BookingQueueSubscriber
 
             try
             {
-                await bookingsApiClient.CheckServiceHealthAsync();
+                await _bookingsApiClient.CheckServiceHealthAsync();
             }
             catch (Exception ex)
             {
@@ -52,7 +62,7 @@ namespace BookingQueueSubscriber
 
             try
             {
-                await userApiClient.CheckServiceHealthAsync();
+                await _userApiClient.CheckServiceHealthAsync();
             }
             catch (Exception ex)
             {

@@ -23,7 +23,7 @@ namespace SchedulerJobs.UnitTests.Common.ApiHelper
                     TenantId = "tenant",
                    
                 }, memoryCache, azureTokenProvider,
-                new HearingServicesConfiguration
+                new ServicesConfiguration
                 {
                     VideoApiResourceId = "resourceid"
                 });
