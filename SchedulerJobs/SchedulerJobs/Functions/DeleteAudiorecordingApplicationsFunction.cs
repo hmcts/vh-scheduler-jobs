@@ -2,24 +2,28 @@ using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Logging;
 using SchedulerJobs.Services;
 using System.Threading.Tasks;
-using Willezone.Azure.WebJobs.Extensions.DependencyInjection;
 
 namespace SchedulerJobs.Functions
 {
-    public static class DeleteAudiorecordingApplicationsFunction
+    public class DeleteAudiorecordingApplicationsFunction
     {
+        private readonly ICloseConferenceService _closeConferenceService;
+
+        public DeleteAudiorecordingApplicationsFunction(ICloseConferenceService closeConferenceService)
+        {
+            _closeConferenceService = closeConferenceService;
+        }
+
         [FunctionName("DeleteAudiorecordingApplicationsFunction")]
-        public static async Task Run([TimerTrigger("0 0 22 * * *")]TimerInfo myTimer,
-        ILogger log,
-            [Inject]ICloseConferenceService closeConferenceService)
+        public async Task Run([TimerTrigger("0 0 22 * * *")]TimerInfo myTimer, ILogger log)
         {
 
-            if (myTimer != null && myTimer.IsPastDue)
+            if (myTimer?.IsPastDue ?? true)
             {
                 log.LogTrace("Delete audiorecording applications function running late");
             }
 
-            var audioFilesCount = await closeConferenceService.DeleteAudiorecordingApplicationsAsync().ConfigureAwait(false);
+            var audioFilesCount = await _closeConferenceService.DeleteAudiorecordingApplicationsAsync();
             log.LogTrace($"Delete audiorecording applications function executed for {audioFilesCount} conferences");
         }
     }

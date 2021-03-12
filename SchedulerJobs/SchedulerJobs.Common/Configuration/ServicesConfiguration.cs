@@ -1,6 +1,6 @@
 ﻿namespace SchedulerJobs.Common.Configuration
 {
-    public class HearingServicesConfiguration
+    public class ServicesConfiguration
     {
         public string VideoApiResourceId { get; set; }
         public string VideoApiUrl { get; set; } = "https://localhost:59390/";

@@ -8,6 +8,7 @@ namespace SchedulerJobs.Services
     public interface ICloseConferenceService
     {
         Task<int> CloseConferencesAsync();
+
         Task<int> DeleteAudiorecordingApplicationsAsync();
     }
 

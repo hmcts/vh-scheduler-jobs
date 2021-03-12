@@ -1,67 +1,100 @@
 ﻿using BookingsApi.Client;
-using Microsoft.Azure.WebJobs;
+using Microsoft.Azure.Functions.Extensions.DependencyInjection;
 using Microsoft.Azure.WebJobs.Hosting;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using SchedulerJobs;
 using SchedulerJobs.Common.ApiHelper;
 using SchedulerJobs.Common.Configuration;
 using SchedulerJobs.Common.Security;
-using SchedulerJobs.Service;
 using SchedulerJobs.Services;
+using System;
+using System.IO;
 using UserApi.Client;
+using VH.Core.Configuration;
 using VideoApi.Client;
-using Willezone.Azure.WebJobs.Extensions.DependencyInjection;
 
 [assembly: WebJobsStartup(typeof(Startup))]
 namespace SchedulerJobs
 {
-    public class Startup : IWebJobsStartup
+    public class Startup : FunctionsStartup
     {
-        public void Configure(IWebJobsBuilder builder)
+        public override void ConfigureAppConfiguration(IFunctionsConfigurationBuilder builder)
         {
-            builder.AddTimers();
-            builder.AddDependencyInjection(ConfigureServices);
+            if (builder == null)
+            {
+                throw new ArgumentNullException(nameof(builder));
+            }
+
+
+            base.ConfigureAppConfiguration(builder);
+
+            const string vhInfraCore = "/mnt/secrets/vh-infra-core";
+            const string vhSchedulerJobs = "/mnt/secrets/vh-scheduler-jobs";
+
+            var context = builder.GetContext();
+            builder.ConfigurationBuilder
+                .AddJsonFile(Path.Combine(context.ApplicationRootPath, $"appsettings.json"), true)
+                .AddJsonFile(Path.Combine(context.ApplicationRootPath, $"appsettings.{context.EnvironmentName}.json"), true)
+                .AddAksKeyVaultSecretProvider(vhInfraCore)
+                .AddAksKeyVaultSecretProvider(vhSchedulerJobs)
+                .AddUserSecrets("518CD6B6-4F2B-4431-94C8-4D0F4137295F")
+                .AddEnvironmentVariables();
         }
 
-        public static void ConfigureServices(IServiceCollection services)
+        public override void Configure(IFunctionsHostBuilder builder)
         {
-            services.AddMemoryCache();
-            var configLoader = new ConfigLoader();
-            // need to check if bind works for both tests and host
+            if (builder == null)
+            {
+                throw new ArgumentNullException(nameof(builder));
+            }
 
-            var adConfiguration = configLoader.Configuration.GetSection("AzureAd")
-                .Get<AzureAdConfiguration>() ?? BuildAdConfiguration(configLoader);
+            var context = builder.GetContext();
+            RegisterServices(builder.Services, context.Configuration);
+        }
 
-            services.AddSingleton(adConfiguration);
+        public void RegisterServices(IServiceCollection services, IConfiguration configuration)
+        {
+            var memoryCache = new MemoryCache(Options.Create(new MemoryCacheOptions()));
+            services.AddSingleton<IMemoryCache>(memoryCache);
+            services.Configure<AzureAdConfiguration>(options =>
+            {
+                configuration.GetSection("AzureAd").Bind(options);
+            });
+            services.Configure<ServicesConfiguration>(options =>
+            {
+                configuration.GetSection("VhServices").Bind(options);
+            });
 
-            var hearingServicesConfiguration =
-                configLoader.Configuration.GetSection("VhServices").Get<HearingServicesConfiguration>() ??
-                BuildHearingServicesConfiguration(configLoader);
+            var serviceConfiguration = new ServicesConfiguration();
+            configuration.GetSection("VhServices").Bind(serviceConfiguration);
 
-            services.AddSingleton(hearingServicesConfiguration);
             services.AddScoped<IAzureTokenProvider, AzureTokenProvider>();
 
-            services.AddScoped<VideoServiceTokenHandler>();
-            services.AddScoped<BookingsServiceTokenHandler>();
-            services.AddScoped<UserServiceTokenHandler>();
-            services.AddLogging(builder => { builder.SetMinimumLevel(LogLevel.Debug); });
+            services.AddLogging(builder =>
+                builder.AddApplicationInsights(configuration["ApplicationInsights:InstrumentationKey"])
+            );
 
             services.AddScoped<ICloseConferenceService, CloseConferenceService>();
             services.AddScoped<IClearConferenceChatHistoryService, ClearConferenceChatHistoryService>();
             services.AddScoped<IAnonymiseHearingsConferencesDataService, AnonymiseHearingsConferencesDataService>();
             services.AddScoped<IRemoveHeartbeatsForConferencesService, RemoveHeartbeatsForConferencesService>();
 
+            services.AddTransient<VideoServiceTokenHandler>();
+            services.AddTransient<BookingsServiceTokenHandler>();
+            services.AddTransient<UserServiceTokenHandler>();
+
             services.AddHttpClient<IVideoApiClient, VideoApiClient>()
                 .AddHttpMessageHandler<VideoServiceTokenHandler>()
                 .AddTypedClient(httpClient =>
                 {
                     var client = VideoApiClient.GetClient(httpClient);
-                    client.BaseUrl = hearingServicesConfiguration.VideoApiUrl;
+                    client.BaseUrl = serviceConfiguration.VideoApiUrl;
                     client.ReadResponseAsString = true;
-                    return (IVideoApiClient) client;
+                    return (IVideoApiClient)client;
                 });
 
             services.AddHttpClient<IBookingsApiClient, BookingsApiClient>()
@@ -69,9 +102,9 @@ namespace SchedulerJobs
                 .AddTypedClient(httpClient =>
                 {
                     var client = BookingsApiClient.GetClient(httpClient);
-                    client.BaseUrl = hearingServicesConfiguration.BookingsApiUrl;
+                    client.BaseUrl = serviceConfiguration.BookingsApiUrl;
                     client.ReadResponseAsString = true;
-                    return (IBookingsApiClient) client;
+                    return (IBookingsApiClient)client;
                 });
 
             services.AddHttpClient<IUserApiClient, UserApiClient>()
@@ -79,26 +112,10 @@ namespace SchedulerJobs
                 .AddTypedClient(httpClient =>
                 {
                     var client = UserApiClient.GetClient(httpClient);
-                    client.BaseUrl = hearingServicesConfiguration.UserApiUrl;
+                    client.BaseUrl = serviceConfiguration.UserApiUrl;
                     client.ReadResponseAsString = true;
-                    return (IUserApiClient) client;
+                    return (IUserApiClient)client;
                 });
-        }
-
-        private static HearingServicesConfiguration BuildHearingServicesConfiguration(ConfigLoader configLoader)
-        {
-            var values = configLoader.Configuration.GetSection("Values");
-            var hearingServicesConfiguration = new HearingServicesConfiguration();
-            values.GetSection("VhServices").Bind(hearingServicesConfiguration);
-            return hearingServicesConfiguration;
-        }
-
-        private static AzureAdConfiguration BuildAdConfiguration(ConfigLoader configLoader)
-        {
-            var values = configLoader.Configuration.GetSection("Values");
-            var azureAdConfiguration = new AzureAdConfiguration();
-            values.GetSection("AzureAd").Bind(azureAdConfiguration);
-            return azureAdConfiguration;
         }
     }
 }

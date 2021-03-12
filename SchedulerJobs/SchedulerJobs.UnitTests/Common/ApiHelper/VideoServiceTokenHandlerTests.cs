@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Options;
 using Moq;
 using NUnit.Framework;
 using SchedulerJobs.Common.ApiHelper;
@@ -16,17 +17,17 @@ namespace SchedulerJobs.UnitTests.Common.ApiHelper
             var tokenProviderMock = new Mock<IAzureTokenProvider>();
             var azureTokenProvider = tokenProviderMock.Object;
             new VideoServiceTokenHandler(
-                new AzureAdConfiguration
+                Options.Create(new AzureAdConfiguration
                 {
                     ClientId = "id",
                     ClientSecret = "secret",
                     TenantId = "tenant",
                    
-                }, memoryCache, azureTokenProvider,
-                new HearingServicesConfiguration
+                }),
+                Options.Create(new ServicesConfiguration
                 {
                     VideoApiResourceId = "resourceid"
-                });
+                }), memoryCache, azureTokenProvider);
 
             tokenProviderMock.Setup(x => x.GetAuthorisationResult(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()));
         }
