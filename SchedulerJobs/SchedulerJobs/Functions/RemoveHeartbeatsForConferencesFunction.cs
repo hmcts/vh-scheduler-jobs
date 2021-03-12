@@ -23,7 +23,7 @@ namespace SchedulerJobs.Functions
         [FunctionName("RemoveHeartbeatsForConferencesFunction")]
         public async Task Run([TimerTrigger("0 40 5 * * *")]TimerInfo myTimer, ILogger log)
         {
-            if (myTimer != null && myTimer.IsPastDue)
+            if (myTimer?.IsPastDue ?? true)
             {
                 log.LogTrace("Remove heartbeats for conferences function running late");
             }

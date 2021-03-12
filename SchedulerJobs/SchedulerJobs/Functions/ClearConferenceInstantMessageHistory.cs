@@ -23,7 +23,7 @@ namespace SchedulerJobs.Functions
             TimerInfo myTimer, ILogger log
         )
         {
-            if (myTimer.IsPastDue)
+            if (myTimer?.IsPastDue ?? true)
             {
                 log.LogInformation("Timer is running late!");
             }

@@ -22,7 +22,7 @@ namespace SchedulerJobs.Functions
         [FunctionName("AnonymiseHearingsConferencesAndDeleteAadUsersFunction")]
         public async Task Run([TimerTrigger("0 30 5 * * *")]TimerInfo myTimer, ILogger log)
         {
-            if (myTimer != null && myTimer.IsPastDue)
+            if (myTimer?.IsPastDue ?? true)
             {
                 log.LogTrace("Anonymise data function running late");
             }

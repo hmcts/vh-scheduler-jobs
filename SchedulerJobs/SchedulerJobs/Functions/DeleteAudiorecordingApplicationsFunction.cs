@@ -18,12 +18,12 @@ namespace SchedulerJobs.Functions
         public async Task Run([TimerTrigger("0 0 22 * * *")]TimerInfo myTimer, ILogger log)
         {
 
-            if (myTimer != null && myTimer.IsPastDue)
+            if (myTimer?.IsPastDue ?? true)
             {
                 log.LogTrace("Delete audiorecording applications function running late");
             }
 
-            var audioFilesCount = await _closeConferenceService.DeleteAudiorecordingApplicationsAsync().ConfigureAwait(false);
+            var audioFilesCount = await _closeConferenceService.DeleteAudiorecordingApplicationsAsync();
             log.LogTrace($"Delete audiorecording applications function executed for {audioFilesCount} conferences");
         }
     }
