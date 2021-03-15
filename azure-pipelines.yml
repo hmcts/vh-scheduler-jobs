@@ -46,9 +46,6 @@ parameters:
   - name: AzureAd:TenantId
     value: tenantid
     secret: true
-    
-  - name: VhServices:SchedulerJobsUrl
-    value: $(scheduler_jobs_url)
 
 - name: appSettings
   type: object
