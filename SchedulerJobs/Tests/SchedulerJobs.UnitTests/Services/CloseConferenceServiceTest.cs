@@ -90,7 +90,7 @@ namespace SchedulerJobs.UnitTests.Services
         }
 
         [Test]
-        public void Should_delete_audio_applications_for_closed_conferences_with_audiorecording()
+        public void Should_delete_audio_applications_for_closed_conferences_with_audio_recording()
         {
             var response = new ExpiredConferencesResponse
             {

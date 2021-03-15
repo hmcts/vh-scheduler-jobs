@@ -7,7 +7,7 @@ parameters:
   - name: PackageACTests
     displayName: Package Acceptance Tests
     type: boolean
-    default: false
+    default: true
 
   - name: RunUnitTests
     displayName: Run Unit Tests
@@ -32,9 +32,25 @@ parameters:
   - name: RunACTests
     displayName: Run Acceptance Tests
     type: boolean
-    default: false
+    default: true
 
-  - name: appSettings
+- name: testSettings
+  type: object
+  default:
+  - name: AzureAd:ClientId
+    value: vh-test-api-appid
+    secret: true
+  - name: AzureAd:ClientSecret
+    value: vh-test-api-key
+    secret: true
+  - name: AzureAd:TenantId
+    value: tenantid
+    secret: true
+    
+  - name: VhServices:SchedulerJobsUrl
+    value: $(scheduler_jobs_url)
+
+- name: appSettings
     type: object
     default:
     - name: ApplicationInsights:InstrumentationKey
@@ -161,3 +177,10 @@ extends:
         - name: vh-user-api-$(environment)
           resourceGroup: vh-user-api-$(environment)
           healthEndpoint: $(user_api_url)healthcheck/health
+      acceptanceTestSettings:
+        - name: VhServices:SchedulerJobsUrl
+          value: $(scheduler_jobs_url_staging)
+        - ${{ each setting in parameters.testSettings }}:
+          - name: ${{ setting.name }}
+            value: ${{ setting.value }}
+            secret: ${{ setting.secret }}
