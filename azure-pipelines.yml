@@ -34,59 +34,59 @@ parameters:
     type: boolean
     default: true
 
-- name: testSettings
-  type: object
-  default:
-  - name: AzureAd:ClientId
-    value: vh-test-api-appid
-    secret: true
-  - name: AzureAd:ClientSecret
-    value: vh-test-api-key
-    secret: true
-  - name: AzureAd:TenantId
-    value: tenantid
-    secret: true
-    
-  - name: VhServices:SchedulerJobsUrl
-    value: $(scheduler_jobs_url)
-
-- name: appSettings
+  - name: testSettings
     type: object
     default:
-    - name: ApplicationInsights:InstrumentationKey
-      value: vh-core-infra-AppInsightsKey
-      secret: true
-    - name: AppInsightsKey
-      value: vh-core-infra-AppInsightsKey
-      secret: true
-    
-    # AzureAd
     - name: AzureAd:ClientId
-      value: vh-scheduler-jobs-appid
+      value: vh-test-api-appid
       secret: true
     - name: AzureAd:ClientSecret
-      value: vh-scheduler-jobs-key
+      value: vh-test-api-key
       secret: true
     - name: AzureAd:TenantId
       value: tenantid
       secret: true
+        
+    - name: VhServices:SchedulerJobsUrl
+      value: $(scheduler_jobs_url)
 
-    # VhServices
-    - name: VhServices:BookingsApiResourceId
-      value: vh-bookings-api-identifieruris
-      secret: true
-    - name: VhServices:BookingsApiUrl
-      value: $(bookings_api_url)
-    - name: VhServices:VideoApiResourceId   
-      value: vh-video-api-identifieruris
-      secret: true
-    - name: VhServices:VideoApiUrl
-      value: $(video_api_url)
-    - name: VhServices:UserApiResourceId   
-      value: vh-user-api-identifieruris
-      secret: true
-    - name: VhServices:UserApiUrl
-      value: $(user_api_url)
+   - name: appSettings
+     type: object
+     default:
+     - name: ApplicationInsights:InstrumentationKey
+       value: vh-core-infra-AppInsightsKey
+       secret: true
+     - name: AppInsightsKey
+       value: vh-core-infra-AppInsightsKey
+       secret: true
+    
+     # AzureAd
+     - name: AzureAd:ClientId
+       value: vh-scheduler-jobs-appid
+       secret: true
+     - name: AzureAd:ClientSecret
+       value: vh-scheduler-jobs-key
+       secret: true
+     - name: AzureAd:TenantId
+       value: tenantid
+       secret: true
+
+     # VhServices
+     - name: VhServices:BookingsApiResourceId
+       value: vh-bookings-api-identifieruris
+       secret: true
+     - name: VhServices:BookingsApiUrl
+       value: $(bookings_api_url)
+     - name: VhServices:VideoApiResourceId   
+       value: vh-video-api-identifieruris
+       secret: true
+     - name: VhServices:VideoApiUrl
+       value: $(video_api_url)
+     - name: VhServices:UserApiResourceId   
+       value: vh-user-api-identifieruris
+       secret: true
+     - name: VhServices:UserApiUrl
+       value: $(user_api_url)
 
 variables:
   - group: vh-domains-and-urls
