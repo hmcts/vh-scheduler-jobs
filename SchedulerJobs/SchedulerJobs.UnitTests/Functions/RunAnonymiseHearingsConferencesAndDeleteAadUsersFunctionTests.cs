@@ -1,9 +1,6 @@
-﻿using BookingsApi.Client;
-using BookingsApi.Contract.Responses;
-using FluentAssertions;
+﻿using FluentAssertions;
 using Moq;
 using NUnit.Framework;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using SchedulerJobs.Functions;

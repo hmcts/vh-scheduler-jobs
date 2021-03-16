@@ -1,76 +1,89 @@
 parameters:
-  - name: PackageApp
-    displayName: Package App
-    type: boolean
-    default: true
+- name: PackageApp
+  displayName: Package App
+  type: boolean
+  default: true
 
-  - name: PackageACTests
-    displayName: Package Acceptance Tests
-    type: boolean
-    default: false
+- name: PackageACTests
+  displayName: Package Acceptance Tests
+  type: boolean
+  default: true
 
-  - name: RunUnitTests
-    displayName: Run Unit Tests
-    type: boolean
-    default: true
+- name: RunUnitTests
+  displayName: Run Unit Tests
+  type: boolean
+  default: true
 
-  - name: RunIntegTests
-    displayName: Run Integration Tests
-    type: boolean
-    default: false
+- name: RunIntegTests
+  displayName: Run Integration Tests
+  type: boolean
+  default: false
 
-  - name: RunSonarCloudTests
-    displayName: Run Sonar Cloud Analysis
-    type: boolean
-    default: false
+- name: RunSonarCloudTests
+  displayName: Run Sonar Cloud Analysis
+  type: boolean
+  default: false
 
-  - name: RunMutationTests
-    displayName: Run Mutation Tests
-    type: boolean
-    default: false
+- name: RunMutationTests
+  displayName: Run Mutation Tests
+  type: boolean
+  default: false
 
-  - name: RunACTests
-    displayName: Run Acceptance Tests
-    type: boolean
-    default: false
+- name: RunACTests
+  displayName: Run Acceptance Tests
+  type: boolean
+  default: true
 
-  - name: appSettings
-    type: object
-    default:
-    - name: ApplicationInsights:InstrumentationKey
-      value: vh-core-infra-AppInsightsKey
-      secret: true
-    - name: AppInsightsKey
-      value: vh-core-infra-AppInsightsKey
-      secret: true
-    
-    # AzureAd
-    - name: AzureAd:ClientId
-      value: vh-scheduler-jobs-appid
-      secret: true
-    - name: AzureAd:ClientSecret
-      value: vh-scheduler-jobs-key
-      secret: true
-    - name: AzureAd:TenantId
-      value: tenantid
-      secret: true
+- name: testSettings
+  type: object
+  default:
+  - name: AzureAd:ClientId
+    value: vh-test-api-appid
+    secret: true
+  - name: AzureAd:ClientSecret
+    value: vh-test-api-key
+    secret: true
+  - name: AzureAd:TenantId
+    value: tenantid
+    secret: true
 
-    # VhServices
-    - name: VhServices:BookingsApiResourceId
-      value: vh-bookings-api-identifieruris
-      secret: true
-    - name: VhServices:BookingsApiUrl
-      value: $(bookings_api_url)
-    - name: VhServices:VideoApiResourceId   
-      value: vh-video-api-identifieruris
-      secret: true
-    - name: VhServices:VideoApiUrl
-      value: $(video_api_url)
-    - name: VhServices:UserApiResourceId   
-      value: vh-user-api-identifieruris
-      secret: true
-    - name: VhServices:UserApiUrl
-      value: $(user_api_url)
+- name: appSettings
+  type: object
+  default:
+  - name: ApplicationInsights:InstrumentationKey
+    value: vh-core-infra-AppInsightsKey
+    secret: true
+  - name: AppInsightsKey
+    value: vh-core-infra-AppInsightsKey
+    secret: true
+
+  # AzureAd
+  - name: AzureAd:ClientId
+    value: vh-scheduler-jobs-appid
+    secret: true
+  - name: AzureAd:ClientSecret
+    value: vh-scheduler-jobs-key
+    secret: true
+  - name: AzureAd:TenantId
+    value: tenantid
+    secret: true
+
+  # VhServices
+  - name: VhServices:BookingsApiResourceId
+    value: vh-bookings-api-identifieruris
+    secret: true
+  - name: VhServices:BookingsApiUrl
+    value: $(bookings_api_url)
+  - name: VhServices:VideoApiResourceId   
+    value: vh-video-api-identifieruris
+    secret: true
+  - name: VhServices:VideoApiUrl
+    value: $(video_api_url)
+  - name: VhServices:UserApiResourceId   
+    value: vh-user-api-identifieruris
+    secret: true
+  - name: VhServices:UserApiUrl
+    value: $(user_api_url)
 
 variables:
   - group: vh-domains-and-urls
@@ -144,7 +157,7 @@ extends:
       secrets_Subscription: $(pr_Secret_Subscription)
       devOpsResource: vh_scheduler_jobs
       appName: vh-scheduler-jobs-$(environment)
-      resourceGroup: vh-scheduler-jobs-dev-$(environment)
+      resourceGroup: vh-scheduler-jobs-$(environment)
       variables:
         - group: vh-domains-and-urls
         - group: vh-apps-settings-generic
@@ -161,3 +174,10 @@ extends:
         - name: vh-user-api-$(environment)
           resourceGroup: vh-user-api-$(environment)
           healthEndpoint: $(user_api_url)healthcheck/health
+      acceptanceTestSettings:
+        - name: VhServices:SchedulerJobsUrl
+          value: $(scheduler_jobs_url_staging)
+        - ${{ each setting in parameters.testSettings }}:
+          - name: ${{ setting.name }}
+            value: ${{ setting.value }}
+            secret: ${{ setting.secret }}

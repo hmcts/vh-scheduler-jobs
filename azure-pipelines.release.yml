@@ -139,3 +139,14 @@ stages:
           - name: ApplicationInsights:InstrumentationKey
             value: vh-core-infra-AppInsightsKey
             secret: true
+          - name: AzureAd:ClientId
+            value: vh-scheduler-jobs-appid
+            secret: true
+          - name: AzureAd:ClientSecret
+            value: vh-scheduler-jobs-key
+            secret: true
+          - name: AzureAd:TenantId
+            value: tenantid
+            secret: true
+          - name: VhServices:SchedulerJobsUrl
+            value: $(scheduler_jobs_url)

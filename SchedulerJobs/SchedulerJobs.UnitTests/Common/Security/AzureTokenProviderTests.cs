@@ -14,7 +14,7 @@ namespace SchedulerJobs.UnitTests.Common.Security
             var azureTokenProvider = new AzureTokenProvider(
                 Options.Create(new AzureAdConfiguration
                 {
-                    TenantId = "teanantid"
+                    TenantId = "tenantId"
                 }));
 
             Assert.Throws<AggregateException>(() =>

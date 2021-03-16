@@ -1,13 +1,10 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using SchedulerJobs.Functions;
 using SchedulerJobs.Services;
-using VideoApi.Client;
-using VideoApi.Contract.Responses;
 
 namespace SchedulerJobs.UnitTests.Functions
 {

@@ -29,11 +29,11 @@ namespace SchedulerJobs.UnitTests.Services
         [Test]
         public void Should_anonymise_the_old_hearings_and_conferences()
         {
-            var usernames = new UserWithClosedConferencesResponse();
-            usernames.Usernames = new List<string>();
-            usernames.Usernames.Add("username1@email.com");
-            usernames.Usernames.Add("username2@email.com");
-            usernames.Usernames.Add("username3@email.com");
+            var usernames = new UserWithClosedConferencesResponse
+            {
+                Usernames = new List<string> {"username1@hmcts.net", "username2@hmcts.net", "username3@hmcts.net" }
+            };
+
             _bookingApiClient.Setup(x => x.GetPersonByClosedHearingsAsync()).ReturnsAsync(usernames);
 
             _anonymiseHearingsConferencesDataService.AnonymiseHearingsConferencesDataAsync();

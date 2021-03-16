@@ -7,18 +7,7 @@ namespace Testing.Common
     {
         public static ILogger CreateLogger(LoggerTypes type = LoggerTypes.Null)
         {
-            ILogger logger;
-
-            if (type == LoggerTypes.List)
-            {
-                logger = new LoggerFake();
-            }
-            else
-            {
-                logger = NullLoggerFactory.Instance.CreateLogger("Null Logger");
-            }
-
-            return logger;
+            return type == LoggerTypes.List ? new LoggerFake() : NullLoggerFactory.Instance.CreateLogger("Null Logger");
         }
     }
 }

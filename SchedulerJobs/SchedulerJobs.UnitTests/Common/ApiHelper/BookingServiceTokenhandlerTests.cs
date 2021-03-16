@@ -23,7 +23,7 @@ namespace SchedulerJobs.UnitTests.Common.ApiHelper
                     ClientSecret = "secret",
                     TenantId = "tenant",
                 }),
-                Options.Create(new ServicesConfiguration { BookingsApiResourceId = "resourceid" }),
+                Options.Create(new ServicesConfiguration { BookingsApiResourceId = "resourceId" }),
                 memoryCache, azureTokenProvider);
             tokenProviderMock.Setup(x => x.GetAuthorisationResult(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()));
         }
