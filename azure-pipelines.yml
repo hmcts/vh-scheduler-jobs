@@ -157,7 +157,7 @@ extends:
       secrets_Subscription: $(pr_Secret_Subscription)
       devOpsResource: vh_scheduler_jobs
       appName: vh-scheduler-jobs-$(environment)
-      resourceGroup: vh-scheduler-jobs-dev-$(environment)
+      resourceGroup: vh-scheduler-jobs-$(environment)
       variables:
         - group: vh-domains-and-urls
         - group: vh-apps-settings-generic
