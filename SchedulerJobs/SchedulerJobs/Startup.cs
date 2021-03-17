@@ -13,6 +13,7 @@ using SchedulerJobs.Common.Security;
 using SchedulerJobs.Services;
 using System;
 using System.IO;
+using SchedulerJobs.Services.HttpClients;
 using UserApi.Client;
 using VH.Core.Configuration;
 using VideoApi.Client;
@@ -116,6 +117,10 @@ namespace SchedulerJobs
                     client.ReadResponseAsString = true;
                     return (IUserApiClient)client;
                 });
+            
+            services.AddHttpClient<IELinksApiClient, ELinksApiClient>()
+                .AddHttpMessageHandler<ELinksApiDelegatingHandler>()
+                .AddTypedClient(httpClient => new ELinksApiClient(httpClient, serviceConfiguration.ELinksApiUrl));
         }
     }
 }
