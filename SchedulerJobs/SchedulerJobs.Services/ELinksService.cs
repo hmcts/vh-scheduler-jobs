@@ -1,11 +1,10 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using BookingsApi.Client;
 using Microsoft.Extensions.Logging;
-using SchedulerJobs.Common.Models;
 using SchedulerJobs.Services.HttpClients;
+using SchedulerJobs.Services.Mappers;
 
 namespace SchedulerJobs.Services
 {
@@ -29,23 +28,22 @@ namespace SchedulerJobs.Services
 
         public async Task ImportJudiciaryPeople(DateTime fromDate)
         {
-            const int maxPages = 10;
+            const int cutOff = 2;
             var currentPage = 1;
-            IEnumerable<JudiciaryPersonModel> peopleResult;
 
             try
             {
-                while (currentPage < maxPages)
+                while (currentPage < cutOff)
                 {
-                    peopleResult = await _eLinksApiClient.GetPeopleAsync(fromDate);
+                    var peopleResult = (await _eLinksApiClient.GetPeopleAsync(fromDate, currentPage)).ToList();
 
-                    if (peopleResult == null || !peopleResult.Any())
+                    if (!peopleResult.Any())
                     {
                         _logger.LogWarning($"{GetType().Name}: ImportJudiciaryPeople: No results from api for page: {currentPage}");
                         break;
                     }
                     
-                    // peopleResult o BookingApi
+                    await _bookingsApiClient.BulkJudiciaryPersonsAsync(peopleResult.Select(JudiciaryPersonRequestMapper.MapTo));
 
                     currentPage++;
                 }  

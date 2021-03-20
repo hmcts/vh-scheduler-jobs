@@ -12,17 +12,18 @@ namespace SchedulerJobs.Services.HttpClients
     {
         private readonly HttpClient _httpClient;
 
-        public ELinksApiClient(HttpClient httpClient, string baseUrl)
+        public ELinksApiClient(HttpClient httpClient)
         {
             _httpClient = httpClient;
-            _httpClient.BaseAddress = new Uri(baseUrl);
         }
 
-        public async Task<IEnumerable<JudiciaryPersonModel>> GetPeopleAsync(DateTime updatedSince, int perPage = 100, int page = 1)
+        public string BaseUrl { get; set; }
+
+        public async Task<IEnumerable<JudiciaryPersonModel>> GetPeopleAsync(DateTime updatedSince, int page = 1, int perPage = 100)
         {
             var response = await _httpClient.GetAsync
             (
-                $"api/people?updated_since={updatedSince:yyyy-MM-dd}&page={page}&per_page={perPage}"
+                $"{BaseUrl}api/people?updated_since={updatedSince:yyyy-MM-dd}&page={page}&per_page={perPage}"
             );
 
             await HandleUnsuccessfulResponse(response);

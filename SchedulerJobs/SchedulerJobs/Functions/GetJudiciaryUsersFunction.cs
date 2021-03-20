@@ -23,8 +23,9 @@ namespace SchedulerJobs.Functions
         /// <param name="log"></param>
         /// <returns></returns>
         [FunctionName("GetJudiciaryUsersFunction")]
-        public async Task RunAsync([TimerTrigger("0 40 5 * * *")] TimerInfo myTimer, ILogger log)
+        public async Task RunAsync([TimerTrigger("0 40 5 * * *", RunOnStartup = true)] TimerInfo myTimer, ILogger log)
         {
+            Console.WriteLine($"Started GetJudiciaryUsersFunction at: {DateTime.UtcNow}");
             log.LogInformation($"Started GetJudiciaryUsersFunction at: {DateTime.UtcNow}");
 
             try

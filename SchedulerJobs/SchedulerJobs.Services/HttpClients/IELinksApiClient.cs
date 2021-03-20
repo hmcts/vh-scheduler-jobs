@@ -7,6 +7,6 @@ namespace SchedulerJobs.Services.HttpClients
 {
     public interface IELinksApiClient
     {
-        Task<IEnumerable<JudiciaryPersonModel>> GetPeopleAsync(DateTime updatedSince, int perPage = 100, int page = 1);
+        Task<IEnumerable<JudiciaryPersonModel>> GetPeopleAsync(DateTime updatedSince, int page = 1, int perPage = 100);
     }
 }

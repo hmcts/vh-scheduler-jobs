@@ -83,10 +83,12 @@ namespace SchedulerJobs
             services.AddScoped<IClearConferenceChatHistoryService, ClearConferenceChatHistoryService>();
             services.AddScoped<IAnonymiseHearingsConferencesDataService, AnonymiseHearingsConferencesDataService>();
             services.AddScoped<IRemoveHeartbeatsForConferencesService, RemoveHeartbeatsForConferencesService>();
+            services.AddScoped<IELinksService, ELinksService>();
 
             services.AddTransient<VideoServiceTokenHandler>();
             services.AddTransient<BookingsServiceTokenHandler>();
             services.AddTransient<UserServiceTokenHandler>();
+            services.AddTransient<ELinksApiDelegatingHandler>();
 
             services.AddHttpClient<IVideoApiClient, VideoApiClient>()
                 .AddHttpMessageHandler<VideoServiceTokenHandler>()
@@ -120,7 +122,11 @@ namespace SchedulerJobs
             
             services.AddHttpClient<IELinksApiClient, ELinksApiClient>()
                 .AddHttpMessageHandler<ELinksApiDelegatingHandler>()
-                .AddTypedClient(httpClient => new ELinksApiClient(httpClient, serviceConfiguration.ELinksApiUrl));
+                .AddTypedClient(httpClient =>
+                {
+                    var eLinksApiClient = new ELinksApiClient(httpClient) {BaseUrl = serviceConfiguration.ELinksApiUrl};
+                    return (IELinksApiClient)eLinksApiClient;
+                });
         }
     }
 }
