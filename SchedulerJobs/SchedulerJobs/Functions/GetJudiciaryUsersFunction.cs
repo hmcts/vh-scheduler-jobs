@@ -29,9 +29,8 @@ namespace SchedulerJobs.Functions
         [FunctionName("GetJudiciaryUsersFunction")]
         public async Task RunAsync([TimerTrigger("0 40 5 * * *", RunOnStartup = true)] TimerInfo myTimer, ILogger log)
         {
-            var updatedSince = DateTime.UtcNow.AddDays(-_servicesConfiguration.ELinksApiPeopleFromDaysAgo);
+            var updatedSince = DateTime.UtcNow.AddDays(-_servicesConfiguration.ELinksApiGetPeopleUpdatedSinceDays);
             
-            Console.WriteLine($"***** Started GetJudiciaryUsersFunction at: {DateTime.UtcNow} - param UpdatedSince: {updatedSince:yyyy-MM-dd}");
             log.LogInformation($"Started GetJudiciaryUsersFunction at: {DateTime.UtcNow} - param UpdatedSince: {updatedSince:yyyy-MM-dd}");
 
             try
@@ -45,7 +44,6 @@ namespace SchedulerJobs.Functions
                 throw;
             }
             
-            Console.WriteLine($"***** Finished GetJudiciaryUsersFunction at: {DateTime.UtcNow} - param UpdatedSince: {updatedSince:yyyy-MM-dd}");
             log.LogInformation($"Finished GetJudiciaryUsersFunction at: {DateTime.UtcNow} - param UpdatedSince: {updatedSince:yyyy-MM-dd}");
         }
     }

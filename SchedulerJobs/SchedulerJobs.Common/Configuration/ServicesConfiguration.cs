@@ -11,6 +11,6 @@
         public string UserApiUrl { get; set; } = "https://localhost:5200/";
         public string ELinksApiUrl { get; set; } = "https://localhost:9999/";
         public string ELinksApiKey { get; set; }
-        public int ELinksApiPeopleFromDaysAgo { get; set; }
+        public int ELinksApiGetPeopleUpdatedSinceDays { get; set; }
     }
 }

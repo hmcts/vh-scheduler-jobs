@@ -28,15 +28,13 @@ namespace SchedulerJobs.Services
 
         public async Task ImportJudiciaryPeople(DateTime fromDate)
         {
-            const int cutOff = 100;
             var currentPage = 1;
 
             try
             {
-                while (currentPage < cutOff)
+                while (true)
                 {
                     _logger.LogInformation($"{GetType().Name}: ImportJudiciaryPeople: executing page {currentPage}");
-                    Console.WriteLine($"***** {GetType().Name}: ImportJudiciaryPeople: executing page {currentPage}");
                     
                     var peopleResult = (await _eLinksApiClient.GetPeopleAsync(fromDate, currentPage))
                         .Where(x => x.Id.HasValue)
@@ -45,7 +43,6 @@ namespace SchedulerJobs.Services
                     if (!peopleResult.Any())
                     {
                         _logger.LogWarning($"{GetType().Name}: ImportJudiciaryPeople: No results from api for page: {currentPage}");
-                        Console.WriteLine($"***** {GetType().Name}: ImportJudiciaryPeople: No results from api for page: {currentPage}");
                         break;
                     }
                     
@@ -55,17 +52,16 @@ namespace SchedulerJobs.Services
                     {
                         foreach (var errorResponse in response.ErroredRequests)
                         {
-                            _logger.LogInformation($"{GetType().Name}: ImportJudiciaryPeople: {errorResponse.Message}");
-                            Console.WriteLine($"***** {GetType().Name}: ImportJudiciaryPeople: {errorResponse.Message}");
+                            _logger.LogError($"{GetType().Name}: ImportJudiciaryPeople: {errorResponse.Message}");
                         }
                     }
                     
                     currentPage++;
+                    await Task.Delay(250);
                 }  
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"***** {ex.Message}");
                 _logger.LogError(ex, ex.Message);
                 throw;
             }   
