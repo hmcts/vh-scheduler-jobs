@@ -10,7 +10,7 @@ namespace SchedulerJobs.Services
 {
     public interface IELinksService
     {
-        Task ImportJudiciaryPeople(DateTime fromDate);
+        Task ImportJudiciaryPeopleAsync(DateTime fromDate);
     }
     
     public class ELinksService : IELinksService
@@ -26,7 +26,7 @@ namespace SchedulerJobs.Services
             _logger = logger;
         }
 
-        public async Task ImportJudiciaryPeople(DateTime fromDate)
+        public async Task ImportJudiciaryPeopleAsync(DateTime fromDate)
         {
             var currentPage = 1;
 

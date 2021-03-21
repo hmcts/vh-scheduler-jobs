@@ -29,13 +29,14 @@ namespace SchedulerJobs.Functions
         [FunctionName("GetJudiciaryUsersFunction")]
         public async Task RunAsync([TimerTrigger("0 40 5 * * *", RunOnStartup = true)] TimerInfo myTimer, ILogger log)
         {
-            var updatedSince = DateTime.UtcNow.AddDays(-_servicesConfiguration.ELinksApiGetPeopleUpdatedSinceDays);
+            var days = _servicesConfiguration?.ELinksApiGetPeopleUpdatedSinceDays ?? 1;
+            var updatedSince = DateTime.UtcNow.AddDays(-days);
             
             log.LogInformation($"Started GetJudiciaryUsersFunction at: {DateTime.UtcNow} - param UpdatedSince: {updatedSince:yyyy-MM-dd}");
 
             try
             {
-                await _eLinksService.ImportJudiciaryPeople(updatedSince);
+                await _eLinksService.ImportJudiciaryPeopleAsync(updatedSince);
             }
             catch (Exception ex)
             {
