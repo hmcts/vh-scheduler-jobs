@@ -7,9 +7,14 @@ namespace SchedulerJobs.Services.Mappers
     {
         public static JudiciaryPersonRequest MapTo(JudiciaryPersonModel source)
         {
+            if (!source.Id.HasValue)
+            {
+                return null;
+            }
+            
             return new JudiciaryPersonRequest
             {
-                Id = source.Id,
+                Id = source.Id.Value,
                 Email = source.Email,
                 Fullname = source.Fullname,
                 Surname = source.Surname,

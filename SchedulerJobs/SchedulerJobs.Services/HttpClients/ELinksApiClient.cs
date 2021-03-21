@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using SchedulerJobs.Common.ApiHelper;
 using SchedulerJobs.Common.Exceptions;
 using SchedulerJobs.Common.Models;
 
@@ -28,7 +29,7 @@ namespace SchedulerJobs.Services.HttpClients
 
             await HandleUnsuccessfulResponse(response);
 
-            return JsonConvert.DeserializeObject<List<JudiciaryPersonModel>>(await response.Content.ReadAsStringAsync());       
+            return ApiRequestHelper.Deserialise<List<JudiciaryPersonModel>>(await response.Content.ReadAsStringAsync());       
         }
         
         private static async Task HandleUnsuccessfulResponse(HttpResponseMessage response)
