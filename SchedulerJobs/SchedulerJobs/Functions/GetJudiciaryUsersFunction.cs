@@ -27,12 +27,13 @@ namespace SchedulerJobs.Functions
         /// <param name="log"></param>
         /// <returns></returns>
         [FunctionName("GetJudiciaryUsersFunction")]
-        public async Task RunAsync([TimerTrigger("0 40 5 * * *", RunOnStartup = true)] TimerInfo myTimer, ILogger log)
+        public async Task RunAsync([TimerTrigger("0 0 2 * * *", RunOnStartup = true)] TimerInfo myTimer, ILogger log)
         {
             var days = _servicesConfiguration?.ELinksApiGetPeopleUpdatedSinceDays ?? 1;
             var updatedSince = DateTime.UtcNow.AddDays(-days);
             
-            log.LogInformation($"Started GetJudiciaryUsersFunction at: {DateTime.UtcNow} - param UpdatedSince: {updatedSince:yyyy-MM-dd}");
+            log.LogInformation("Started GetJudiciaryUsersFunction at: {Now} - param UpdatedSince: {UpdatedSince}", 
+                DateTime.UtcNow, updatedSince.ToString("yyyy-MM-dd"));
 
             try
             {
@@ -40,12 +41,12 @@ namespace SchedulerJobs.Functions
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"***** {ex.Message}");
                 log.LogError(ex, ex.Message);
                 throw;
             }
             
-            log.LogInformation($"Finished GetJudiciaryUsersFunction at: {DateTime.UtcNow} - param UpdatedSince: {updatedSince:yyyy-MM-dd}");
+            log.LogInformation("Finished GetJudiciaryUsersFunction at: {Now} - param UpdatedSince: {UpdatedSince}", 
+                DateTime.UtcNow, updatedSince.ToString("yyyy-MM-dd"));
         }
     }
 }

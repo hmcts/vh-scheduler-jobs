@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
 using SchedulerJobs.Common.ApiHelper;
 using SchedulerJobs.Common.Exceptions;
 using SchedulerJobs.Common.Models;

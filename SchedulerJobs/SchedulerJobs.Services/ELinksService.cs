@@ -34,7 +34,7 @@ namespace SchedulerJobs.Services
             {
                 while (true)
                 {
-                    _logger.LogInformation($"{GetType().Name}: ImportJudiciaryPeople: executing page {currentPage}");
+                    _logger.LogInformation("ImportJudiciaryPeople: executing page {CurrentPage}", currentPage);
                     
                     var peopleResult = (await _eLinksApiClient.GetPeopleAsync(fromDate, currentPage))
                         .Where(x => x.Id.HasValue)
@@ -42,20 +42,14 @@ namespace SchedulerJobs.Services
 
                     if (!peopleResult.Any())
                     {
-                        _logger.LogWarning($"{GetType().Name}: ImportJudiciaryPeople: No results from api for page: {currentPage}");
+                        _logger.LogWarning("ImportJudiciaryPeople: No results from api for page: {CurrentPage}", currentPage);
                         break;
                     }
                     
+                    _logger.LogInformation("ImportJudiciaryPeople: Calling bookings API with {PeopleResultCount} people", peopleResult.Count);
                     var response = await _bookingsApiClient.BulkJudiciaryPersonsAsync(peopleResult.Select(JudiciaryPersonRequestMapper.MapTo));
+                    response?.ErroredRequests.ForEach(x => _logger.LogError("ImportJudiciaryPeople: {ErrorResponseMessage}", x.Message));
 
-                    if (response != null)
-                    {
-                        foreach (var errorResponse in response.ErroredRequests)
-                        {
-                            _logger.LogError($"{GetType().Name}: ImportJudiciaryPeople: {errorResponse.Message}");
-                        }
-                    }
-                    
                     currentPage++;
                     await Task.Delay(250);
                 }  
