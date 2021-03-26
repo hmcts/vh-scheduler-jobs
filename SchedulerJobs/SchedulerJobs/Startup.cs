@@ -13,6 +13,7 @@ using SchedulerJobs.Common.Security;
 using SchedulerJobs.Services;
 using System;
 using System.IO;
+using SchedulerJobs.Services.HttpClients;
 using UserApi.Client;
 using VH.Core.Configuration;
 using VideoApi.Client;
@@ -82,10 +83,12 @@ namespace SchedulerJobs
             services.AddScoped<IClearConferenceChatHistoryService, ClearConferenceChatHistoryService>();
             services.AddScoped<IAnonymiseHearingsConferencesDataService, AnonymiseHearingsConferencesDataService>();
             services.AddScoped<IRemoveHeartbeatsForConferencesService, RemoveHeartbeatsForConferencesService>();
+            services.AddScoped<IELinksService, ELinksService>();
 
             services.AddTransient<VideoServiceTokenHandler>();
             services.AddTransient<BookingsServiceTokenHandler>();
             services.AddTransient<UserServiceTokenHandler>();
+            services.AddTransient<ELinksApiDelegatingHandler>();
 
             services.AddHttpClient<IVideoApiClient, VideoApiClient>()
                 .AddHttpMessageHandler<VideoServiceTokenHandler>()
@@ -115,6 +118,14 @@ namespace SchedulerJobs
                     client.BaseUrl = serviceConfiguration.UserApiUrl;
                     client.ReadResponseAsString = true;
                     return (IUserApiClient)client;
+                });
+            
+            services.AddHttpClient<IELinksApiClient, ELinksApiClient>()
+                .AddHttpMessageHandler<ELinksApiDelegatingHandler>()
+                .AddTypedClient(httpClient =>
+                {
+                    var eLinksApiClient = new ELinksApiClient(httpClient) {BaseUrl = serviceConfiguration.ELinksApiUrl};
+                    return (IELinksApiClient)eLinksApiClient;
                 });
         }
     }
