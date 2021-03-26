@@ -93,7 +93,7 @@ parameters:
     - name: VhServices:ELinksApiGetPeopleUpdatedSinceDay
       value: vh-services-elinks-api-get-people-updated-since-days
       secret: true
-  
+
   variables:
     - group: vh-domains-and-urls
     - group: vh-apps-settings-generic
