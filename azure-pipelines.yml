@@ -84,6 +84,15 @@ parameters:
     secret: true
   - name: VhServices:UserApiUrl
     value: $(user_api_url)
+  - name: VhServices:ELinksApiUrl
+    value: vh-services-elinks-api-url
+    secret: true
+  - name: VhServices:ELinksApiKey
+    value: vh-services-elinks-api-key
+    secret: true
+  - name: VhServices:ELinksApiGetPeopleUpdatedSinceDay
+    value: vh-services-elinks-api-get-people-updated-since-days
+    secret: true
 
 variables:
   - group: vh-domains-and-urls
