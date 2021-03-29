@@ -135,6 +135,14 @@ stages:
             secret: true
           - name: VhServices:UserApiUrl
             value: $(user_api_url)
+          - name: VhServices:ELinksApiUrl
+            value: $(elinks_api_url)
+          - name: VhServices:ELinksApiKey
+            value: vh-services-elinks-api-key
+            secret: true
+          - name: VhServices:ELinksApiGetPeopleUpdatedSinceDay
+            value: vh-services-elinks-api-get-people-updated-since-days
+            secret: true
         acceptanceTestSettings:
           - name: ApplicationInsights:InstrumentationKey
             value: vh-core-infra-AppInsightsKey
