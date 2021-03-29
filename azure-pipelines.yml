@@ -105,7 +105,12 @@ trigger:
     - master
     - release/*
     - hotfix/*
-
+    
+jobs:
+- job: test_vars
+  steps:
+    - script: |
+      echo $VhServices:ELinksApiUrl
 pr:
   branches:
     include:
