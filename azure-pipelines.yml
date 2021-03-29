@@ -109,10 +109,10 @@ trigger:
 jobs:
 - job: test_vars
   steps:
-    - script: |
+    - script:
       echo $VhServices:ELinksApiUrl
     displayName: 'Show elinks value'  
-    
+
 pr:
   branches:
     include:
