@@ -111,6 +111,8 @@ jobs:
   steps:
     - script: |
       echo $VhServices:ELinksApiUrl
+    displayName: 'Show elinks value'  
+    
 pr:
   branches:
     include:
