@@ -106,13 +106,6 @@ trigger:
     - release/*
     - hotfix/*
     
-jobs:
-- job: test_vars
-  steps:
-    - script:
-      echo $VhServices:ELinksApiUrl
-    displayName: 'Show elinks value'  
-
 pr:
   branches:
     include:
