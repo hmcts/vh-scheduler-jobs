@@ -17,7 +17,10 @@ namespace SchedulerJobs.UnitTests.Functions
         public void Setup()
         {
             _mocker.Mock<IELinksService>().Setup(x => x.ImportJudiciaryPeopleAsync(It.IsAny<DateTime>()));
-            _mocker.Mock<IOptions<ServicesConfiguration>>().Setup(x => x.Value).Returns(new ServicesConfiguration
+        }
+        protected override void MockerAdditionalSetupBeforeSutCreation()
+        {
+            _mocker.Mock<IOptions<ServicesConfiguration>>().Setup(x => x.Value).Returns(new ServicesConfiguration()
             {
                 ELinksApiGetPeopleUpdatedSinceDays = 10
             });
