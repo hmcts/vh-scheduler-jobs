@@ -37,10 +37,14 @@ namespace SchedulerJobs.UnitTests.Services
         {
             _eLinksApiClient.Setup(x => x.GetPeopleAsync(It.IsAny<DateTime>(), It.IsAny<int>(), It.IsAny<int>()))
                 .ThrowsAsync(new Exception("some exception"));
+            _eLinksApiClient.Setup(x => x.GetLeaversAsync(It.IsAny<DateTime>(), It.IsAny<int>(), It.IsAny<int>()))
+                .ThrowsAsync(new Exception("some exception"));
 
             Assert.ThrowsAsync<Exception>(() => _eLinksService.ImportJudiciaryPeopleAsync(new DateTime()));
+            Assert.ThrowsAsync<Exception>(() => _eLinksService.ImportLeaversJudiciaryPeopleAsync(new DateTime()));
             
             _eLinksApiClient.Verify(x => x.GetPeopleAsync(It.IsAny<DateTime>(), It.IsAny<int>(), It.IsAny<int>()), Times.Once);
+            _eLinksApiClient.Verify(x => x.GetLeaversAsync(It.IsAny<DateTime>(), It.IsAny<int>(), It.IsAny<int>()), Times.Once);
             _bookingsApiClient.Verify(x => x.BulkJudiciaryPersonsAsync(It.IsAny<IEnumerable<JudiciaryPersonRequest>>()), Times.Never);
         }
         
@@ -49,10 +53,14 @@ namespace SchedulerJobs.UnitTests.Services
         {
             _eLinksApiClient.Setup(x => x.GetPeopleAsync(It.IsAny<DateTime>(), It.IsAny<int>(), It.IsAny<int>()))
                 .ReturnsAsync(new List<JudiciaryPersonModel>());
+            _eLinksApiClient.Setup(x => x.GetLeaversAsync(It.IsAny<DateTime>(), It.IsAny<int>(), It.IsAny<int>()))
+                .ReturnsAsync(new List<JudiciaryPersonModel>());
 
             await _eLinksService.ImportJudiciaryPeopleAsync(new DateTime());
+            await _eLinksService.ImportLeaversJudiciaryPeopleAsync(new DateTime());
             
             _eLinksApiClient.Verify(x => x.GetPeopleAsync(It.IsAny<DateTime>(), It.IsAny<int>(), It.IsAny<int>()), Times.Once);
+            _eLinksApiClient.Verify(x => x.GetLeaversAsync(It.IsAny<DateTime>(), It.IsAny<int>(), It.IsAny<int>()), Times.Once);
             _bookingsApiClient.Verify(x => x.BulkJudiciaryPersonsAsync(It.IsAny<IEnumerable<JudiciaryPersonRequest>>()), Times.Never);
         }
         
@@ -68,18 +76,23 @@ namespace SchedulerJobs.UnitTests.Services
             
             _eLinksApiClient.Setup(x => x.GetPeopleAsync(It.IsAny<DateTime>(), 1, It.IsAny<int>())).ReturnsAsync(judiciaryPersonModels);
             _eLinksApiClient.Setup(x => x.GetPeopleAsync(It.IsAny<DateTime>(), 2, It.IsAny<int>())).ReturnsAsync(new List<JudiciaryPersonModel>());
+            _eLinksApiClient.Setup(x => x.GetLeaversAsync(It.IsAny<DateTime>(), 1, It.IsAny<int>())).ReturnsAsync(judiciaryPersonModels);
+            _eLinksApiClient.Setup(x => x.GetLeaversAsync(It.IsAny<DateTime>(), 2, It.IsAny<int>())).ReturnsAsync(new List<JudiciaryPersonModel>());
 
             await _eLinksService.ImportJudiciaryPeopleAsync(new DateTime());
+            await _eLinksService.ImportLeaversJudiciaryPeopleAsync(new DateTime());
             
             _eLinksApiClient.Verify(x => x.GetPeopleAsync(It.IsAny<DateTime>(), 1, It.IsAny<int>()), Times.Once);
             _eLinksApiClient.Verify(x => x.GetPeopleAsync(It.IsAny<DateTime>(), 2, It.IsAny<int>()), Times.Once);
+            _eLinksApiClient.Verify(x => x.GetLeaversAsync(It.IsAny<DateTime>(), 1, It.IsAny<int>()), Times.Once);
+            _eLinksApiClient.Verify(x => x.GetLeaversAsync(It.IsAny<DateTime>(), 2, It.IsAny<int>()), Times.Once);
             _bookingsApiClient.Verify(x => x.BulkJudiciaryPersonsAsync(It.Is<IEnumerable<JudiciaryPersonRequest>>
                 (
                     x => 
                     x.ElementAt(0).Email == judiciaryPersonModels.ElementAt(0).Email &&
                     x.ElementAt(1).Email == judiciaryPersonModels.ElementAt(1).Email &&
                     x.ElementAt(2).Email == judiciaryPersonModels.ElementAt(2).Email
-                )), Times.Once);
+                )), Times.Exactly(2));
         }
         
         [Test]
@@ -97,16 +110,27 @@ namespace SchedulerJobs.UnitTests.Services
             _eLinksApiClient.Setup(x => x.GetPeopleAsync(It.IsAny<DateTime>(), 3, It.IsAny<int>())).ReturnsAsync(judiciaryPersonModels);
             _eLinksApiClient.Setup(x => x.GetPeopleAsync(It.IsAny<DateTime>(), 4, It.IsAny<int>())).ReturnsAsync(judiciaryPersonModels);
             _eLinksApiClient.Setup(x => x.GetPeopleAsync(It.IsAny<DateTime>(), 5, It.IsAny<int>())).ReturnsAsync(new List<JudiciaryPersonModel>());
+            _eLinksApiClient.Setup(x => x.GetLeaversAsync(It.IsAny<DateTime>(), 1, It.IsAny<int>())).ReturnsAsync(judiciaryPersonModels);
+            _eLinksApiClient.Setup(x => x.GetLeaversAsync(It.IsAny<DateTime>(), 2, It.IsAny<int>())).ReturnsAsync(judiciaryPersonModels);
+            _eLinksApiClient.Setup(x => x.GetLeaversAsync(It.IsAny<DateTime>(), 3, It.IsAny<int>())).ReturnsAsync(judiciaryPersonModels);
+            _eLinksApiClient.Setup(x => x.GetLeaversAsync(It.IsAny<DateTime>(), 4, It.IsAny<int>())).ReturnsAsync(judiciaryPersonModels);
+            _eLinksApiClient.Setup(x => x.GetLeaversAsync(It.IsAny<DateTime>(), 5, It.IsAny<int>())).ReturnsAsync(new List<JudiciaryPersonModel>());
 
             await _eLinksService.ImportJudiciaryPeopleAsync(new DateTime());
+            await _eLinksService.ImportLeaversJudiciaryPeopleAsync(new DateTime());
             
             _eLinksApiClient.Verify(x => x.GetPeopleAsync(It.IsAny<DateTime>(), 1, It.IsAny<int>()), Times.Once);
             _eLinksApiClient.Verify(x => x.GetPeopleAsync(It.IsAny<DateTime>(), 2, It.IsAny<int>()), Times.Once);
             _eLinksApiClient.Verify(x => x.GetPeopleAsync(It.IsAny<DateTime>(), 3, It.IsAny<int>()), Times.Once);
             _eLinksApiClient.Verify(x => x.GetPeopleAsync(It.IsAny<DateTime>(), 4, It.IsAny<int>()), Times.Once);
             _eLinksApiClient.Verify(x => x.GetPeopleAsync(It.IsAny<DateTime>(), 5, It.IsAny<int>()), Times.Once);
-            
-            _bookingsApiClient.Verify(x => x.BulkJudiciaryPersonsAsync(It.IsAny<IEnumerable<JudiciaryPersonRequest>>()), Times.Exactly(4));
+            _eLinksApiClient.Verify(x => x.GetLeaversAsync(It.IsAny<DateTime>(), 1, It.IsAny<int>()), Times.Once);
+            _eLinksApiClient.Verify(x => x.GetLeaversAsync(It.IsAny<DateTime>(), 2, It.IsAny<int>()), Times.Once);
+            _eLinksApiClient.Verify(x => x.GetLeaversAsync(It.IsAny<DateTime>(), 3, It.IsAny<int>()), Times.Once);
+            _eLinksApiClient.Verify(x => x.GetLeaversAsync(It.IsAny<DateTime>(), 4, It.IsAny<int>()), Times.Once);
+            _eLinksApiClient.Verify(x => x.GetLeaversAsync(It.IsAny<DateTime>(), 5, It.IsAny<int>()), Times.Once);
+
+            _bookingsApiClient.Verify(x => x.BulkJudiciaryPersonsAsync(It.IsAny<IEnumerable<JudiciaryPersonRequest>>()), Times.Exactly(8));
         }
         
         [Test]
@@ -121,6 +145,8 @@ namespace SchedulerJobs.UnitTests.Services
             
             _eLinksApiClient.Setup(x => x.GetPeopleAsync(It.IsAny<DateTime>(), 1, It.IsAny<int>())).ReturnsAsync(judiciaryPersonModels);
             _eLinksApiClient.Setup(x => x.GetPeopleAsync(It.IsAny<DateTime>(), 2, It.IsAny<int>())).ReturnsAsync(new List<JudiciaryPersonModel>());
+            _eLinksApiClient.Setup(x => x.GetLeaversAsync(It.IsAny<DateTime>(), 1, It.IsAny<int>())).ReturnsAsync(judiciaryPersonModels);
+            _eLinksApiClient.Setup(x => x.GetLeaversAsync(It.IsAny<DateTime>(), 2, It.IsAny<int>())).ReturnsAsync(new List<JudiciaryPersonModel>());
 
             _bookingsApiClient.Setup(x => x.BulkJudiciaryPersonsAsync(It.IsAny<IEnumerable<JudiciaryPersonRequest>>()))
                 .ReturnsAsync(new BulkJudiciaryPersonResponse
@@ -129,10 +155,13 @@ namespace SchedulerJobs.UnitTests.Services
                 });
             
             await _eLinksService.ImportJudiciaryPeopleAsync(new DateTime());
+            await _eLinksService.ImportLeaversJudiciaryPeopleAsync(new DateTime());
             
             _eLinksApiClient.Verify(x => x.GetPeopleAsync(It.IsAny<DateTime>(), 1, It.IsAny<int>()), Times.Once);
             _eLinksApiClient.Verify(x => x.GetPeopleAsync(It.IsAny<DateTime>(), 2, It.IsAny<int>()), Times.Once);
-            _bookingsApiClient.Verify(x => x.BulkJudiciaryPersonsAsync(It.IsAny<IEnumerable<JudiciaryPersonRequest>>()), Times.Once);
+            _eLinksApiClient.Verify(x => x.GetLeaversAsync(It.IsAny<DateTime>(), 1, It.IsAny<int>()), Times.Once);
+            _eLinksApiClient.Verify(x => x.GetLeaversAsync(It.IsAny<DateTime>(), 2, It.IsAny<int>()), Times.Once);
+            _bookingsApiClient.Verify(x => x.BulkJudiciaryPersonsAsync(It.IsAny<IEnumerable<JudiciaryPersonRequest>>()), Times.Exactly(2));
         }
     }
 }

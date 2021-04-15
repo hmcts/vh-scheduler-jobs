@@ -11,6 +11,7 @@ namespace SchedulerJobs.Services
     public interface IELinksService
     {
         Task ImportJudiciaryPeopleAsync(DateTime fromDate);
+        Task ImportLeaversJudiciaryPeopleAsync(DateTime fromDate);
     }
     
     public class ELinksService : IELinksService
@@ -59,6 +60,45 @@ namespace SchedulerJobs.Services
                 _logger.LogError(ex, ex.Message);
                 throw;
             }   
+        }
+
+        public async Task ImportLeaversJudiciaryPeopleAsync(DateTime fromDate)
+        {
+            var currentPage = 1;
+
+            try
+            {
+                while (true)
+                {
+                    _logger.LogInformation("ImportJudiciaryLeavers: executing page {CurrentPage}", currentPage);
+
+                    var leaversResult = (await _eLinksApiClient.GetLeaversAsync(fromDate, currentPage))
+                        .Where(x => x.Id.HasValue)
+                        .ToList();
+
+                    if (!leaversResult.Any())
+                    {
+                        _logger.LogWarning("ImportJudiciaryLeavers: No results from api for page: {CurrentPage}", currentPage);
+                        break;
+                    }
+
+                    _logger.LogInformation("ImportJudiciaryLeavers: Calling bookings API with {leaversResultCount} people", leaversResult.Count);
+                    var response = await _bookingsApiClient.BulkJudiciaryPersonsAsync(leaversResult.Select(x =>
+                    {
+                        x.HasLeft = true;
+                        return JudiciaryPersonRequestMapper.MapTo(x);
+                    }));
+                    response?.ErroredRequests.ForEach(x => _logger.LogError("ImportJudiciaryPeople: {ErrorResponseMessage}", x.Message));
+
+                    currentPage++;
+                    await Task.Delay(250);
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                throw;
+            }
         }
     }
 }

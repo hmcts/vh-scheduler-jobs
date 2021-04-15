@@ -23,9 +23,6 @@ namespace SchedulerJobs.UnitTests.Functions
             _timerInfo = new TimerInfo(new ScheduleStub(), new ScheduleStatus(), true);
         }
 
-        protected virtual void MockerAdditionalSetupBeforeSutCreation()
-        {
-            // Method intentionally left empty.
-        }
+        protected virtual void MockerAdditionalSetupBeforeSutCreation(){}
     }
 }

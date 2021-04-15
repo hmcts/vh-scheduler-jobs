@@ -30,7 +30,19 @@ namespace SchedulerJobs.Services.HttpClients
 
             return ApiRequestHelper.Deserialise<List<JudiciaryPersonModel>>(await response.Content.ReadAsStringAsync());       
         }
-        
+
+        public async Task<IEnumerable<JudiciaryPersonModel>> GetLeaversAsync(DateTime updatedSince, int page = 1, int perPage = 100)
+        {
+            var response = await _httpClient.GetAsync
+            (
+                $"{BaseUrl}api/leavers?updated_since={updatedSince:yyyy-MM-dd}&page={page}&per_page={perPage}"
+            );
+
+            await HandleUnsuccessfulResponse(response);
+
+            return ApiRequestHelper.Deserialise<List<JudiciaryPersonModel>>(await response.Content.ReadAsStringAsync());
+        }
+
         private static async Task HandleUnsuccessfulResponse(HttpResponseMessage response)
         {
             if (!response.IsSuccessStatusCode)

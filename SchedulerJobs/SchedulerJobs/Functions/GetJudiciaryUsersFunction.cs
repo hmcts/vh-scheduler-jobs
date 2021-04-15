@@ -33,11 +33,13 @@ namespace SchedulerJobs.Functions
             var updatedSince = DateTime.UtcNow.AddDays(-days);
             
             log.LogInformation("Started GetJudiciaryUsersFunction at: {Now} - param UpdatedSince: {UpdatedSince}", 
-                DateTime.UtcNow, updatedSince.ToString("yyyy-MM-dd"));
+            DateTime.UtcNow, updatedSince.ToString("yyyy-MM-dd"));
 
             try
             {
                 await _eLinksService.ImportJudiciaryPeopleAsync(updatedSince);
+                
+                await _eLinksService.ImportLeaversJudiciaryPeopleAsync(updatedSince);
             }
             catch (Exception ex)
             {
