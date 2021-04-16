@@ -29,7 +29,7 @@ namespace SchedulerJobs.Functions
         [FunctionName("GetJudiciaryUsersFunction")]
         public async Task RunAsync([TimerTrigger("0 0 2 * * *", RunOnStartup = true)] TimerInfo myTimer, ILogger log)
         {
-            var days = _servicesConfiguration?.ELinksApiGetPeopleUpdatedSinceDays ?? 1;
+            var days = Math.Max(_servicesConfiguration?.ELinksApiGetPeopleUpdatedSinceDays ?? 1, 1);
             var updatedSince = DateTime.UtcNow.AddDays(-days);
             
             log.LogInformation("Started GetJudiciaryUsersFunction at: {Now} - param UpdatedSince: {UpdatedSince}", 
