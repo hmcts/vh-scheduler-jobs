@@ -21,7 +21,8 @@ namespace SchedulerJobs.Services.Mappers
                 Title = source.Title,
                 KnownAs = source.KnownAs,
                 PersonalCode = source.PersonalCode,
-                PostNominals = source.PostNominals
+                PostNominals = source.PostNominals,
+                HasLeft = source.HasLeft
             };
         }
     }

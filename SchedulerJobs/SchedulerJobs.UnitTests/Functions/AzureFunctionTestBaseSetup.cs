@@ -17,9 +17,12 @@ namespace SchedulerJobs.UnitTests.Functions
         protected void MockerSetup()
         {
             _mocker = AutoMock.GetLoose();
+            MockerAdditionalSetupBeforeSutCreation();
             _sut = _mocker.Create<T>();
             _logger = (LoggerFake)TestFactory.CreateLogger(LoggerTypes.List);
             _timerInfo = new TimerInfo(new ScheduleStub(), new ScheduleStatus(), true);
         }
+
+        protected virtual void MockerAdditionalSetupBeforeSutCreation(){}
     }
 }
