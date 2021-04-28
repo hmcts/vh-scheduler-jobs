@@ -93,6 +93,9 @@ parameters:
     value: vh-services-elinks-api-get-people-updated-since-days
     secret: true
 
+  - name: UseELinksStub
+    value: true
+
 variables:
   - group: vh-domains-and-urls
   - group: vh-apps-settings-generic
