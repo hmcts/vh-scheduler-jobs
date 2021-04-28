@@ -50,7 +50,7 @@ variables:
   - name: UseELinksStub
     ${{ if eq(parameters.environment, 'Prod') }}:
       value: false
-    ${{ if eq(variables['Build.SourceBranchName'], 'dev') }}:
+    ${{ if ne(variables['Build.SourceBranchName'], 'Prod') }}:
       value: true
 
 trigger: none
