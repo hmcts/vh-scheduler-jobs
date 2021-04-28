@@ -13,7 +13,7 @@ namespace SchedulerJobs.Services
         Task ImportJudiciaryPeopleAsync(DateTime fromDate);
         Task ImportLeaversJudiciaryPeopleAsync(DateTime fromDate);
     }
-    
+
     public class ELinksService : IELinksService
     {
         private readonly IELinksApiClient _eLinksApiClient;
@@ -57,7 +57,7 @@ namespace SchedulerJobs.Services
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, ex.Message);
+                _logger.LogError(ex, "There was a problem importing judiciary people");
                 throw;
             }   
         }
@@ -82,7 +82,7 @@ namespace SchedulerJobs.Services
                         break;
                     }
 
-                    _logger.LogInformation("ImportJudiciaryLeavers: Calling bookings API with {leaversResultCount} people", leaversResult.Count);
+                    _logger.LogInformation("ImportJudiciaryLeavers: Calling bookings API with {LeaversResultCount} people", leaversResult.Count);
                     var response = await _bookingsApiClient.BulkJudiciaryPersonsAsync(leaversResult.Select(x =>
                     {
                         x.HasLeft = true;
@@ -96,7 +96,7 @@ namespace SchedulerJobs.Services
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, ex.Message);
+                _logger.LogError(ex, "There was a problem importing judiciary people leavers");
                 throw;
             }
         }

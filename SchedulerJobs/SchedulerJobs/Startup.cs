@@ -83,12 +83,30 @@ namespace SchedulerJobs
             services.AddScoped<IClearConferenceChatHistoryService, ClearConferenceChatHistoryService>();
             services.AddScoped<IAnonymiseHearingsConferencesDataService, AnonymiseHearingsConferencesDataService>();
             services.AddScoped<IRemoveHeartbeatsForConferencesService, RemoveHeartbeatsForConferencesService>();
-            services.AddScoped<IELinksService, ELinksService>();
+
+            bool.TryParse(configuration["UseELinksStub"], out var useELinksStub);
+
+            if (useELinksStub)
+            {
+                services.AddScoped<IELinksService, ELinksServiceStub>();
+            }
+            else
+            {
+                services.AddScoped<IELinksService, ELinksService>(); 
+                services.AddTransient<ELinksApiDelegatingHandler>();
+                services.AddHttpClient<IELinksApiClient, ELinksApiClient>()
+                    .AddHttpMessageHandler<ELinksApiDelegatingHandler>()
+                    .AddTypedClient(httpClient =>
+                    {
+                        var eLinksApiClient = new ELinksApiClient(httpClient) {BaseUrl = serviceConfiguration.ELinksApiUrl};
+                        return (IELinksApiClient)eLinksApiClient;
+                    });
+            }
+            
 
             services.AddTransient<VideoServiceTokenHandler>();
             services.AddTransient<BookingsServiceTokenHandler>();
             services.AddTransient<UserServiceTokenHandler>();
-            services.AddTransient<ELinksApiDelegatingHandler>();
 
             services.AddHttpClient<IVideoApiClient, VideoApiClient>()
                 .AddHttpMessageHandler<VideoServiceTokenHandler>()
@@ -118,14 +136,6 @@ namespace SchedulerJobs
                     client.BaseUrl = serviceConfiguration.UserApiUrl;
                     client.ReadResponseAsString = true;
                     return (IUserApiClient)client;
-                });
-            
-            services.AddHttpClient<IELinksApiClient, ELinksApiClient>()
-                .AddHttpMessageHandler<ELinksApiDelegatingHandler>()
-                .AddTypedClient(httpClient =>
-                {
-                    var eLinksApiClient = new ELinksApiClient(httpClient) {BaseUrl = serviceConfiguration.ELinksApiUrl};
-                    return (IELinksApiClient)eLinksApiClient;
                 });
         }
     }
