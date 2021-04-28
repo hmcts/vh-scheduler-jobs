@@ -71,6 +71,7 @@ namespace SchedulerJobs.Services
 
         private JudiciaryPersonModel InitPersonModel(string prefix, int number, Guid id)
         {
+            var ticks = DateTime.UtcNow.Ticks.ToString();
             return new JudiciaryPersonModel
             {
                 Email = $"{prefix.ToLower()}_judge_{number}@judiciarystaging.onmicrosoft.com",
@@ -79,7 +80,7 @@ namespace SchedulerJobs.Services
                 Surname = $"Judge {number}",
                 Id = id,
                 HasLeft = false,
-                PersonalCode = DateTime.UtcNow.ToString(CultureInfo.InvariantCulture).Reverse().Take(5).ToString(),
+                PersonalCode = ticks.Substring(ticks.Length-5),
                 PostNominals = null,
                 Title = "Honour"
             };
