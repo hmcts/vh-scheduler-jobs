@@ -49,9 +49,9 @@ variables:
       - group: vh-preview
   - name: UseELinksStub
     ${{ if eq(parameters.environment, 'Prod') }}:
-      value: false
-    ${{ if eq(variables['Build.SourceBranchName'], 'dev') }}:
-      value: true
+      value: 'false'
+    ${{ if ne(parameters.environment, 'Prod') }}:
+      value: 'true'
 
 trigger: none
 pr: none
