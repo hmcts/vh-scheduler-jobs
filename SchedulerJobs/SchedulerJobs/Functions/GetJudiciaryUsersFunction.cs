@@ -27,9 +27,28 @@ namespace SchedulerJobs.Functions
         /// <param name="log"></param>
         /// <returns></returns>
         [FunctionName("GetJudiciaryUsersFunction")]
-        public Task RunAsync([TimerTrigger("0 0 2 * * *", RunOnStartup = true)] TimerInfo myTimer, ILogger log)
+        public async Task RunAsync([TimerTrigger("0 0 2 * * *", RunOnStartup = true)] TimerInfo myTimer, ILogger log)
         {
-            return Task.CompletedTask;
+            var days = Math.Max(_servicesConfiguration?.ELinksApiGetPeopleUpdatedSinceDays ?? 1, 1);
+            var updatedSince = DateTime.UtcNow.AddDays(-days);
+
+            log.LogInformation("Started GetJudiciaryUsersFunction at: {Now} - param UpdatedSince: {UpdatedSince}",
+            DateTime.UtcNow, updatedSince.ToString("yyyy-MM-dd"));
+
+            try
+            {
+                await _eLinksService.ImportJudiciaryPeopleAsync(updatedSince);
+
+                await _eLinksService.ImportLeaversJudiciaryPeopleAsync(updatedSince);
+            }
+            catch (Exception ex)
+            {
+                log.LogError(ex, ex.Message);
+                throw;
+            }
+
+            log.LogInformation("Finished GetJudiciaryUsersFunction at: {Now} - param UpdatedSince: {UpdatedSince}",
+                DateTime.UtcNow, updatedSince.ToString("yyyy-MM-dd"));
         }
     }
 }
