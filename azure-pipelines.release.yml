@@ -48,7 +48,7 @@ variables:
     - ${{ if not(or(startswith(variables['Build.SourceBranch'], 'refs/heads/release/'), startswith(variables['Build.SourceBranch'], 'refs/heads/hotfix/'))) }}:
       - group: vh-preview
   - name: UseELinksStub
-    ${{ if eq(parameters.environment, 'Prod') }}:
+    ${{ if contains(parameters.environment, 'Prod') }}:
       value: 'false'
     ${{ if ne(parameters.environment, 'Prod') }}:
       value: 'true'
