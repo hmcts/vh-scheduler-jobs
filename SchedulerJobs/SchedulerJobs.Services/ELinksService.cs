@@ -52,7 +52,6 @@ namespace SchedulerJobs.Services
                     response?.ErroredRequests.ForEach(x => _logger.LogError("ImportJudiciaryPeople: {ErrorResponseMessage}", x.Message));
 
                     currentPage++;
-                    await Task.Delay(250);
                 }  
             }
             catch (Exception ex)
@@ -91,7 +90,6 @@ namespace SchedulerJobs.Services
                     response?.ErroredRequests.ForEach(x => _logger.LogError("ImportJudiciaryPeople: {ErrorResponseMessage}", x.Message));
 
                     currentPage++;
-                    await Task.Delay(250);
                 }
             }
             catch (Exception ex)

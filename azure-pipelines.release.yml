@@ -146,9 +146,7 @@ stages:
             value: vh-services-elinks-api-key
             secret: true
           - name: VhServices:ELinksApiGetPeopleUpdatedSinceDays
-            value: vh-services-elinks-api-get-people-updated-since-days
-            secret: true
-          
+            value: 5000
           - name: UseELinksStub
             value: $(UseELinksStub)
         acceptanceTestSettings:
