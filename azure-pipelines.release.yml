@@ -52,6 +52,11 @@ variables:
       value: 'false'
     ${{ if ne(parameters.environment, 'Prod') }}:
       value: 'true'
+  - name: ELinksApiUrl
+    ${{ if eq(parameters.environment, 'Prod') }}:
+      value: $(elinks_api_url)
+    ${{ if ne(parameters.environment, 'Prod') }}:
+      value: $(elinks_api_url_staging)
 
 trigger: none
 pr: none
@@ -141,7 +146,7 @@ stages:
           - name: VhServices:UserApiUrl
             value: $(user_api_url)
           - name: VhServices:ELinksApiUrl
-            value: $(elinks_api_url)
+            value: $(ELinksApiUrl)
           - name: VhServices:ELinksApiKey
             value: vh-services-elinks-api-key
             secret: true
