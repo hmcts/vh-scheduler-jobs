@@ -40,18 +40,17 @@ variables:
   - ${{ if ne(variables['Build.Reason'], 'ResourceTrigger') }}:
     - ${{ if containsValue(parameters.prodEnvs, parameters.environment) }}:
       - group: vh-prod
+      - name: UseELinksStub
+        value: false
     - ${{ if not(containsValue(parameters.prodEnvs, parameters.environment)) }}:
       - group: vh-preview
+      - name: UseELinksStub
+        value: false
   - ${{ if eq(variables['Build.Reason'], 'ResourceTrigger') }}:
     - ${{ if or(startswith(variables['Build.SourceBranch'], 'refs/heads/release/'), startswith(variables['Build.SourceBranch'], 'refs/heads/hotfix/')) }}:
       - group: vh-prod
     - ${{ if not(or(startswith(variables['Build.SourceBranch'], 'refs/heads/release/'), startswith(variables['Build.SourceBranch'], 'refs/heads/hotfix/'))) }}:
       - group: vh-preview
-  - name: UseELinksStub
-    ${{ if containsValue(parameters.prodEnvs, parameters.environment) }}:
-      value: 'false'
-    ${{ if ne(parameters.environment, 'Prod') }}:
-      value: 'true'
   - name: ELinksApiUrl
     ${{ if eq(parameters.environment, 'Prod') }}:
       value: $(elinks_api_url)
