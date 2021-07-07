@@ -35,7 +35,7 @@ namespace SchedulerJobs.Services.HttpClients
         {
             var response = await _httpClient.GetAsync
             (
-                $"{BaseUrl}api/v2/leavers?left_since={updatedSince:yyyy-MM-dd}&page={page}&per_page={perPage}"
+                $"{BaseUrl}api/v2/leavers?left_since={updatedSince:yyyy-MM-dd}"
             );
 
             await HandleUnsuccessfulResponse(response);
