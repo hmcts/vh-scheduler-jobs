@@ -40,12 +40,8 @@ variables:
   - ${{ if ne(variables['Build.Reason'], 'ResourceTrigger') }}:
     - ${{ if containsValue(parameters.prodEnvs, parameters.environment) }}:
       - group: vh-prod
-      - name: UseELinksStub
-        value: false
     - ${{ if not(containsValue(parameters.prodEnvs, parameters.environment)) }}:
       - group: vh-preview
-      - name: UseELinksStub
-        value: true
   - ${{ if eq(variables['Build.Reason'], 'ResourceTrigger') }}:
     - ${{ if or(startswith(variables['Build.SourceBranch'], 'refs/heads/release/'), startswith(variables['Build.SourceBranch'], 'refs/heads/hotfix/')) }}:
       - group: vh-prod
@@ -111,6 +107,22 @@ stages:
             value: $(AppUri_Prod)
             env:
              - Prod
+          - name: UseELinksStub
+            value: false
+            env:
+             - Prod
+             - Preprod
+          - name: UseELinksStub
+            value: true
+            env:
+             - Preview
+             - Dev
+             - AAT
+             - Sandbox
+             - Test1
+             - Test2
+             - Test3
+             - Demo
         appSettings:
           - name: ApplicationInsights:InstrumentationKey
             value: vh-core-infra-AppInsightsKey
