@@ -84,8 +84,10 @@ parameters:
     secret: true
   - name: VhServices:UserApiUrl
     value: $(user_api_url)
-  - name: VhServices:ELinksApiUrl
-    value: $(elinks_api_url_staging)
+  - name: VhServices:ELinksLeaversBaseUrl
+    value: $(elinks_leavers_api_url_staging)
+  - name: VhServices:ELinksPeoplesBaseUrl
+    value: $(elinks_people_api_url_staging)
   - name: VhServices:ELinksApiKey
     value: vh-services-elinks-api-key
     secret: true

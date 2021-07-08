@@ -16,13 +16,15 @@ namespace SchedulerJobs.Services
 
     public class ELinksService : IELinksService
     {
-        private readonly IELinksApiClient _eLinksApiClient;
+        private readonly IPeoplesClient _peoplesClient;
+        private readonly ILeaversClient _leaversClient;
         private readonly IBookingsApiClient _bookingsApiClient;
         private readonly ILogger<ELinksService> _logger;
 
-        public ELinksService(IELinksApiClient eLinksApiClient, IBookingsApiClient bookingsApiClient, ILogger<ELinksService> logger)
+        public ELinksService(IPeoplesClient peoplesClient, ILeaversClient leaversClient, IBookingsApiClient bookingsApiClient, ILogger<ELinksService> logger)
         {
-            _eLinksApiClient = eLinksApiClient;
+            _peoplesClient = peoplesClient;
+            _leaversClient = leaversClient;
             _bookingsApiClient = bookingsApiClient;
             _logger = logger;
         }
@@ -37,11 +39,11 @@ namespace SchedulerJobs.Services
                 {
                     _logger.LogInformation("ImportJudiciaryPeople: executing page {CurrentPage}", currentPage);
                     
-                    var peopleResult = (await _eLinksApiClient.GetPeopleAsync(fromDate, currentPage))
+                    var peopleResult = (await _peoplesClient.GetPeopleAsync(fromDate, currentPage))
                         .Where(x => x.Id.HasValue)
                         .ToList();
 
-                    if (!peopleResult.Any())
+                    if (peopleResult.Count == 0)
                     {
                         _logger.LogWarning("ImportJudiciaryPeople: No results from api for page: {CurrentPage}", currentPage);
                         break;
@@ -52,13 +54,13 @@ namespace SchedulerJobs.Services
                     response?.ErroredRequests.ForEach(x => _logger.LogError("ImportJudiciaryPeople: {ErrorResponseMessage}", x.Message));
 
                     currentPage++;
-                }  
+                }
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "There was a problem importing judiciary people");
                 throw;
-            }   
+            }
         }
 
         public async Task ImportLeaversJudiciaryPeopleAsync(DateTime fromDate)
@@ -71,11 +73,11 @@ namespace SchedulerJobs.Services
                 {
                     _logger.LogInformation("ImportJudiciaryLeavers: executing page {CurrentPage}", currentPage);
 
-                    var leaversResult = (await _eLinksApiClient.GetLeaversAsync(fromDate, currentPage))
+                    var leaversResult = (await _leaversClient.GetLeaversAsync(fromDate, currentPage))
                         .Where(x => x.Id.HasValue)
                         .ToList();
 
-                    if (!leaversResult.Any())
+                    if (leaversResult.Count == 0)
                     {
                         _logger.LogWarning("ImportJudiciaryLeavers: No results from api for page: {CurrentPage}", currentPage);
                         break;

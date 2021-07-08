@@ -47,11 +47,16 @@ variables:
       - group: vh-prod
     - ${{ if not(or(startswith(variables['Build.SourceBranch'], 'refs/heads/release/'), startswith(variables['Build.SourceBranch'], 'refs/heads/hotfix/'))) }}:
       - group: vh-preview
-  - name: ELinksApiUrl
+  - name: ELinksPeoplesBaseUrl
     ${{ if eq(parameters.environment, 'Prod') }}:
-      value: $(elinks_api_url)
+      value: $(elinks_people_api_url)
     ${{ if ne(parameters.environment, 'Prod') }}:
-      value: $(elinks_api_url_staging)
+      value: $(elinks_people_api_url_staging)
+  - name: ELinksLeaversBaseUrl
+    ${{ if eq(parameters.environment, 'Prod') }}:
+      value: $(elinks_leavers_api_url)
+    ${{ if ne(parameters.environment, 'Prod') }}:
+      value: $(elinks_leavers_api_url_staging)
 
 trigger: none
 pr: none
@@ -156,8 +161,10 @@ stages:
             secret: true
           - name: VhServices:UserApiUrl
             value: $(user_api_url)
-          - name: VhServices:ELinksApiUrl
-            value: $(ELinksApiUrl)
+          - name: VhServices:ELinksPeoplesBaseUrl
+            value: $(ELinksPeoplesBaseUrl)
+          - name: VhServices:ELinksLeaversBaseUrl
+            value: $(ELinksLeaversBaseUrl)
           - name: VhServices:ELinksApiKey
             value: vh-services-elinks-api-key
             secret: true
