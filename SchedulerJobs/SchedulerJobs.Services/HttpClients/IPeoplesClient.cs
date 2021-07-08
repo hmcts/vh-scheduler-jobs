@@ -5,9 +5,8 @@ using SchedulerJobs.Common.Models;
 
 namespace SchedulerJobs.Services.HttpClients
 {
-    public interface IELinksApiClient
+    public interface IPeoplesClient
     {
         Task<IEnumerable<JudiciaryPersonModel>> GetPeopleAsync(DateTime updatedSince, int page = 1, int perPage = 100);
-        Task<IEnumerable<JudiciaryPersonModel>> GetLeaversAsync(DateTime updatedSince, int page = 1, int perPage = 100);
     }
 }

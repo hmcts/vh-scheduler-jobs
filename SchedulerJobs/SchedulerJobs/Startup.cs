@@ -92,17 +92,29 @@ namespace SchedulerJobs
             }
             else
             {
-                services.AddScoped<IELinksService, ELinksService>(); 
+                services.AddScoped<IELinksService, ELinksService>();
                 services.AddTransient<ELinksApiDelegatingHandler>();
-                services.AddHttpClient<IELinksApiClient, ELinksApiClient>()
+                services.AddHttpClient<IPeoplesClient, PeoplesClient>()
                     .AddHttpMessageHandler<ELinksApiDelegatingHandler>()
                     .AddTypedClient(httpClient =>
                     {
-                        var eLinksApiClient = new ELinksApiClient(httpClient) {BaseUrl = serviceConfiguration.ELinksApiUrl};
-                        return (IELinksApiClient)eLinksApiClient;
+                        var peoplesClient = new PeoplesClient(httpClient)
+                        {
+                            BaseUrl = serviceConfiguration.ELinksPeoplesBaseUrl
+                        };
+                        return (IPeoplesClient)peoplesClient;
+                    });
+                services.AddHttpClient<ILeaversClient, LeaversClient>()
+                    .AddHttpMessageHandler<ELinksApiDelegatingHandler>()
+                    .AddTypedClient(httpClient =>
+                    {
+                        var leaversClient = new LeaversClient(httpClient)
+                        {
+                            BaseUrl = serviceConfiguration.ELinksLeaversBaseUrl
+                        };
+                        return (ILeaversClient)leaversClient;
                     });
             }
-            
 
             services.AddTransient<VideoServiceTokenHandler>();
             services.AddTransient<BookingsServiceTokenHandler>();
