@@ -84,11 +84,8 @@ namespace SchedulerJobs.Services
                     }
 
                     _logger.LogInformation("ImportJudiciaryLeavers: Calling bookings API with {LeaversResultCount} people", leaversResult.Count);
-                    var response = await _bookingsApiClient.BulkJudiciaryPersonsAsync(leaversResult.Select(x =>
-                    {
-                        x.HasLeft = true;
-                        return JudiciaryPersonRequestMapper.MapTo(x);
-                    }));
+
+                    var response = await _bookingsApiClient.BulkJudiciaryLeaversAsync(leaversResult.Select(x => JudiciaryLeaverRequestMapper.MapTo(x)));
                     response?.ErroredRequests.ForEach(x => _logger.LogError("ImportJudiciaryPeople: {ErrorResponseMessage}", x.Message));
 
                     currentPage++;

@@ -38,7 +38,6 @@ namespace SchedulerJobs.Functions
             try
             {
                 await _eLinksService.ImportJudiciaryPeopleAsync(updatedSince);
-
                 await _eLinksService.ImportLeaversJudiciaryPeopleAsync(updatedSince);
             }
             catch (Exception ex)

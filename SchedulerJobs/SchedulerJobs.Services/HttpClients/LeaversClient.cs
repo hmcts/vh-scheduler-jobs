@@ -18,7 +18,7 @@ namespace SchedulerJobs.Services.HttpClients
 
         public string BaseUrl { get; set; }
 
-        public async Task<IEnumerable<JudiciaryPersonModel>> GetLeaversAsync(DateTime updatedSince, int page = 1, int perPage = 100)
+        public async Task<IEnumerable<JudiciaryLeaverModel>> GetLeaversAsync(DateTime updatedSince, int page = 1, int perPage = 100)
         {
             var response = await _httpClient.GetAsync
             (
@@ -27,7 +27,7 @@ namespace SchedulerJobs.Services.HttpClients
 
             await ResponseHandler.HandleUnsuccessfulResponse(response);
 
-            return ApiRequestHelper.Deserialise<List<JudiciaryPersonModel>>(await response.Content.ReadAsStringAsync());
+            return ApiRequestHelper.Deserialise<List<JudiciaryLeaverModel>>(await response.Content.ReadAsStringAsync());
         }
     }
 }
