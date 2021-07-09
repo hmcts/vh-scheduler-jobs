@@ -27,7 +27,8 @@ namespace SchedulerJobs.Services.HttpClients
 
             await ResponseHandler.HandleUnsuccessfulResponse(response);
 
-            return ApiRequestHelper.Deserialise<List<JudiciaryLeaverModel>>(await response.Content.ReadAsStringAsync());
+            var model = ApiRequestHelper.Deserialise<LeaverResults>(await response.Content.ReadAsStringAsync());
+            return model.Results;
         }
     }
 }
