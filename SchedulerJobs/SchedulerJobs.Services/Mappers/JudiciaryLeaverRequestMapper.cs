@@ -7,15 +7,11 @@ namespace SchedulerJobs.Services.Mappers
     {
        public static JudiciaryLeaverRequest MapTo(JudiciaryLeaverModel source)
         {
-            if (!source.Id.HasValue)
-            {
-                return null;
-            }
-
             return new JudiciaryLeaverRequest
             {
-                Id = source.Id.Value,
-                Leaver = source.Leaver
+                Id = source.Id,
+                Leaver = source.Leaver,
+                LeftOn = source.LeftOn
             };
         }
     }

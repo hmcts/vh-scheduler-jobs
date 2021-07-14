@@ -83,12 +83,12 @@ namespace SchedulerJobs.UnitTests.Services
 
             var judiciaryLeaverModels = new List<JudiciaryLeaverModel>
             {
-                new JudiciaryLeaverModel{Id = person1, Leaver = true},
-                new JudiciaryLeaverModel{Id = person2, Leaver = true}
+                new JudiciaryLeaverModel{Id = person1.ToString(), Leaver = true},
+                new JudiciaryLeaverModel{Id = person2.ToString(), Leaver = true}
             };
             var judiciaryLeaverModels2 = new List<JudiciaryLeaverModel>
             {
-                new JudiciaryLeaverModel{Id = person3, Leaver = true}
+                new JudiciaryLeaverModel{Id = person3.ToString(), Leaver = true}
             };
 
             _peoplesClient.Setup(x => x.GetPeopleAsync(It.IsAny<DateTime>(), 1, It.IsAny<int>())).ReturnsAsync(judiciaryPersonModels);
@@ -113,7 +113,7 @@ namespace SchedulerJobs.UnitTests.Services
             _bookingsApiClient.Verify(x => x.BulkJudiciaryLeaversAsync(It.Is<IEnumerable<JudiciaryLeaverRequest>>
             (
                 x =>
-                x.ElementAt(0).Id == person1
+                x.ElementAt(0).Id == person1.ToString()
             )), Times.Exactly(1));
         }
 
@@ -133,7 +133,7 @@ namespace SchedulerJobs.UnitTests.Services
 
             var judiciaryLeaverModels = new List<JudiciaryLeaverModel>
             {
-                new JudiciaryLeaverModel{Id = person1, Leaver = true}
+                new JudiciaryLeaverModel{Id = person1.ToString(), Leaver = true, LeftOn = new DateTime().ToString()}
             };
 
             _peoplesClient.Setup(x => x.GetPeopleAsync(It.IsAny<DateTime>(), 1, It.IsAny<int>())).ReturnsAsync(judiciaryPersonModels);
@@ -155,10 +155,10 @@ namespace SchedulerJobs.UnitTests.Services
             _peoplesClient.Verify(x => x.GetPeopleAsync(It.IsAny<DateTime>(), 3, It.IsAny<int>()), Times.Once);
             _peoplesClient.Verify(x => x.GetPeopleAsync(It.IsAny<DateTime>(), 4, It.IsAny<int>()), Times.Once);
             _peoplesClient.Verify(x => x.GetPeopleAsync(It.IsAny<DateTime>(), 5, It.IsAny<int>()), Times.Once);
-           _leaversClient.Verify(x => x.GetLeaversAsync(It.IsAny<DateTime>(), 1, It.IsAny<int>()), Times.Once);
-           _leaversClient.Verify(x => x.GetLeaversAsync(It.IsAny<DateTime>(), 2, It.IsAny<int>()), Times.Once);
-           _leaversClient.Verify(x => x.GetLeaversAsync(It.IsAny<DateTime>(), 3, It.IsAny<int>()), Times.Once);
-           _leaversClient.Verify(x => x.GetLeaversAsync(It.IsAny<DateTime>(), 4, It.IsAny<int>()), Times.Once);
+            _leaversClient.Verify(x => x.GetLeaversAsync(It.IsAny<DateTime>(), 1, It.IsAny<int>()), Times.Once);
+            _leaversClient.Verify(x => x.GetLeaversAsync(It.IsAny<DateTime>(), 2, It.IsAny<int>()), Times.Once);
+            _leaversClient.Verify(x => x.GetLeaversAsync(It.IsAny<DateTime>(), 3, It.IsAny<int>()), Times.Once);
+            _leaversClient.Verify(x => x.GetLeaversAsync(It.IsAny<DateTime>(), 4, It.IsAny<int>()), Times.Once);
             _leaversClient.Verify(x => x.GetLeaversAsync(It.IsAny<DateTime>(), 5, It.IsAny<int>()), Times.Once);
 
             _bookingsApiClient.Verify(x => x.BulkJudiciaryPersonsAsync(It.IsAny<IEnumerable<JudiciaryPersonRequest>>()), Times.Exactly(4));
@@ -181,7 +181,7 @@ namespace SchedulerJobs.UnitTests.Services
 
             var judiciaryLeaverModels = new List<JudiciaryLeaverModel>
             {
-                new JudiciaryLeaverModel{Id = person1, Leaver = true}
+                new JudiciaryLeaverModel{Id = person1.ToString(), Leaver = true}
             };
 
             _peoplesClient.Setup(x => x.GetPeopleAsync(It.IsAny<DateTime>(), 1, It.IsAny<int>())).ReturnsAsync(judiciaryPersonModels);
@@ -195,15 +195,14 @@ namespace SchedulerJobs.UnitTests.Services
                     ErroredRequests = new List<JudiciaryPersonErrorResponse> { new JudiciaryPersonErrorResponse { Message = "some error" } }
                 });
 
-            await _eLinksService.ImportJudiciaryPeopleAsync(new DateTime());
-            await _eLinksService.ImportLeaversJudiciaryPeopleAsync(new DateTime());
+            await _eLinksService.ImportJudiciaryPeopleAsync(DateTime.Now.AddDays(-100));
+            await _eLinksService.ImportLeaversJudiciaryPeopleAsync(DateTime.Now.AddDays(-100));
 
             _peoplesClient.Verify(x => x.GetPeopleAsync(It.IsAny<DateTime>(), 1, It.IsAny<int>()), Times.Once);
             _peoplesClient.Verify(x => x.GetPeopleAsync(It.IsAny<DateTime>(), 2, It.IsAny<int>()), Times.Once);
             _leaversClient.Verify(x => x.GetLeaversAsync(It.IsAny<DateTime>(), 1, It.IsAny<int>()), Times.Once);
-            _leaversClient.Verify(x => x.GetLeaversAsync(It.IsAny<DateTime>(), 2, It.IsAny<int>()), Times.Once);
-            _bookingsApiClient.Verify(x => x.BulkJudiciaryPersonsAsync(It.IsAny<IEnumerable<JudiciaryPersonRequest>>()), Times.Exactly(1));
-            _bookingsApiClient.Verify(x => x.BulkJudiciaryLeaversAsync(It.IsAny<IEnumerable<JudiciaryLeaverRequest>>()), Times.Exactly(1));
+            _bookingsApiClient.Verify(x => x.BulkJudiciaryPersonsAsync(It.IsAny<IEnumerable<JudiciaryPersonRequest>>()), Times.Once);
+            _bookingsApiClient.Verify(x => x.BulkJudiciaryLeaversAsync(It.IsAny<IEnumerable<JudiciaryLeaverRequest>>()), Times.Once);
         }
     }
 }

@@ -37,9 +37,9 @@ namespace SchedulerJobs.Services
             {
                 while (true)
                 {
-                    _logger.LogInformation("ImportJudiciaryPeople: executing page {CurrentPage}", currentPage);
-                    
-                    var peopleResult = (await _peoplesClient.GetPeopleAsync(fromDate, currentPage))
+                    _logger.LogInformation("ImportJudiciaryPeople: Executing page {CurrentPage}", currentPage);
+                    var people = await _peoplesClient.GetPeopleAsync(fromDate, currentPage);
+                    var peopleResult = people
                         .Where(x => x.Id.HasValue)
                         .ToList();
 
@@ -48,8 +48,9 @@ namespace SchedulerJobs.Services
                         _logger.LogWarning("ImportJudiciaryPeople: No results from api for page: {CurrentPage}", currentPage);
                         break;
                     }
-                    
-                    _logger.LogInformation("ImportJudiciaryPeople: Calling bookings API with {PeopleResultCount} people", peopleResult.Count);
+                    var invalidCount = people.Count(x => !x.Id.HasValue);
+                    _logger.LogWarning($"ImportJudiciaryPeople: No of people who are invalid '{invalidCount}' in page '{currentPage}'.");
+                    _logger.LogInformation($"ImportJudiciaryPeople: Calling bookings API with '{peopleResult.Count}' people");
                     var response = await _bookingsApiClient.BulkJudiciaryPersonsAsync(peopleResult.Select(JudiciaryPersonRequestMapper.MapTo));
                     response?.ErroredRequests.ForEach(x => _logger.LogError("ImportJudiciaryPeople: {ErrorResponseMessage}", x.Message));
 
@@ -71,10 +72,10 @@ namespace SchedulerJobs.Services
             {
                 while (true)
                 {
-                    _logger.LogInformation("ImportJudiciaryLeavers: executing page {CurrentPage}", currentPage);
-
-                    var leaversResult = (await _leaversClient.GetLeaversAsync(fromDate, currentPage))
-                        .Where(x => x.Id.HasValue)
+                    _logger.LogInformation("ImportJudiciaryLeavers: Executing page {CurrentPage}", currentPage);
+                    var leavers = await _leaversClient.GetLeaversAsync(fromDate, currentPage);
+                    var leaversResult = leavers
+                        .Where(x => !string.IsNullOrEmpty(x.Id))
                         .ToList();
 
                     if (leaversResult.Count == 0)
@@ -83,17 +84,19 @@ namespace SchedulerJobs.Services
                         break;
                     }
 
-                    _logger.LogInformation("ImportJudiciaryLeavers: Calling bookings API with {LeaversResultCount} people", leaversResult.Count);
+                    var invalidCount = leavers.Count(x => string.IsNullOrEmpty(x.Id));
+                    _logger.LogWarning($"ImportJudiciaryLeavers: No of leavers who are invalid '{invalidCount}' in page '{currentPage}'.");
+                    _logger.LogInformation($"ImportJudiciaryLeavers: Calling bookings API with '{leaversResult.Count}' leavers");
 
-                    var response = await _bookingsApiClient.BulkJudiciaryLeaversAsync(leaversResult.Select(x => JudiciaryLeaverRequestMapper.MapTo(x)));
-                    response?.ErroredRequests.ForEach(x => _logger.LogError("ImportJudiciaryPeople: {ErrorResponseMessage}", x.Message));
+                    var response = await _bookingsApiClient.BulkJudiciaryLeaversAsync(leaversResult.Select(x =>  JudiciaryLeaverRequestMapper.MapTo(x)));
+                    response?.ErroredRequests.ForEach(x => _logger.LogError("ImportJudiciaryLeavers: {ErrorResponseMessage}", x.Message));
 
                     currentPage++;
                 }
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "There was a problem importing judiciary people leavers");
+                _logger.LogError(ex, "There was a problem importing judiciary leavers");
                 throw;
             }
         }
