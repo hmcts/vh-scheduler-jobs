@@ -1,12 +1,10 @@
 ﻿using BookingsApi.Client;
 using Microsoft.Azure.Functions.Extensions.DependencyInjection;
-using Microsoft.Azure.WebJobs.Hosting;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using SchedulerJobs;
 using SchedulerJobs.Common.ApiHelper;
 using SchedulerJobs.Common.Configuration;
 using SchedulerJobs.Common.Security;
@@ -18,7 +16,7 @@ using UserApi.Client;
 using VH.Core.Configuration;
 using VideoApi.Client;
 
-[assembly: WebJobsStartup(typeof(Startup))]
+[assembly: FunctionsStartup(typeof(SchedulerJobs.Startup))]
 namespace SchedulerJobs
 {
     public class Startup : FunctionsStartup
@@ -76,7 +74,7 @@ namespace SchedulerJobs
             services.AddScoped<IAzureTokenProvider, AzureTokenProvider>();
 
             services.AddLogging(builder =>
-                builder.AddApplicationInsights(configuration["ApplicationInsights:InstrumentationKey"])
+              builder.AddApplicationInsights(configuration["ApplicationInsights:InstrumentationKey"])
             );
 
             services.AddScoped<ICloseConferenceService, CloseConferenceService>();

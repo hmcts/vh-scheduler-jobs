@@ -7,5 +7,16 @@
       "maxConcurrentRequests": 100,
       "dynamicThrottlesEnabled": true
     }
+  },
+  "logging": {
+    "applicationInsights": {
+      "samplingSettings": {
+        "isEnabled": true,
+        "excludedTypes": "Request"
+      }
+    },
+    "LogLevel": {
+      "Default": "Information"
+    }
   }
 }
