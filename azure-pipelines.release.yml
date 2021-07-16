@@ -47,16 +47,6 @@ variables:
       - group: vh-prod
     - ${{ if not(or(startswith(variables['Build.SourceBranch'], 'refs/heads/release/'), startswith(variables['Build.SourceBranch'], 'refs/heads/hotfix/'))) }}:
       - group: vh-preview
-  - name: ELinksPeoplesBaseUrl
-    ${{ if eq(parameters.environment, 'Prod') }}:
-      value: $(elinks_people_api_url)
-    ${{ if ne(parameters.environment, 'Prod') }}:
-      value: $(elinks_people_api_url_staging)
-  - name: ELinksLeaversBaseUrl
-    ${{ if eq(parameters.environment, 'Prod') }}:
-      value: $(elinks_leavers_api_url)
-    ${{ if ne(parameters.environment, 'Prod') }}:
-      value: $(elinks_leavers_api_url_staging)
 
 trigger: none
 pr: none
@@ -112,6 +102,38 @@ stages:
             value: $(AppUri_Prod)
             env:
              - Prod
+          - name: ELinksPeoplesBaseUrl
+            value: $(elinks_people_api_url)
+            env:
+             - Prod
+          - name: ELinksLeaversBaseUrl
+            value: $(elinks_leavers_api_url)
+            env:
+             - Prod
+          - name: ELinksPeoplesBaseUrl
+            value: $(elinks_people_api_url_staging)
+            env:
+             - Preprod
+             - Preview
+             - Dev
+             - AAT
+             - Sandbox
+             - Test1
+             - Test2
+             - Test3
+             - Demo
+          - name: ELinksLeaversBaseUrl
+            value: $(elinks_leavers_api_url_staging)
+            env:
+             - Preprod
+             - Preview
+             - Dev
+             - AAT
+             - Sandbox
+             - Test1
+             - Test2
+             - Test3
+             - Demo
           - name: UseELinksStub
             value: false
             env:
@@ -169,7 +191,7 @@ stages:
             value: vh-services-elinks-api-key
             secret: true
           - name: VhServices:ELinksApiGetPeopleUpdatedSinceDays
-            value: 5000
+            value: 1
           - name: UseELinksStub
             value: $(UseELinksStub)
         acceptanceTestSettings:
