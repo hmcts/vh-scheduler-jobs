@@ -92,7 +92,7 @@ parameters:
     value: vh-services-elinks-api-key
     secret: true
   - name: VhServices:ELinksApiGetPeopleUpdatedSinceDays
-    value: 5000
+    value: 1
   - name: UseELinksStub
     value: true
 
