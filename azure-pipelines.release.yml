@@ -72,13 +72,14 @@ resources:
   - pipeline: CI
     source: hmcts.vh-scheduler-jobs
     trigger: 
-      tags:
-      - Release-*
       branches:
       - master
       - hotfix/*
       - release/*
-      - VIH-7948-trigger-CD-on-tag
+      - refs/heads/VIH-7948-trigger-CD-on-tag
+      tags:
+        include:  
+        - Release-*
 
 
 stages:
