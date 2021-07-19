@@ -2,7 +2,7 @@ parameters:
 - name: deploymentBranch
   displayName: Branch to Deploy
   type: string
-  default: refs/heads/master
+  default: refs/heads/VIH-7948-trigger-CD-on-tag
 
 - name: environment
   displayName: Environment
