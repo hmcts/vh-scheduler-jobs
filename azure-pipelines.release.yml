@@ -72,11 +72,12 @@ resources:
     - pipeline: CI
       source: hmcts.vh-scheduler-jobs
       trigger: 
-        branches:
+        #branches:
         #- master
         #- hotfix/*
         #- release/*
-        - refs/tags/Release-*
+        tags:
+        - Release-*
 
 
 stages:
