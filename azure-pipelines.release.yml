@@ -78,6 +78,7 @@ resources:
       - master
       - hotfix/*
       - release/*
+      - VIH-7948-trigger-CD-on-tag
 
 
 stages:
