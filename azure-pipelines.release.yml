@@ -58,7 +58,7 @@ variables:
     ${{ if ne(parameters.environment, 'Prod') }}:
       value: $(elinks_leavers_api_url_staging)
 
-trigger: none
+#trigger: none
 pr: none
 
 resources:
@@ -69,17 +69,17 @@ resources:
       ref: refs/heads/master
       endpoint: hmcts
   pipelines:
-  - pipeline: CI
-    source: hmcts.vh-scheduler-jobs
-    trigger: 
-      branches:
-      - master
-      - hotfix/*
-      - release/*
-      - refs/heads/VIH-7948-trigger-CD-on-tag
-      - refs/tags/Release-*
-      tags: 
-      - Release-*
+    - pipeline: CI
+      source: hmcts.vh-scheduler-jobs
+      trigger: 
+        branches:
+        - master
+        - hotfix/*
+        - release/*
+        - refs/heads/VIH-7948-trigger-CD-on-tag
+        - refs/tags/Release-*
+        tags: 
+        - Release-*
 
 
 stages:
