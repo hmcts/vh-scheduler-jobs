@@ -77,9 +77,8 @@ resources:
       - hotfix/*
       - release/*
       - refs/heads/VIH-7948-trigger-CD-on-tag
-      tags:
-        include:  
-        - Release-*
+      tags: 
+      - Release-*
 
 
 stages:
