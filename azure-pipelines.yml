@@ -108,6 +108,7 @@ trigger:
     - master
     - release/*
     - hotfix/*
+    - refs/tags/Release-*
 
 pr:
   branches:
