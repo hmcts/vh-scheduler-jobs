@@ -76,6 +76,7 @@ resources:
       - master
       - hotfix/*
       - release/*
+      - refs/tags/Release-*
 
 stages:
   - template: templates/vh-release.yml@templates
