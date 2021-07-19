@@ -73,7 +73,7 @@ resources:
     source: hmcts.vh-scheduler-jobs
     trigger: 
       tags:
-      - refs/tags/Release-*
+      - Release-*
       branches:
       - master
       - hotfix/*
