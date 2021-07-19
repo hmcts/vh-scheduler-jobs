@@ -58,7 +58,7 @@ variables:
     ${{ if ne(parameters.environment, 'Prod') }}:
       value: $(elinks_leavers_api_url_staging)
 
-#trigger: none
+trigger: none
 pr: none
 
 resources:
@@ -76,9 +76,8 @@ resources:
         #- master
         #- hotfix/*
         #- release/*
-        
         tags:
-        - Release-*
+        - Release-test-11
 
 
 stages:
