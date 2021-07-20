@@ -70,7 +70,7 @@ resources:
       endpoint: hmcts
   pipelines:
     - pipeline: CI
-      source: hmcts.vh-scheduler-jobs
+      source: /Apps-CI/hmcts.vh-scheduler-jobs
       trigger: true
         #branches:
         #- master
