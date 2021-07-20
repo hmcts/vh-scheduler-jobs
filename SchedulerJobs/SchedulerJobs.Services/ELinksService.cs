@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using BookingsApi.Client;
@@ -31,11 +32,12 @@ namespace SchedulerJobs.Services
 
         public async Task ImportJudiciaryPeopleAsync(DateTime fromDate)
         {
+            var invalidPeoplePersonalCode = new List<string>();
             var currentPage = 1;
 
-            try
+            while (true)
             {
-                while (true)
+                try
                 {
                     _logger.LogInformation("ImportJudiciaryPeople: Executing page {CurrentPage}", currentPage);
                     var people = await _peoplesClient.GetPeopleAsync(fromDate, currentPage);
@@ -48,29 +50,33 @@ namespace SchedulerJobs.Services
                         _logger.LogWarning("ImportJudiciaryPeople: No results from api for page: {CurrentPage}", currentPage);
                         break;
                     }
-                    var invalidCount = people.Count(x => !x.Id.HasValue);
-                    _logger.LogWarning($"ImportJudiciaryPeople: No of people who are invalid '{invalidCount}' in page '{currentPage}'.");
+
+                    var invalidPersonList = people.Where(x => !x.Id.HasValue).ToList();
+                    invalidPersonList.ForEach(x => invalidPeoplePersonalCode.Add(x.PersonalCode));
+
+                    _logger.LogWarning($"ImportJudiciaryPeople: No of people who are invalid '{invalidPersonList.Count}' in page '{currentPage}'.");
                     _logger.LogInformation($"ImportJudiciaryPeople: Calling bookings API with '{peopleResult.Count}' people");
                     var response = await _bookingsApiClient.BulkJudiciaryPersonsAsync(peopleResult.Select(JudiciaryPersonRequestMapper.MapTo));
                     response?.ErroredRequests.ForEach(x => _logger.LogError("ImportJudiciaryPeople: {ErrorResponseMessage}", x.Message));
 
                     currentPage++;
                 }
+                catch (Exception ex)
+                {
+                    currentPage++;
+                    _logger.LogError(ex, "There was a problem importing judiciary people");
+                }
             }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "There was a problem importing judiciary people");
-                throw;
-            }
+            _logger.LogWarning($"ImportJudiciaryPeople: List of Personal code which are failed to insert '{string.Join(",", invalidPeoplePersonalCode)}'");
         }
 
         public async Task ImportLeaversJudiciaryPeopleAsync(DateTime fromDate)
         {
             var currentPage = 1;
 
-            try
+            while (true)
             {
-                while (true)
+                try
                 {
                     _logger.LogInformation("ImportJudiciaryLeavers: Executing page {CurrentPage}", currentPage);
                     var leavers = await _leaversClient.GetLeaversAsync(fromDate, currentPage);
@@ -88,16 +94,16 @@ namespace SchedulerJobs.Services
                     _logger.LogWarning($"ImportJudiciaryLeavers: No of leavers who are invalid '{invalidCount}' in page '{currentPage}'.");
                     _logger.LogInformation($"ImportJudiciaryLeavers: Calling bookings API with '{leaversResult.Count}' leavers");
 
-                    var response = await _bookingsApiClient.BulkJudiciaryLeaversAsync(leaversResult.Select(x =>  JudiciaryLeaverRequestMapper.MapTo(x)));
+                    var response = await _bookingsApiClient.BulkJudiciaryLeaversAsync(leaversResult.Select(x => JudiciaryLeaverRequestMapper.MapTo(x)));
                     response?.ErroredRequests.ForEach(x => _logger.LogError("ImportJudiciaryLeavers: {ErrorResponseMessage}", x.Message));
 
                     currentPage++;
                 }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "There was a problem importing judiciary leavers");
-                throw;
+                catch (Exception ex)
+                {
+                    currentPage++;
+                    _logger.LogError(ex, "There was a problem importing judiciary leavers");
+                }
             }
         }
     }

@@ -3,6 +3,7 @@ using BookingsApi.Contract.Requests;
 using BookingsApi.Contract.Responses;
 using Microsoft.Extensions.Logging;
 using Moq;
+using Newtonsoft.Json;
 using NUnit.Framework;
 using SchedulerJobs.Common.Models;
 using SchedulerJobs.Services;
@@ -33,22 +34,6 @@ namespace SchedulerJobs.UnitTests.Services
             _logger = new Mock<ILogger<ELinksService>>();
 
             _eLinksService = new ELinksService(_peoplesClient.Object, _leaversClient.Object, _bookingsApiClient.Object, _logger.Object);
-        }
-
-        [Test]
-        public void Should_throw_exception()
-        {
-            _peoplesClient.Setup(x => x.GetPeopleAsync(It.IsAny<DateTime>(), It.IsAny<int>(), It.IsAny<int>()))
-                .ThrowsAsync(new Exception("some exception"));
-            _leaversClient.Setup(x => x.GetLeaversAsync(It.IsAny<DateTime>(), It.IsAny<int>(), It.IsAny<int>()))
-                .ThrowsAsync(new Exception("some exception"));
-
-            Assert.ThrowsAsync<Exception>(() => _eLinksService.ImportJudiciaryPeopleAsync(new DateTime()));
-            Assert.ThrowsAsync<Exception>(() => _eLinksService.ImportLeaversJudiciaryPeopleAsync(new DateTime()));
-
-            _peoplesClient.Verify(x => x.GetPeopleAsync(It.IsAny<DateTime>(), It.IsAny<int>(), It.IsAny<int>()), Times.Once);
-            _leaversClient.Verify(x => x.GetLeaversAsync(It.IsAny<DateTime>(), It.IsAny<int>(), It.IsAny<int>()), Times.Once);
-            _bookingsApiClient.Verify(x => x.BulkJudiciaryPersonsAsync(It.IsAny<IEnumerable<JudiciaryPersonRequest>>()), Times.Never);
         }
 
         [Test]
@@ -117,8 +102,7 @@ namespace SchedulerJobs.UnitTests.Services
             )), Times.Exactly(1));
         }
 
-        [Test]
-        public async Task Should_call_booking_api_client_with_many_pages_of_results()
+        private void CommonTestSetUp()
         {
             var person1 = Guid.NewGuid();
             var person2 = Guid.NewGuid();
@@ -137,7 +121,6 @@ namespace SchedulerJobs.UnitTests.Services
             };
 
             _peoplesClient.Setup(x => x.GetPeopleAsync(It.IsAny<DateTime>(), 1, It.IsAny<int>())).ReturnsAsync(judiciaryPersonModels);
-            _peoplesClient.Setup(x => x.GetPeopleAsync(It.IsAny<DateTime>(), 2, It.IsAny<int>())).ReturnsAsync(judiciaryPersonModels);
             _peoplesClient.Setup(x => x.GetPeopleAsync(It.IsAny<DateTime>(), 3, It.IsAny<int>())).ReturnsAsync(judiciaryPersonModels);
             _peoplesClient.Setup(x => x.GetPeopleAsync(It.IsAny<DateTime>(), 4, It.IsAny<int>())).ReturnsAsync(judiciaryPersonModels);
             _peoplesClient.Setup(x => x.GetPeopleAsync(It.IsAny<DateTime>(), 5, It.IsAny<int>())).ReturnsAsync(new List<JudiciaryPersonModel>());
@@ -145,8 +128,11 @@ namespace SchedulerJobs.UnitTests.Services
             _leaversClient.Setup(x => x.GetLeaversAsync(It.IsAny<DateTime>(), 2, It.IsAny<int>())).ReturnsAsync(judiciaryLeaverModels);
             _leaversClient.Setup(x => x.GetLeaversAsync(It.IsAny<DateTime>(), 3, It.IsAny<int>())).ReturnsAsync(judiciaryLeaverModels);
             _leaversClient.Setup(x => x.GetLeaversAsync(It.IsAny<DateTime>(), 4, It.IsAny<int>())).ReturnsAsync(judiciaryLeaverModels);
-            _leaversClient.Setup(x => x.GetLeaversAsync(It.IsAny<DateTime>(), 5, It.IsAny<int>())).ReturnsAsync(new List<JudiciaryLeaverModel>());
 
+        }
+
+        private async Task CommonActAndAssert(int peopleTimes, int leaverTimes)
+        {
             await _eLinksService.ImportJudiciaryPeopleAsync(new DateTime());
             await _eLinksService.ImportLeaversJudiciaryPeopleAsync(new DateTime());
 
@@ -161,8 +147,69 @@ namespace SchedulerJobs.UnitTests.Services
             _leaversClient.Verify(x => x.GetLeaversAsync(It.IsAny<DateTime>(), 4, It.IsAny<int>()), Times.Once);
             _leaversClient.Verify(x => x.GetLeaversAsync(It.IsAny<DateTime>(), 5, It.IsAny<int>()), Times.Once);
 
-            _bookingsApiClient.Verify(x => x.BulkJudiciaryPersonsAsync(It.IsAny<IEnumerable<JudiciaryPersonRequest>>()), Times.Exactly(4));
-            _bookingsApiClient.Verify(x => x.BulkJudiciaryLeaversAsync(It.IsAny<IEnumerable<JudiciaryLeaverRequest>>()), Times.Exactly(4));
+            _bookingsApiClient.Verify(x => x.BulkJudiciaryPersonsAsync(It.IsAny<IEnumerable<JudiciaryPersonRequest>>()), Times.Exactly(peopleTimes));
+            _bookingsApiClient.Verify(x => x.BulkJudiciaryLeaversAsync(It.IsAny<IEnumerable<JudiciaryLeaverRequest>>()), Times.Exactly(leaverTimes));
+        }
+
+        [Test]
+        public async Task Should_call_booking_api_client_with_many_pages_of_leavers_results()
+        {
+            var person1 = Guid.NewGuid();
+            var judiciaryLeaverModels = new List<JudiciaryLeaverModel>
+            {
+                new JudiciaryLeaverModel{Id = person1.ToString(), Leaver = true, LeftOn = new DateTime().ToString()}
+            };
+            CommonTestSetUp();
+            _peoplesClient.Setup(x => x.GetPeopleAsync(It.IsAny<DateTime>(), 2, It.IsAny<int>())).ReturnsAsync(new List<JudiciaryPersonModel>
+            {
+                new JudiciaryPersonModel{Id = person1, Email = "one"},
+            });
+            _leaversClient.Setup(x => x.GetLeaversAsync(It.IsAny<DateTime>(), 5, It.IsAny<int>())).ReturnsAsync(judiciaryLeaverModels);
+
+            await CommonActAndAssert(4, 5);
+        }
+
+        [Test]
+        public async Task Should_call_booking_api_client_with_one_of_many_pages_of_leavers_results_has_exception()
+        {
+            var person1 = Guid.NewGuid();
+            var judiciaryLeaverModels = new List<JudiciaryLeaverModel>
+            {
+                new JudiciaryLeaverModel{Id = person1.ToString(), Leaver = true, LeftOn = new DateTime().ToString()}
+            };
+            CommonTestSetUp();
+            _peoplesClient.Setup(x => x.GetPeopleAsync(It.IsAny<DateTime>(), 2, It.IsAny<int>())).ReturnsAsync(new List<JudiciaryPersonModel>
+            {
+                new JudiciaryPersonModel{Id = person1, Email = "one"},
+            });
+            _leaversClient.Setup(x => x.GetLeaversAsync(It.IsAny<DateTime>(), 5, It.IsAny<int>())).ThrowsAsync(new JsonSerializationException("Error converting value 1ad85664b - aab9 - 4a8d - 8e76 - 0affdcb5b90f"));
+            _leaversClient.Setup(x => x.GetLeaversAsync(It.IsAny<DateTime>(), 6, It.IsAny<int>())).ReturnsAsync(judiciaryLeaverModels);
+
+            await CommonActAndAssert(4, 5);
+        }
+
+        [Test]
+        public async Task Should_call_booking_api_client_with_many_pages_of_results()
+        {
+            CommonTestSetUp();
+            _peoplesClient.Setup(x => x.GetPeopleAsync(It.IsAny<DateTime>(), 2, It.IsAny<int>())).ReturnsAsync(new List<JudiciaryPersonModel>
+            {
+                 new JudiciaryPersonModel{Id = Guid.NewGuid(), Email = "one"},
+            });
+            _leaversClient.Setup(x => x.GetLeaversAsync(It.IsAny<DateTime>(), 5, It.IsAny<int>())).ReturnsAsync(new List<JudiciaryLeaverModel>());
+
+            await CommonActAndAssert(4, 4);
+        }
+
+        [Test]
+        public async Task Should_call_booking_api_client_with_one_of_many_pages_of_results_has_exception()
+        {
+            CommonTestSetUp();
+            _peoplesClient.Setup(x => x.GetPeopleAsync(It.IsAny<DateTime>(), 2, It.IsAny<int>()))
+                .ThrowsAsync(new JsonSerializationException("Error converting value 1ad85664b - aab9 - 4a8d - 8e76 - 0affdcb5b90f"));
+            _leaversClient.Setup(x => x.GetLeaversAsync(It.IsAny<DateTime>(), 5, It.IsAny<int>())).ReturnsAsync(new List<JudiciaryLeaverModel>());
+
+            await CommonActAndAssert(3, 4);
         }
 
         [Test]
