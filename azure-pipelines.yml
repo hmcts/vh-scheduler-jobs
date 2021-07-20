@@ -109,6 +109,8 @@ trigger:
     - release/*
     - hotfix/*
     - refs/tags/Release-*
+    - refs/heads/VIH-7948-trigger-CD-on-tag
+
 
 pr:
   branches:
