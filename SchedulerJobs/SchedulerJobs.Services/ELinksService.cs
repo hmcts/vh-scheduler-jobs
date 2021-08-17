@@ -50,7 +50,6 @@ namespace SchedulerJobs.Services
                         _logger.LogWarning("ImportJudiciaryPeople: No results from api for page: {CurrentPage}", currentPage);
                         break;
                     }
-
                     var invalidPersonList = people.Where(x => !x.Id.HasValue).ToList();
                     invalidPersonList.ForEach(x => invalidPeoplePersonalCode.Add(x.PersonalCode));
 
@@ -104,6 +103,7 @@ namespace SchedulerJobs.Services
                     currentPage++;
                     _logger.LogError(ex, "There was a problem importing judiciary leavers");
                 }
+
             }
         }
     }
