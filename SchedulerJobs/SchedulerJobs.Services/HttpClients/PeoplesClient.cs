@@ -22,7 +22,7 @@ namespace SchedulerJobs.Services.HttpClients
         {
             var response = await _httpClient.GetAsync
             (
-                $"{BaseUrl}/people?updated_since={updatedSince:yyyy-MM-dd}&page={page}&per_page={perPage}"
+                $"{BaseUrl}/people?updated_since={updatedSince:yyyy-MM-dd}&page={page}&per_page={perPage}&include_previous_appointments=true"
             );
 
             await ResponseHandler.HandleUnsuccessfulResponse(response);
