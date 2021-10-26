@@ -18,7 +18,7 @@ namespace SchedulerJobs.Services.HttpClients
 
         public string BaseUrl { get; set; }
 
-        public async Task<IEnumerable<JudiciaryLeaverModel>> GetLeaversAsync(DateTime updatedSince, int page = 1, int perPage = 100)
+        public async Task<LeaversResponse> GetLeaversAsync(DateTime updatedSince, int page = 1, int perPage = 100)
         {
             var response = await _httpClient.GetAsync
             (
@@ -27,8 +27,7 @@ namespace SchedulerJobs.Services.HttpClients
 
             await ResponseHandler.HandleUnsuccessfulResponse(response);
 
-            var model = ApiRequestHelper.Deserialise<LeaverResults>(await response.Content.ReadAsStringAsync());
-            return model.Results;
+            return ApiRequestHelper.Deserialise<LeaversResponse>(await response.Content.ReadAsStringAsync());
         }
     }
 }

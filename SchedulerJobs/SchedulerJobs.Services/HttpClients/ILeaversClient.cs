@@ -7,6 +7,6 @@ namespace SchedulerJobs.Services.HttpClients
 {
     public interface ILeaversClient
     {
-        Task<IEnumerable<JudiciaryLeaverModel>> GetLeaversAsync(DateTime updatedSince, int page = 1, int perPage = 100);
+        Task<LeaversResponse> GetLeaversAsync(DateTime updatedSince, int page = 1, int perPage = 100);
     }
 }
