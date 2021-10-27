@@ -20,7 +20,7 @@ namespace SchedulerJobs.Functions
         /// <param name="myTimer">Set time to run every day at 5:30 AM</param>
         /// <param name="log"></param>
         [FunctionName("AnonymiseHearingsConferencesAndDeleteAadUsersFunction")]
-        public async Task Run([TimerTrigger("45 51 17 * * *")]TimerInfo myTimer, ILogger log)
+        public async Task Run([TimerTrigger("0 30 5 * * *")]TimerInfo myTimer, ILogger log)
         {
             if (myTimer?.IsPastDue ?? true)
             {
