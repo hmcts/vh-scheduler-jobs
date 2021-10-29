@@ -3,6 +3,7 @@ using BookingsApi.Contract.Responses;
 using Moq;
 using NUnit.Framework;
 using SchedulerJobs.Services;
+using System;
 using System.Collections.Generic;
 using UserApi.Client;
 using VideoApi.Client;
@@ -41,6 +42,50 @@ namespace SchedulerJobs.UnitTests.Services
             _userApiClient.Verify(x => x.DeleteUserAsync(It.IsAny<string>()), Times.Exactly(3));
             _videoApiClient.Verify(x => x.AnonymiseConferencesAsync(), Times.Once);
             _bookingApiClient.Verify(x => x.AnonymiseHearingsAsync(), Times.Once);
+        }
+
+        [Test]
+        public void Should_ignore_not_found_errors_when_deleting_users()
+        {
+            //Arrange
+            var usernames = new UserWithClosedConferencesResponse
+            {
+                Usernames = new List<string> { "username1@hmcts.net", "username2@hmcts.net", "username3@hmcts.net" }
+            };
+
+            _bookingApiClient.Setup(x => x.GetPersonByClosedHearingsAsync()).ReturnsAsync(usernames);
+            _userApiClient.Setup(x => x.DeleteUserAsync(It.IsAny<string>()))
+                .ThrowsAsync(new UserApiException("", 404, "", null, null));
+
+            //Act
+            _anonymiseHearingsConferencesDataService.AnonymiseHearingsConferencesDataAsync();
+
+            //Assert
+            _userApiClient.Verify(x => x.DeleteUserAsync(It.IsAny<string>()), Times.Exactly(3));
+            _videoApiClient.Verify(x => x.AnonymiseConferencesAsync(), Times.Once);
+            _bookingApiClient.Verify(x => x.AnonymiseHearingsAsync(), Times.Once);
+        }
+
+        [Test]
+        public void Should_throw_errors_when_deleting_users()
+        {
+            //Arrange
+            var usernames = new UserWithClosedConferencesResponse
+            {
+                Usernames = new List<string> { "username1@hmcts.net", "username2@hmcts.net", "username3@hmcts.net" }
+            };
+
+            _bookingApiClient.Setup(x => x.GetPersonByClosedHearingsAsync()).ReturnsAsync(usernames);
+            _userApiClient.Setup(x => x.DeleteUserAsync(It.IsAny<string>()))
+                .ThrowsAsync(new Exception(""));
+
+            //Act/Assert
+            Assert.ThrowsAsync<Exception>(async () =>
+                await _anonymiseHearingsConferencesDataService.AnonymiseHearingsConferencesDataAsync());
+
+            _userApiClient.Verify(x => x.DeleteUserAsync(It.IsAny<string>()), Times.Exactly(1));
+            _videoApiClient.Verify(x => x.AnonymiseConferencesAsync(), Times.Never);
+            _bookingApiClient.Verify(x => x.AnonymiseHearingsAsync(), Times.Never);
         }
     }
 }

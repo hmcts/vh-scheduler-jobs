@@ -1,4 +1,6 @@
 ﻿using BookingsApi.Client;
+using System;
+using System.Net;
 using System.Threading.Tasks;
 using UserApi.Client;
 using VideoApi.Client;
@@ -35,11 +37,22 @@ namespace SchedulerJobs.Services
             // get users that do not have hearings in the future and have had hearing more than 3 months in the past. 
             // (exclude judges, vhos, test users, performance test users.
             var usersToDelete = await _bookingsApiClient.GetPersonByClosedHearingsAsync();
+
             if (usersToDelete != null && usersToDelete.Usernames != null)
             {
                 foreach (var username in usersToDelete.Usernames)
                 {
-                    await _userApiClient.DeleteUserAsync(username);
+                    try
+                    {
+                        await _userApiClient.DeleteUserAsync(username);
+                    }
+                    catch (UserApiException exception)
+                    {
+                        if (exception.StatusCode != (int)HttpStatusCode.NotFound)
+                        {
+                            throw;
+                        }
+                    }
                 }
             }
         }
