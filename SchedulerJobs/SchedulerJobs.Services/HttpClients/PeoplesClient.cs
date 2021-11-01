@@ -18,17 +18,16 @@ namespace SchedulerJobs.Services.HttpClients
 
         public string BaseUrl { get; set; }
 
-        public async Task<IEnumerable<JudiciaryPersonModel>> GetPeopleAsync(DateTime updatedSince, int page = 1, int perPage = 100)
+        public async Task<PeopleResponse> GetPeopleAsync(DateTime updatedSince, int page = 1, int perPage = 100)
         {
             var response = await _httpClient.GetAsync
             (
-                $"{BaseUrl}/people?updated_since={updatedSince:yyyy-MM-dd}&page={page}&per_page={perPage}"
+                $"{BaseUrl}/people?updated_since={updatedSince:yyyy-MM-dd}&page={page}&per_page={perPage}&include_previous_appointments=true"
             );
 
             await ResponseHandler.HandleUnsuccessfulResponse(response);
 
-            var model = ApiRequestHelper.Deserialise<PeopleResults>(await response.Content.ReadAsStringAsync());
-            return model.Results;
+            return ApiRequestHelper.Deserialise<PeopleResponse>(await response.Content.ReadAsStringAsync());
         }
     }
 }
