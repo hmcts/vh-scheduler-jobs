@@ -13,7 +13,7 @@
 		<PackageReference Include="System.Threading.Tasks.Extensions" Version="4.5.4" />
 		<PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
 		<PackageReference Include="UserApi.Client" Version="1.24.3" />
-		<PackageReference Include="VideoApi.Client" Version="1.23.54" />
+		<PackageReference Include="VideoApi.Client" Version="1.29.2" />
 
 	</ItemGroup>
 
