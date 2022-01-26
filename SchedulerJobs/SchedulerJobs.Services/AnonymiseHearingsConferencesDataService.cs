@@ -4,6 +4,7 @@ using System.Net;
 using System.Threading.Tasks;
 using UserApi.Client;
 using VideoApi.Client;
+using VideoApi.Contract.Enums;
 
 namespace SchedulerJobs.Services
 {
@@ -44,6 +45,9 @@ namespace SchedulerJobs.Services
                 {
                     try
                     {
+                        var user = await _userApiClient.GetUserByAdUserNameAsync(username);
+                        if (user.UserRole == "VhOfficer")
+                            continue;
                         await _userApiClient.DeleteUserAsync(username);
                     }
                     catch (UserApiException exception)
