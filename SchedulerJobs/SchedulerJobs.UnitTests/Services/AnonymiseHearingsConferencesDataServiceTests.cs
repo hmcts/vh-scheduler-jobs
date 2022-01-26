@@ -45,7 +45,9 @@ namespace SchedulerJobs.UnitTests.Services
         }
 
         [Test]
-        public void Should_ignore_not_found_errors_when_deleting_users()
+        [TestCase(404)]
+        [TestCase(403)]
+        public void Should_ignore_errors_when_deleting_users_with_status_code(int statusCode)
         {
             //Arrange
             var usernames = new UserWithClosedConferencesResponse
@@ -55,7 +57,7 @@ namespace SchedulerJobs.UnitTests.Services
 
             _bookingApiClient.Setup(x => x.GetPersonByClosedHearingsAsync()).ReturnsAsync(usernames);
             _userApiClient.Setup(x => x.DeleteUserAsync(It.IsAny<string>()))
-                .ThrowsAsync(new UserApiException("", 404, "", null, null));
+                .ThrowsAsync(new UserApiException("", statusCode, "", null, null));
 
             //Act
             _anonymiseHearingsConferencesDataService.AnonymiseHearingsConferencesDataAsync();
