@@ -45,7 +45,7 @@ namespace SchedulerJobs.Services
                     try
                     {
                         var user = await _userApiClient.GetUserByAdUserNameAsync(username);
-                        if (user.UserRole == AzureAdUserRoles.VhOfficer)
+                        if (user.UserRole == AzureAdUserRoles.VhOfficer || user.UserRole == AzureAdUserRoles.StaffMember)
                             continue;
                         await _userApiClient.DeleteUserAsync(username);
                     }
