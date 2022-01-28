@@ -2,10 +2,12 @@
 using BookingsApi.Contract.Responses;
 using Moq;
 using NUnit.Framework;
+using SchedulerJobs.Common.Constants;
 using SchedulerJobs.Services;
 using System;
 using System.Collections.Generic;
 using UserApi.Client;
+using UserApi.Contract.Responses;
 using VideoApi.Client;
 
 namespace SchedulerJobs.UnitTests.Services
@@ -23,6 +25,10 @@ namespace SchedulerJobs.UnitTests.Services
             _userApiClient = new Mock<IUserApiClient>();
             _bookingApiClient = new Mock<IBookingsApiClient>();
             _videoApiClient = new Mock<IVideoApiClient>();
+
+            var userProfile = new UserProfile { UserRole = "Individual" };
+            _userApiClient.Setup(x => x.GetUserByAdUserNameAsync(It.IsAny<string>())).ReturnsAsync(userProfile);
+
             _anonymiseHearingsConferencesDataService = new AnonymiseHearingsConferencesDataService(_videoApiClient.Object,
                 _bookingApiClient.Object, _userApiClient.Object);
         }
@@ -40,6 +46,26 @@ namespace SchedulerJobs.UnitTests.Services
             _anonymiseHearingsConferencesDataService.AnonymiseHearingsConferencesDataAsync();
 
             _userApiClient.Verify(x => x.DeleteUserAsync(It.IsAny<string>()), Times.Exactly(3));
+            _videoApiClient.Verify(x => x.AnonymiseConferencesAsync(), Times.Once);
+            _bookingApiClient.Verify(x => x.AnonymiseHearingsAsync(), Times.Once);
+        }
+
+        [Test]
+        public void Should_not_delete_vho_accounts()
+        {
+            var usernames = new UserWithClosedConferencesResponse
+            {
+                Usernames = new List<string> { "username1@hmcts.net" }
+            };
+
+            _bookingApiClient.Setup(x => x.GetPersonByClosedHearingsAsync()).ReturnsAsync(usernames);
+
+            var userProfile = new UserProfile { UserRole = AzureAdUserRoles.VhOfficer };
+            _userApiClient.Setup(x => x.GetUserByAdUserNameAsync(It.IsAny<string>())).ReturnsAsync(userProfile);
+
+            _anonymiseHearingsConferencesDataService.AnonymiseHearingsConferencesDataAsync();
+
+            _userApiClient.Verify(x => x.DeleteUserAsync(It.IsAny<string>()), Times.Never);
             _videoApiClient.Verify(x => x.AnonymiseConferencesAsync(), Times.Once);
             _bookingApiClient.Verify(x => x.AnonymiseHearingsAsync(), Times.Once);
         }
