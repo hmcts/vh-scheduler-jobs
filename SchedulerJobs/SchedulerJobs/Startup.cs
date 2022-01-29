@@ -81,6 +81,7 @@ namespace SchedulerJobs
             services.AddScoped<IClearConferenceChatHistoryService, ClearConferenceChatHistoryService>();
             services.AddScoped<IAnonymiseHearingsConferencesDataService, AnonymiseHearingsConferencesDataService>();
             services.AddScoped<IRemoveHeartbeatsForConferencesService, RemoveHeartbeatsForConferencesService>();
+            services.AddScoped<IReconcileHearingAudioService, ReconcileHearingAudioService>();
 
             bool.TryParse(configuration["UseELinksStub"], out var useELinksStub);
 
