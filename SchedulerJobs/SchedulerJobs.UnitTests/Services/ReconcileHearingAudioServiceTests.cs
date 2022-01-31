@@ -4,7 +4,6 @@ using NUnit.Framework;
 using SchedulerJobs.Services;
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 using VideoApi.Client;
 using VideoApi.Contract.Responses;
@@ -82,8 +81,6 @@ namespace SchedulerJobs.UnitTests.Services
             _videoApiClient.Setup(x => x.ReconcileAudioFilesInStorageAsync(It.IsAny<string>(), It.IsAny<int>())).Throws(new Exception("Error"));
 
             await _reconcileAudioHearingService.ReconcileAudiorecordingsWithConferencesAsync();
-
-            //Assert.That(async () => , Throws.TypeOf<Exception>().With.Message.EqualTo("Error"));
 
             _videoApiClient.Verify(x => x.GetConferencesHearingRoomsAsync(It.IsAny<string>()), Times.Once);
             _videoApiClient.Verify(x => x.ReconcileAudioFilesInStorageAsync(It.IsAny<string>(), It.IsAny<int>()), Times.Once);

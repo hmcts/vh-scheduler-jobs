@@ -2008,8 +2008,8 @@
       },
       "VideoApi.Client": {
         "type": "Transitive",
-        "resolved": "1.23.54",
-        "contentHash": "1OLCs5UIv+A6365JlSPfhsFepwrABEAcwpsjLz/xHXUdnl1U4Xgh9tQa82lLUDT/GXaWxSJ75WeLB3B7W+Hy/g==",
+        "resolved": "1.29.3",
+        "contentHash": "wVSecG/I1Ssc/0GAQHk7m+F2DSjRPst2Xr4qj2JEOAD6r6437Vmh6Mnx1kcttujHDkqUwN5iGHTV1cDqxrsEqg==",
         "dependencies": {
           "Microsoft.AspNetCore.Mvc.Core": "2.2.5",
           "Newtonsoft.Json": "12.0.3"
@@ -2050,7 +2050,7 @@
           "SchedulerJobs.Common": "1.0.0",
           "System.Threading.Tasks.Extensions": "4.5.4",
           "UserApi.Client": "1.24.3",
-          "VideoApi.Client": "1.23.54"
+          "VideoApi.Client": "1.29.3"
         }
       }
     }
