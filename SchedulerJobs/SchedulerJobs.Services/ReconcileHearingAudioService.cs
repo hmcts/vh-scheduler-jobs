@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
+using SchedulerJobs.Services.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,12 +9,6 @@ using VideoApi.Client;
 
 namespace SchedulerJobs.Services
 {
-
-    public interface IReconcileHearingAudioService
-    {
-        Task ReconcileAudiorecordingsWithConferencesAsync();
-    }
-
     public class ReconcileHearingAudioService : IReconcileHearingAudioService
     {
         private readonly IVideoApiClient _videoApiClient;
@@ -60,7 +55,7 @@ namespace SchedulerJobs.Services
                     catch (Exception ex)
                     {
                         audioMissingList.Add(item.Name.ToString());
-                        _logger.LogInformation("ReconcileAudiorecordingsWithConferencesAsync - missing wowza audio or empty files for conferences - " + item.Name + "  Exception from Reconciliation - " + ex.Message);
+                        _logger.LogError("ReconcileAudiorecordingsWithConferencesAsync - missing wowza audio or empty files for conferences - " + item.Name + "  Exception from Reconciliation - " + ex.Message);
 
                     }
                 }
@@ -68,7 +63,7 @@ namespace SchedulerJobs.Services
             }
             catch (Exception ex)
             {
-                _logger.LogInformation("ReconcileAudiorecordingsWithConferencesAsync - Exception" + ex.StackTrace);
+                _logger.LogError("ReconcileAudiorecordingsWithConferencesAsync - Exception" + ex.StackTrace);
                 throw;
             }
 

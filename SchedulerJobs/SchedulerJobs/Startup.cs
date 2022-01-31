@@ -15,6 +15,7 @@ using SchedulerJobs.Services.HttpClients;
 using UserApi.Client;
 using VH.Core.Configuration;
 using VideoApi.Client;
+using SchedulerJobs.Services.Interfaces;
 
 [assembly: FunctionsStartup(typeof(SchedulerJobs.Startup))]
 namespace SchedulerJobs

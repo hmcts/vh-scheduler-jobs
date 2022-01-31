@@ -2,6 +2,7 @@
 using Moq;
 using NUnit.Framework;
 using SchedulerJobs.Services;
+using SchedulerJobs.Services.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;

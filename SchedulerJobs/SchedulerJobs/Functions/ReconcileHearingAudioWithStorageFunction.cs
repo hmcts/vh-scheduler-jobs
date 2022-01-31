@@ -1,6 +1,6 @@
 ﻿using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Logging;
-using SchedulerJobs.Services;
+using SchedulerJobs.Services.Interfaces;
 using System.Threading.Tasks;
 
 namespace SchedulerJobs.Functions
