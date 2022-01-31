@@ -15,6 +15,7 @@ using SchedulerJobs.Services.HttpClients;
 using UserApi.Client;
 using VH.Core.Configuration;
 using VideoApi.Client;
+using SchedulerJobs.Services.Interfaces;
 
 [assembly: FunctionsStartup(typeof(SchedulerJobs.Startup))]
 namespace SchedulerJobs
@@ -81,6 +82,7 @@ namespace SchedulerJobs
             services.AddScoped<IClearConferenceChatHistoryService, ClearConferenceChatHistoryService>();
             services.AddScoped<IAnonymiseHearingsConferencesDataService, AnonymiseHearingsConferencesDataService>();
             services.AddScoped<IRemoveHeartbeatsForConferencesService, RemoveHeartbeatsForConferencesService>();
+            services.AddScoped<IReconcileHearingAudioService, ReconcileHearingAudioService>();
 
             bool.TryParse(configuration["UseELinksStub"], out var useELinksStub);
 
