@@ -2,6 +2,7 @@
 using BookingsApi.Contract.Responses;
 using System;
 using System.Collections.Generic;
+using SchedulerJobs.Common.Constants;
 using System.Net;
 using System.Threading.Tasks;
 using UserApi.Client;
@@ -46,6 +47,9 @@ namespace SchedulerJobs.Services
                 {
                     try
                     {
+                        var user = await _userApiClient.GetUserByAdUserNameAsync(username);
+                        if (user.UserRole == AzureAdUserRoles.VhOfficer || user.UserRole == AzureAdUserRoles.StaffMember)
+                            continue;
                         await _userApiClient.DeleteUserAsync(username);
                     }
                     catch (UserApiException exception)

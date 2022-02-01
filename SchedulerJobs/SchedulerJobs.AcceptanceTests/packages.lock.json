@@ -119,8 +119,8 @@
       },
       "BookingsApi.Client": {
         "type": "Transitive",
-        "resolved": "1.28.1",
-        "contentHash": "wS29EysW1/XCdzxyqLfES5+vD+FCyBvmBlFO7oG+G9PeOb4O7Y5l++j/Si26dAbQ4y606KgZs1K/WFXH9XKF0w==",
+        "resolved": "1.29.1",
+        "contentHash": "SD5vDl2Hcb0lZGAl0b4rVJpBWX085/4WW1goy+PT+XjDhlcAZipWGVHj12znRdHAgLLqyFrPiB5VeIwNZIz45Q==",
         "dependencies": {
           "Microsoft.AspNetCore.Mvc.Core": "2.2.5",
           "Newtonsoft.Json": "12.0.3"
@@ -2161,8 +2161,8 @@
       },
       "UserApi.Client": {
         "type": "Transitive",
-        "resolved": "1.24.3",
-        "contentHash": "CbbYvdREAv1x4P2FBXJn9DkUOAyPn6yZcfOvWaT19wAjsziabV6qfITbUYiVGOWpwdqdB2H7lyOH/V//AC66fg==",
+        "resolved": "1.27.1",
+        "contentHash": "wLtw+Jo5s8IHLryGhCttblNtm4vAXH4EuEDyTnAncrXBO5Tz1os948Ba5vdjJbXxZiXjntu7p0MJQ9ITVBpadw==",
         "dependencies": {
           "Microsoft.AspNetCore.Mvc.Core": "2.2.5",
           "Newtonsoft.Json": "12.0.3"
@@ -2170,8 +2170,8 @@
       },
       "VideoApi.Client": {
         "type": "Transitive",
-        "resolved": "1.29.2",
-        "contentHash": "3pUHqJ3blYKQDjOrFgVqFIZzAD0cSdO4qkejWO0E7yxyqziGQvMBHnnQ8DtIr5Hvz1LdupCwklkNkV95H1su3A==",
+        "resolved": "1.29.3",
+        "contentHash": "wVSecG/I1Ssc/0GAQHk7m+F2DSjRPst2Xr4qj2JEOAD6r6437Vmh6Mnx1kcttujHDkqUwN5iGHTV1cDqxrsEqg==",
         "dependencies": {
           "Microsoft.AspNetCore.Mvc.Core": "2.2.5",
           "Newtonsoft.Json": "12.0.3"
@@ -2206,13 +2206,13 @@
       "schedulerjobs.services": {
         "type": "Project",
         "dependencies": {
-          "BookingsApi.Client": "1.28.1",
+          "BookingsApi.Client": "1.29.1",
           "Microsoft.Extensions.Logging.Abstractions": "3.1.1",
           "Newtonsoft.Json": "12.0.3",
           "SchedulerJobs.Common": "1.0.0",
           "System.Threading.Tasks.Extensions": "4.5.4",
-          "UserApi.Client": "1.24.3",
-          "VideoApi.Client": "1.29.2"
+          "UserApi.Client": "1.27.1",
+          "VideoApi.Client": "1.29.3"
         }
       },
       "testing.common": {
