@@ -1,4 +1,7 @@
 ﻿using BookingsApi.Client;
+using BookingsApi.Contract.Responses;
+using System;
+using System.Collections.Generic;
 using SchedulerJobs.Common.Constants;
 using System.Net;
 using System.Threading.Tasks;
@@ -51,7 +54,7 @@ namespace SchedulerJobs.Services
                     }
                     catch (UserApiException exception)
                     {
-                        if (exception.StatusCode != (int)HttpStatusCode.NotFound)
+                        if (exception.StatusCode != (int)HttpStatusCode.NotFound && exception.StatusCode != (int)HttpStatusCode.Forbidden)
                         {
                             throw;
                         }
