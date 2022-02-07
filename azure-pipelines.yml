@@ -119,7 +119,7 @@ resources:
     - repository: templates
       type: github
       name: hmcts/azure-devops-templates
-      ref: refs/heads/master
+      ref: refs/heads/force-dotnet-version
       endpoint: hmcts
   containers:
   - container: dotnetsdk
