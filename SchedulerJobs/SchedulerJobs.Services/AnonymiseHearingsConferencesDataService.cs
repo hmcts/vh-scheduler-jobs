@@ -1,7 +1,4 @@
 ﻿using BookingsApi.Client;
-using BookingsApi.Contract.Responses;
-using System;
-using System.Collections.Generic;
 using SchedulerJobs.Common.Constants;
 using System.Net;
 using System.Threading.Tasks;
@@ -48,7 +45,7 @@ namespace SchedulerJobs.Services
                     try
                     {
                         var user = await _userApiClient.GetUserByAdUserNameAsync(username);
-                        if (user.UserRole == AzureAdUserRoles.VhOfficer || user.UserRole == AzureAdUserRoles.StaffMember)
+                        if (user.UserRole == AzureAdUserRoles.VhOfficer || user.UserRole == AzureAdUserRoles.StaffMember || user.IsUserAdmin)
                             continue;
                         await _userApiClient.DeleteUserAsync(username);
                     }
