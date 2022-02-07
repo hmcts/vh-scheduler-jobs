@@ -135,10 +135,10 @@ extends:
     coreProjectPath: SchedulerJobs/SchedulerJobs
     PackageApp: ${{ parameters.PackageApp }}
     PackageAcceptanceTests: ${{ parameters.PackageACTests }}
+    netVersion: 3.1.x
     Test: ${{ or(parameters.RunUnitTests, parameters.RunIntegTests, parameters.RunMutationTests) }}
     testParameters:
       baseAgent: windows-latest
-      netVersion: 3.1.x
       coreProjectPath: SchedulerJobs/SchedulerJobs
       unitTestProjectPath: SchedulerJobs/SchedulerJobs.UnitTests
       integTestProjectPath: SchedulerJobs/SchedulerJobs.IntegrationTests
