@@ -138,7 +138,7 @@ extends:
     Test: ${{ or(parameters.RunUnitTests, parameters.RunIntegTests, parameters.RunMutationTests) }}
     testParameters:
       baseAgent: windows-latest
-      netVersion: 3.1.402
+      netVersion: 3.1.x
       coreProjectPath: SchedulerJobs/SchedulerJobs
       unitTestProjectPath: SchedulerJobs/SchedulerJobs.UnitTests
       integTestProjectPath: SchedulerJobs/SchedulerJobs.IntegrationTests
@@ -164,7 +164,7 @@ extends:
     ACTest: ${{ parameters.RunACTests }}
     releaseParameters:
       environment: Preview
-      netVersion: 3.1.402
+      netVersion: 3.1.x
       subscription: $(pr_Subscription)
       secrets_KeyVault: $(pr_Secret_KeyVault)
       secrets_Subscription: $(pr_Secret_Subscription)
