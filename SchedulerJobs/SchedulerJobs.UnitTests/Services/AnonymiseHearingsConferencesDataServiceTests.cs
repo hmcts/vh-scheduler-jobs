@@ -1,5 +1,6 @@
 ﻿using BookingsApi.Client;
 using BookingsApi.Contract.Responses;
+using FizzWare.NBuilder;
 using Moq;
 using NUnit.Framework;
 using SchedulerJobs.Common.Constants;
@@ -62,6 +63,27 @@ namespace SchedulerJobs.UnitTests.Services
 
             var userProfile = new UserProfile { UserRole = AzureAdUserRoles.VhOfficer };
             _userApiClient.Setup(x => x.GetUserByAdUserNameAsync(It.IsAny<string>())).ReturnsAsync(userProfile);
+
+            _anonymiseHearingsConferencesDataService.AnonymiseHearingsConferencesDataAsync();
+
+            _userApiClient.Verify(x => x.DeleteUserAsync(It.IsAny<string>()), Times.Never);
+            _videoApiClient.Verify(x => x.AnonymiseConferencesAsync(), Times.Once);
+            _bookingApiClient.Verify(x => x.AnonymiseHearingsAsync(), Times.Once);
+        }
+
+        [Test]
+        public void Should_not_delete_user_admin_accounts()
+        {
+            _bookingApiClient.Setup(x => x.GetPersonByClosedHearingsAsync())
+                .ReturnsAsync(() => new UserWithClosedConferencesResponse
+                {
+                    Usernames = new List<string> { "username1@hmcts.net" }
+                });
+
+            _userApiClient.Setup(x => x.GetUserByAdUserNameAsync(It.IsAny<string>()))
+                .ReturnsAsync(() => Builder<UserProfile>
+                .CreateNew().With(r => r.IsUserAdmin = true)
+                .Build());
 
             _anonymiseHearingsConferencesDataService.AnonymiseHearingsConferencesDataAsync();
 
