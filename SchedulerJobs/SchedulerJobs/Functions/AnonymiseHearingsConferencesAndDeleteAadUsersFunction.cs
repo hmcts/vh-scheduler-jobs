@@ -2,16 +2,22 @@ using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Logging;
 using SchedulerJobs.Services;
 using System.Threading.Tasks;
+using Microsoft.FeatureManagement;
 
 namespace SchedulerJobs.Functions
 {
     public class AnonymiseHearingsConferencesAndDeleteAadUsersFunction
     {
         private readonly IAnonymiseHearingsConferencesDataService _anonymiseHearingsConferencesDataService;
+        private readonly IAnonymiseHearingsConferencesWithSpecifiedDataService _anonymiseHearingsConferencesWithSpecifiedDataService;
+        private readonly IFeatureManager _featureManager;
+        public const string LogInformationMessage = "Data anonymised for hearings, conferences older than 3 months.";
 
-        public AnonymiseHearingsConferencesAndDeleteAadUsersFunction(IAnonymiseHearingsConferencesDataService anonymiseHearingsConferencesDataService)
+        public AnonymiseHearingsConferencesAndDeleteAadUsersFunction(IAnonymiseHearingsConferencesDataService anonymiseHearingsConferencesDataService, IAnonymiseHearingsConferencesWithSpecifiedDataService anonymiseHearingsConferencesWithSpecifiedDataService, IFeatureManager featureManager)
         {
             _anonymiseHearingsConferencesDataService = anonymiseHearingsConferencesDataService;
+            _anonymiseHearingsConferencesWithSpecifiedDataService = anonymiseHearingsConferencesWithSpecifiedDataService;
+            _featureManager = featureManager;
         }
 
         /// <summary>
@@ -27,8 +33,16 @@ namespace SchedulerJobs.Functions
                 log.LogTrace("Anonymise data function running late");
             }
 
-            await _anonymiseHearingsConferencesDataService.AnonymiseHearingsConferencesDataAsync().ConfigureAwait(false);
-            log.LogInformation("Data anonymised for hearings, conferences older than 3 months.");
+            if (await _featureManager.IsEnabledAsync(FeatureFlags
+                    .EnableAnonymiseHearingsConferencesWithSpecifiedDataService))
+            {
+                await _anonymiseHearingsConferencesWithSpecifiedDataService.AnonymiseHearingsConferencesWithSpecifiedData().ConfigureAwait(false);
+            }
+            else
+            {
+                await _anonymiseHearingsConferencesDataService.AnonymiseHearingsConferencesDataAsync().ConfigureAwait(false);
+            }
+            log.LogInformation(LogInformationMessage);
         }
     }
 }

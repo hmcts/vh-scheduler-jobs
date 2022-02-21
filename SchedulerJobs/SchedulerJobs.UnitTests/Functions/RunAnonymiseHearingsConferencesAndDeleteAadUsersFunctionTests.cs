@@ -3,6 +3,7 @@ using Moq;
 using NUnit.Framework;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.FeatureManagement;
 using SchedulerJobs.Functions;
 using SchedulerJobs.Services;
 
@@ -14,12 +15,30 @@ namespace SchedulerJobs.UnitTests.Functions
         [Test]
         public async Task Timer_should_log_message_all_older_conferences_were_updated()
         {
+            _mocker.Mock<IFeatureManager>().Setup(x =>
+                    x.IsEnabledAsync(FeatureFlags.EnableAnonymiseHearingsConferencesWithSpecifiedDataService))
+                .ReturnsAsync(false);
+            
             // Act
             await _sut.Run(_timerInfo, _logger);
 
             // Assert
             _mocker.Mock<IAnonymiseHearingsConferencesDataService>().Verify(x => x.AnonymiseHearingsConferencesDataAsync(), Times.Once);
-            _logger.GetLoggedMessages().Last().Should().StartWith("Data anonymised for hearings, conferences older than 3 months.");
+            _logger.GetLoggedMessages().Last().Should().StartWith(AnonymiseHearingsConferencesAndDeleteAadUsersFunction.LogInformationMessage);
+        }
+
+        [Test]
+        public async Task Calls_AnonymiseHearingsConferencesWithSpecifiedDataService_When_Toggled_On()
+        {
+            _mocker.Mock<IFeatureManager>().Setup(x =>
+                    x.IsEnabledAsync(FeatureFlags.EnableAnonymiseHearingsConferencesWithSpecifiedDataService))
+                .ReturnsAsync(true);
+            
+            await _sut.Run(_timerInfo, _logger);
+            
+            _mocker.Mock<IAnonymiseHearingsConferencesWithSpecifiedDataService>().Verify(x => x.AnonymiseHearingsConferencesWithSpecifiedData(), Times.Once);
+            _mocker.Mock<IAnonymiseHearingsConferencesDataService>().Verify(x => x.AnonymiseHearingsConferencesDataAsync(), Times.Never);
+            _logger.GetLoggedMessages().Last().Should().StartWith(AnonymiseHearingsConferencesAndDeleteAadUsersFunction.LogInformationMessage);
         }
     }
 }

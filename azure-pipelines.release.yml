@@ -150,6 +150,25 @@ stages:
              - Test2
              - Test3
              - Demo
+          - group: FeatureFlags_NonProd
+            env:
+              - Preview
+              - Dev
+              - AAT
+              - Sandbox
+          - group: FeatureFlags_Test
+            env:
+              - Test1
+              - Test2
+          - group: FeatureFlags_Demo
+            env:
+              - Demo
+          - group: FeatureFlags_PreProd
+            env:
+              - PreProd
+          - group: FeatureFlags_Prod
+            env:
+              - Prod
         appSettings:
           - name: ApplicationInsights:InstrumentationKey
             value: vh-core-infra-AppInsightsKey
@@ -193,7 +212,11 @@ stages:
           - name: VhServices:ELinksApiGetPeopleUpdatedSinceDays
             value: 8000
           - name: UseELinksStub
-            value: $(UseELinksStub)
+            value: $(UseELinksStub)  
+          
+          # FeatureFlags
+          - name: FeatureManagement:EnableAnonymiseHearingsConferencesWithSpecifiedDataService
+            value: $(EnableAnonymiseHearingsConferencesWithSpecifiedDataService)
         acceptanceTestSettings:
           - name: ApplicationInsights:InstrumentationKey
             value: vh-core-infra-AppInsightsKey
