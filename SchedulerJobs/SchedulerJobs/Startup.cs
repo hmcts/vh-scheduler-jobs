@@ -11,7 +11,6 @@ using SchedulerJobs.Common.Security;
 using SchedulerJobs.Services;
 using System;
 using System.IO;
-using Microsoft.FeatureManagement;
 using SchedulerJobs.Services.HttpClients;
 using UserApi.Client;
 using VH.Core.Configuration;
@@ -60,7 +59,6 @@ namespace SchedulerJobs
         public void RegisterServices(IServiceCollection services, IConfiguration configuration)
         {
             var memoryCache = new MemoryCache(Options.Create(new MemoryCacheOptions()));
-            services.AddFeatureManagement();
             services.AddSingleton<IMemoryCache>(memoryCache);
             services.Configure<AzureAdConfiguration>(options =>
             {

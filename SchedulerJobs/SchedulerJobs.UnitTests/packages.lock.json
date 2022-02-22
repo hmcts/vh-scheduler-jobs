@@ -838,23 +838,6 @@
         "resolved": "3.1.13",
         "contentHash": "cZVp49xwQPVWs+utx6khnnECWQtkHaFXQnMg/odvy1RUumFUkO6h6C19fJd5zUclC4cS6aIfVJs7b1CDL1ep0A=="
       },
-      "Microsoft.FeatureManagement": {
-        "type": "Transitive",
-        "resolved": "2.4.0",
-        "contentHash": "2dO7ZP1O57yniChHABHKq1J0IXX28Fxl9r1YPXAz3dr0SkVJ0yhzCblQYoWlG4sRT7NOF5O9YipzDjTEDBGrUA==",
-        "dependencies": {
-          "Microsoft.Extensions.Configuration.Binder": "2.1.10",
-          "Microsoft.Extensions.Logging": "2.1.1"
-        }
-      },
-      "Microsoft.FeatureManagement.AspNetCore": {
-        "type": "Transitive",
-        "resolved": "2.4.0",
-        "contentHash": "+TQPMSRGkca1qji6z3Rvh3ReDVI6KzaHLGEtynEBOhQo25iIOBpzeXxG/W6xt55hpDo1/eI8cBY6lDnO/0nC/A==",
-        "dependencies": {
-          "Microsoft.FeatureManagement": "2.4.0"
-        }
-      },
       "Microsoft.Net.Http.Headers": {
         "type": "Transitive",
         "resolved": "2.2.0",
@@ -2225,7 +2208,6 @@
           "Microsoft.Extensions.Configuration.UserSecrets": "3.1.13",
           "Microsoft.Extensions.DependencyInjection": "3.1.12",
           "Microsoft.Extensions.Http": "3.1.12",
-          "Microsoft.FeatureManagement.AspNetCore": "2.4.0",
           "Microsoft.NET.Sdk.Functions": "3.0.11",
           "Microsoft.VisualStudio.Azure.Containers.Tools.Targets": "1.10.9",
           "SchedulerJobs.Common": "1.0.0",
