@@ -96,16 +96,11 @@ parameters:
   - name: UseELinksStub
     value: true
 
-  # FeatureFlags
-  - name: FeatureManagement:EnableAnonymiseHearingsConferencesWithSpecifiedDataService
-    value: $(EnableAnonymiseHearingsConferencesWithSpecifiedDataService)
-
 variables:
   - group: vh-domains-and-urls
   - group: vh-apps-settings-generic
   - group: vh-scheduler-jobs
   - group: vh-preview
-  - group: FeatureFlags_NonProd
 
 trigger:
   branches:
