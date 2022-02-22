@@ -193,7 +193,7 @@ stages:
           - name: VhServices:ELinksApiGetPeopleUpdatedSinceDays
             value: 8000
           - name: UseELinksStub
-            value: $(UseELinksStub)  
+            value: $(UseELinksStub)
         acceptanceTestSettings:
           - name: ApplicationInsights:InstrumentationKey
             value: vh-core-infra-AppInsightsKey
