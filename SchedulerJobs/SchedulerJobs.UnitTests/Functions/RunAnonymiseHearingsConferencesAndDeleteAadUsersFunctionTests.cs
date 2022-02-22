@@ -26,19 +26,5 @@ namespace SchedulerJobs.UnitTests.Functions
             _mocker.Mock<IAnonymiseHearingsConferencesDataService>().Verify(x => x.AnonymiseHearingsConferencesDataAsync(), Times.Once);
             _logger.GetLoggedMessages().Last().Should().StartWith(AnonymiseHearingsConferencesAndDeleteAadUsersFunction.LogInformationMessage);
         }
-
-        [Test]
-        public async Task Calls_AnonymiseHearingsConferencesWithSpecifiedDataService_When_Toggled_On()
-        {
-            _mocker.Mock<IFeatureManager>().Setup(x =>
-                    x.IsEnabledAsync(FeatureFlags.EnableAnonymiseHearingsConferencesWithSpecifiedDataService))
-                .ReturnsAsync(true);
-            
-            await _sut.Run(_timerInfo, _logger);
-            
-            _mocker.Mock<IAnonymiseHearingsConferencesWithSpecifiedDataService>().Verify(x => x.AnonymiseHearingsConferencesWithSpecifiedData(), Times.Once);
-            _mocker.Mock<IAnonymiseHearingsConferencesDataService>().Verify(x => x.AnonymiseHearingsConferencesDataAsync(), Times.Never);
-            _logger.GetLoggedMessages().Last().Should().StartWith(AnonymiseHearingsConferencesAndDeleteAadUsersFunction.LogInformationMessage);
-        }
     }
 }

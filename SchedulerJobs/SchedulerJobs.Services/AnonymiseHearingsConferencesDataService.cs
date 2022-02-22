@@ -1,9 +1,11 @@
-﻿using BookingsApi.Client;
+﻿using System.Threading.Tasks;
+using BookingsApi.Client;
+using Microsoft.Extensions.Logging;
 using SchedulerJobs.Common.Constants;
-using System.Net;
-using System.Threading.Tasks;
 using UserApi.Client;
+using UserApi.Contract.Responses;
 using VideoApi.Client;
+using VideoApi.Contract.Requests;
 
 namespace SchedulerJobs.Services
 {
@@ -12,52 +14,81 @@ namespace SchedulerJobs.Services
         Task AnonymiseHearingsConferencesDataAsync();
     }
 
-    public class AnonymiseHearingsConferencesDataService : IAnonymiseHearingsConferencesDataService
+    public class
+        AnonymiseHearingsConferencesDataService : IAnonymiseHearingsConferencesDataService
     {
-        private readonly IVideoApiClient _videoApiClient;
         private readonly IBookingsApiClient _bookingsApiClient;
+        private readonly ILogger<AnonymiseHearingsConferencesDataService> _logger;
         private readonly IUserApiClient _userApiClient;
-        public AnonymiseHearingsConferencesDataService(IVideoApiClient videoApiClient, IBookingsApiClient bookingsApiClient,
-            IUserApiClient userApiClient)
+        private readonly IVideoApiClient _videoApiClient;
+
+        public AnonymiseHearingsConferencesDataService(IVideoApiClient videoApiClient,
+            IBookingsApiClient bookingsApiClient,
+            IUserApiClient userApiClient,
+            ILogger<AnonymiseHearingsConferencesDataService> logger)
         {
             _videoApiClient = videoApiClient;
             _bookingsApiClient = bookingsApiClient;
             _userApiClient = userApiClient;
+            _logger = logger;
         }
+
         public async Task AnonymiseHearingsConferencesDataAsync()
         {
-            await DeleteUserAsync();
-            await _videoApiClient.AnonymiseConferencesAsync();
-            await _bookingsApiClient.AnonymiseHearingsAsync();
-        }
+            var anonymisationData = await _bookingsApiClient.GetAnonymisationDataAsync();
 
-        private async Task DeleteUserAsync()
-        {
-            // delete users from AAD.
-            // get users that do not have hearings in the future and have had hearing more than 3 months in the past. 
-            // (exclude judges, vhos, test users, performance test users.
-            var usersToDelete = await _bookingsApiClient.GetPersonByClosedHearingsAsync();
+            await _videoApiClient.AnonymiseConferenceWithHearingIdsAsync(new AnonymiseConferenceWithHearingIdsRequest
+                { HearingIds = anonymisationData.HearingIds });
+            await _videoApiClient.AnonymiseQuickLinkParticipantWithHearingIdsAsync(
+                new AnonymiseQuickLinkParticipantWithHearingIdsRequest { HearingIds = anonymisationData.HearingIds });
 
-            if (usersToDelete != null && usersToDelete.Usernames != null)
-            {
-                foreach (var username in usersToDelete.Usernames)
+            await _bookingsApiClient.AnonymiseParticipantAndCaseByHearingIdAsync("hearingIds",
+                anonymisationData.HearingIds);
+
+            if (anonymisationData.Usernames != null)
+                foreach (var username in anonymisationData.Usernames)
                 {
+                    var userProfile = await _userApiClient.GetUserByAdUserNameAsync(username);
+
+                    if (RemoveUserFromAd(userProfile))
+                        try
+                        {
+                            await _userApiClient.DeleteUserAsync(username);
+                        }
+                        catch (UserApiException exception)
+                        {
+                            _logger.LogError(exception, $"unknown exception when attempting to delete user {username}",
+                                username);
+                        }
+
                     try
                     {
-                        var user = await _userApiClient.GetUserByAdUserNameAsync(username);
-                        if (user.UserRole == AzureAdUserRoles.VhOfficer || user.UserRole == AzureAdUserRoles.StaffMember || user.IsUserAdmin)
-                            continue;
-                        await _userApiClient.DeleteUserAsync(username);
+                        await _videoApiClient.AnonymiseParticipantWithUsernameAsync(username);
                     }
-                    catch (UserApiException exception)
+                    catch (VideoApiException exception)
                     {
-                        if (exception.StatusCode != (int)HttpStatusCode.NotFound && exception.StatusCode != (int)HttpStatusCode.Forbidden)
-                        {
-                            throw;
-                        }
+                        _logger.LogError(exception, $"unknown exception when attempting to delete user {username}",
+                            username);
+                    }
+
+                    try
+                    {
+                        await _bookingsApiClient.AnonymisePersonWithUsernameForExpiredHearingsAsync(username);
+                    }
+                    catch (BookingsApiException exception)
+                    {
+                        _logger.LogError(exception, $"unknown exception when attempting to delete user {username}",
+                            username);
                     }
                 }
-            }
+        }
+
+        private bool RemoveUserFromAd(UserProfile userProfile)
+        {
+            return userProfile.UserRole != AzureAdUserRoles.Judge &&
+                   userProfile.UserRole != AzureAdUserRoles.VhOfficer &&
+                   userProfile.UserRole != AzureAdUserRoles.StaffMember &&
+                   !userProfile.IsUserAdmin;
         }
     }
 }

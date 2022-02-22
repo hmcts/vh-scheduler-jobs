@@ -83,7 +83,6 @@ namespace SchedulerJobs
             services.AddScoped<ICloseConferenceService, CloseConferenceService>();
             services.AddScoped<IClearConferenceChatHistoryService, ClearConferenceChatHistoryService>();
             services.AddScoped<IAnonymiseHearingsConferencesDataService, AnonymiseHearingsConferencesDataService>();
-            services.AddScoped<IAnonymiseHearingsConferencesWithSpecifiedDataService, AnonymiseHearingsConferencesWithSpecifiedDataService>();
             services.AddScoped<IRemoveHeartbeatsForConferencesService, RemoveHeartbeatsForConferencesService>();
             services.AddScoped<IReconcileHearingAudioService, ReconcileHearingAudioService>();
 
