@@ -39,7 +39,7 @@ namespace SchedulerJobs.Services
         {
             var anonymisationData = await _bookingsApiClient.GetAnonymisationDataAsync();
 
-            if (anonymisationData.HearingIds != null && anonymisationData.HearingIds.Any())
+            if (anonymisationData.HearingIds.Any())
             {
                 _logger.LogInformation("Hearing ids being processed: {hearingids}", anonymisationData.HearingIds);
                 
@@ -54,13 +54,14 @@ namespace SchedulerJobs.Services
             }
 
 
-            if (anonymisationData.Usernames == null) return;
+            if (!anonymisationData.Usernames.Any()) return;
             
             foreach (var username in anonymisationData.Usernames)
             {
                 var userProfile = await _userApiClient.GetUserByAdUserNameAsync(username);
 
-                if (RemoveUserFromAd(userProfile))
+                if (ShouldRemoveUserFromAd(userProfile))
+                {
                     try
                     {
                         await _userApiClient.DeleteUserAsync(username);
@@ -70,6 +71,7 @@ namespace SchedulerJobs.Services
                         _logger.LogError(exception, ProcessingUsernameExceptionMessage,
                             username);
                     }
+                }
 
                 try
                 {
@@ -93,7 +95,7 @@ namespace SchedulerJobs.Services
             }
         }
 
-        private bool RemoveUserFromAd(UserProfile userProfile)
+        private bool ShouldRemoveUserFromAd(UserProfile userProfile)
         {
             return userProfile.UserRole != AzureAdUserRoles.Judge &&
                    userProfile.UserRole != AzureAdUserRoles.VhOfficer &&
