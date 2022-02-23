@@ -82,6 +82,32 @@ namespace SchedulerJobs.UnitTests.Services
         }
 
         [Test]
+        public async Task Does_Not_Call_Endpoints_To_Anonymise_Conferences_And_Hearings_Data_When_Hearing_Ids_Null()
+        {
+            _bookingApiClient.Setup(x => x.GetAnonymisationDataAsync()).ReturnsAsync(new AnonymisationDataResponse());
+            
+            await _anonymiseHearingsConferencesDataService.AnonymiseHearingsConferencesDataAsync();
+            
+            _videoApiClient.Verify(videoApi => videoApi.AnonymiseConferenceWithHearingIdsAsync(It.IsAny<AnonymiseConferenceWithHearingIdsRequest>()), Times.Never);
+            _videoApiClient.Verify(videoApi => videoApi.AnonymiseQuickLinkParticipantWithHearingIdsAsync(It.IsAny<AnonymiseQuickLinkParticipantWithHearingIdsRequest>()), Times.Never);
+            
+            _bookingApiClient.Verify(bookingsApi => bookingsApi.AnonymiseParticipantAndCaseByHearingIdAsync(It.IsAny<string>(), It.IsAny<List<Guid>>()), Times.Never);
+        }
+
+        [Test]
+        public async Task Does_Not_Call_Endpoints_To_Anonymise_Conferences_And_Hearings_Data_When_Hearing_Ids_Is_Empty()
+        {
+            _bookingApiClient.Setup(x => x.GetAnonymisationDataAsync()).ReturnsAsync(new AnonymisationDataResponse {HearingIds = new List<Guid>()});
+            
+            await _anonymiseHearingsConferencesDataService.AnonymiseHearingsConferencesDataAsync();
+            
+            _videoApiClient.Verify(videoApi => videoApi.AnonymiseConferenceWithHearingIdsAsync(It.IsAny<AnonymiseConferenceWithHearingIdsRequest>()), Times.Never);
+            _videoApiClient.Verify(videoApi => videoApi.AnonymiseQuickLinkParticipantWithHearingIdsAsync(It.IsAny<AnonymiseQuickLinkParticipantWithHearingIdsRequest>()), Times.Never);
+            
+            _bookingApiClient.Verify(bookingsApi => bookingsApi.AnonymiseParticipantAndCaseByHearingIdAsync(It.IsAny<string>(), It.IsAny<List<Guid>>()), Times.Never);
+        }
+        
+        [Test]
         public async Task Does_Not_Delete_User_From_Ad_When_User_Is_Admin()
         {
             var usernameNotToDeleteFromAd = "username1@hmcts.net";
@@ -232,5 +258,6 @@ namespace SchedulerJobs.UnitTests.Services
                 It.Is<Exception>(x => x == unknownException),
                 (Func<It.IsAnyType, Exception, string>)It.IsAny<object>()), Times.Once);
         }
+        
     }
 }

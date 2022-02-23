@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Threading.Tasks;
 using BookingsApi.Client;
 using Microsoft.Extensions.Logging;
 using SchedulerJobs.Common.Constants;
@@ -21,6 +22,7 @@ namespace SchedulerJobs.Services
         private readonly ILogger<AnonymiseHearingsConferencesDataService> _logger;
         private readonly IUserApiClient _userApiClient;
         private readonly IVideoApiClient _videoApiClient;
+        public const string ProcessingUsernameExceptionMessage = "unknown exception when processing {username}";
 
         public AnonymiseHearingsConferencesDataService(IVideoApiClient videoApiClient,
             IBookingsApiClient bookingsApiClient,
@@ -37,50 +39,58 @@ namespace SchedulerJobs.Services
         {
             var anonymisationData = await _bookingsApiClient.GetAnonymisationDataAsync();
 
-            await _videoApiClient.AnonymiseConferenceWithHearingIdsAsync(new AnonymiseConferenceWithHearingIdsRequest
-                { HearingIds = anonymisationData.HearingIds });
-            await _videoApiClient.AnonymiseQuickLinkParticipantWithHearingIdsAsync(
-                new AnonymiseQuickLinkParticipantWithHearingIdsRequest { HearingIds = anonymisationData.HearingIds });
+            if (anonymisationData.HearingIds != null && anonymisationData.HearingIds.Any())
+            {
+                _logger.LogInformation("Hearing ids being processed: {hearingids}", anonymisationData.HearingIds);
+                
+                await _videoApiClient.AnonymiseConferenceWithHearingIdsAsync(new AnonymiseConferenceWithHearingIdsRequest
+                    { HearingIds = anonymisationData.HearingIds });
+                
+                await _videoApiClient.AnonymiseQuickLinkParticipantWithHearingIdsAsync(
+                    new AnonymiseQuickLinkParticipantWithHearingIdsRequest { HearingIds = anonymisationData.HearingIds });
 
-            await _bookingsApiClient.AnonymiseParticipantAndCaseByHearingIdAsync("hearingIds",
-                anonymisationData.HearingIds);
+                await _bookingsApiClient.AnonymiseParticipantAndCaseByHearingIdAsync("hearingIds",
+                    anonymisationData.HearingIds);
+            }
 
-            if (anonymisationData.Usernames != null)
-                foreach (var username in anonymisationData.Usernames)
+
+            if (anonymisationData.Usernames == null) return;
+            
+            foreach (var username in anonymisationData.Usernames)
+            {
+                var userProfile = await _userApiClient.GetUserByAdUserNameAsync(username);
+
+                if (RemoveUserFromAd(userProfile))
+                    try
+                    {
+                        await _userApiClient.DeleteUserAsync(username);
+                    }
+                    catch (UserApiException exception)
+                    {
+                        _logger.LogError(exception, ProcessingUsernameExceptionMessage,
+                            username);
+                    }
+
+                try
                 {
-                    var userProfile = await _userApiClient.GetUserByAdUserNameAsync(username);
-
-                    if (RemoveUserFromAd(userProfile))
-                        try
-                        {
-                            await _userApiClient.DeleteUserAsync(username);
-                        }
-                        catch (UserApiException exception)
-                        {
-                            _logger.LogError(exception, $"unknown exception when attempting to delete user {username}",
-                                username);
-                        }
-
-                    try
-                    {
-                        await _videoApiClient.AnonymiseParticipantWithUsernameAsync(username);
-                    }
-                    catch (VideoApiException exception)
-                    {
-                        _logger.LogError(exception, $"unknown exception when attempting to delete user {username}",
-                            username);
-                    }
-
-                    try
-                    {
-                        await _bookingsApiClient.AnonymisePersonWithUsernameForExpiredHearingsAsync(username);
-                    }
-                    catch (BookingsApiException exception)
-                    {
-                        _logger.LogError(exception, $"unknown exception when attempting to delete user {username}",
-                            username);
-                    }
+                    await _videoApiClient.AnonymiseParticipantWithUsernameAsync(username);
                 }
+                catch (VideoApiException exception)
+                {
+                    _logger.LogError(exception, ProcessingUsernameExceptionMessage,
+                        username);
+                }
+
+                try
+                {
+                    await _bookingsApiClient.AnonymisePersonWithUsernameForExpiredHearingsAsync(username);
+                }
+                catch (BookingsApiException exception)
+                {
+                    _logger.LogError(exception, ProcessingUsernameExceptionMessage,
+                        username);
+                }
+            }
         }
 
         private bool RemoveUserFromAd(UserProfile userProfile)

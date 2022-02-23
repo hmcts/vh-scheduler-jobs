@@ -119,8 +119,8 @@
       },
       "BookingsApi.Client": {
         "type": "Transitive",
-        "resolved": "1.29.20",
-        "contentHash": "QNszqCYIrt7GXkOJaSOT6ygl5XpewXlMyPUxXo8Y40E+UI0ZD0ebjeQbKBmymNgo2dzeLnyhDlbSxKJN0NjS1Q==",
+        "resolved": "1.30.12",
+        "contentHash": "lWe9E84IBT9fhhCnmmJNRyHx2EIt5Q5HPRSwnFGM6e1Upy44uY1E2j+lYcrqLsW724fEScpkM0VFKEwgXuLmOw==",
         "dependencies": {
           "Microsoft.AspNetCore.Mvc.Core": "2.2.5",
           "Newtonsoft.Json": "12.0.3"
@@ -2206,7 +2206,7 @@
       "schedulerjobs.services": {
         "type": "Project",
         "dependencies": {
-          "BookingsApi.Client": "1.29.20",
+          "BookingsApi.Client": "1.30.12",
           "Microsoft.Extensions.Logging.Abstractions": "3.1.1",
           "Newtonsoft.Json": "12.0.3",
           "SchedulerJobs.Common": "1.0.0",
