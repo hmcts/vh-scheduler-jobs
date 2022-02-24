@@ -4,9 +4,9 @@
     ".NETCoreApp,Version=v3.1": {
       "BookingsApi.Client": {
         "type": "Direct",
-        "requested": "[1.29.1, )",
-        "resolved": "1.29.1",
-        "contentHash": "SD5vDl2Hcb0lZGAl0b4rVJpBWX085/4WW1goy+PT+XjDhlcAZipWGVHj12znRdHAgLLqyFrPiB5VeIwNZIz45Q==",
+        "requested": "[1.30.12, )",
+        "resolved": "1.30.12",
+        "contentHash": "lWe9E84IBT9fhhCnmmJNRyHx2EIt5Q5HPRSwnFGM6e1Upy44uY1E2j+lYcrqLsW724fEScpkM0VFKEwgXuLmOw==",
         "dependencies": {
           "Microsoft.AspNetCore.Mvc.Core": "2.2.5",
           "Newtonsoft.Json": "12.0.3"
@@ -42,9 +42,9 @@
       },
       "VideoApi.Client": {
         "type": "Direct",
-        "requested": "[1.29.5, )",
-        "resolved": "1.29.5",
-        "contentHash": "tCvn31cbIfrpAP4CeTm8MOOzAqOo8gZEpvqjqCTchEBbCV0wtzr3Fm5gixxDpTFYpIxR95Zh6Qnkhax9xcounw==",
+        "requested": "[1.29.11, )",
+        "resolved": "1.29.11",
+        "contentHash": "DGWQijHEz5XniQJOeQcyV6IXlrhIyKLouB+OSmyhp6pLUGkoAO2+IhmzQOL7EKL8UcTNQoiFxwa9BXIZLtZHHg==",
         "dependencies": {
           "Microsoft.AspNetCore.Mvc.Core": "2.2.5",
           "Newtonsoft.Json": "12.0.3"

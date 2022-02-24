@@ -19,7 +19,7 @@ namespace SchedulerJobs.UnitTests.Functions
 
             // Assert
             _mocker.Mock<IAnonymiseHearingsConferencesDataService>().Verify(x => x.AnonymiseHearingsConferencesDataAsync(), Times.Once);
-            _logger.GetLoggedMessages().Last().Should().StartWith("Data anonymised for hearings, conferences older than 3 months.");
+            _logger.GetLoggedMessages().Last().Should().StartWith(AnonymiseHearingsConferencesAndDeleteAadUsersFunction.LogInformationMessage);
         }
     }
 }
