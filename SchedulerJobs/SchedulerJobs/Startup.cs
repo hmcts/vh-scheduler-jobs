@@ -11,6 +11,7 @@ using SchedulerJobs.Common.Security;
 using SchedulerJobs.Services;
 using System;
 using System.IO;
+using SchedulerJobs.Configuration;
 using SchedulerJobs.Services.HttpClients;
 using UserApi.Client;
 using VH.Core.Configuration;
@@ -149,6 +150,8 @@ namespace SchedulerJobs
                     client.ReadResponseAsString = true;
                     return (IUserApiClient)client;
                 });
+            
+            services.AddSingleton<IFeatureToggles>(new FeatureToggles(configuration.GetSection("FeatureToggles:SDK-Key").Value));
         }
     }
 }

@@ -194,6 +194,10 @@ stages:
             value: 8000
           - name: UseELinksStub
             value: $(UseELinksStub)
+          # Feature Toggle
+          - name: FeatureToggle:SDK-Key
+            value: vh-admin-web-Feature-Toggle
+            secret: true
         acceptanceTestSettings:
           - name: ApplicationInsights:InstrumentationKey
             value: vh-core-infra-AppInsightsKey
@@ -209,3 +213,7 @@ stages:
             secret: true
           - name: VhServices:SchedulerJobsUrl
             value: $(scheduler_jobs_url)
+          # Feature Toggle
+          - name: FeatureToggle:SDK-Key
+            value: vh-admin-web-Feature-Toggle
+            secret: true

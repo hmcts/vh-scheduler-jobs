@@ -46,6 +46,11 @@ parameters:
   - name: AzureAd:TenantId
     value: tenantid
     secret: true
+    
+  # Feature Toggle
+  - name: FeatureToggle:SDK-Key
+    value: vh-admin-web-Feature-Toggle
+    secret: true
 
 - name: appSettings
   type: object
@@ -95,6 +100,11 @@ parameters:
     value: 1
   - name: UseELinksStub
     value: true
+
+  # Feature Toggle
+  - name: FeatureToggle:SDK-Key
+    value: vh-admin-web-Feature-Toggle
+    secret: true
 
 variables:
   - group: vh-domains-and-urls
