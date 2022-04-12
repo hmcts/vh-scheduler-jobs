@@ -2,7 +2,7 @@
 using LaunchDarkly.Sdk.Server;
 using LaunchDarkly.Sdk.Server.Interfaces;
 
-namespace SchedulerJobs.Configuration
+namespace SchedulerJobs.Common.Configuration
 {
     public interface IFeatureToggles
     {

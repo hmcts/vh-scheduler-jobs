@@ -128,8 +128,8 @@
       },
       "BookingsApi.Client": {
         "type": "Transitive",
-        "resolved": "1.30.12",
-        "contentHash": "lWe9E84IBT9fhhCnmmJNRyHx2EIt5Q5HPRSwnFGM6e1Upy44uY1E2j+lYcrqLsW724fEScpkM0VFKEwgXuLmOw==",
+        "resolved": "1.33.6",
+        "contentHash": "8k2ecbin0rRF5DMNoyNX2z0A/X6HsQ21AM8B9ExbKjvYcwTJgP6VSfzhVHFMqBEYEPbTTTYZ8+fwX29xITQmUQ==",
         "dependencies": {
           "Microsoft.AspNetCore.Mvc.Core": "2.2.5",
           "Newtonsoft.Json": "12.0.3"
@@ -2262,8 +2262,7 @@
       "schedulerjobs": {
         "type": "Project",
         "dependencies": {
-          "BookingsApi.Client": "1.30.12",
-          "LaunchDarkly.ServerSdk": "6.3.2",
+          "BookingsApi.Client": "1.33.6",
           "Microsoft.ApplicationInsights.AspNetCore": "2.15.0",
           "Microsoft.AspNetCore.Hosting": "2.2.7",
           "Microsoft.Azure.Functions.Extensions": "1.1.0",
@@ -2284,6 +2283,7 @@
       "schedulerjobs.common": {
         "type": "Project",
         "dependencies": {
+          "LaunchDarkly.ServerSdk": "6.3.2",
           "Microsoft.Extensions.Caching.Abstractions": "3.1.1",
           "Microsoft.Extensions.Caching.Memory": "3.1.1",
           "Microsoft.Extensions.Configuration.Abstractions": "3.1.13",
@@ -2301,8 +2301,8 @@
       "schedulerjobs.services": {
         "type": "Project",
         "dependencies": {
-          "BookingsApi.Client": "1.30.12",
-          "Microsoft.Extensions.Logging.Abstractions": "3.1.1",
+          "BookingsApi.Client": "1.33.6",
+          "Microsoft.Extensions.Logging.Abstractions": "3.1.9",
           "Newtonsoft.Json": "12.0.3",
           "SchedulerJobs.Common": "1.0.0",
           "System.Threading.Tasks.Extensions": "4.5.4",
