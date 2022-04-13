@@ -921,6 +921,15 @@
           "Newtonsoft.Json": "10.0.1"
         }
       },
+      "NotificationApi.Client": {
+        "type": "Transitive",
+        "resolved": "1.30.2",
+        "contentHash": "yMx1IM+vYMdcJx8CcqmyG14PN8GJwnRCVPFdAn9XXvZA2Wc31M1jxBj7HR+1rlrxQpOezUS87unkZxcdZIHDmg==",
+        "dependencies": {
+          "Microsoft.AspNetCore.Mvc.Core": "2.2.5",
+          "Newtonsoft.Json": "12.0.3"
+        }
+      },
       "runtime.debian.8-x64.runtime.native.System.Security.Cryptography.OpenSsl": {
         "type": "Transitive",
         "resolved": "4.3.0",
@@ -2061,6 +2070,11 @@
           "System.Xml.XmlDocument": "4.3.0"
         }
       },
+      "TimeZoneConverter": {
+        "type": "Transitive",
+        "resolved": "5.0.0",
+        "contentHash": "U7Oilf3Ya6Rmu6gOaBfWyT3q0kwy2av6a5PfTn05CF54C+7DvuLsE3ljASvYmCpsSQeJvpnqU5Uzag6+ysWUeA=="
+      },
       "UserApi.Client": {
         "type": "Transitive",
         "resolved": "1.29.1",
@@ -2103,7 +2117,8 @@
           "Microsoft.IdentityModel.Clients.ActiveDirectory": "4.3.0",
           "Newtonsoft.Json": "12.0.3",
           "SonarAnalyzer.CSharp": "7.13.0.8313",
-          "System.Threading.Tasks.Extensions": "4.5.4"
+          "System.Threading.Tasks.Extensions": "4.5.4",
+          "TimeZoneConverter": "5.0.0"
         }
       },
       "schedulerjobs.services": {
@@ -2112,6 +2127,7 @@
           "BookingsApi.Client": "1.33.6",
           "Microsoft.Extensions.Logging.Abstractions": "3.1.9",
           "Newtonsoft.Json": "12.0.3",
+          "NotificationApi.Client": "1.30.2",
           "SchedulerJobs.Common": "1.0.0",
           "System.Threading.Tasks.Extensions": "4.5.4",
           "UserApi.Client": "1.29.1",

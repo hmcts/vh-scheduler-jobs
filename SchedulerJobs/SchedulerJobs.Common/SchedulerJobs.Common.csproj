@@ -23,6 +23,7 @@
 		<PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
 		<PackageReference Include="SonarAnalyzer.CSharp" Version="7.13.0.8313" />
 		<PackageReference Include="System.Threading.Tasks.Extensions" Version="4.5.4" />
+		<PackageReference Include="TimeZoneConverter" Version="5.0.0" />
 	</ItemGroup>
 
 </Project>
