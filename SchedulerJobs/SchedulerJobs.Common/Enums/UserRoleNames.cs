@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
+﻿
 namespace SchedulerJobs.Common.Enums
 {
     public static class UserRoleNames

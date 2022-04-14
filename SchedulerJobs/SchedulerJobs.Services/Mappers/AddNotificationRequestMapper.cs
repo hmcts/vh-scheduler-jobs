@@ -14,46 +14,64 @@ namespace SchedulerJobs.Services.Mappers
         public static AddNotificationRequest MapToHearingReminderNotification(HearingDetailsResponse hearing,
             ParticipantResponse participant)
         {
-            var parameters = InitConfirmReminderParams(hearing);
+            var parameters = InitCommonParameters(hearing);
 
-            parameters.Add("name", participant.Username.ToLower());
-
-            NotificationType notificationType;
-
-            /*
-            if (participant.UserRoleName.Contains(RoleNames.JudicialOfficeHolder,
-                StringComparison.InvariantCultureIgnoreCase))
-            {
-                notificationType = hearing.IsParticipantAEJudJudicialOfficeHolder(participant.Id) ? NotificationType.HearingReminderEJudJoh : NotificationType.HearingReminderJoh;
-                parameters.Add(NotifyParams.JudicialOfficeHolder, $"{participant.FirstName} {participant.LastName}");
-            }
-            else if (participant.UserRoleName.Contains(RoleNames.Representative, StringComparison.InvariantCultureIgnoreCase))
-            {
-                notificationType = NotificationType.HearingReminderRepresentative;
-                parameters.Add(NotifyParams.ClientName, participant.Representee);
-                parameters.Add(NotifyParams.SolicitorName, $"{participant.FirstName} {participant.LastName}");
-            }
-            else
-            {
-                notificationType = NotificationType.HearingReminderLip;
-                parameters.Add(NotifyParams.Name, $"{participant.FirstName} {participant.LastName}");
-            }*/
-
-            notificationType = NotificationType.HearingReminderLip;
+            addParticipantParameters(participant, parameters); 
 
             return new AddNotificationRequest
             {
                 HearingId = hearing.Id,
                 MessageType = MessageType.Email,
                 ContactEmail = participant.ContactEmail,
-                NotificationType = notificationType,
+                NotificationType = getNotificationType(participant),
                 ParticipantId = participant.Id,
                 PhoneNumber = participant.TelephoneNumber,
                 Parameters = parameters
             };
         }
 
-        private static Dictionary<string, string> InitConfirmReminderParams(HearingDetailsResponse hearing)
+        private static void addParticipantParameters(ParticipantResponse participant, Dictionary<string, string> parameters)
+        {
+            parameters.Add("username", $"{participant.Username}");
+            parameters.Add("email address", $"{participant.ContactEmail}");
+
+            switch (participant.UserRoleName)
+            {
+                case UserRoleNames.Individual:
+                    parameters.Add("name", $"{participant.FirstName} {participant.LastName}");
+                    break;
+                case UserRoleNames.Representative:
+                    parameters.Add("client name", participant.Representee);
+                    parameters.Add("solicitor name", $"{participant.FirstName} {participant.LastName}");
+                    break;
+                default:       //JudicialOfficeHolder
+                    parameters.Add("judicial office holder", $"{participant.FirstName} {participant.LastName}");
+                    break;
+            }
+
+        }
+
+        private static NotificationType getNotificationType(ParticipantResponse participant)
+        {
+            NotificationType notificationType;
+
+            switch (participant.UserRoleName)
+            {
+                case UserRoleNames.Individual:
+                    notificationType = NotificationType.NewHearingReminderLIP;
+                    break;
+                case UserRoleNames.Representative:
+                    notificationType = NotificationType.NewHearingReminderRepresentative;
+                    break;
+                default:       //JudicialOfficeHolder
+                    notificationType = NotificationType.NewHearingReminderJOH;
+                    break;
+            }
+
+            return notificationType;
+        }
+
+        private static Dictionary<string, string> InitCommonParameters(HearingDetailsResponse hearing)
         {
             var @case = hearing.Cases.First();
 
@@ -62,7 +80,7 @@ namespace SchedulerJobs.Services.Mappers
                 {"case name", @case.Name},
                 {"case number", @case.Number},
                 {"time", hearing.ScheduledDateTime.ToEmailTimeGbLocale()},
-                {"day month year", hearing.ScheduledDateTime.ToEmailDateGbLocale()}
+                {"Day Month Year", hearing.ScheduledDateTime.ToEmailDateGbLocale()}
             };
         }
     }

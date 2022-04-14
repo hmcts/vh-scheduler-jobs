@@ -70,7 +70,6 @@ namespace SchedulerJobs.Services
                     }
 
                     await processParticipantForNotification(item, participant);
-
                 }
             }
         }
