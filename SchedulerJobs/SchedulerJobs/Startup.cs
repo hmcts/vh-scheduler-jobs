@@ -121,6 +121,7 @@ namespace SchedulerJobs
             services.AddTransient<VideoServiceTokenHandler>();
             services.AddTransient<BookingsServiceTokenHandler>();
             services.AddTransient<UserServiceTokenHandler>();
+            services.AddTransient<NotificationServiceTokenHandler>();
 
             services.AddHttpClient<IVideoApiClient, VideoApiClient>()
                 .AddHttpMessageHandler<VideoServiceTokenHandler>()

@@ -42,7 +42,7 @@ namespace SchedulerJobs.Services
 
             var hearings = await getHearings();
 
-            if (hearings.Count < 0)
+            if (hearings.Count < 1)
             {
                 _logger.LogInformation("SendNotificationsAsync - No hearings to send notifications");
                 return;

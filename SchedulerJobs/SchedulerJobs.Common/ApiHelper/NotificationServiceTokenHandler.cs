@@ -15,7 +15,7 @@ namespace SchedulerJobs.Common.ApiHelper
         private readonly AzureAdConfiguration _azureAdConfiguration;
         private readonly ServicesConfiguration _servicesConfiguration;
 
-        private const string TokenCacheKey = "UserApiServiceToken";
+        private const string TokenCacheKey = "NotificationApiServiceToken";
 
         public NotificationServiceTokenHandler(
             IOptions<AzureAdConfiguration> azureAdConfigurationOptions,
@@ -35,7 +35,7 @@ namespace SchedulerJobs.Common.ApiHelper
             if (string.IsNullOrEmpty(token))
             {
                 var authenticationResult = _azureTokenProvider.GetAuthorisationResult(_azureAdConfiguration.ClientId,
-                    _azureAdConfiguration.ClientSecret, _servicesConfiguration.UserApiResourceId);
+                    _azureAdConfiguration.ClientSecret, _servicesConfiguration.NotificationApiResourceId);
                 token = authenticationResult.AccessToken;
                 var tokenExpireDateTime = authenticationResult.ExpiresOn.DateTime.AddMinutes(-1);
                 _memoryCache.Set(TokenCacheKey, token, tokenExpireDateTime);

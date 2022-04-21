@@ -21,12 +21,15 @@ namespace SchedulerJobs.Functions
         /// </summary>
         /// <param name="myTimer">Set time to run every day at 10:00 AM</param>
         /// <param name="log"></param>
-        /// //public async Task Run([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req, ILogger log) for local
+        /// //public async Task Run([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req, ILogger log)  // for local
         /// 
         [FunctionName("SendHearingNotificationsFunction")]
         public async Task RunAsync([TimerTrigger("0 0 10 * * *")] TimerInfo myTimer, ILogger log)
         {
-            log.LogInformation($"Send hearing notifications function triggered at: {DateTime.Now} ");
+            if (myTimer?.IsPastDue ?? true)
+            {
+                log.LogInformation($"Send hearing notifications function triggered at: {DateTime.Now} ");
+            }
 
             await _hearingNotificationService.SendNotificationsAsync();
 
