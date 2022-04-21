@@ -178,6 +178,11 @@ stages:
             secret: true
           - name: VhServices:VideoApiUrl
             value: $(video_api_url)
+          - name: VhServices:NotificationApiResourceId
+            value: vh-notification-api-identifieruris
+            secret: true
+          - name: VhServices:NotificationApiUrl
+            value: $(notification_api_url)
           - name: VhServices:UserApiResourceId   
             value: vh-user-api-identifieruris
             secret: true
