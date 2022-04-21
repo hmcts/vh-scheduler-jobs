@@ -200,7 +200,7 @@ stages:
           - name: UseELinksStub
             value: $(UseELinksStub)
           # Feature Toggle
-          - name: FeatureToggle:SDK-Key
+          - name: FeatureToggles:SDK-Key
             value: vh-admin-web-Feature-Toggle
             secret: true
         acceptanceTestSettings:
@@ -219,6 +219,6 @@ stages:
           - name: VhServices:SchedulerJobsUrl
             value: $(scheduler_jobs_url)
           # Feature Toggle
-          - name: FeatureToggle:SDK-Key
+          - name: FeatureToggles:SDK-Key
             value: vh-admin-web-Feature-Toggle
             secret: true

@@ -48,7 +48,7 @@ parameters:
     secret: true
     
   # Feature Toggle
-  - name: FeatureToggle:SDK-Key
+  - name: FeatureToggles:SDK-Key
     value: vh-admin-web-Feature-Toggle
     secret: true
 
@@ -107,7 +107,7 @@ parameters:
     value: true
 
   # Feature Toggle
-  - name: FeatureToggle:SDK-Key
+  - name: FeatureToggles:SDK-Key
     value: vh-admin-web-Feature-Toggle
     secret: true
 
