@@ -20,31 +20,23 @@ namespace SchedulerJobs.UnitTests.Services
         private Mock<IFeatureToggles> _featureToggles;
         private IHearingNotificationService _hearingNotificationService;
         private Mock<ILogger<HearingNotificationService>> _logger;
-        private List<HearingDetailsResponse> nohearings;
-        private List<HearingDetailsResponse> hearings_1;
-        private List<HearingDetailsResponse> hearings_with_no_notification_userroles;
-        private List<HearingDetailsResponse> hearings_multiple;
+        private List<HearingDetailsResponse> _nohearings;
+        private List<HearingDetailsResponse> _hearings_1;
+        private List<HearingDetailsResponse> _hearings_with_no_notification_userroles;
+        private List<HearingDetailsResponse> _hearings_multiple;
 
         [SetUp]
         public void Setup()
         {
-
-
             _bookingApiClient = new Mock<IBookingsApiClient>();
             _notificationApiClient = new Mock<INotificationApiClient>();
             _featureToggles = new Mock<IFeatureToggles>();
-
             _logger = new Mock<ILogger<HearingNotificationService>>();
-
             _hearingNotificationService = new HearingNotificationService(_bookingApiClient.Object, _featureToggles.Object, _notificationApiClient.Object, _logger.Object);
-
-            hearings_1 = new List<HearingDetailsResponse>() { createHearing() };
-
-            hearings_multiple = new List<HearingDetailsResponse>() { createHearing(), createHearing() };
-            hearings_with_no_notification_userroles = new List<HearingDetailsResponse>() { createHearingWithNoRoles() };
+            _hearings_1 = new List<HearingDetailsResponse>() { createHearing() };
+            _hearings_multiple = new List<HearingDetailsResponse>() { createHearing(), createHearing() };
+            _hearings_with_no_notification_userroles = new List<HearingDetailsResponse>() { createHearingWithNoRoles() };
         }
-
-        
 
         [Test]
         public async Task should_not_call_bookingapi_GetHearingsForNotificationAsync_when_BookAndConfirm_toggle_is_off()
@@ -56,14 +48,13 @@ namespace SchedulerJobs.UnitTests.Services
             _bookingApiClient.Verify(x => x.GetHearingsForNotificationAsync(), Times.Never);
         }
 
-
         [Test]
         public async Task should_not_call_notificationApi_when_no_bookings_are_retruned()
         {
-            nohearings = new List<HearingDetailsResponse>();
+            _nohearings = new List<HearingDetailsResponse>();
 
             _featureToggles.Setup(x => x.BookAndConfirmToggle()).Returns(true);
-            _bookingApiClient.Setup(x => x.GetHearingsForNotificationAsync()).ReturnsAsync(nohearings);
+            _bookingApiClient.Setup(x => x.GetHearingsForNotificationAsync()).ReturnsAsync(_nohearings);
 
             await _hearingNotificationService.SendNotificationsAsync();
 
@@ -75,7 +66,7 @@ namespace SchedulerJobs.UnitTests.Services
         public async Task should__call_notificationApi_when_bookings_are_retruned()
         {
             _featureToggles.Setup(x => x.BookAndConfirmToggle()).Returns(true);
-            _bookingApiClient.Setup(x => x.GetHearingsForNotificationAsync()).ReturnsAsync(hearings_1);
+            _bookingApiClient.Setup(x => x.GetHearingsForNotificationAsync()).ReturnsAsync(_hearings_1);
             _notificationApiClient.SetupSequence(x => x.CreateNewNotificationAsync(It.IsAny<NotificationApi.Contract.Requests.AddNotificationRequest>()))
                 .Returns(Task.CompletedTask)
                 .Returns(Task.CompletedTask)
@@ -91,7 +82,7 @@ namespace SchedulerJobs.UnitTests.Services
         public async Task should__call_notificationApi_when_multiple_bookings_are_retruned()
         {
             _featureToggles.Setup(x => x.BookAndConfirmToggle()).Returns(true);
-            _bookingApiClient.Setup(x => x.GetHearingsForNotificationAsync()).ReturnsAsync(hearings_multiple);
+            _bookingApiClient.Setup(x => x.GetHearingsForNotificationAsync()).ReturnsAsync(_hearings_multiple);
             _notificationApiClient.SetupSequence(x => x.CreateNewNotificationAsync(It.IsAny<NotificationApi.Contract.Requests.AddNotificationRequest>()))
                 .Returns(Task.CompletedTask)
                 .Returns(Task.CompletedTask)
@@ -109,10 +100,10 @@ namespace SchedulerJobs.UnitTests.Services
         [Test]
         public async Task should_not_call_notificationApi_when_bookings_with_notification_user_roles_doesnot_exists()
         {
-            nohearings = new List<HearingDetailsResponse>();
+            _nohearings = new List<HearingDetailsResponse>();
 
             _featureToggles.Setup(x => x.BookAndConfirmToggle()).Returns(true);
-            _bookingApiClient.Setup(x => x.GetHearingsForNotificationAsync()).ReturnsAsync(hearings_with_no_notification_userroles);
+            _bookingApiClient.Setup(x => x.GetHearingsForNotificationAsync()).ReturnsAsync(_hearings_with_no_notification_userroles);
 
             await _hearingNotificationService.SendNotificationsAsync();
 
@@ -227,7 +218,6 @@ namespace SchedulerJobs.UnitTests.Services
                 Endpoints = null,
                 GroupId = id
             };
-
         }
 
         private HearingDetailsResponse createHearingWithNoRoles()

@@ -40,7 +40,7 @@ namespace SchedulerJobs.Services
                 return;
             }
 
-            var hearings = await getHearings();
+            var hearings = await GetHearings();
 
             if (hearings.Count < 1)
             {
@@ -48,11 +48,11 @@ namespace SchedulerJobs.Services
                 return;
             }
 
-            await processHearings(hearings);
+            await ProcessHearings(hearings);
 
         }
 
-        private async Task processHearings(List<HearingDetailsResponse> hearings)
+        private async Task ProcessHearings(List<HearingDetailsResponse> hearings)
         {
             foreach (var item in hearings)
             {
@@ -69,32 +69,32 @@ namespace SchedulerJobs.Services
                         continue;
                     }
 
-                    await processParticipantForNotification(item, participant);
+                    await ProcessParticipantForNotification(item, participant);
                 }
             }
         }
 
-        private async Task processParticipantForNotification(HearingDetailsResponse item, ParticipantResponse participant)
+        private async Task ProcessParticipantForNotification(HearingDetailsResponse item, ParticipantResponse participant)
         {
             switch (participant.UserRoleName)
             {
                 case UserRoleNames.Individual:
                 case UserRoleNames.Representative:
                 case UserRoleNames.JudicialOfficeHolder:
-                    await sendHearingNotification(item, participant);
+                    await SendHearingNotification(item, participant);
                     break;
                 default:
                     break;
             }
         }
 
-        private async Task sendHearingNotification(HearingDetailsResponse item, ParticipantResponse participant)
+        private async Task SendHearingNotification(HearingDetailsResponse item, ParticipantResponse participant)
         {
             var request = AddNotificationRequestMapper.MapToHearingReminderNotification(item, participant);
             await _notificationApiClient.CreateNewNotificationAsync(request);
         }
 
-        private async Task<List<HearingDetailsResponse>> getHearings()
+        private async Task<List<HearingDetailsResponse>> GetHearings()
         {
             var response = await _bookingsApiClient.GetHearingsForNotificationAsync();
 

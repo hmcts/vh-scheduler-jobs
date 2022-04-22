@@ -16,21 +16,21 @@ namespace SchedulerJobs.Services.Mappers
         {
             var parameters = InitCommonParameters(hearing);
 
-            addParticipantParameters(participant, parameters); 
+            AddParticipantParameters(participant, parameters); 
 
             return new AddNotificationRequest
             {
                 HearingId = hearing.Id,
                 MessageType = MessageType.Email,
                 ContactEmail = participant.ContactEmail,
-                NotificationType = getNotificationType(participant),
+                NotificationType = GetNotificationType(participant),
                 ParticipantId = participant.Id,
                 PhoneNumber = participant.TelephoneNumber,
                 Parameters = parameters
             };
         }
 
-        private static void addParticipantParameters(ParticipantResponse participant, Dictionary<string, string> parameters)
+        private static void AddParticipantParameters(ParticipantResponse participant, Dictionary<string, string> parameters)
         {
             parameters.Add("username", $"{participant.Username}");
             parameters.Add("email address", $"{participant.ContactEmail}");
@@ -51,7 +51,7 @@ namespace SchedulerJobs.Services.Mappers
 
         }
 
-        private static NotificationType getNotificationType(ParticipantResponse participant)
+        private static NotificationType GetNotificationType(ParticipantResponse participant)
         {
             NotificationType notificationType;
 
