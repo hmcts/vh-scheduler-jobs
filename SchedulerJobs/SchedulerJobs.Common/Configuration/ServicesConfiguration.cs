@@ -13,5 +13,7 @@
         public string ELinksLeaversBaseUrl { get; set; } = "https://localhost:9988/";
         public string ELinksApiKey { get; set; }
         public int ELinksApiGetPeopleUpdatedSinceDays { get; set; }
+        public string NotificationApiResourceId { get; set; }
+        public string NotificationApiUrl { get; set; } = "https://localhost:59390/";
     }
 }

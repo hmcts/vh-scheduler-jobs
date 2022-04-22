@@ -16,6 +16,7 @@ using UserApi.Client;
 using VH.Core.Configuration;
 using VideoApi.Client;
 using SchedulerJobs.Services.Interfaces;
+using NotificationApi.Client;
 
 [assembly: FunctionsStartup(typeof(SchedulerJobs.Startup))]
 namespace SchedulerJobs
@@ -83,6 +84,7 @@ namespace SchedulerJobs
             services.AddScoped<IAnonymiseHearingsConferencesDataService, AnonymiseHearingsConferencesDataService>();
             services.AddScoped<IRemoveHeartbeatsForConferencesService, RemoveHeartbeatsForConferencesService>();
             services.AddScoped<IReconcileHearingAudioService, ReconcileHearingAudioService>();
+            services.AddScoped<IHearingNotificationService, HearingNotificationService>();
 
             bool.TryParse(configuration["UseELinksStub"], out var useELinksStub);
 
@@ -119,6 +121,7 @@ namespace SchedulerJobs
             services.AddTransient<VideoServiceTokenHandler>();
             services.AddTransient<BookingsServiceTokenHandler>();
             services.AddTransient<UserServiceTokenHandler>();
+            services.AddTransient<NotificationServiceTokenHandler>();
 
             services.AddHttpClient<IVideoApiClient, VideoApiClient>()
                 .AddHttpMessageHandler<VideoServiceTokenHandler>()
@@ -149,6 +152,18 @@ namespace SchedulerJobs
                     client.ReadResponseAsString = true;
                     return (IUserApiClient)client;
                 });
+
+            services.AddHttpClient<INotificationApiClient, NotificationApiClient>()
+                .AddHttpMessageHandler<NotificationServiceTokenHandler>()
+                .AddTypedClient(httpClient =>
+                {
+                    var client = NotificationApiClient.GetClient(httpClient);
+                    client.BaseUrl = serviceConfiguration.NotificationApiUrl;
+                    client.ReadResponseAsString = true;
+                    return (INotificationApiClient)client;
+                });
+
+            services.AddSingleton<IFeatureToggles>(new FeatureToggles(configuration.GetSection("FeatureToggles:SDK-Key").Value));
         }
     }
 }

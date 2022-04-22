@@ -119,8 +119,8 @@
       },
       "BookingsApi.Client": {
         "type": "Transitive",
-        "resolved": "1.30.12",
-        "contentHash": "lWe9E84IBT9fhhCnmmJNRyHx2EIt5Q5HPRSwnFGM6e1Upy44uY1E2j+lYcrqLsW724fEScpkM0VFKEwgXuLmOw==",
+        "resolved": "1.33.6",
+        "contentHash": "8k2ecbin0rRF5DMNoyNX2z0A/X6HsQ21AM8B9ExbKjvYcwTJgP6VSfzhVHFMqBEYEPbTTTYZ8+fwX29xITQmUQ==",
         "dependencies": {
           "Microsoft.AspNetCore.Mvc.Core": "2.2.5",
           "Newtonsoft.Json": "12.0.3"
@@ -184,6 +184,65 @@
         "type": "Transitive",
         "resolved": "1.11.30",
         "contentHash": "IuOSVuuHCJKrnAjNe5rZnZCyR/NpXL6ExEL7UiM8h4fnhbt8tLqIKol9q5Lv0uoxWO8fl9Uq+1kpGfMDUdr5zA=="
+      },
+      "LaunchDarkly.Cache": {
+        "type": "Transitive",
+        "resolved": "1.0.2",
+        "contentHash": "0bEnUVFVeW1TTDXb/bW6kS3FLQTLeGtw7Xh8yt6WNO56utVmtgcrMLvcnF6yeTn+N4FXrKfW09KkLNmK8YYQvw=="
+      },
+      "LaunchDarkly.CommonSdk": {
+        "type": "Transitive",
+        "resolved": "5.5.0",
+        "contentHash": "FXr09X++bZu66k8O/aMKlSntSZiuaeKXd0Op6LTpJ6P/l2QvfyJbM7OlhKi/KLJr1CO5TlOKvZjD7ud9EgCNsg==",
+        "dependencies": {
+          "LaunchDarkly.JsonStream": "[1.0.3, 2.0.0)",
+          "System.Collections.Immutable": "1.7.1"
+        }
+      },
+      "LaunchDarkly.EventSource": {
+        "type": "Transitive",
+        "resolved": "4.1.3",
+        "contentHash": "qMb0NI+BrhjkmyVm0y/SrrDSOn+Hnm5h/bzafNryLcJ4pTjCUtFVuwYqfrmLbmC1LvUDKmK5Ae5F0/X4gFIi8A==",
+        "dependencies": {
+          "LaunchDarkly.Logging": "[1.0.1, 2.0.0)"
+        }
+      },
+      "LaunchDarkly.InternalSdk": {
+        "type": "Transitive",
+        "resolved": "2.3.2",
+        "contentHash": "OuOBThDVuvM0xkYup8YD/4Sz4oixDnSVBp6Qda0WwPKE/c9vE3gD+VdG0PU32VgrLRzv5PUldkMikCGWKzPpNg==",
+        "dependencies": {
+          "LaunchDarkly.CommonSdk": "[5.5.0, 6.0.0)",
+          "LaunchDarkly.Logging": "[1.0.1, 2.0.0)",
+          "System.Collections.Immutable": "1.7.1"
+        }
+      },
+      "LaunchDarkly.JsonStream": {
+        "type": "Transitive",
+        "resolved": "1.0.3",
+        "contentHash": "WZxC5jQoYTqKrlrWmqV16PlNKCfDp5mQ0IuQEOOSTyVJPUPamm0IIHsyDRbDmNidNKedgFqjn8WaKBNVkakLyA=="
+      },
+      "LaunchDarkly.Logging": {
+        "type": "Transitive",
+        "resolved": "1.0.1",
+        "contentHash": "rWgD2CIB3rvhdgN4WkwIT9JQTK1SayubtmR4efhJis/fmlhi5J4roXtkvBs07C1mU/06farZWCXdF+KnCjdfjg==",
+        "dependencies": {
+          "Microsoft.Extensions.Logging.Abstractions": "3.1.9"
+        }
+      },
+      "LaunchDarkly.ServerSdk": {
+        "type": "Transitive",
+        "resolved": "6.3.2",
+        "contentHash": "IBHoKWgSN4O11/DVm7pF0cWb6uwLcmUsrf8KeTOHnJ+WNrlSQ+S6RFRI4IXbGOeT2D5o+OpaDoQmWBwMiO/vYQ==",
+        "dependencies": {
+          "LaunchDarkly.Cache": "1.0.2",
+          "LaunchDarkly.CommonSdk": "5.5.0",
+          "LaunchDarkly.EventSource": "4.1.3",
+          "LaunchDarkly.InternalSdk": "2.3.2",
+          "LaunchDarkly.JsonStream": "1.0.3",
+          "LaunchDarkly.Logging": "1.0.1",
+          "System.Collections.Immutable": "1.7.1"
+        }
       },
       "Microsoft.AspNetCore.Authentication.Abstractions": {
         "type": "Transitive",
@@ -662,8 +721,8 @@
       },
       "Microsoft.Extensions.Logging.Abstractions": {
         "type": "Transitive",
-        "resolved": "3.1.8",
-        "contentHash": "LxQPR/KE4P9nx304VcFipWPcW8ZOZOGHuiYlG0ncAQJItogDzR9nyYUNvziLObx2MfX2Z9iCTdAqEtoImaQOYg=="
+        "resolved": "3.1.9",
+        "contentHash": "W5fbF8qVR9SMVVJqDQLIR7meWbev6Pu/lbrm7LDNr4Sp7HOotr4k2UULTdFSXOi5aoDdkQZpWnq0ZSpjrR3tjg=="
       },
       "Microsoft.Extensions.Logging.Configuration": {
         "type": "Transitive",
@@ -858,6 +917,15 @@
         "type": "Transitive",
         "resolved": "12.0.3",
         "contentHash": "6mgjfnRB4jKMlzHSl+VD+oUc1IebOZabkbyWj2RiTgWwYPPuaK1H97G1sHqGwPlS5npiF5Q0OrxN1wni2n5QWg=="
+      },
+      "NotificationApi.Client": {
+        "type": "Transitive",
+        "resolved": "1.30.2",
+        "contentHash": "yMx1IM+vYMdcJx8CcqmyG14PN8GJwnRCVPFdAn9XXvZA2Wc31M1jxBj7HR+1rlrxQpOezUS87unkZxcdZIHDmg==",
+        "dependencies": {
+          "Microsoft.AspNetCore.Mvc.Core": "2.2.5",
+          "Newtonsoft.Json": "12.0.3"
+        }
       },
       "NuGet.Frameworks": {
         "type": "Transitive",
@@ -1131,6 +1199,11 @@
           "System.Threading": "4.3.0",
           "System.Threading.Tasks": "4.3.0"
         }
+      },
+      "System.Collections.Immutable": {
+        "type": "Transitive",
+        "resolved": "1.7.1",
+        "contentHash": "B43Zsz5EfMwyEbnObwRxW5u85fzJma3lrDeGcSAV1qkhSRTNY5uXAByTn9h9ddNdhM+4/YoLc/CI43umjwIl9Q=="
       },
       "System.Collections.NonGeneric": {
         "type": "Transitive",
@@ -2156,8 +2229,8 @@
       },
       "TimeZoneConverter": {
         "type": "Transitive",
-        "resolved": "3.4.0",
-        "contentHash": "4rqXd06uLqaLPGpO+whrZnSTJyG3SG5DEbeldMTvaGit0+gI6XLVb9YMnfM+5wtV0DDM1QPd/QhbE6j5vJCWDw=="
+        "resolved": "5.0.0",
+        "contentHash": "U7Oilf3Ya6Rmu6gOaBfWyT3q0kwy2av6a5PfTn05CF54C+7DvuLsE3ljASvYmCpsSQeJvpnqU5Uzag6+ysWUeA=="
       },
       "UserApi.Client": {
         "type": "Transitive",
@@ -2189,6 +2262,7 @@
       "schedulerjobs.common": {
         "type": "Project",
         "dependencies": {
+          "LaunchDarkly.ServerSdk": "6.3.2",
           "Microsoft.Extensions.Caching.Abstractions": "3.1.1",
           "Microsoft.Extensions.Caching.Memory": "3.1.1",
           "Microsoft.Extensions.Configuration.Abstractions": "3.1.13",
@@ -2200,15 +2274,17 @@
           "Microsoft.IdentityModel.Clients.ActiveDirectory": "4.3.0",
           "Newtonsoft.Json": "12.0.3",
           "SonarAnalyzer.CSharp": "7.13.0.8313",
-          "System.Threading.Tasks.Extensions": "4.5.4"
+          "System.Threading.Tasks.Extensions": "4.5.4",
+          "TimeZoneConverter": "5.0.0"
         }
       },
       "schedulerjobs.services": {
         "type": "Project",
         "dependencies": {
-          "BookingsApi.Client": "1.30.12",
-          "Microsoft.Extensions.Logging.Abstractions": "3.1.1",
+          "BookingsApi.Client": "1.33.6",
+          "Microsoft.Extensions.Logging.Abstractions": "3.1.9",
           "Newtonsoft.Json": "12.0.3",
+          "NotificationApi.Client": "1.30.2",
           "SchedulerJobs.Common": "1.0.0",
           "System.Threading.Tasks.Extensions": "4.5.4",
           "UserApi.Client": "1.29.1",
