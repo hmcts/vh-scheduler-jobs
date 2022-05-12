@@ -71,7 +71,7 @@ namespace SchedulerJobs.Services.Mappers
                     }
                     else
                     {
-                        notificationType = NotificationType.NewHearingReminderJOH;
+                    notificationType = NotificationType.NewHearingReminderJOH;
                     }
                     
                     break;

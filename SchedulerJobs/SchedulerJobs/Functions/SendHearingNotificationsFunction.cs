@@ -26,15 +26,13 @@ namespace SchedulerJobs.Functions
         /// //public async Task Run([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req, ILogger log)  // for local
         /// 
         [FunctionName("SendHearingNotificationsFunction")]
-        public async Task Run([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req, ILogger log)
-        //public async Task RunAsync([TimerTrigger("0 0 10 * * *")] TimerInfo myTimer, ILogger log)
+        public async Task RunAsync([TimerTrigger("0 0 10 * * *")] TimerInfo myTimer, ILogger log)
         {
-            /*
             if (myTimer?.IsPastDue ?? true)
             {
                 log.LogInformation($"Send hearing notifications function triggered at: {DateTime.Now} ");
-            }*/
-                        
+            }
+
             await _hearingNotificationService.SendNotificationsAsync();
 
             log.LogInformation($"Send hearing notifications - Completed at:{DateTime.Now} ");
