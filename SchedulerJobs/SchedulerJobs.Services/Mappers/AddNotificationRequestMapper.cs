@@ -11,6 +11,7 @@ namespace SchedulerJobs.Services.Mappers
 {
     public static class AddNotificationRequestMapper
     {
+        private static readonly string Judiciary = "judiciary";
         public static AddNotificationRequest MapToHearingReminderNotification(HearingDetailsResponse hearing,
             ParticipantResponse participant)
         {
@@ -64,11 +65,24 @@ namespace SchedulerJobs.Services.Mappers
                     notificationType = NotificationType.NewHearingReminderRepresentative;
                     break;
                 default:       //JudicialOfficeHolder
-                    notificationType = NotificationType.NewHearingReminderJOH;
+                    if (IsEjudge(participant))
+                    {
+                        notificationType = NotificationType.NewHearingReminderEJUD;
+                    }
+                    else
+                    {
+                        notificationType = NotificationType.NewHearingReminderJOH;
+                    }
+                    
                     break;
             }
 
             return notificationType;
+        }
+
+        public static bool IsEjudge(ParticipantResponse participant)
+        {
+            return (participant.ContactEmail.ToLower() == participant.Username.ToLower() && participant.Username.ToLower().Contains(Judiciary));
         }
 
         private static Dictionary<string, string> InitCommonParameters(HearingDetailsResponse hearing)
@@ -83,5 +97,7 @@ namespace SchedulerJobs.Services.Mappers
                 {"Day Month Year", hearing.ScheduledDateTime.ToEmailDateGbLocale()}
             };
         }
+
+       
     }
 }

@@ -923,8 +923,8 @@
       },
       "NotificationApi.Client": {
         "type": "Transitive",
-        "resolved": "1.30.2",
-        "contentHash": "yMx1IM+vYMdcJx8CcqmyG14PN8GJwnRCVPFdAn9XXvZA2Wc31M1jxBj7HR+1rlrxQpOezUS87unkZxcdZIHDmg==",
+        "resolved": "1.34.4",
+        "contentHash": "L7qr5un2IB6j+wGlImONPWeRHLHak7/5nkGvCAOsuSRlMkjzG1QCdleHDjNlmy9APpt/ZftEYJwQgTSIqHU3dA==",
         "dependencies": {
           "Microsoft.AspNetCore.Mvc.Core": "2.2.5",
           "Newtonsoft.Json": "12.0.3"
@@ -2127,7 +2127,7 @@
           "BookingsApi.Client": "1.33.6",
           "Microsoft.Extensions.Logging.Abstractions": "3.1.9",
           "Newtonsoft.Json": "12.0.3",
-          "NotificationApi.Client": "1.30.2",
+          "NotificationApi.Client": "1.34.4",
           "SchedulerJobs.Common": "1.0.0",
           "System.Threading.Tasks.Extensions": "4.5.4",
           "UserApi.Client": "1.29.1",
