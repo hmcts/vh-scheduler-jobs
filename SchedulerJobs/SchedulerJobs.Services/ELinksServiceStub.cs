@@ -82,7 +82,9 @@ namespace SchedulerJobs.Services
                 HasLeft = false,
                 PersonalCode = ticks.Substring(ticks.Length-5),
                 PostNominals = null,
-                Title = "Honour"
+                Title = "Honour",
+                Leaver = false,
+                LeftOn = ""
             };
         }
 
