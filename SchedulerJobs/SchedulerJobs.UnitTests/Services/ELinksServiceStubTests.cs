@@ -31,7 +31,7 @@ namespace SchedulerJobs.UnitTests.Services
             _autoMock.Mock<IBookingsApiClient>()
                 .Verify(x=> 
                     x.BulkJudiciaryPersonsAsync(It.Is<IEnumerable<JudiciaryPersonRequest>>(r => 
-                        r.Count() == 35)), Times.Once);
+                        r.Count() == 38)), Times.Once);
         }
 
         [Test]
