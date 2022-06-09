@@ -26,6 +26,7 @@ namespace SchedulerJobs.Services
         {
             _logger.LogInformation("ImportJudiciaryPeople: using stub");
             var peopleResult = RetrieveManualAccounts().Concat(RetrieveAutomationAccounts()).ToList();
+            peopleResult.AddRange(RetrieveLeaverAccounts());
 
             _logger.LogInformation("ImportJudiciaryPeople: Calling bookings API with {PeopleResultCount} people",
                 peopleResult.Count);
@@ -68,6 +69,17 @@ namespace SchedulerJobs.Services
 
             return accounts;
         }
+        
+        private List<JudiciaryPersonModel> RetrieveLeaverAccounts()
+        {
+            var accounts = new List<JudiciaryPersonModel>();
+            for (var i = 0; i < 3; i++)
+            {
+                accounts.Add(InitLeaverPersonModel(Guid.NewGuid()));
+            }
+
+            return accounts;
+        }
 
         private JudiciaryPersonModel InitPersonModel(string prefix, int number, Guid id)
         {
@@ -82,7 +94,20 @@ namespace SchedulerJobs.Services
                 HasLeft = false,
                 PersonalCode = ticks.Substring(ticks.Length-5),
                 PostNominals = null,
-                Title = "Honour"
+                Title = "Honour",
+                Leaver = false,
+                LeftOn = ""
+            };
+        }
+        
+        private JudiciaryPersonModel InitLeaverPersonModel(Guid id)
+        {
+            return new JudiciaryPersonModel
+            {
+                Id = id,
+                PersonalCode = null,
+                Leaver = true,
+                LeftOn = "2021-02-26"
             };
         }
 

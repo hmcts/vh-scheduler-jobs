@@ -22,7 +22,9 @@ namespace SchedulerJobs.Services.Mappers
                 KnownAs = source.KnownAs,
                 PersonalCode = source.PersonalCode,
                 PostNominals = source.PostNominals,
-                HasLeft = source.HasLeft
+                HasLeft = source.HasLeft,
+                Leaver = source.Leaver,
+                LeftOn = source.LeftOn
             };
         }
     }
