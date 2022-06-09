@@ -23,8 +23,8 @@ namespace SchedulerJobs.Services.Mappers
                 PersonalCode = source.PersonalCode,
                 PostNominals = source.PostNominals,
                 HasLeft = source.HasLeft,
-                // Leaver = source.Leaver,
-                // LeftOn = source.LeftOn
+                Leaver = source.Leaver,
+                LeftOn = source.LeftOn
             };
         }
     }
