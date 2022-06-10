@@ -135,9 +135,9 @@ namespace SchedulerJobs.Services
         {
             return new List<Guid>
             {
-                Guid.Parse("26586e7a-2366-4df0-92c2-c892ae142719"),
-                Guid.Parse("t02ebe68-ce60-43bc-82bd-69d768bd33b2"),
-                Guid.Parse("le0de20f-c307-42df-aa81-17b1070c9a5w")
+                Guid.Parse("4a135b6a-2e8a-4eea-a6ee-a58ae0d8b4c1"),
+                Guid.Parse("4a135b6a-2e8a-4eea-a6ee-a58ae0d8b4c2"),
+                Guid.Parse("4a135b6a-2e8a-4eea-a6ee-a58ae0d8b4c3")
             };
         }
         
