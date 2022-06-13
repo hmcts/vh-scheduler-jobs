@@ -73,11 +73,9 @@ namespace SchedulerJobs.Services
         private List<JudiciaryPersonModel> RetrieveLeaverAccounts()
         {
             var accounts = new List<JudiciaryPersonModel>();
-            var leaverIds = GetLeaverIds();
             for (var i = 0; i < 3; i++)
             {
-                var id = leaverIds[i];
-                accounts.Add(InitLeaverPersonModel(id));
+                accounts.Add(InitLeaverPersonModel(Guid.NewGuid()));
             }
 
             return accounts;
@@ -128,16 +126,6 @@ namespace SchedulerJobs.Services
                 Guid.Parse("5395f5ef-47a3-409e-ab65-12e16d9ca470"),
                 Guid.Parse("44a233a7-e094-48ec-a329-c7f1569fd8cf"), 
                 Guid.Parse("4a135b6a-2e8a-4eea-a6ee-a58ae0d8b4c4")
-            };
-        }
-        
-        private List<Guid> GetLeaverIds()
-        {
-            return new List<Guid>
-            {
-                Guid.Parse("4a135b6a-2e8a-4eea-a6ee-a58ae0d8b4c1"),
-                Guid.Parse("4a135b6a-2e8a-4eea-a6ee-a58ae0d8b4c2"),
-                Guid.Parse("4a135b6a-2e8a-4eea-a6ee-a58ae0d8b4c3")
             };
         }
         
