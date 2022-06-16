@@ -38,6 +38,7 @@ namespace SchedulerJobs.Services
             var currentPage = 1;
             var invalidPeoplePersonalCode = new List<string>();
             var morePages = false;
+            int results = 0;
             do
             {
                 try
@@ -46,7 +47,8 @@ namespace SchedulerJobs.Services
                     var peoples = await _peoplesClient.GetPeopleAsync(fromDate, currentPage);
                     morePages = peoples.Pagination.MorePages;
                     var pages = peoples.Pagination.Pages;
-                    _logger.LogInformation("Number of expected results: {Results}", peoples.Pagination.Results);
+                    results = peoples.Pagination.Results;
+                    
                     var peopleResult = peoples.Results
                         .Where(x => x.Id.HasValue)
                         .ToList();
@@ -78,7 +80,7 @@ namespace SchedulerJobs.Services
                 currentPage++;
                 
             } while (morePages);
-
+            _logger.LogInformation("Number of pagination results: {Results}", results);
             _logger.LogWarning(
                 $"ImportJudiciaryPeople: List of Personal code which are failed to insert '{string.Join(",", invalidPeoplePersonalCode)}'");
         }
