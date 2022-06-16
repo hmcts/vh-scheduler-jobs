@@ -38,6 +38,7 @@ namespace SchedulerJobs.Services
             var currentPage = 1;
             var invalidPeoplePersonalCode = new List<string>();
             var morePages = false;
+            int results = 0;
             do
             {
                 try
@@ -45,6 +46,9 @@ namespace SchedulerJobs.Services
                     _logger.LogInformation("ImportJudiciaryPeople: Executing page {CurrentPage}", currentPage);
                     var peoples = await _peoplesClient.GetPeopleAsync(fromDate, currentPage);
                     morePages = peoples.Pagination.MorePages;
+                    var pages = peoples.Pagination.Pages;
+                    results = peoples.Pagination.Results;
+                    
                     var peopleResult = peoples.Results
                         .Where(x => x.Id.HasValue)
                         .ToList();
@@ -59,9 +63,10 @@ namespace SchedulerJobs.Services
                     invalidPersonList.ForEach(x => invalidPeoplePersonalCode.Add(x.PersonalCode));
 
                     _logger.LogWarning(
-                        $"ImportJudiciaryPeople: No of people who are invalid '{invalidPersonList.Count}' in page '{currentPage}'.");
+                        "ImportJudiciaryPeople: No of people who are invalid '{Count}' in page '{CurrentPage}'. Pages: {Pages}", 
+                        invalidPersonList.Count, currentPage, pages);
                     _logger.LogInformation(
-                        $"ImportJudiciaryPeople: Calling bookings API with '{peopleResult.Count}' people");
+                        "ImportJudiciaryPeople: Calling bookings API with '{Count}' people", peopleResult.Count);
                     var response =
                         await _bookingsApiClient.BulkJudiciaryPersonsAsync(
                             peopleResult.Select(JudiciaryPersonRequestMapper.MapTo));
@@ -70,12 +75,12 @@ namespace SchedulerJobs.Services
                 }
                 catch (Exception ex)
                 {
-                    _logger.LogError(ex, "There was a problem importing judiciary people");
+                    _logger.LogError(ex, "There was a problem importing judiciary people, on page {CurrentPage}", currentPage);
                 }
                 currentPage++;
                 
             } while (morePages);
-
+            _logger.LogInformation("Number of pagination results: {Results}", results);
             _logger.LogWarning(
                 $"ImportJudiciaryPeople: List of Personal code which are failed to insert '{string.Join(",", invalidPeoplePersonalCode)}'");
         }
