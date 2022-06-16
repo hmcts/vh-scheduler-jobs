@@ -4,7 +4,7 @@ namespace SchedulerJobs.Common.Models
 {
     public class JudiciaryPersonModel
     {
-        public Guid? Id { get; set; }
+        public string Id { get; set; }
         public string PersonalCode { get; set; }
         public string Title { get; set; }
         public string KnownAs { get; set; }
