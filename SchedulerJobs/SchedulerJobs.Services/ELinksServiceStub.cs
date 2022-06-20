@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using BookingsApi.Client;
+using BookingsApi.Contract.Requests;
 using Microsoft.Extensions.Logging;
 using SchedulerJobs.Common.Models;
 using SchedulerJobs.Services.Extensions;
@@ -25,13 +26,19 @@ namespace SchedulerJobs.Services
         public async Task ImportJudiciaryPeopleAsync(DateTime fromDate)
         {
             _logger.LogInformation("ImportJudiciaryPeople: using stub");
+            _logger.LogInformation("ImportJudiciaryPeople: Removing all records from JudiciaryPersonsStaging");
+            await _bookingsApiClient.RemoveAllJudiciaryPersonsStagingAsync();
             var peopleResult = RetrieveManualAccounts().Concat(RetrieveAutomationAccounts()).ToList();
             peopleResult.AddRange(RetrieveLeaverAccounts());
 
             _logger.LogInformation("ImportJudiciaryPeople: Calling bookings API with {PeopleResultCount} people",
                 peopleResult.Count);
-            var mapped = peopleResult.Select(JudiciaryPersonRequestMapper.MapTo);
-            var response = await _bookingsApiClient.BulkJudiciaryPersonsAsync(mapped); 
+            var mappedForJudiciaryPersonsStaging = peopleResult.Select(JudiciaryPersonStagingRequestMapper.MapTo);
+            var mappedForJudiciaryPersons = peopleResult.Select(JudiciaryPersonRequestMapper.MapTo);
+            
+            await _bookingsApiClient.BulkJudiciaryPersonsStagingAsync(mappedForJudiciaryPersonsStaging);
+            
+            var response = await _bookingsApiClient.BulkJudiciaryPersonsAsync(mappedForJudiciaryPersons); 
             response?.ErroredRequests.ForEach(x =>
                 _logger.LogError("ImportJudiciaryPeople: {ErrorResponseMessage}", x.Message));
         }
