@@ -43,6 +43,9 @@ namespace SchedulerJobs.Services
             {
                 try
                 {
+                    _logger.LogInformation("ImportJudiciaryPeople: Removing all records from JudiciaryPersonsStaging");
+                    await _bookingsApiClient.RemoveAllJudiciaryPersonsStagingAsync();
+                    
                     _logger.LogInformation("ImportJudiciaryPeople: Executing page {CurrentPage}", currentPage);
                     var peoples = await _peoplesClient.GetPeopleAsync(fromDate, currentPage);
                     morePages = peoples.Pagination.MorePages;
@@ -58,6 +61,10 @@ namespace SchedulerJobs.Services
                             currentPage);
                         break;
                     }
+
+                    _logger.LogInformation("ImportJudiciaryPeople: Adding raw data to JudiciaryPersonStaging from page: {CurrentPage}, total records: {Records}", currentPage, peopleResult.Count);
+                    await _bookingsApiClient.BulkJudiciaryPersonsStagingAsync(
+                        peopleResult.Select(JudiciaryPersonStagingRequestMapper.MapTo));
 
                     var invalidPersonList = peoples.Results.Where(x => string.IsNullOrEmpty(x.Id)).ToList();
                     invalidPersonList.ForEach(x => invalidPeoplePersonalCode.Add(x.PersonalCode));

@@ -4,9 +4,9 @@
     ".NETCoreApp,Version=v3.1": {
       "BookingsApi.Client": {
         "type": "Direct",
-        "requested": "[1.35.17, )",
-        "resolved": "1.35.17",
-        "contentHash": "OQV+RwilX6mogUhxy5983nLXjhkilShinHWIi/U+tFR9bAN8Kw6FPfpV1rBvfsr8Ve2ukDbggSk2wzl3/izHkw==",
+        "requested": "[1.36.1, )",
+        "resolved": "1.36.1",
+        "contentHash": "wK1L468w9WT5/zJyA28oyl/dLiBz9+4DiR6fPz088N+gXoH7/H6a+D2E/s5pskbR5MJ3eNo4Ji8sUiWV75dkfw==",
         "dependencies": {
           "Microsoft.AspNetCore.Mvc.Core": "2.2.5",
           "Newtonsoft.Json": "12.0.3"
