@@ -75,9 +75,9 @@ namespace SchedulerJobs.UnitTests.Services
         [Test]
         public async Task Should_call_booking_api_client_with_one_page_of_results()
         {
-            var person1 = Guid.NewGuid();
-            var person2 = Guid.NewGuid();
-            var person3 = Guid.NewGuid();
+            var person1 = Guid.NewGuid().ToString();
+            var person2 = Guid.NewGuid().ToString();
+            var person3 = Guid.NewGuid().ToString();
 
             var judiciaryPersonModels = new List<JudiciaryPersonModel>
             {
@@ -88,8 +88,8 @@ namespace SchedulerJobs.UnitTests.Services
 
             var judiciaryLeaverModels = new List<JudiciaryLeaverModel>
             {
-                new JudiciaryLeaverModel {Id = person1.ToString(), Leaver = true},
-                new JudiciaryLeaverModel {Id = person2.ToString(), Leaver = true}
+                new JudiciaryLeaverModel {Id = person1, Leaver = true},
+                new JudiciaryLeaverModel {Id = person2, Leaver = true}
             };
 
             var personPage1Response = new PeopleResponse()
@@ -151,17 +151,17 @@ namespace SchedulerJobs.UnitTests.Services
             _bookingsApiClient.Verify(x => x.BulkJudiciaryLeaversAsync(It.Is<IEnumerable<JudiciaryLeaverRequest>>
             (
                 x =>
-                    x.ElementAt(0).Id == person1.ToString()
+                    x.ElementAt(0).Id == person1
             )), Times.Exactly(1));
         }
 
         [Test]
         public async Task Should_call_booking_api_client_with_many_pages_of_leavers_results()
         {
-            var person1 = Guid.NewGuid();
+            var person1 = Guid.NewGuid().ToString();
             var judiciaryLeaverModels = new List<JudiciaryLeaverModel>
             {
-                new JudiciaryLeaverModel {Id = person1.ToString(), Leaver = true, LeftOn = new DateTime().ToString()}
+                new JudiciaryLeaverModel {Id = person1, Leaver = true, LeftOn = new DateTime().ToString()}
             };
             CommonTestSetUp();
             _peoplesClient.Setup(x => x.GetPeopleAsync(It.IsAny<DateTime>(), 2, It.IsAny<int>())).ReturnsAsync(
@@ -202,7 +202,7 @@ namespace SchedulerJobs.UnitTests.Services
                 },
                 Results = new List<JudiciaryPersonModel>()
                 {
-                    new JudiciaryPersonModel{Id = Guid.NewGuid(), Email = "one"},
+                    new JudiciaryPersonModel{Id = Guid.NewGuid().ToString(), Email = "one"},
                 }
             };
             _peoplesClient.Setup(x => x.GetPeopleAsync(It.IsAny<DateTime>(), 2, It.IsAny<int>())).ReturnsAsync(personPage1Response);
@@ -233,7 +233,7 @@ namespace SchedulerJobs.UnitTests.Services
                 },
                 Results = new List<JudiciaryPersonModel>()
                 {
-                    new JudiciaryPersonModel{Id = Guid.NewGuid(), Email = "one"},
+                    new JudiciaryPersonModel{Id = Guid.NewGuid().ToString(), Email = "one"},
                 }
             };
             _peoplesClient.Setup(x => x.GetPeopleAsync(It.IsAny<DateTime>(), 2, It.IsAny<int>())).ReturnsAsync(personPage1Response);
@@ -270,9 +270,9 @@ namespace SchedulerJobs.UnitTests.Services
         [Test]
         public async Task Should_call_booking_api_client_which_returns_some_error_responses()
         {
-            var person1 = Guid.NewGuid();
-            var person2 = Guid.NewGuid();
-            var person3 = Guid.NewGuid();
+            var person1 = Guid.NewGuid().ToString();
+            var person2 = Guid.NewGuid().ToString();
+            var person3 = Guid.NewGuid().ToString();
 
             var judiciaryPersonModels = new List<JudiciaryPersonModel>
             {
@@ -283,8 +283,8 @@ namespace SchedulerJobs.UnitTests.Services
 
             var judiciaryLeaverModels = new List<JudiciaryLeaverModel>
             {
-                new JudiciaryLeaverModel {Id = person1.ToString(), Leaver = true},
-                new JudiciaryLeaverModel {Id = person2.ToString(), Leaver = true}
+                new JudiciaryLeaverModel {Id = person1, Leaver = true},
+                new JudiciaryLeaverModel {Id = person2, Leaver = true}
             };
 
             var personPage1Response = new PeopleResponse()
@@ -340,12 +340,12 @@ namespace SchedulerJobs.UnitTests.Services
             _bookingsApiClient.Verify(x => x.BulkJudiciaryPersonsAsync(It.IsAny<IEnumerable<JudiciaryPersonRequest>>()), Times.Once);
             _bookingsApiClient.Verify(x => x.BulkJudiciaryLeaversAsync(It.IsAny<IEnumerable<JudiciaryLeaverRequest>>()), Times.Once);
         }
-
+        
         private void CommonTestSetUp()
         {
-            var person1 = Guid.NewGuid();
-            var person2 = Guid.NewGuid();
-            var person3 = Guid.NewGuid();
+            var person1 = Guid.NewGuid().ToString();
+            var person2 = Guid.NewGuid().ToString();
+            var person3 = Guid.NewGuid().ToString();
 
             var judiciaryPersonModels = new List<JudiciaryPersonModel>
             {
@@ -356,7 +356,7 @@ namespace SchedulerJobs.UnitTests.Services
 
             var judiciaryLeaverModels = new List<JudiciaryLeaverModel>
             {
-                new JudiciaryLeaverModel {Id = person1.ToString(), Leaver = true, LeftOn = new DateTime().ToString()}
+                new JudiciaryLeaverModel {Id = person1, Leaver = true, LeftOn = new DateTime().ToString()}
             };
 
             var expectedPeopleResponse = new PeopleResponse()

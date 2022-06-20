@@ -50,7 +50,7 @@ namespace SchedulerJobs.Services
                     results = peoples.Pagination.Results;
                     
                     var peopleResult = peoples.Results
-                        .Where(x => x.Id.HasValue)
+                        .Where(x => !string.IsNullOrEmpty(x.Id))
                         .ToList();
                     if (peopleResult.Count == 0)
                     {
@@ -59,7 +59,7 @@ namespace SchedulerJobs.Services
                         break;
                     }
 
-                    var invalidPersonList = peoples.Results.Where(x => !x.Id.HasValue).ToList();
+                    var invalidPersonList = peoples.Results.Where(x => string.IsNullOrEmpty(x.Id)).ToList();
                     invalidPersonList.ForEach(x => invalidPeoplePersonalCode.Add(x.PersonalCode));
 
                     _logger.LogWarning(
