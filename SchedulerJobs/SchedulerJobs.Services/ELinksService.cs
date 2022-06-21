@@ -47,7 +47,6 @@ namespace SchedulerJobs.Services
             {
                 try
                 {
-
                     
                     _logger.LogInformation("ImportJudiciaryPeople: Executing page {CurrentPage}", currentPage);
                     var peoples = await _peoplesClient.GetPeopleAsync(fromDate, currentPage);
