@@ -62,9 +62,9 @@ namespace SchedulerJobs.Services
                         break;
                     }
 
-                    _logger.LogInformation("ImportJudiciaryPeople: Adding raw data to JudiciaryPersonStaging from page: {CurrentPage}, total records: {Records}", currentPage, peopleResult.Count);
+                    _logger.LogInformation("ImportJudiciaryPeople: Adding raw data to JudiciaryPersonStaging from page: {CurrentPage}, total records: {Records}", currentPage, peoples.Results.Count());
                     await _bookingsApiClient.BulkJudiciaryPersonsStagingAsync(
-                        peopleResult.Select(JudiciaryPersonStagingRequestMapper.MapTo));
+                        peoples.Results.Select(JudiciaryPersonStagingRequestMapper.MapTo));
 
                     var invalidPersonList = peoples.Results.Where(x => string.IsNullOrEmpty(x.Id)).ToList();
                     invalidPersonList.ForEach(x => invalidPeoplePersonalCode.Add(x.PersonalCode));

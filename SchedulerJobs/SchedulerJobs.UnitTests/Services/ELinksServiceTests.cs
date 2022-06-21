@@ -57,6 +57,53 @@ namespace SchedulerJobs.UnitTests.Services
                 Times.Exactly(1));
             
         }
+
+        [Test]
+        public async Task ImportJudiciaryPeopleAsync_Adds_Invalid_Accounts()
+        {
+            var person1 = Guid.NewGuid().ToString();
+            var person2 = Guid.NewGuid().ToString();
+
+            var judiciaryPersonModels = new List<JudiciaryPersonModel>
+            {
+                new JudiciaryPersonModel {Id = person1, Email = "one"},
+                new JudiciaryPersonModel {Id = person2, Email = "two"},
+                new JudiciaryPersonModel {Id = null, Email = "three"}
+            };
+
+
+            var personPage1Response = new PeopleResponse()
+            {
+                Pagination = new Pagination
+                {
+                    MorePages = true
+                },
+                Results = judiciaryPersonModels
+            };
+            var personPage2Response = new PeopleResponse()
+            {
+                Pagination = new Pagination
+                {
+                    MorePages = false
+                },
+                Results = new List<JudiciaryPersonModel>()
+            };
+
+            _peoplesClient.Setup(x => x.GetPeopleAsync(It.IsAny<DateTime>(), 1, It.IsAny<int>()))
+                .ReturnsAsync(personPage1Response);
+            _peoplesClient.Setup(x => x.GetPeopleAsync(It.IsAny<DateTime>(), 2, It.IsAny<int>()))
+                .ReturnsAsync(personPage2Response);
+
+            await _eLinksService.ImportJudiciaryPeopleAsync(new DateTime());
+
+            _bookingsApiClient.Verify(x => x.BulkJudiciaryPersonsStagingAsync(It.Is<IEnumerable<JudiciaryPersonStagingRequest>>
+            (
+                x =>
+                    x.ElementAt(0).Id == person1 &&
+                    x.ElementAt(1).Id == person2 &&
+                    x.ElementAt(2).Id == null
+            )), Times.Exactly(1)); 
+        }
         
         [Test]
         public async Task ImportJudiciaryPeopleAsync_Requests_To_Add_JudiciaryPersonStaging_Records()
