@@ -39,12 +39,15 @@ namespace SchedulerJobs.Services
             var invalidPeoplePersonalCode = new List<string>();
             var morePages = false;
             int results = 0;
+            
+            _logger.LogInformation("ImportJudiciaryPeople: Removing all records from JudiciaryPersonsStaging");
+            await _bookingsApiClient.RemoveAllJudiciaryPersonsStagingAsync();
+            
             do
             {
                 try
                 {
-                    _logger.LogInformation("ImportJudiciaryPeople: Removing all records from JudiciaryPersonsStaging");
-                    await _bookingsApiClient.RemoveAllJudiciaryPersonsStagingAsync();
+
                     
                     _logger.LogInformation("ImportJudiciaryPeople: Executing page {CurrentPage}", currentPage);
                     var peoples = await _peoplesClient.GetPeopleAsync(fromDate, currentPage);
