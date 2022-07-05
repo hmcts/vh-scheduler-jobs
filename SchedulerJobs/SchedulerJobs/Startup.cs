@@ -11,12 +11,15 @@ using SchedulerJobs.Common.Security;
 using SchedulerJobs.Services;
 using System;
 using System.IO;
+using Azure.Storage;
+using Azure.Storage.Blobs;
 using SchedulerJobs.Services.HttpClients;
 using UserApi.Client;
 using VH.Core.Configuration;
 using VideoApi.Client;
 using SchedulerJobs.Services.Interfaces;
 using NotificationApi.Client;
+using SchedulerJobs.Services.Configuration;
 
 [assembly: FunctionsStartup(typeof(SchedulerJobs.Startup))]
 namespace SchedulerJobs
@@ -56,11 +59,15 @@ namespace SchedulerJobs
             var context = builder.GetContext();
             RegisterServices(builder.Services, context.Configuration);
         }
+        
 
         public void RegisterServices(IServiceCollection services, IConfiguration configuration)
         {
             var memoryCache = new MemoryCache(Options.Create(new MemoryCacheOptions()));
             services.AddSingleton<IMemoryCache>(memoryCache);
+            
+            
+            
             services.Configure<AzureAdConfiguration>(options =>
             {
                 configuration.GetSection("AzureAd").Bind(options);
@@ -69,10 +76,30 @@ namespace SchedulerJobs
             {
                 configuration.GetSection("VhServices").Bind(options);
             });
+            
+            services.Configure<AzureConfiguration>(options =>
+            {
+                configuration.GetSection("WowzaConfiguration").Bind(options);
+            });
 
             var serviceConfiguration = new ServicesConfiguration();
             configuration.GetSection("VhServices").Bind(serviceConfiguration);
-
+            
+            var azureConfiguration = new AzureConfiguration();
+            configuration.GetSection("AzureConfiguration").Bind(azureConfiguration);
+            
+            
+            services.AddSingleton(configuration.GetSection("AzureConfiguration").Get<AzureConfiguration>());
+            
+            
+            var vhBlobServiceClient = new BlobServiceClient(new Uri(azureConfiguration.StorageEndpoint),
+                new StorageSharedKeyCredential(azureConfiguration.StorageAccountName, azureConfiguration.StorageAccountKey));
+            var blobClientExtension = new BlobClientExtension();
+            var azureStorage =
+                new VhAzureStorageService(vhBlobServiceClient, azureConfiguration, false, blobClientExtension);
+            services.AddSingleton<IAzureStorageService>(x => azureStorage);
+            
+            
             services.AddScoped<IAzureTokenProvider, AzureTokenProvider>();
 
             services.AddLogging(builder =>
@@ -100,7 +127,7 @@ namespace SchedulerJobs
                     .AddHttpMessageHandler<ELinksApiDelegatingHandler>()
                     .AddTypedClient(httpClient =>
                     {
-                        var peoplesClient = new PeoplesClient(httpClient)
+                        var peoplesClient = new PeoplesClient(httpClient, azureStorage)
                         {
                             BaseUrl = serviceConfiguration.ELinksPeoplesBaseUrl
                         };
