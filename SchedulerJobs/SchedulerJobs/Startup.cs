@@ -115,6 +115,8 @@ namespace SchedulerJobs
 
             bool.TryParse(configuration["UseELinksStub"], out var useELinksStub);
 
+            var featureToggle = new FeatureToggles(configuration.GetSection("FeatureToggles:SDK-Key").Value);
+            
             if (useELinksStub)
             {
                 services.AddScoped<IELinksService, ELinksServiceStub>();
@@ -127,7 +129,7 @@ namespace SchedulerJobs
                     .AddHttpMessageHandler<ELinksApiDelegatingHandler>()
                     .AddTypedClient(httpClient =>
                     {
-                        var peoplesClient = new PeoplesClient(httpClient, azureStorage)
+                        var peoplesClient = new PeoplesClient(httpClient)
                         {
                             BaseUrl = serviceConfiguration.ELinksPeoplesBaseUrl
                         };
@@ -190,7 +192,7 @@ namespace SchedulerJobs
                     return (INotificationApiClient)client;
                 });
 
-            services.AddSingleton<IFeatureToggles>(new FeatureToggles(configuration.GetSection("FeatureToggles:SDK-Key").Value));
+            services.AddSingleton<IFeatureToggles>(featureToggle);
         }
     }
 }

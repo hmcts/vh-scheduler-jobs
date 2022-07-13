@@ -20,5 +20,9 @@ namespace SchedulerJobs.Services
         Task<IEnumerable<string>> GetAllEmptyBlobsByFilePathPrefix(string filePathPrefix);
 
         Task<bool> ReconcileFilesInStorage(string fileNamePrefix, int count);
+
+        Task UploadFile(string fileName, byte[] file);
+
+        Task ClearBlobs();
     }
 }

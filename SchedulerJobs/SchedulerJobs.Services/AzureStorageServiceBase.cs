@@ -7,13 +7,14 @@ using System.Text;
 using System.Threading.Tasks;
 using Azure.Storage;
 using Azure.Storage.Blobs;
+using Azure.Storage.Blobs.Models;
 using Azure.Storage.Sas;
 using SchedulerJobs.Common.Exceptions;
 using SchedulerJobs.Services.Configuration;
 
 namespace SchedulerJobs.Services
 {
-    public class AzureStorageServiceBase 
+    public class AzureStorageServiceBase
     {
         private readonly BlobServiceClient _serviceClient;
 
@@ -22,10 +23,11 @@ namespace SchedulerJobs.Services
         private readonly bool _useUserDelegation;
 
         private readonly IBlobClientExtension _blobClientExtension;
-        
-        
 
-        protected AzureStorageServiceBase(BlobServiceClient serviceClient, IBlobStorageConfiguration blobStorageConfiguration, IBlobClientExtension blobClientExtension, bool useUserDelegation)
+
+        protected AzureStorageServiceBase(BlobServiceClient serviceClient,
+            IBlobStorageConfiguration blobStorageConfiguration, IBlobClientExtension blobClientExtension,
+            bool useUserDelegation)
         {
             _serviceClient = serviceClient;
             _blobStorageConfiguration = blobStorageConfiguration;
@@ -47,11 +49,31 @@ namespace SchedulerJobs.Services
             await using MemoryStream ms = new MemoryStream(file);
             await blobClient.UploadAsync(ms);
         }
-        
 
-        public Task<bool> FileExistsAsync(string filePath) => ExistsAsync(filePath, _blobStorageConfiguration.StorageContainerName);
+        /// <summary>
+        /// Delete all blobs from the azure storage container.
+        /// </summary>
+        public async Task ClearBlobs()
+        {
+            var blobNames = await GetAllBlobNamesByFilePathPrefix(".json");
 
-        public Task<string> CreateSharedAccessSignature(string filePath, TimeSpan validUntil) => GenerateSharedAccessSignature(filePath,
+            var containerClient = _serviceClient.GetBlobContainerClient(_blobStorageConfiguration.StorageContainerName);
+
+            var blobsList = containerClient.GetBlobs(BlobTraits.All).ToList();
+
+            foreach (var blob in blobsList)
+            {
+                var blobClient = containerClient.GetBlobClient(blob.Name);
+                await blobClient.DeleteAsync();
+            }
+        }
+
+
+        public Task<bool> FileExistsAsync(string filePath) =>
+            ExistsAsync(filePath, _blobStorageConfiguration.StorageContainerName);
+
+        public Task<string> CreateSharedAccessSignature(string filePath, TimeSpan validUntil) =>
+            GenerateSharedAccessSignature(filePath,
                 _blobStorageConfiguration.StorageContainerName,
                 _blobStorageConfiguration.StorageEndpoint,
                 _blobStorageConfiguration.StorageAccountName,
@@ -74,7 +96,8 @@ namespace SchedulerJobs.Services
             return GetAllBlobNamesByFileExtension(allBlobsAsync);
         }
 
-        private async Task<IEnumerable<string>> GetAllBlobNamesByFileExtension(IAsyncEnumerable<BlobClient> allBlobs, string fileExtension = ".json")
+        private async Task<IEnumerable<string>> GetAllBlobNamesByFileExtension(IAsyncEnumerable<BlobClient> allBlobs,
+            string fileExtension = ".json")
         {
             var blobFullNames = new List<string>();
             await foreach (var blob in allBlobs)
@@ -84,6 +107,7 @@ namespace SchedulerJobs.Services
                     blobFullNames.Add(blob.Name);
                 }
             }
+
             return blobFullNames;
         }
 
@@ -93,7 +117,8 @@ namespace SchedulerJobs.Services
             return GetAllEmptyBlobs(allBlobsAsync);
         }
 
-        private async Task<IEnumerable<string>> GetAllEmptyBlobs(IAsyncEnumerable<BlobClient> allBlobs, string fileExtension = ".json")
+        private async Task<IEnumerable<string>> GetAllEmptyBlobs(IAsyncEnumerable<BlobClient> allBlobs,
+            string fileExtension = ".json")
         {
             var blobFullNames = new List<string>();
 
@@ -102,7 +127,7 @@ namespace SchedulerJobs.Services
                 if (blob.Name.ToLower().EndsWith(fileExtension.ToLower()))
                 {
                     var properties = await _blobClientExtension.GetPropertiesAsync(blob);
-                    
+
                     if (properties.ContentLength <= 0) blobFullNames.Add(blob.Name);
                 }
             }
@@ -110,7 +135,6 @@ namespace SchedulerJobs.Services
             return blobFullNames;
         }
 
-        
 
         private async Task<string> GenerateSharedAccessSignature(string filePath,
             string storageContainerName,
@@ -136,7 +160,7 @@ namespace SchedulerJobs.Services
             var token = await GenerateSasToken(builder, useUserDelegation, storageAccountName, storageAccountKey);
             return $"{storageEndpoint}{storageContainerName}/{filePath}?{token}";
         }
-               
+
         private async Task<bool> ExistsAsync(string filePath, string storageContainerName)
         {
             var containerClient = _serviceClient.GetBlobContainerClient(storageContainerName);
@@ -146,12 +170,15 @@ namespace SchedulerJobs.Services
             return response.Value;
         }
 
-        private async Task<string> GenerateSasToken(BlobSasBuilder builder, bool useUserDelegation, string storageAccountName, string storageAccountKey)
+        private async Task<string> GenerateSasToken(BlobSasBuilder builder, bool useUserDelegation,
+            string storageAccountName, string storageAccountKey)
         {
             var userDelegationStart = DateTimeOffset.UtcNow.AddHours(-1);
             var userDelegationEnd = userDelegationStart.AddDays(3);
             var blobSasQueryParameters = useUserDelegation
-                ? builder.ToSasQueryParameters(await _serviceClient.GetUserDelegationKeyAsync(userDelegationStart, userDelegationEnd), storageAccountName)
+                ? builder.ToSasQueryParameters(
+                    await _serviceClient.GetUserDelegationKeyAsync(userDelegationStart, userDelegationEnd),
+                    storageAccountName)
                 : builder.ToSasQueryParameters(new StorageSharedKeyCredential(storageAccountName, storageAccountKey));
 
             return blobSasQueryParameters.ToString();
@@ -164,13 +191,16 @@ namespace SchedulerJobs.Services
 
             if (allBlobs.Count() < count || !allBlobs.Any())
             {
-                var msg = $"ReconcileFilesInStorage - File name prefix :" + fileNamePrefix + "  Expected: " + count + " Actual:" + allBlobs.Count().ToString();
+                var msg = $"ReconcileFilesInStorage - File name prefix :" + fileNamePrefix + "  Expected: " + count +
+                          " Actual:" + allBlobs.Count().ToString();
                 throw new AudioPlatformFileNotFoundException(msg, HttpStatusCode.NotFound);
             }
 
             if (emptyBlobs.Any())
             {
-                StringBuilder msg = new StringBuilder($"ReconcileFilesInStorage - File name prefix :" + fileNamePrefix + "  Expected: " + count + " Actual:" + allBlobs.Count().ToString());
+                StringBuilder msg = new StringBuilder($"ReconcileFilesInStorage - File name prefix :" + fileNamePrefix +
+                                                      "  Expected: " + count + " Actual:" +
+                                                      allBlobs.Count().ToString());
 
                 foreach (var item in emptyBlobs)
                 {
@@ -181,7 +211,6 @@ namespace SchedulerJobs.Services
             }
 
             return true;
-
         }
     }
 }
