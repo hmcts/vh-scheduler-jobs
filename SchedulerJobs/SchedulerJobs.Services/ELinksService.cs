@@ -7,7 +7,9 @@ using System.Text;
 using System.Threading.Tasks;
 using BookingsApi.Client;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using SchedulerJobs.Common.Configuration;
+using SchedulerJobs.Common.Models;
 using SchedulerJobs.Services.HttpClients;
 using SchedulerJobs.Services.Mappers;
 
@@ -46,7 +48,7 @@ namespace SchedulerJobs.Services
             var invalidPeoplePersonalCode = new List<string>();
             var morePages = false;
             int results = 0;
-            StringBuilder combinedFile = new StringBuilder();
+            List<JudiciaryPersonModel> peopleList = new List<JudiciaryPersonModel>();
             
             _logger.LogInformation("ImportJudiciaryPeople: Removing all records from JudiciaryPersonsStaging");
             await _bookingsApiClient.RemoveAllJudiciaryPersonsStagingAsync();
@@ -64,7 +66,7 @@ namespace SchedulerJobs.Services
                     {
                         var clientResponse = await _peoplesClient.GetPeopleJsonAsync(fromDate, currentPage);
 
-                        combinedFile.Append(clientResponse);
+                        peopleList.AddRange(peoples.Results);
                         
                         byte[] fileToBytes = Encoding.ASCII.GetBytes(clientResponse);
                 
@@ -116,10 +118,11 @@ namespace SchedulerJobs.Services
             } while (morePages);
             
             // create a combined file for all pages
-            if (combinedFile.Length > 0)
+            if (peopleList.Count > 0)
             {
                 string fileName = "combined.json";
-                byte[] fileToBytes = Encoding.ASCII.GetBytes(combinedFile.ToString());
+                string listString = JsonConvert.SerializeObject(peopleList);
+                byte[] fileToBytes = Encoding.ASCII.GetBytes(listString);
                 await _service.UploadFile(fileName, fileToBytes);
             }
             _logger.LogInformation("Number of pagination results: {Results}", results);
