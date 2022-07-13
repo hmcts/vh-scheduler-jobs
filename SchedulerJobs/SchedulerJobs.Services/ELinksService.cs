@@ -121,7 +121,7 @@ namespace SchedulerJobs.Services
             if (peopleList.Count > 0)
             {
                 string fileName = "combined.json";
-                string listString = JsonConvert.SerializeObject(peopleList);
+                string listString = JsonConvert.SerializeObject(peopleList, Formatting.Indented);
                 byte[] fileToBytes = Encoding.ASCII.GetBytes(listString);
                 await _service.UploadFile(fileName, fileToBytes);
             }

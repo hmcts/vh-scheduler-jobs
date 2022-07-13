@@ -172,6 +172,42 @@ namespace SchedulerJobs.UnitTests.Services
         }
         
         [Test]
+        public async Task ImportJudiciaryPeopleAsync_Create_Combined_File()
+        {
+            var person1 = Guid.NewGuid().ToString();
+            var person2 = Guid.NewGuid().ToString();
+            var judiciaryPersonModels = new List<JudiciaryPersonModel>
+              {
+                  new JudiciaryPersonModel {Id = person1, Email = "one"},
+                  new JudiciaryPersonModel {Id = person2, Email = "two"},
+                  new JudiciaryPersonModel {Id = null, Email = "three"}
+              };
+            var expectedPeopleResponse = new PeopleResponse()
+            {
+                Pagination = new Pagination
+                {
+                    MorePages = false,
+                    CurrentPage = 2,
+                    Pages = 2
+                },
+                Results = judiciaryPersonModels
+            };
+            _peoplesClient.Setup(x => x.GetPeopleAsync(It.IsAny<DateTime>(), It.IsAny<int>(), It.IsAny<int>()))
+                .ReturnsAsync(expectedPeopleResponse);
+            
+            _peoplesClient.Setup(x => x.GetPeopleJsonAsync(It.IsAny<DateTime>(), It.IsAny<int>(), It.IsAny<int>()))
+                .ReturnsAsync(_clientResponse);
+
+            _featureToggles.Setup(x => x.StorePeopleIngestion())
+                .Returns(true);
+
+            await _eLinksService.ImportJudiciaryPeopleAsync(new DateTime());
+
+            _service.Verify(x => x.UploadFile("combined.json", It.IsAny<byte[]>()),
+                Times.Exactly(1));
+        }
+        
+        [Test]
         public async Task ImportJudiciaryPeopleAsync_Not_Upload_With_FeautureFlag_Off()
         {
             var expectedPeopleResponse = new PeopleResponse()
