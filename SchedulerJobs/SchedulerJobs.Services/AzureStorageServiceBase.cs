@@ -55,8 +55,6 @@ namespace SchedulerJobs.Services
         /// </summary>
         public async Task ClearBlobs()
         {
-            var blobNames = await GetAllBlobNamesByFilePathPrefix(".json");
-
             var containerClient = _serviceClient.GetBlobContainerClient(_blobStorageConfiguration.StorageContainerName);
 
             var blobsList = containerClient.GetBlobs(BlobTraits.All).ToList();
