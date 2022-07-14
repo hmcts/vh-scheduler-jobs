@@ -59,13 +59,15 @@ namespace SchedulerJobs.Services
                 {
                     
                     _logger.LogInformation("ImportJudiciaryPeople: Executing page {CurrentPage}", currentPage);
-                    var peoples = await _peoplesClient.GetPeopleAsync(fromDate, currentPage);
+                    
+                    var clientResponse = await _peoplesClient.GetPeopleJsonAsync(fromDate, currentPage);
+                    
+                    var peoples = JsonConvert.DeserializeObject<PeopleResponse>(clientResponse);
                     
                     string fileName = $"page{currentPage}.json";
                     if (_featureToggles.StorePeopleIngestion())
                     {
-                        var clientResponse = await _peoplesClient.GetPeopleJsonAsync(fromDate, currentPage);
-
+                        
                         peopleList.AddRange(peoples.Results);
                         
                         byte[] fileToBytes = Encoding.ASCII.GetBytes(clientResponse);
