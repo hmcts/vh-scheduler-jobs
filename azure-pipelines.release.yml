@@ -202,8 +202,8 @@ stages:
               
           # AzureStorage
            - name: AzureConfiguration:StorageAccountKey
-           value: vh-azure-storage-configuration-account-key
-           secret: true
+            value: vh-azure-storage-configuration-account-key
+            secret: true
            - name: AzureConfiguration:StorageAccountName
             value: vh-azure-storage-configuration-account-name
             secret: true
