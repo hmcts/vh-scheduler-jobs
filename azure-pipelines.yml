@@ -105,8 +105,22 @@ parameters:
     value: 1
   - name: UseELinksStub
     value: true
-
-  # Feature Toggle
+    
+  # AzureStorage
+  - name: AzureConfiguration:StorageAccountKey
+    value: vh-azure-storage-configuration-account-key
+    secret: true
+  - name: AzureConfiguration:StorageAccountName
+    value: vh-azure-storage-configuration-account-name
+    secret: true
+  - name: AzureConfiguration:StorageContainerName
+    value: vh-azure-storage-configuration-container-name
+    secret: true
+  - name: AzureConfiguration:StorageEndpoint
+    value: vh-azure-storage-configuration-end-point
+    secret: true
+    
+    # Feature Toggle
   - name: FeatureToggles:SDK-Key
     value: vh-admin-web-Feature-Toggle
     secret: true
