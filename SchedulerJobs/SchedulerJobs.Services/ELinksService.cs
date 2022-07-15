@@ -48,7 +48,7 @@ namespace SchedulerJobs.Services
             var invalidPeoplePersonalCode = new List<string>();
             var morePages = false;
             int results = 0;
-            List<JudiciaryPersonModel> peopleList = new List<JudiciaryPersonModel>();
+            StringBuilder peopleListString = new StringBuilder();
             
             _logger.LogInformation("ImportJudiciaryPeople: Removing all records from JudiciaryPersonsStaging");
             await _bookingsApiClient.RemoveAllJudiciaryPersonsStagingAsync();
@@ -68,8 +68,7 @@ namespace SchedulerJobs.Services
                     if (_featureToggles.StorePeopleIngestion())
                     {
                         
-                        peopleList.AddRange(peoples.Results);
-                        
+                        peopleListString.Append(clientResponse);
                         byte[] fileToBytes = Encoding.ASCII.GetBytes(clientResponse);
                 
                         // delete all the history only on the first page so we can keep the following file in storage
@@ -120,11 +119,10 @@ namespace SchedulerJobs.Services
             } while (morePages);
             
             // create a combined file for all pages
-            if (peopleList.Count > 0)
+            if (peopleListString.Length > 0)
             {
                 string fileName = "combined.json";
-                string listString = JsonConvert.SerializeObject(peopleList, Formatting.Indented);
-                byte[] fileToBytes = Encoding.ASCII.GetBytes(listString);
+                byte[] fileToBytes = Encoding.ASCII.GetBytes(peopleListString.ToString());
                 await _service.UploadFile(fileName, fileToBytes);
             }
             _logger.LogInformation("Number of pagination results: {Results}", results);
