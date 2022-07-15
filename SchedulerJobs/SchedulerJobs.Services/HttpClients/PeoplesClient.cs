@@ -17,20 +17,6 @@ namespace SchedulerJobs.Services.HttpClients
 
         public string BaseUrl { get; set; }
 
-        public async Task<PeopleResponse> GetPeopleAsync(DateTime updatedSince, int page = 1, int perPage = 100)
-        {
-            var response = await _httpClient.GetAsync
-            (
-                $"{BaseUrl}/people?updated_since={updatedSince:yyyy-MM-dd}&page={page}&per_page={perPage}&include_previous_appointments=true"
-            );
-
-            await ResponseHandler.HandleUnsuccessfulResponse(response);
-
-            var clientResponse = await response.Content.ReadAsStringAsync();
-
-            return JsonConvert.DeserializeObject<PeopleResponse>(clientResponse);
-        }
-        
         public async Task<String> GetPeopleJsonAsync(DateTime updatedSince, int page = 1, int perPage = 100)
         {
             var response = await _httpClient.GetAsync
