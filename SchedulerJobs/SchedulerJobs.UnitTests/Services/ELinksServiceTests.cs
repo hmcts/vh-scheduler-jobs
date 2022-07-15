@@ -56,11 +56,7 @@ namespace SchedulerJobs.UnitTests.Services
             };
 
             var clientResponse = JsonConvert.SerializeObject(expectedPeopleResponse);
-            
-            
-            _peoplesClient.Setup(x => x.GetPeopleAsync(It.IsAny<DateTime>(), It.IsAny<int>(), It.IsAny<int>()))
-                .ReturnsAsync(expectedPeopleResponse);
-            
+
             _peoplesClient.Setup(x => x.GetPeopleJsonAsync(It.IsAny<DateTime>(), It.IsAny<int>(), It.IsAny<int>()))
                 .ReturnsAsync(clientResponse);
 
@@ -86,8 +82,6 @@ namespace SchedulerJobs.UnitTests.Services
             
             var clientResponse = JsonConvert.SerializeObject(expectedPeopleResponse);
             
-            _peoplesClient.Setup(x => x.GetPeopleAsync(It.IsAny<DateTime>(), It.IsAny<int>(), It.IsAny<int>()))
-                .ReturnsAsync(expectedPeopleResponse);
 
             _peoplesClient.Setup(x => x.GetPeopleJsonAsync(It.IsAny<DateTime>(), It.IsAny<int>(), It.IsAny<int>()))
                 .ReturnsAsync(clientResponse);
@@ -114,8 +108,7 @@ namespace SchedulerJobs.UnitTests.Services
                 },
                 Results = new List<JudiciaryPersonModel>()
             };
-            _peoplesClient.Setup(x => x.GetPeopleAsync(It.IsAny<DateTime>(), 2, It.IsAny<int>()))
-                .ReturnsAsync(expectedPeopleResponse);
+
             var clientResponse = JsonConvert.SerializeObject(expectedPeopleResponse);
             _peoplesClient.Setup(x => x.GetPeopleJsonAsync(It.IsAny<DateTime>(), 2, It.IsAny<int>()))
                 .ReturnsAsync(clientResponse);
@@ -152,9 +145,6 @@ namespace SchedulerJobs.UnitTests.Services
             };
             var clientResponse = JsonConvert.SerializeObject(expectedPeopleResponse);
             
-            _peoplesClient.Setup(x => x.GetPeopleAsync(It.IsAny<DateTime>(), It.IsAny<int>(), It.IsAny<int>()))
-                .ReturnsAsync(expectedPeopleResponse);
-            
             _peoplesClient.Setup(x => x.GetPeopleJsonAsync(It.IsAny<DateTime>(), It.IsAny<int>(), It.IsAny<int>()))
                 .ReturnsAsync(clientResponse);
 
@@ -181,9 +171,7 @@ namespace SchedulerJobs.UnitTests.Services
                 Results = new List<JudiciaryPersonModel>()
             };
             var clientResponse = JsonConvert.SerializeObject(expectedPeopleResponse);
-            _peoplesClient.Setup(x => x.GetPeopleAsync(It.IsAny<DateTime>(), 2, It.IsAny<int>()))
-                .ReturnsAsync(expectedPeopleResponse);
-            
+
             _peoplesClient.Setup(x => x.GetPeopleJsonAsync(It.IsAny<DateTime>(), It.IsAny<int>(), It.IsAny<int>()))
                 .ReturnsAsync(clientResponse);
             
@@ -233,11 +221,6 @@ namespace SchedulerJobs.UnitTests.Services
             var clientResponse1 = JsonConvert.SerializeObject(personPage1Response);
             var clientResponse2 = JsonConvert.SerializeObject(personPage2Response);
 
-            _peoplesClient.Setup(x => x.GetPeopleAsync(It.IsAny<DateTime>(), 1, It.IsAny<int>()))
-                .ReturnsAsync(personPage1Response);
-            _peoplesClient.Setup(x => x.GetPeopleAsync(It.IsAny<DateTime>(), 2, It.IsAny<int>()))
-                .ReturnsAsync(personPage2Response);
-            
             _peoplesClient.Setup(x => x.GetPeopleJsonAsync(It.IsAny<DateTime>(), 1, It.IsAny<int>()))
                 .ReturnsAsync(clientResponse1);
             _peoplesClient.Setup(x => x.GetPeopleJsonAsync(It.IsAny<DateTime>(), 2, It.IsAny<int>()))
@@ -295,11 +278,6 @@ namespace SchedulerJobs.UnitTests.Services
             _peoplesClient.Setup(x => x.GetPeopleJsonAsync(It.IsAny<DateTime>(), 2, It.IsAny<int>()))
                 .ReturnsAsync(clientResponse2);
 
-            _peoplesClient.Setup(x => x.GetPeopleAsync(It.IsAny<DateTime>(), 1, It.IsAny<int>()))
-                .ReturnsAsync(personPage1Response);
-            _peoplesClient.Setup(x => x.GetPeopleAsync(It.IsAny<DateTime>(), 2, It.IsAny<int>()))
-                .ReturnsAsync(personPage2Response);
-            
             await _eLinksService.ImportJudiciaryPeopleAsync(new DateTime());
 
             _bookingsApiClient.Verify(x => x.BulkJudiciaryPersonsStagingAsync(
@@ -333,9 +311,7 @@ namespace SchedulerJobs.UnitTests.Services
             };
             
             var clientResponse = JsonConvert.SerializeObject(expectedPeopleResponse);
-            
-            _peoplesClient.Setup(x => x.GetPeopleAsync(It.IsAny<DateTime>(), It.IsAny<int>(), It.IsAny<int>()))
-                .ReturnsAsync(expectedPeopleResponse);
+
             _leaversClient.Setup(x => x.GetLeaversAsync(It.IsAny<DateTime>(), It.IsAny<int>(), It.IsAny<int>()))
                 .ReturnsAsync(expectedLeaverResponse);
             
@@ -408,11 +384,6 @@ namespace SchedulerJobs.UnitTests.Services
                 Results = new List<JudiciaryLeaverModel>()
             };
 
-            _peoplesClient.Setup(x => x.GetPeopleAsync(It.IsAny<DateTime>(), 1, It.IsAny<int>()))
-                .ReturnsAsync(personPage1Response);
-            _peoplesClient.Setup(x => x.GetPeopleAsync(It.IsAny<DateTime>(), 2, It.IsAny<int>()))
-                .ReturnsAsync(personPage2Response);
-            
             _leaversClient.Setup(x => x.GetLeaversAsync(It.IsAny<DateTime>(), 1, It.IsAny<int>()))
                 .ReturnsAsync(leaverPage1Response);
             _leaversClient.Setup(x => x.GetLeaversAsync(It.IsAny<DateTime>(), 2, It.IsAny<int>()))
@@ -465,7 +436,7 @@ namespace SchedulerJobs.UnitTests.Services
                 }
             };
             var clientResponse = JsonConvert.SerializeObject(peopleResponse);
-            _peoplesClient.Setup(x => x.GetPeopleAsync(It.IsAny<DateTime>(), 2, It.IsAny<int>())).ReturnsAsync(peopleResponse);
+
             _leaversClient.Setup(x => x.GetLeaversAsync(It.IsAny<DateTime>(), 5, It.IsAny<int>()))
                 .ReturnsAsync(new LeaversResponse()
                 {
@@ -498,8 +469,6 @@ namespace SchedulerJobs.UnitTests.Services
             };
             var clientResponse = JsonConvert.SerializeObject(personPage1Response);
             
-            _peoplesClient.Setup(x => x.GetPeopleAsync(It.IsAny<DateTime>(), 2, It.IsAny<int>()))
-                .ReturnsAsync(personPage1Response);
             _leaversClient.Setup(x => x.GetLeaversAsync(It.IsAny<DateTime>(), 5, It.IsAny<int>())).ThrowsAsync(
                 new JsonSerializationException("Error converting value 1ad85664b - aab9 - 4a8d - 8e76 - 0affdcb5b90f"));
             _leaversClient.Setup(x => x.GetLeaversAsync(It.IsAny<DateTime>(), 6, It.IsAny<int>())).ReturnsAsync(
@@ -535,8 +504,7 @@ namespace SchedulerJobs.UnitTests.Services
                 }
             };
             var clientResponse = JsonConvert.SerializeObject(personPage1Response);
-            _peoplesClient.Setup(x => x.GetPeopleAsync(It.IsAny<DateTime>(), 2, It.IsAny<int>()))
-                .ReturnsAsync(personPage1Response);
+
             _leaversClient.Setup(x => x.GetLeaversAsync(It.IsAny<DateTime>(), 5, It.IsAny<int>())).ReturnsAsync(
                 new LeaversResponse()
                 {
@@ -554,11 +522,7 @@ namespace SchedulerJobs.UnitTests.Services
         public async Task Should_call_booking_api_client_with_one_of_many_pages_of_results_has_exception()
         {
             CommonTestSetUp();
-            _peoplesClient.Setup(x => x.GetPeopleAsync(It.IsAny<DateTime>(), 2, It.IsAny<int>()))
-                .ThrowsAsync(
-                    new JsonSerializationException(
-                        "Error converting value 1ad85664b - aab9 - 4a8d - 8e76 - 0affdcb5b90f"));
-            
+
             _leaversClient.Setup(x => x.GetLeaversAsync(It.IsAny<DateTime>(), 5, It.IsAny<int>())).ReturnsAsync(
                 new LeaversResponse()
                 {
@@ -633,11 +597,7 @@ namespace SchedulerJobs.UnitTests.Services
                 },
                 Results = new List<JudiciaryLeaverModel>()
             };
-
-            _peoplesClient.Setup(x => x.GetPeopleAsync(It.IsAny<DateTime>(), 1, It.IsAny<int>()))
-                .ReturnsAsync(personPage1Response);
-            _peoplesClient.Setup(x => x.GetPeopleAsync(It.IsAny<DateTime>(), 2, It.IsAny<int>()))
-                .ReturnsAsync(personPage2Response);
+            
             _leaversClient.Setup(x => x.GetLeaversAsync(It.IsAny<DateTime>(), 1, It.IsAny<int>()))
                 .ReturnsAsync(leaverPage1Response);
             _leaversClient.Setup(x => x.GetLeaversAsync(It.IsAny<DateTime>(), 2, It.IsAny<int>()))
@@ -714,14 +674,6 @@ namespace SchedulerJobs.UnitTests.Services
                 Results = judiciaryLeaverModels
             };
 
-            _peoplesClient.Setup(x => x.GetPeopleAsync(It.IsAny<DateTime>(), 1, It.IsAny<int>()))
-                .ReturnsAsync(expectedPeopleResponse);
-            _peoplesClient.Setup(x => x.GetPeopleAsync(It.IsAny<DateTime>(), 3, It.IsAny<int>()))
-                .ReturnsAsync(expectedPeopleResponse);
-            _peoplesClient.Setup(x => x.GetPeopleAsync(It.IsAny<DateTime>(), 4, It.IsAny<int>()))
-                .ReturnsAsync(expectedPeopleResponse);
-            _peoplesClient.Setup(x => x.GetPeopleAsync(It.IsAny<DateTime>(), 5, It.IsAny<int>())).ReturnsAsync(clientNoMorePage);
-            
             _peoplesClient.Setup(x => x.GetPeopleJsonAsync(It.IsAny<DateTime>(), 1, It.IsAny<int>()))
                 .ReturnsAsync(clientResponse1);
             _peoplesClient.Setup(x => x.GetPeopleJsonAsync(It.IsAny<DateTime>(), 3, It.IsAny<int>()))
