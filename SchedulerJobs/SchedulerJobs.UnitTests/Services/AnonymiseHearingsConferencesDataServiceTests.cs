@@ -191,6 +191,39 @@ namespace SchedulerJobs.UnitTests.Services
                 It.Is<Exception>(x => x == unknownException),
                 (Func<It.IsAnyType, Exception, string>)It.IsAny<object>()), Times.Once);
         }
+
+        [Test]
+        public async Task Logs_Unexpected_User_Api_Exception_For_Get_User_By_Ad_Username_And_Continues_To_Process_Other_User()
+        {
+            var usernameToThrowException = "username1@hmcts.net";
+
+            _anonymisationDataResponse.Usernames = new List<string>
+                { usernameToThrowException, "username2@hmcts.net", "username3@hmcts.net" };
+
+            var unknownException = new UserApiException("", 404, "", null, null);
+            
+            _bookingApiClient.Setup(x => x.GetAnonymisationDataAsync()).ReturnsAsync(_anonymisationDataResponse);
+            _userApiClient.Setup(x => x.GetUserByAdUserNameAsync(It.Is<string>(username => username == usernameToThrowException)))
+                .ThrowsAsync(unknownException);
+            
+            await _anonymiseHearingsConferencesDataService.AnonymiseHearingsConferencesDataAsync();
+
+            _userApiClient.Verify(userApi => userApi
+                .DeleteUserAsync(It.Is<string>(username => _anonymisationDataResponse.Usernames.Contains(username))), Times.Exactly(2));
+            
+            _bookingApiClient.Verify(bookingsApi => bookingsApi
+                .AnonymisePersonWithUsernameForExpiredHearingsAsync(It.Is<string>(username => _anonymisationDataResponse.Usernames.Contains(username))), Times.Exactly(3));
+            
+            _videoApiClient.Verify(videoApi => videoApi
+                .AnonymiseParticipantWithUsernameAsync(It.Is<string>(username => _anonymisationDataResponse.Usernames.Contains(username))), Times.Exactly(3));
+            
+            _logger.Verify(x => x.Log(
+                It.Is<LogLevel>(log => log == LogLevel.Error),
+                It.IsAny<EventId>(),
+                It.IsAny<It.IsAnyType>(),
+                It.Is<Exception>(x => x == unknownException),
+                (Func<It.IsAnyType, Exception, string>)It.IsAny<object>()), Times.Once);
+        }
         
         [Test]
         public async Task Logs_Unexpected_Video_Api_Exception__And_Continues_To_Process_Other_User()
@@ -257,6 +290,5 @@ namespace SchedulerJobs.UnitTests.Services
                 It.Is<Exception>(x => x == unknownException),
                 (Func<It.IsAnyType, Exception, string>)It.IsAny<object>()), Times.Once);
         }
-        
     }
 }
