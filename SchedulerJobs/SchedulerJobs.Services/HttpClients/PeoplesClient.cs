@@ -14,9 +14,8 @@ namespace SchedulerJobs.Services.HttpClients
         {
             _httpClient = httpClient;
         }
-
         public string BaseUrl { get; set; }
-
+        
         public async Task<String> GetPeopleJsonAsync(DateTime updatedSince, int page = 1, int perPage = 100)
         {
             var response = await _httpClient.GetAsync
@@ -25,7 +24,7 @@ namespace SchedulerJobs.Services.HttpClients
             );
             
             await ResponseHandler.HandleUnsuccessfulResponse(response);
-            
+
             return await response.Content.ReadAsStringAsync();
         }
     }
