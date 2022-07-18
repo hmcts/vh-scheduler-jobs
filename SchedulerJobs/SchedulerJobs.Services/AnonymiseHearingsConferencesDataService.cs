@@ -58,19 +58,19 @@ namespace SchedulerJobs.Services
             
             foreach (var username in anonymisationData.Usernames)
             {
-                var userProfile = await _userApiClient.GetUserByAdUserNameAsync(username);
-
-                if (ShouldRemoveUserFromAd(userProfile))
+                try
                 {
-                    try
+                    var userProfile = await _userApiClient.GetUserByAdUserNameAsync(username);
+
+                    if (ShouldRemoveUserFromAd(userProfile))
                     {
                         await _userApiClient.DeleteUserAsync(username);
                     }
-                    catch (UserApiException exception)
-                    {
-                        _logger.LogError(exception, ProcessingUsernameExceptionMessage,
-                            username);
-                    }
+                }
+                catch (UserApiException exception)
+                {
+                    _logger.LogError(exception, ProcessingUsernameExceptionMessage,
+                        username);
                 }
 
                 try
