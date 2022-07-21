@@ -1,0 +1,8 @@
+---
+java:
+  image: '${IMAGE_NAME}'
+  ingressHost: ${SERVICE_FQDN}
+  releaseNameOverride: ${RELEASE_NAME}
+  environment:
+    SERVICES__SchedulerJobsRESOURCEID: http://vh-scheduler-jobs.staging.platform.hmcts.net
+

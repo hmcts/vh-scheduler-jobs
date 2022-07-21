@@ -173,10 +173,10 @@ stages:
             secret: true
           - name: VhServices:BookingsApiUrl
             value: $(bookings_api_url)
-          - name: VhServices:VideoApiResourceId   
+          - name: VhServices:SchedulerJobsResourceId   
             value: vh-video-api-identifieruris
             secret: true
-          - name: VhServices:VideoApiUrl
+          - name: VhServices:SchedulerJobsUrl
             value: $(video_api_url)
           - name: VhServices:NotificationApiResourceId
             value: vh-notification-api-identifieruris

@@ -1,0 +1,68 @@
+---
+java:
+  image: 'sdshmctspublic.azurecr.io/vh/scheduler-jobs:20210210.6'
+  applicationPort: 8080
+  replicas: 2
+  ingressHost: vh-scheduler-jobs.{{ .Values.global.environment }}.platform.hmcts.net
+  releaseNameOverride: vh-scheduler-jobs
+  readinessPath: /healthcheck/health
+  livenessPath: /healthcheck/health
+  livenessDelay: 360
+  livenessPeriod: 120
+  aadIdentityName: vh-aad-identity
+  keyVaults:
+    vh-infra-core:
+      excludeEnvironmentSuffix: false
+      resourceGroup: vh-infra-core-{{ .Values.global.environment }}
+      usePodIdentity: true
+      secrets:
+        - applicationinsights--instrumentationkey
+        - CvpConfiguration--StorageAccountName
+        - CvpConfiguration--StorageAccountKey
+        - CvpConfiguration--StorageContainerName
+        - CvpConfiguration--StorageEndpoint
+        - azuread--vhvideowebclientid
+        - servicebusqueue--connectionstring
+        - wowzaconfiguration--streamPassword
+        - wowzaconfiguration--restPassword
+        - wowzaconfiguration--storageaccountkey
+        - wowzaconfiguration--managedidentityclientid
+        - wowzaconfiguration--azure-storage-directory
+        - wowzaconfiguration--endpoint
+        - wowzaconfiguration--storage-account
+        - wowzaconfiguration--storage-account-endpoint
+        - wowzaconfiguration--storage-account-container
+        - wowzaconfiguration--username
+        - wowzaconfiguration--ServerName
+        - connectionstrings--SchedulerJobs
+        - name: wowzaconfiguration--restendpoint--0
+          alias: WowzaConfiguration--RestApiEndpoints--0
+    vh-scheduler-jobs:
+      excludeEnvironmentSuffix: false
+      resourceGroup: vh-infra-core-{{ .Values.global.environment }}
+      usePodIdentity: true
+      secrets:
+        - azuread--clientsecret
+        - azuread--clientid
+        - kinlyconfiguration--apisecret
+        - kinlyconfiguration--callbacksecret
+        - kinlyconfiguration--selftestapisecret
+        - kinlyconfiguration--telephoneconferencenumber
+        - kinlyconfiguration--telephoneconferencenumberwelsh
+        - kinlyconfiguration--kinlyapiurl
+        - kinlyconfiguration--kinlyselftestapiurl
+        - kinlyconfiguration--conferenceusername
+        - kinlyconfiguration--callbackuri
+        - kinlyconfiguration--pexipnode
+        - kinlyconfiguration--pexipselftestnode
+  environment:
+    ASPNETCORE_URLS: http://+:8080
+    APPINSIGHTS_PROFILERFEATURE_VERSION: disabled
+    APPINSIGHTS_SNAPSHOTFEATURE_VERSION: disabled
+    APPLICATIONINSIGHTSAGENT_EXTENSION_VERSION: ~2
+    AZUREAD__VHSchedulerJobsRESOURCEID: http://vh-scheduler-jobs.{{ .Values.global.environment }}.platform.hmcts.net/
+    MSDEPLOY_RENAME_LOCKED_FILES: 1
+    SERVICES__SchedulerJobsURL: http://vh-scheduler-jobs.{{ .Values.global.environment }}.platform.hmcts.net
+    Logging__LogLevel__Default: debug
+    Logging__LogLevel__System: debug
+    Logging__LogLevel__Microsoft: debug
