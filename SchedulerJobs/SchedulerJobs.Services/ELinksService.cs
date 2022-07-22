@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using BookingsApi.Client;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using SchedulerJobs.Common.ApiHelper;
 using SchedulerJobs.Common.Configuration;
 using SchedulerJobs.Common.Models;
 using SchedulerJobs.Services.HttpClients;
@@ -64,7 +65,7 @@ namespace SchedulerJobs.Services
                     
                     var clientResponse = await _peoplesClient.GetPeopleJsonAsync(fromDate, currentPage);
                     
-                    var peoples = JsonConvert.DeserializeObject<PeopleResponse>(clientResponse);
+                    var peoples = ApiRequestHelper.Deserialise<PeopleResponse>(clientResponse);
                     
                     string fileName = $"page{currentPage}.json";
                     if (_featureToggles.StorePeopleIngestion())
