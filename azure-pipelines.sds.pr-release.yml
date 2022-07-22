@@ -125,26 +125,7 @@ stages:
               imageTags:
                 - '${{ variables.prTagName }}'
 
-      - job: package_nuget
-        displayName: "Package NuGet Packages"
-        dependsOn: Dock
-        steps:
-          - template: templates\dotnet\package-nuget-packages.yml@azTemplates
-            parameters:
-              nugetProjectPath: "SchedulerJobs/${{ variables.nuget_package_name }}"
-              vstsFeed: "${{ variables.nuget_org_name }}/${{ variables.nuget_feed_name }}"
-              gitVersionConfigPath: ${{ variables.git_version_config_path }}
-
-      - ${{ if eq(variables.run_acceptance_tests, true) }}:
-        - job: PublishAcceptanceTests
-          displayName: Publish Acceptance Tests 
-          variables:
-            projectPath: SchedulerJobs/SchedulerJobs
-          steps:
-          - template: templates\dotnet\publish-acceptance-tests.yml@azTemplates
-            parameters:
-              coreProjectPath: $(projectPath)
-              nugetProjectPath: $(projectPath)
+ 
 
 #####################################################
 # Deploy Helm Chart to Dev. ######################### 
@@ -239,29 +220,11 @@ stages:
                   secret: true
                 - name: Services:CallbackUri
                   value: $(CallbackUri)
-                       
-#####################################################
-# Deploy Nuget Packages. #########################
-  - stage: Push_Nuget
-    dependsOn: Install
-    displayName: Deploy NuGet Packages
-    variables:
-      - template: variables/dev.yaml
-      - template: variables/shared.yaml
-        parameters:
-          env: ${{ variables.env }}
-    jobs: 
-      - job: Publish_Nuget
-        displayName: Publish NuGet Packages
-        steps:
-          - template: templates\dotnet\push-nuget-packages.yml@azTemplates
-            parameters:
-              vstsFeed: "${{ variables.nuget_org_name }}/${{ variables.nuget_feed_name }}"
 
 #####################################################
 # Manual Approval To Demo. ##########################
   - stage: Wait
-    dependsOn: Push_Nuget
+    dependsOn: Install
     jobs:
       - job: Wait
         displayName: "Approve Release Demo"
