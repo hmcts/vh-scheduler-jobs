@@ -17,26 +17,17 @@ java:
       usePodIdentity: true
       secrets:
         - applicationinsights--instrumentationkey
-        - CvpConfiguration--StorageAccountName
-        - CvpConfiguration--StorageAccountKey
-        - CvpConfiguration--StorageContainerName
-        - CvpConfiguration--StorageEndpoint
-        - azuread--vhvideowebclientid
-        - servicebusqueue--connectionstring
-        - wowzaconfiguration--streamPassword
-        - wowzaconfiguration--restPassword
-        - wowzaconfiguration--storageaccountkey
-        - wowzaconfiguration--managedidentityclientid
-        - wowzaconfiguration--azure-storage-directory
-        - wowzaconfiguration--endpoint
-        - wowzaconfiguration--storage-account
-        - wowzaconfiguration--storage-account-endpoint
-        - wowzaconfiguration--storage-account-container
-        - wowzaconfiguration--username
-        - wowzaconfiguration--ServerName
-        - connectionstrings--SchedulerJobs
-        - name: wowzaconfiguration--restendpoint--0
-          alias: WowzaConfiguration--RestApiEndpoints--0
+        - azuread--tenantid
+        - name: azuread--appinsightskey
+          alias: AppInsightsKey
+        - name: storage-account-key
+          alias: AzureConfiguration--StorageAccountKey
+        - name: storage-account-name
+          alias: AzureConfiguration--StorageAccountName
+        - name: storage-account-endpoint
+          alias: AzureConfiguration--StorageEndpoint
+        - name: storage-account-container-elinks-name
+          alias: AzureConfiguration--StorageContainerName
     vh-scheduler-jobs:
       excludeEnvironmentSuffix: false
       resourceGroup: vh-infra-core-{{ .Values.global.environment }}
@@ -44,17 +35,46 @@ java:
       secrets:
         - azuread--clientsecret
         - azuread--clientid
-        - kinlyconfiguration--apisecret
-        - kinlyconfiguration--callbacksecret
-        - kinlyconfiguration--selftestapisecret
-        - kinlyconfiguration--telephoneconferencenumber
-        - kinlyconfiguration--telephoneconferencenumberwelsh
-        - kinlyconfiguration--kinlyapiurl
-        - kinlyconfiguration--kinlyselftestapiurl
-        - kinlyconfiguration--conferenceusername
-        - kinlyconfiguration--callbackuri
-        - kinlyconfiguration--pexipnode
-        - kinlyconfiguration--pexipselftestnode
+        - azuread--identifieruri
+        - VhServices--ELinksLeaversBaseUrl
+        - VhServices--ELinksPeoplesBaseUrl
+        - VhServices--ELinksApiKey
+    vh-bookings-api:
+      excludeEnvironmentSuffix: false
+      resourceGroup: vh-infra-core-{{ .Values.global.environment }}
+      usePodIdentity: true
+      secrets:
+        - name: azuread--identifieruri
+          alias: VhServices--BookingsApiResourceId
+        - name: azuread--identifieruri
+          alias: VhServices--BookingsApiUrl
+    vh-video-api:
+      excludeEnvironmentSuffix: false
+      resourceGroup: vh-infra-core-{{ .Values.global.environment }}
+      usePodIdentity: true
+      secrets:
+        - name: azuread--identifieruri
+          alias: VhServices--VideoApiResourceId
+        - name: azuread--identifieruri
+          alias: VhServices--VideoApiUrl
+    vh-notification-api:
+      excludeEnvironmentSuffix: false
+      resourceGroup: vh-infra-core-{{ .Values.global.environment }}
+      usePodIdentity: true
+      secrets:
+        - name: azuread--identifieruri
+          alias: VhServices--NotificationApiResourceId
+        - name: azuread--identifieruri
+          alias: VhServices--NotificationApiUrl
+    vh-user-api:
+      excludeEnvironmentSuffix: false
+      resourceGroup: vh-infra-core-{{ .Values.global.environment }}
+      usePodIdentity: true
+      secrets:
+        - name: azuread--identifieruri
+          alias: VhServices--UserApiResourceId
+        - name: azuread--identifieruri
+          alias: VhServices--UserApiUrl
   environment:
     ASPNETCORE_URLS: http://+:8080
     APPINSIGHTS_PROFILERFEATURE_VERSION: disabled
