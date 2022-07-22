@@ -77,6 +77,7 @@ stages:
 # Build Docker Image & Generate EF Script. ##########
   - stage: Dock
     displayName: Build API
+    dependsOn: CI_Build
     variables: 
       - group: aks-cluster-info
       - template: variables/dev.yaml
@@ -148,7 +149,7 @@ stages:
 #####################################################
 # Deploy Helm Chart to Dev. ######################### 
   - stage: Install
-    dependsOn: Run_Entity_Framework_Dev
+    dependsOn: Dock
     displayName: Deploy Helm Chart Dev AKS
     variables:
       - template: variables/dev.yaml
