@@ -6,7 +6,7 @@ RUN /tools/dotnet-gitversion /ensureassemblyinfo /updateassemblyinfo AssemblyInf
 FROM mcr.microsoft.com/dotnet/core/sdk:3.1-buster AS build
 RUN mkdir -p /home/site/wwwroot
 COPY SchedulerJobs .
-RUN dotnet restore --configfile nuget.sds.config SchedulerJobs
+RUN dotnet restore --configfile nuget.config SchedulerJobs
 COPY --from=gitversion /version/AssemblyInfo.cs .
 RUN dotnet build SchedulerJobs -c Release
 
