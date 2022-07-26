@@ -33,10 +33,10 @@
 		<ProjectReference Include="..\SchedulerJobs.Services\SchedulerJobs.Services.csproj" />
 	</ItemGroup>
 	<ItemGroup>
-		<None Update="host.json">
+		<Content Update="host.json">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 			<CopyToPublishDirectory>Always</CopyToPublishDirectory>
-		</None>
+		</Content>
 		<None Update="local.settings.json">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 			<CopyToPublishDirectory>Never</CopyToPublishDirectory>
