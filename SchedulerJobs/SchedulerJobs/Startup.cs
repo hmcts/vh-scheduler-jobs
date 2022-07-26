@@ -20,6 +20,7 @@ using VideoApi.Client;
 using SchedulerJobs.Services.Interfaces;
 using NotificationApi.Client;
 using SchedulerJobs.Services.Configuration;
+using System.Collections.Generic;
 
 [assembly: FunctionsStartup(typeof(SchedulerJobs.Startup))]
 namespace SchedulerJobs
@@ -36,7 +37,7 @@ namespace SchedulerJobs
 
             base.ConfigureAppConfiguration(builder);
 
-            const List<string> keyVaults=new List<string> (){
+            var keyVaults=new List<string> (){
                 "vh-infra-core",
                 "vh-scheduler-jobs",
                 "vh-bookings-api",
