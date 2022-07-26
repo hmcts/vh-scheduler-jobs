@@ -12,6 +12,7 @@ RUN dotnet build SchedulerJobs -c Release
 
 FROM build AS publish
 RUN dotnet publish SchedulerJobs -c Release -o /home/site/wwwroot
+RUN apt-get update && apt-get install curl
 
 FROM mcr.microsoft.com/azure-functions/dotnet:3.0
 ENV AzureWebJobsScriptRoot=/home/site/wwwroot \
