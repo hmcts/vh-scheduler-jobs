@@ -36,7 +36,7 @@ namespace SchedulerJobs
 
             base.ConfigureAppConfiguration(builder);
 
-            cosnt list<string> keyVaults=new List<string> (){
+            const list<string> keyVaults=new List<string> (){
                 "vh-infra-core",
                 "vh-scheduler-jobs",
                 "vh-bookings-api",
