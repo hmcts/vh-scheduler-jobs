@@ -86,3 +86,4 @@ java:
     Logging__LogLevel__Default: debug
     Logging__LogLevel__System: debug
     Logging__LogLevel__Microsoft: debug
+    FUNCTIONS_EXTENSION_VERSION: ~3
