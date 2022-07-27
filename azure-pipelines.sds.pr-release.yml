@@ -157,6 +157,7 @@ stages:
               aksClusterName: "$(aksCluster.name)"
       - job: aks_push
         displayName: Deploy To Dev AKS
+        dependsOn: helm_uninstall
         steps:
 
           - template: templates\Azure\Aks\get-active-cluster.yaml@azTemplates
@@ -265,6 +266,7 @@ stages:
               aksClusterName: "$(aksCluster.name)"
       - job: aks_push
         displayName: Deploy To Demo AKS
+        dependsOn: helm_uninstall
         steps:
         - template: templates\Azure\Aks\get-active-cluster.yaml@azTemplates
           parameters:
