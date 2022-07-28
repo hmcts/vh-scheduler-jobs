@@ -18,7 +18,7 @@ namespace SchedulerJobs.UnitTests.Functions
             await _sut.Run(_timerInfo, _logger);
 
             // Assert
-            _mocker.Mock<IAnonymiseHearingsConferencesDataService>().Verify(x => x.AnonymiseHearingsConferencesDataAsync(), Times.Once);
+            _mocker.Mock<IAnonymiseHearingsConferencesDataService>().Verify(x => x.AnonymiseHearingsConferencesDataAsync(It.IsAny<string>()), Times.Once);
             _logger.GetLoggedMessages().Last().Should().StartWith(AnonymiseHearingsConferencesAndDeleteAadUsersFunction.LogInformationMessage);
         }
     }

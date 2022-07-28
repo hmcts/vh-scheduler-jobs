@@ -29,7 +29,7 @@ namespace SchedulerJobs.Functions
                 log.LogTrace("Anonymise data function running late");
             }
 
-            await _anonymiseHearingsConferencesDataService.AnonymiseHearingsConferencesDataAsync()
+            await _anonymiseHearingsConferencesDataService.AnonymiseHearingsConferencesDataAsync(GetType().Name)
                 .ConfigureAwait(false);
 
             log.LogInformation(LogInformationMessage);
