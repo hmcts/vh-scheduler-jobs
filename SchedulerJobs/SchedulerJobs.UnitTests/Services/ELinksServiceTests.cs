@@ -349,21 +349,21 @@ namespace SchedulerJobs.UnitTests.Services
                 new JudiciaryLeaverModel {Id = person2, Leaver = true}
             };
 
-            var personPage1Response = new PeopleResponse()
+            var personPage1Response = new
             {
-                Pagination = new Pagination
+                pagination = new
                 {
-                    MorePages = true
+                    more_pages = true
                 },
-                Results = judiciaryPersonModels
+                results = judiciaryPersonModels
             };
-            var personPage2Response = new PeopleResponse()
+            var personPage2Response = new
             {
-                Pagination = new Pagination
+                pagination = new
                 {
-                    MorePages = false
+                    more_pages = false
                 },
-                Results = new List<JudiciaryPersonModel>()
+                results = new List<JudiciaryPersonModel>()
             };
             var personPage1 = JsonConvert.SerializeObject(personPage1Response);
             var personPage2 = JsonConvert.SerializeObject(personPage2Response);
@@ -562,21 +562,21 @@ namespace SchedulerJobs.UnitTests.Services
                 new JudiciaryLeaverModel {Id = person2, Leaver = true}
             };
 
-            var personPage1Response = new PeopleResponse()
+            var personPage1Response = new
             {
-                Pagination = new Pagination
+                pagination = new
                 {
-                    MorePages = true
+                    more_pages = true
                 },
-                Results = judiciaryPersonModels
+                results = judiciaryPersonModels
             };
-            var personPage2Response = new PeopleResponse()
+            var personPage2Response = new
             {
-                Pagination = new Pagination
+                pagination = new
                 {
-                    MorePages = false
+                    more_pages = false
                 },
-                Results = new List<JudiciaryPersonModel>()
+                results = new List<JudiciaryPersonModel>()
             };
             
             var clientResponse1 = JsonConvert.SerializeObject(personPage1Response);
@@ -644,23 +644,23 @@ namespace SchedulerJobs.UnitTests.Services
                 new JudiciaryLeaverModel {Id = person1, Leaver = true, LeftOn = new DateTime().ToString()}
             };
 
-            var expectedPeopleResponse = new PeopleResponse()
+            var expectedPeopleResponse = new
             {
-                Pagination = new Pagination
+                pagination = new
                 {
-                    MorePages = true
+                    more_pages = true
                 },
-                Results = judiciaryPersonModels
+                results = judiciaryPersonModels
             };
             var clientResponse1 = JsonConvert.SerializeObject(expectedPeopleResponse);
 
-            var clientNoMorePage = new PeopleResponse()
+            var clientNoMorePage = new
             {
-                Pagination = new Pagination
+                pagination = new
                 {
-                    MorePages = false
+                    more_pages = false
                 },
-                Results = new List<JudiciaryPersonModel>()
+                results = new List<JudiciaryPersonModel>()
             };
             
             var clientResponse2 = JsonConvert.SerializeObject(clientNoMorePage);
