@@ -28,6 +28,7 @@ java:
           alias: AzureConfiguration--StorageEndpoint
         - name: storage-account-container-elinks-name
           alias: AzureConfiguration--StorageContainerName
+          #FeatureToggles:SDK-Key
     vh-scheduler-jobs:
       excludeEnvironmentSuffix: false
       resourceGroup: vh-infra-core-{{ .Values.global.environment }}
@@ -39,6 +40,7 @@ java:
         - VhServices--ELinksLeaversBaseUrl
         - VhServices--ELinksPeoplesBaseUrl
         - VhServices--ELinksApiKey
+        - VhServices--ELinksApiUrl
     vh-bookings-api:
       excludeEnvironmentSuffix: false
       resourceGroup: vh-infra-core-{{ .Values.global.environment }}
@@ -87,3 +89,4 @@ java:
     Logging__LogLevel__System: debug
     Logging__LogLevel__Microsoft: debug
     FUNCTIONS_EXTENSION_VERSION: ~3
+    FUNCTIONS_WORKER_RUNTIME: dotnet
