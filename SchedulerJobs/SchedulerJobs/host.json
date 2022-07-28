@@ -16,8 +16,12 @@
         "excludedTypes": "Request"
       }
     },
-    "LogLevel": {
-      "Default": "Information"
+    "fileLoggingMode": "always",
+    "logLevel": {
+        "Default": "Debug",
+        "Host.Results": "Error",
+        "Function": "Trace",
+        "Host.Aggregator": "Trace"
     }
   }
 }
