@@ -28,6 +28,8 @@ java:
           alias: AzureConfiguration--StorageEndpoint
         - name: storage-account-container-elinks-name
           alias: AzureConfiguration--StorageContainerName
+        - name: storage-account-web-jobs-connection-string
+          alias: AzureWebJobsStorage
     vh-scheduler-jobs:
       excludeEnvironmentSuffix: false
       resourceGroup: vh-infra-core-{{ .Values.global.environment }}
