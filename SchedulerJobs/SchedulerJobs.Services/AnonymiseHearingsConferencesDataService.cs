@@ -13,18 +13,17 @@ namespace SchedulerJobs.Services
 {
     public interface IAnonymiseHearingsConferencesDataService
     {
-        Task AnonymiseHearingsConferencesDataAsync(string callingJob);
+        Task AnonymiseHearingsConferencesDataAsync();
     }
 
-    public class
-        AnonymiseHearingsConferencesDataService : IAnonymiseHearingsConferencesDataService
+    public class AnonymiseHearingsConferencesDataService : IAnonymiseHearingsConferencesDataService
     {
         private readonly IBookingsApiClient _bookingsApiClient;
         private readonly ILogger<AnonymiseHearingsConferencesDataService> _logger;
         private readonly IUserApiClient _userApiClient;
         private readonly IVideoApiClient _videoApiClient;
         private const string ProcessingUsernameExceptionMessage = "unknown exception when processing {username}";
-        private bool _jobSucceeded;
+
 
         public AnonymiseHearingsConferencesDataService(IVideoApiClient videoApiClient,
             IBookingsApiClient bookingsApiClient,
@@ -37,75 +36,64 @@ namespace SchedulerJobs.Services
             _logger = logger;
         }
 
-        public async Task AnonymiseHearingsConferencesDataAsync(string callingJob)
+        public async Task AnonymiseHearingsConferencesDataAsync()
         {
-            try
+            var anonymisationData = await _bookingsApiClient.GetAnonymisationDataAsync();
+
+            if (anonymisationData.HearingIds.Any())
             {
-                var anonymisationData = await _bookingsApiClient.GetAnonymisationDataAsync();
+                _logger.LogInformation("Hearing ids being processed: {hearingids}", anonymisationData.HearingIds);
 
-                if (anonymisationData.HearingIds.Any())
+                await _videoApiClient.AnonymiseConferenceWithHearingIdsAsync(
+                    new AnonymiseConferenceWithHearingIdsRequest
+                        {HearingIds = anonymisationData.HearingIds});
+
+                await _videoApiClient.AnonymiseQuickLinkParticipantWithHearingIdsAsync(
+                    new AnonymiseQuickLinkParticipantWithHearingIdsRequest
+                        {HearingIds = anonymisationData.HearingIds});
+
+                await _bookingsApiClient.AnonymiseParticipantAndCaseByHearingIdAsync("hearingIds",
+                    anonymisationData.HearingIds);
+            }
+
+
+            if (!anonymisationData.Usernames.Any()) return;
+
+            foreach (var username in anonymisationData.Usernames)
+            {
+                try
                 {
-                    _logger.LogInformation("Hearing ids being processed: {hearingids}", anonymisationData.HearingIds);
+                    var userProfile = await _userApiClient.GetUserByAdUserNameAsync(username);
 
-                    await _videoApiClient.AnonymiseConferenceWithHearingIdsAsync(
-                        new AnonymiseConferenceWithHearingIdsRequest
-                            {HearingIds = anonymisationData.HearingIds});
-
-                    await _videoApiClient.AnonymiseQuickLinkParticipantWithHearingIdsAsync(
-                        new AnonymiseQuickLinkParticipantWithHearingIdsRequest
-                            {HearingIds = anonymisationData.HearingIds});
-
-                    await _bookingsApiClient.AnonymiseParticipantAndCaseByHearingIdAsync("hearingIds",
-                        anonymisationData.HearingIds);
-                }
-
-
-                if (!anonymisationData.Usernames.Any()) return;
-
-                foreach (var username in anonymisationData.Usernames)
-                {
-                    try
+                    if (ShouldRemoveUserFromAd(userProfile))
                     {
-                        var userProfile = await _userApiClient.GetUserByAdUserNameAsync(username);
-
-                        if (ShouldRemoveUserFromAd(userProfile))
-                        {
-                            await _userApiClient.DeleteUserAsync(username);
-                        }
-                    }
-                    catch (UserApiException exception)
-                    {
-                        _logger.LogError(exception, ProcessingUsernameExceptionMessage,
-                            username);
-                    }
-
-                    try
-                    {
-                        await _videoApiClient.AnonymiseParticipantWithUsernameAsync(username);
-                    }
-                    catch (VideoApiException exception)
-                    {
-                        _logger.LogError(exception, ProcessingUsernameExceptionMessage,
-                            username);
-                    }
-
-                    try
-                    {
-                        await _bookingsApiClient.AnonymisePersonWithUsernameForExpiredHearingsAsync(username);
-                    }
-                    catch (BookingsApiException exception)
-                    {
-                        _logger.LogError(exception, ProcessingUsernameExceptionMessage, username);
+                        await _userApiClient.DeleteUserAsync(username);
                     }
                 }
-            }
-            catch (Exception)
-            {
-                _jobSucceeded = false;
-            }
-            finally
-            {
-                await _bookingsApiClient.UpdateJobHistoryAsync(callingJob, _jobSucceeded);
+                catch (UserApiException exception)
+                {
+                    _logger.LogError(exception, ProcessingUsernameExceptionMessage,
+                        username);
+                }
+
+                try
+                {
+                    await _videoApiClient.AnonymiseParticipantWithUsernameAsync(username);
+                }
+                catch (VideoApiException exception)
+                {
+                    _logger.LogError(exception, ProcessingUsernameExceptionMessage,
+                        username);
+                }
+
+                try
+                {
+                    await _bookingsApiClient.AnonymisePersonWithUsernameForExpiredHearingsAsync(username);
+                }
+                catch (BookingsApiException exception)
+                {
+                    _logger.LogError(exception, ProcessingUsernameExceptionMessage, username);
+                }
             }
         }
 

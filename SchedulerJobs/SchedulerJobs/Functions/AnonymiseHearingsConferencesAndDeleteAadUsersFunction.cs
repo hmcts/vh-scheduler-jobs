@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Logging;
@@ -9,11 +10,14 @@ namespace SchedulerJobs.Functions
     {
         public const string LogInformationMessage = "Data anonymised for hearings, conferences older than 3 months.";
         private readonly IAnonymiseHearingsConferencesDataService _anonymiseHearingsConferencesDataService;
-
+        private readonly IJobHistoryService _jobHistoryService;
+        private bool jobSucceeded;
         public AnonymiseHearingsConferencesAndDeleteAadUsersFunction(
-            IAnonymiseHearingsConferencesDataService anonymiseHearingsConferencesDataService)
+            IAnonymiseHearingsConferencesDataService anonymiseHearingsConferencesDataService,
+            IJobHistoryService jobHistoryService)
         {
             _anonymiseHearingsConferencesDataService = anonymiseHearingsConferencesDataService;
+            _jobHistoryService = jobHistoryService;
         }
 
         /// <summary>
@@ -28,11 +32,22 @@ namespace SchedulerJobs.Functions
             {
                 log.LogTrace("Anonymise data function running late");
             }
-
-            await _anonymiseHearingsConferencesDataService.AnonymiseHearingsConferencesDataAsync(GetType().Name)
-                .ConfigureAwait(false);
-
-            log.LogInformation(LogInformationMessage);
+            try
+            {
+                await _anonymiseHearingsConferencesDataService.AnonymiseHearingsConferencesDataAsync()
+                    .ConfigureAwait(false);
+                jobSucceeded = true;
+                log.LogInformation(LogInformationMessage);
+            }
+            catch (Exception)
+            {
+                jobSucceeded = false;
+                throw;
+            }
+            finally
+            {
+                await _jobHistoryService.UpdateJobHistory(GetType().Name, jobSucceeded);
+            }
         }
     }
 }

@@ -11,11 +11,13 @@ namespace SchedulerJobs.Functions
     public class GetJudiciaryUsersFunction
     {
         private readonly IELinksService _eLinksService;
+        private readonly IJobHistoryService _jobHistoryService;
         private readonly ServicesConfiguration _servicesConfiguration;
-
-        public GetJudiciaryUsersFunction(IELinksService eLinksService, IOptions<ServicesConfiguration> servicesConfiguration)
+        private bool jobSucceeded;
+        public GetJudiciaryUsersFunction(IELinksService eLinksService, IOptions<ServicesConfiguration> servicesConfiguration, IJobHistoryService jobHistoryService)
         {
             _eLinksService = eLinksService;
+            _jobHistoryService = jobHistoryService;
             _servicesConfiguration = servicesConfiguration.Value;
         }
         
@@ -39,13 +41,18 @@ namespace SchedulerJobs.Functions
             {
                 await _eLinksService.ImportJudiciaryPeopleAsync(updatedSince);
                 await _eLinksService.ImportLeaversJudiciaryPeopleAsync(updatedSince);
+                jobSucceeded = true;
             }
             catch (Exception ex)
             {
+                jobSucceeded = false;
                 log.LogError(ex, ex.Message);
                 throw;
             }
-
+            finally
+            {
+                await _jobHistoryService.UpdateJobHistory(this.GetType().Name, jobSucceeded);
+            }
             log.LogInformation("Finished GetJudiciaryUsersFunction at: {Now} - param UpdatedSince: {UpdatedSince}",
                 DateTime.UtcNow, updatedSince.ToString("yyyy-MM-dd"));
         }

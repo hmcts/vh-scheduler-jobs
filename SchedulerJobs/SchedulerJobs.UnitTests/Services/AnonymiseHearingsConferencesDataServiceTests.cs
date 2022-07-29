@@ -55,7 +55,7 @@ namespace SchedulerJobs.UnitTests.Services
             
             _bookingApiClient.Setup(x => x.GetAnonymisationDataAsync()).ReturnsAsync(_anonymisationDataResponse);
 
-            await _anonymiseHearingsConferencesDataService.AnonymiseHearingsConferencesDataAsync(GetType().Name);
+            await _anonymiseHearingsConferencesDataService.AnonymiseHearingsConferencesDataAsync();
             
             
             _userApiClient.Verify(userApi => userApi
@@ -75,7 +75,7 @@ namespace SchedulerJobs.UnitTests.Services
             
             _bookingApiClient.Setup(x => x.GetAnonymisationDataAsync()).ReturnsAsync(_anonymisationDataResponse);
             
-            await _anonymiseHearingsConferencesDataService.AnonymiseHearingsConferencesDataAsync(It.IsAny<string>());
+            await _anonymiseHearingsConferencesDataService.AnonymiseHearingsConferencesDataAsync();
             
             _videoApiClient.Verify(videoApi => videoApi.AnonymiseConferenceWithHearingIdsAsync(It.Is<AnonymiseConferenceWithHearingIdsRequest>(request => request.HearingIds == _anonymisationDataResponse.HearingIds)), Times.Once);
             _videoApiClient.Verify(videoApi => videoApi.AnonymiseQuickLinkParticipantWithHearingIdsAsync(It.Is<AnonymiseQuickLinkParticipantWithHearingIdsRequest>(request => request.HearingIds == _anonymisationDataResponse.HearingIds)), Times.Once);
@@ -90,7 +90,7 @@ namespace SchedulerJobs.UnitTests.Services
             
             _bookingApiClient.Setup(x => x.GetAnonymisationDataAsync()).ReturnsAsync(_anonymisationDataResponse);
             
-            await _anonymiseHearingsConferencesDataService.AnonymiseHearingsConferencesDataAsync(It.IsAny<string>());
+            await _anonymiseHearingsConferencesDataService.AnonymiseHearingsConferencesDataAsync();
             
             _videoApiClient.Verify(videoApi => videoApi.AnonymiseConferenceWithHearingIdsAsync(It.IsAny<AnonymiseConferenceWithHearingIdsRequest>()), Times.Never);
             _videoApiClient.Verify(videoApi => videoApi.AnonymiseQuickLinkParticipantWithHearingIdsAsync(It.IsAny<AnonymiseQuickLinkParticipantWithHearingIdsRequest>()), Times.Never);
@@ -105,7 +105,7 @@ namespace SchedulerJobs.UnitTests.Services
             
             _bookingApiClient.Setup(x => x.GetAnonymisationDataAsync()).ReturnsAsync(_anonymisationDataResponse);
             
-            await _anonymiseHearingsConferencesDataService.AnonymiseHearingsConferencesDataAsync(It.IsAny<string>());
+            await _anonymiseHearingsConferencesDataService.AnonymiseHearingsConferencesDataAsync();
             
             
             _userApiClient.Verify(userApi => userApi.GetUserByAdUserNameAsync(It.IsAny<string>()), Times.Never);
@@ -130,7 +130,7 @@ namespace SchedulerJobs.UnitTests.Services
                     .CreateNew().With(r => r.IsUserAdmin = true)
                     .Build());
             
-            await _anonymiseHearingsConferencesDataService.AnonymiseHearingsConferencesDataAsync(It.IsAny<string>());
+            await _anonymiseHearingsConferencesDataService.AnonymiseHearingsConferencesDataAsync();
             
             _userApiClient.Verify(userApi => userApi.DeleteUserAsync(It.Is<string>(username => username == usernameNotToDeleteFromAd)), Times.Never);
             _userApiClient.Verify(userApi => userApi.DeleteUserAsync(It.Is<string>(username => username == _anonymisationDataResponse.Usernames.Last())), Times.Once);
@@ -153,7 +153,7 @@ namespace SchedulerJobs.UnitTests.Services
                     .CreateNew().With(r => r.UserRole = userRole)
                     .Build());
             
-            await _anonymiseHearingsConferencesDataService.AnonymiseHearingsConferencesDataAsync(It.IsAny<string>());
+            await _anonymiseHearingsConferencesDataService.AnonymiseHearingsConferencesDataAsync();
             
             _userApiClient.Verify(userApi => userApi.DeleteUserAsync(It.Is<string>(username => username == usernameNotToDeleteFromAd)), Times.Never);
             _userApiClient.Verify(userApi => userApi.DeleteUserAsync(It.Is<string>(username => username == _anonymisationDataResponse.Usernames.Last())), Times.Once);
@@ -173,7 +173,7 @@ namespace SchedulerJobs.UnitTests.Services
             _userApiClient.Setup(x => x.DeleteUserAsync(It.Is<string>(username => username == usernameToThrowException)))
                 .ThrowsAsync(unknownException);
             
-            await _anonymiseHearingsConferencesDataService.AnonymiseHearingsConferencesDataAsync(It.IsAny<string>());
+            await _anonymiseHearingsConferencesDataService.AnonymiseHearingsConferencesDataAsync();
 
             _userApiClient.Verify(userApi => userApi
                 .DeleteUserAsync(It.Is<string>(username => _anonymisationDataResponse.Usernames.Contains(username))), Times.Exactly(3));
@@ -206,7 +206,7 @@ namespace SchedulerJobs.UnitTests.Services
             _userApiClient.Setup(x => x.GetUserByAdUserNameAsync(It.Is<string>(username => username == usernameToThrowException)))
                 .ThrowsAsync(unknownException);
             
-            await _anonymiseHearingsConferencesDataService.AnonymiseHearingsConferencesDataAsync(It.IsAny<string>());
+            await _anonymiseHearingsConferencesDataService.AnonymiseHearingsConferencesDataAsync();
 
             _userApiClient.Verify(userApi => userApi
                 .DeleteUserAsync(It.Is<string>(username => _anonymisationDataResponse.Usernames.Contains(username))), Times.Exactly(2));
@@ -239,7 +239,7 @@ namespace SchedulerJobs.UnitTests.Services
             _videoApiClient.Setup(x => x.AnonymiseParticipantWithUsernameAsync(It.Is<string>(username => username == usernameToThrowException)))
                 .ThrowsAsync(unknownException);
             
-            await _anonymiseHearingsConferencesDataService.AnonymiseHearingsConferencesDataAsync(It.IsAny<string>());
+            await _anonymiseHearingsConferencesDataService.AnonymiseHearingsConferencesDataAsync();
 
             _userApiClient.Verify(userApi => userApi
                 .DeleteUserAsync(It.Is<string>(username => _anonymisationDataResponse.Usernames.Contains(username))), Times.Exactly(3));
@@ -272,7 +272,7 @@ namespace SchedulerJobs.UnitTests.Services
             _bookingApiClient.Setup(x => x.AnonymisePersonWithUsernameForExpiredHearingsAsync(It.Is<string>(username => username == usernameToThrowException)))
                 .ThrowsAsync(unknownException);
             
-            await _anonymiseHearingsConferencesDataService.AnonymiseHearingsConferencesDataAsync(It.IsAny<string>());
+            await _anonymiseHearingsConferencesDataService.AnonymiseHearingsConferencesDataAsync();
 
             _userApiClient.Verify(userApi => userApi
                 .DeleteUserAsync(It.Is<string>(username => _anonymisationDataResponse.Usernames.Contains(username))), Times.Exactly(3));
