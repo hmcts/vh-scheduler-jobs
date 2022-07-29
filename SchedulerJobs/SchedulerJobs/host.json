@@ -1,6 +1,5 @@
 {
   "version": "2.0",
-  "functionTimeout": "01:00:00",
   "extensions": {
     "http": {
       "routePrefix": "",
@@ -16,12 +15,8 @@
         "excludedTypes": "Request"
       }
     },
-    "fileLoggingMode": "always",
-    "logLevel": {
-        "Default": "Debug",
-        "Host.Results": "Error",
-        "Function": "Trace",
-        "Host.Aggregator": "Trace"
+    "LogLevel": {
+      "Default": "Information"
     }
   }
 }
