@@ -214,7 +214,7 @@ stages:
             value: vh-azure-storage-configuration-end-point
             secret: true
           # Feature Toggle
-          - name: FeatureToggles:SDK-Key
+          - name: FeatureToggles:SdkKey
             value: vh-admin-web-Feature-Toggle
             secret: true
         acceptanceTestSettings:
@@ -233,6 +233,6 @@ stages:
           - name: VhServices:SchedulerJobsUrl
             value: $(scheduler_jobs_url)
           # Feature Toggle
-          - name: FeatureToggles:SDK-Key
+          - name: FeatureToggles:SdkKey
             value: vh-admin-web-Feature-Toggle
             secret: true

@@ -42,7 +42,8 @@ java:
         - VhServices--ELinksPeoplesBaseUrl
         - VhServices--ELinksApiKey
         - VhServices--ELinksApiUrl
-        - FeatureToggles--SDK-Key
+        - name: FeatureToggles--SDK-Key
+          alias: FeatureToggles--SdkKey
     vh-bookings-api:
       excludeEnvironmentSuffix: false
       resourceGroup: vh-infra-core-{{ .Values.global.environment }}

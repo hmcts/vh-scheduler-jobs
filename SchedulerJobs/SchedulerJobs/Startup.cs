@@ -125,7 +125,7 @@ namespace SchedulerJobs
 
             bool.TryParse(configuration["UseELinksStub"], out var useELinksStub);
 
-            var featureToggle = new FeatureToggles(configuration.GetSection("FeatureToggles:SDK-Key").Value);
+            var featureToggle = new FeatureToggles(configuration.GetSection("FeatureToggles:SdkKey").Value);
             
             if (useELinksStub)
             {
