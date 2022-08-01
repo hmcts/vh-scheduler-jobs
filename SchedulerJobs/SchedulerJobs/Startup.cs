@@ -29,15 +29,14 @@ namespace SchedulerJobs
     {
         public override void ConfigureAppConfiguration(IFunctionsConfigurationBuilder builder)
         {
-            Console.WriteLine("VH Scheduler jobs: ConfigureAppConfiguration : App has started");
             if (builder == null)
             {
                 throw new ArgumentNullException(nameof(builder));
             }
 
+
             base.ConfigureAppConfiguration(builder);
 
-            Console.WriteLine("VH Scheduler jobs: ConfigureAppConfiguration : Initializing key vualt array");
             var keyVaults=new List<string> (){
                 "vh-infra-core",
                 "vh-scheduler-jobs",
@@ -46,76 +45,66 @@ namespace SchedulerJobs
                 "vh-notification-api",
                 "vh-user-api"
             };
-            Console.WriteLine("VH Scheduler jobs: ConfigureAppConfiguration : configuring middle wares");
+
             var context = builder.GetContext();
             builder.ConfigurationBuilder
                 .AddJsonFile(Path.Combine(context.ApplicationRootPath, $"appsettings.json"), true)
                 .AddJsonFile(Path.Combine(context.ApplicationRootPath, $"appsettings.{context.EnvironmentName}.json"), true)
                 .AddUserSecrets("518CD6B6-4F2B-4431-94C8-4D0F4137295F")
                 .AddEnvironmentVariables();
+            
             foreach (var keyVault in keyVaults)
             {
-                Console.WriteLine("VH Scheduler jobs: ConfigureAppConfiguration :adding key vault path for " + keyVault);
-                
-                builder.ConfigurationBuilder.AddAksKeyVaultSecretProvider(keyVault);
+                builder.ConfigurationBuilder.AddAksKeyVaultSecretProvider($"/mnt/secrets/{keyVault}");
             }
         }
 
         public override void Configure(IFunctionsHostBuilder builder)
         {
-            Console.WriteLine("VH Scheduler jobs: Configure :  About to register services");
             if (builder == null)
             {
                 throw new ArgumentNullException(nameof(builder));
             }
 
             var context = builder.GetContext();
-            
-            Console.WriteLine("VH Scheduler jobs: Configure : calling register services");
             RegisterServices(builder.Services, context.Configuration);
         }
         
 
         public void RegisterServices(IServiceCollection services, IConfiguration configuration)
         {
-            Console.WriteLine("VH Scheduler jobs: RegisterServices : configuring memory cache");
             var memoryCache = new MemoryCache(Options.Create(new MemoryCacheOptions()));
             services.AddSingleton<IMemoryCache>(memoryCache);
             
             
-            Console.WriteLine("VH Scheduler jobs: RegisterServices : configuration section for azuread");
+            
             services.Configure<AzureAdConfiguration>(options =>
             {
                 configuration.GetSection("AzureAd").Bind(options);
             });
-            Console.WriteLine("VH Scheduler jobs: RegisterServices : configuration section for VhServices");
             services.Configure<ServicesConfiguration>(options =>
             {
                 configuration.GetSection("VhServices").Bind(options);
             });
-            Console.WriteLine("VH Scheduler jobs: RegisterServices : configuration section for WowzaConfiguration");
+            
             services.Configure<AzureConfiguration>(options =>
             {
                 configuration.GetSection("WowzaConfiguration").Bind(options);
             });
-            Console.WriteLine("VH Scheduler jobs: RegisterServices : binding VhServices to var serviceConfiguration");
 
             var serviceConfiguration = new ServicesConfiguration();
             configuration.GetSection("VhServices").Bind(serviceConfiguration);
-            Console.WriteLine("VH Scheduler jobs: RegisterServices : binding AzureConfiguration to var azureConfiguration");
             
             var azureConfiguration = new AzureConfiguration();
             configuration.GetSection("AzureConfiguration").Bind(azureConfiguration);
             
-            Console.WriteLine("VH Scheduler jobs: RegisterServices : resolving dependency for azure config with singleton middleware");
+            
             services.AddSingleton(configuration.GetSection("AzureConfiguration").Get<AzureConfiguration>());
             
             
-            Console.WriteLine("VH Scheduler jobs: RegisterServices : configuring BlobServiceClient");
             var vhBlobServiceClient = new BlobServiceClient(new Uri(azureConfiguration.StorageEndpoint),
                 new StorageSharedKeyCredential(azureConfiguration.StorageAccountName, azureConfiguration.StorageAccountKey));
             var blobClientExtension = new BlobClientExtension();
-            Console.WriteLine("VH Scheduler jobs: RegisterServices : configuring azureStorage");
             var azureStorage =
                 new VhAzureStorageService(vhBlobServiceClient, azureConfiguration, false, blobClientExtension);
             services.AddSingleton<IAzureStorageService>(x => azureStorage);
@@ -126,10 +115,7 @@ namespace SchedulerJobs
             services.AddLogging(builder =>
               builder.AddApplicationInsights(configuration["ApplicationInsights:InstrumentationKey"])
             );
-            
-            
-            Console.WriteLine("Logging tenant id");
-            Console.WriteLine("Tenant id: "  + configuration["AzureAd:TenantId"]);
+
             services.AddScoped<ICloseConferenceService, CloseConferenceService>();
             services.AddScoped<IClearConferenceChatHistoryService, ClearConferenceChatHistoryService>();
             services.AddScoped<IAnonymiseHearingsConferencesDataService, AnonymiseHearingsConferencesDataService>();
