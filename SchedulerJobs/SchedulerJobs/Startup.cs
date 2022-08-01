@@ -55,6 +55,7 @@ namespace SchedulerJobs
             
             foreach (var keyVault in keyVaults)
             {
+                
                 builder.ConfigurationBuilder.AddAksKeyVaultSecretProvider(keyVault);
             }
         }
@@ -115,7 +116,10 @@ namespace SchedulerJobs
             services.AddLogging(builder =>
               builder.AddApplicationInsights(configuration["ApplicationInsights:InstrumentationKey"])
             );
-
+            
+            
+            Console.WriteLine("Logging tenant id");
+            Console.WriteLine("Tenant id: "  + configuration["AzureAd:TenantId"]);
             services.AddScoped<ICloseConferenceService, CloseConferenceService>();
             services.AddScoped<IClearConferenceChatHistoryService, ClearConferenceChatHistoryService>();
             services.AddScoped<IAnonymiseHearingsConferencesDataService, AnonymiseHearingsConferencesDataService>();
