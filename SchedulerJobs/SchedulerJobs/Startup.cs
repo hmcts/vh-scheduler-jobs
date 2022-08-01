@@ -50,13 +50,19 @@ namespace SchedulerJobs
             builder.ConfigurationBuilder
                 .AddJsonFile(Path.Combine(context.ApplicationRootPath, $"appsettings.json"), true)
                 .AddJsonFile(Path.Combine(context.ApplicationRootPath, $"appsettings.{context.EnvironmentName}.json"), true)
+                .AddAksKeyVaultSecretProvider("vh-infra-core")
+                .AddAksKeyVaultSecretProvider("vh-scheduler-jobs")
+                .AddAksKeyVaultSecretProvider("vh-bookings-api")
+                .AddAksKeyVaultSecretProvider("vh-video-api")
+                .AddAksKeyVaultSecretProvider("vh-notification-api")
+                .AddAksKeyVaultSecretProvider("vh-user-api")
                 .AddUserSecrets("518CD6B6-4F2B-4431-94C8-4D0F4137295F")
                 .AddEnvironmentVariables();
             
-            foreach (var keyVault in keyVaults)
-            {
-                builder.ConfigurationBuilder.AddAksKeyVaultSecretProvider(keyVault);
-            }
+            //foreach (var keyVault in keyVaults)
+            //{
+            //    builder.ConfigurationBuilder.AddAksKeyVaultSecretProvider(keyVault);
+            //}
         }
 
         public override void Configure(IFunctionsHostBuilder builder)
