@@ -15,14 +15,14 @@ namespace SchedulerJobs.Services
         Task AnonymiseHearingsConferencesDataAsync();
     }
 
-    public class
-        AnonymiseHearingsConferencesDataService : IAnonymiseHearingsConferencesDataService
+    public class AnonymiseHearingsConferencesDataService : IAnonymiseHearingsConferencesDataService
     {
         private readonly IBookingsApiClient _bookingsApiClient;
         private readonly ILogger<AnonymiseHearingsConferencesDataService> _logger;
         private readonly IUserApiClient _userApiClient;
         private readonly IVideoApiClient _videoApiClient;
-        public const string ProcessingUsernameExceptionMessage = "unknown exception when processing {username}";
+        private const string ProcessingUsernameExceptionMessage = "unknown exception when processing {username}";
+
 
         public AnonymiseHearingsConferencesDataService(IVideoApiClient videoApiClient,
             IBookingsApiClient bookingsApiClient,
@@ -42,12 +42,14 @@ namespace SchedulerJobs.Services
             if (anonymisationData.HearingIds.Any())
             {
                 _logger.LogInformation("Hearing ids being processed: {hearingids}", anonymisationData.HearingIds);
-                
-                await _videoApiClient.AnonymiseConferenceWithHearingIdsAsync(new AnonymiseConferenceWithHearingIdsRequest
-                    { HearingIds = anonymisationData.HearingIds });
-                
+
+                await _videoApiClient.AnonymiseConferenceWithHearingIdsAsync(
+                    new AnonymiseConferenceWithHearingIdsRequest
+                        {HearingIds = anonymisationData.HearingIds});
+
                 await _videoApiClient.AnonymiseQuickLinkParticipantWithHearingIdsAsync(
-                    new AnonymiseQuickLinkParticipantWithHearingIdsRequest { HearingIds = anonymisationData.HearingIds });
+                    new AnonymiseQuickLinkParticipantWithHearingIdsRequest
+                        {HearingIds = anonymisationData.HearingIds});
 
                 await _bookingsApiClient.AnonymiseParticipantAndCaseByHearingIdAsync("hearingIds",
                     anonymisationData.HearingIds);
@@ -55,7 +57,7 @@ namespace SchedulerJobs.Services
 
 
             if (!anonymisationData.Usernames.Any()) return;
-            
+
             foreach (var username in anonymisationData.Usernames)
             {
                 try
@@ -89,8 +91,7 @@ namespace SchedulerJobs.Services
                 }
                 catch (BookingsApiException exception)
                 {
-                    _logger.LogError(exception, ProcessingUsernameExceptionMessage,
-                        username);
+                    _logger.LogError(exception, ProcessingUsernameExceptionMessage, username);
                 }
             }
         }
