@@ -99,14 +99,6 @@ namespace SchedulerJobs
             var azureConfiguration = new AzureConfiguration();
             configuration.GetSection("AzureConfiguration").Bind(azureConfiguration);
             
-            Console.WriteLine("VH Scheduler jobs : printing out azure config");
-            foreach(PropertyDescriptor  descriptor in TypeDescriptor.GetProperties(azureConfiguration))
-            {
-                string name = descriptor.Name;
-                object value = descriptor.GetValue(azureConfiguration);
-                Console.WriteLine("{0}={1}", name, value);
-            }
-            
             Console.WriteLine("VH Scheduler jobs: RegisterServices : resolving dependency for azure config with singleton middleware");
             services.AddSingleton(configuration.GetSection("AzureConfiguration").Get<AzureConfiguration>());
             

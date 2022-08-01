@@ -13,7 +13,8 @@ RUN dotnet publish SchedulerJobs --configfile nuget.config -c Debug -o /home/sit
 FROM mcr.microsoft.com/azure-functions/dotnet:3.0
 ENV AzureWebJobsScriptRoot=/home/site/wwwroot \
     AzureFunctionsJobHost__Logging__Console__IsEnabled=true 
-#RUN apt-get update && apt-get -yq install curl
+RUN apt-get update && apt-get -yq install curl
 EXPOSE 80
+EXPOSE 443
 
 COPY --from=installer-env ["/home/site/wwwroot", "/home/site/wwwroot"]
