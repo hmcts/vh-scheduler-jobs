@@ -26,6 +26,7 @@ using System.ComponentModel;
 [assembly: FunctionsStartup(typeof(SchedulerJobs.Startup))]
 namespace SchedulerJobs
 {
+    [ExcludeFromCodeCoverage]
     public class Startup : FunctionsStartup
     {
         public override void ConfigureAppConfiguration(IFunctionsConfigurationBuilder builder)

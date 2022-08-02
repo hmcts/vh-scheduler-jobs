@@ -8,7 +8,7 @@ RUN mkdir -p /home/site/wwwroot
 COPY SchedulerJobs .
 COPY --from=gitversion /version/AssemblyInfo.cs .
 
-RUN dotnet publish SchedulerJobs --configfile nuget.config -c Debug -o /home/site/wwwroot
+RUN dotnet publish SchedulerJobs --configfile nuget.config -c Production -o /home/site/wwwroot
 
 FROM mcr.microsoft.com/azure-functions/dotnet:3.0
 ENV AzureWebJobsScriptRoot=/home/site/wwwroot \
