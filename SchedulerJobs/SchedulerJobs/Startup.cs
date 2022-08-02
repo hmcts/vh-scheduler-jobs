@@ -115,7 +115,7 @@ namespace SchedulerJobs
             
             services.AddScoped<IAzureTokenProvider, AzureTokenProvider>();
 
-            const string applicationInsightsKey = configuration["ApplicationInsights:InstrumentationKey"];
+            var applicationInsightsKey = configuration["ApplicationInsights:InstrumentationKey"];
             services.AddLogging(builder =>
               builder.AddApplicationInsights(applicationInsightsKey)
             );
