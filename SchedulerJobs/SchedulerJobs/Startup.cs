@@ -22,6 +22,7 @@ using NotificationApi.Client;
 using SchedulerJobs.Services.Configuration;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 
 [assembly: FunctionsStartup(typeof(SchedulerJobs.Startup))]
 namespace SchedulerJobs
