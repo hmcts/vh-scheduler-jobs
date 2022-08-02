@@ -11,12 +11,12 @@ namespace SchedulerJobs.Functions
     public class GetJudiciaryUsersFunction
     {
         private readonly IELinksService _eLinksService;
-        private readonly ServicesConfiguration _servicesConfiguration;
-
-        public GetJudiciaryUsersFunction(IELinksService eLinksService, IOptions<ServicesConfiguration> servicesConfiguration)
+        private readonly IJobHistoryService _jobHistoryService;
+        private bool jobSucceeded;
+        public GetJudiciaryUsersFunction(IELinksService eLinksService, IJobHistoryService jobHistoryService)
         {
             _eLinksService = eLinksService;
-            _servicesConfiguration = servicesConfiguration.Value;
+            _jobHistoryService = jobHistoryService;
         }
         
         /// <summary>
@@ -29,9 +29,8 @@ namespace SchedulerJobs.Functions
         [FunctionName("GetJudiciaryUsersFunction")]
         public async Task RunAsync([TimerTrigger("0 0 2 * * *", RunOnStartup = true)] TimerInfo myTimer, ILogger log)
         {
-            var days = Math.Max(_servicesConfiguration?.ELinksApiGetPeopleUpdatedSinceDays ?? 1, 1);
-            var updatedSince = DateTime.UtcNow.AddDays(-days);
-
+            var lastRun = await _jobHistoryService.GetMostRecentSuccessfulRunDate(GetType().Name);
+            var updatedSince = lastRun ?? DateTime.UtcNow.AddDays(-1);
             log.LogInformation("Started GetJudiciaryUsersFunction at: {Now} - param UpdatedSince: {UpdatedSince}",
             DateTime.UtcNow, updatedSince.ToString("yyyy-MM-dd"));
 
@@ -39,13 +38,18 @@ namespace SchedulerJobs.Functions
             {
                 await _eLinksService.ImportJudiciaryPeopleAsync(updatedSince);
                 await _eLinksService.ImportLeaversJudiciaryPeopleAsync(updatedSince);
+                jobSucceeded = true;
             }
             catch (Exception ex)
             {
+                jobSucceeded = false;
                 log.LogError(ex, ex.Message);
                 throw;
             }
-
+            finally
+            {
+                await _jobHistoryService.UpdateJobHistory(GetType().Name, jobSucceeded);
+            }
             log.LogInformation("Finished GetJudiciaryUsersFunction at: {Now} - param UpdatedSince: {UpdatedSince}",
                 DateTime.UtcNow, updatedSince.ToString("yyyy-MM-dd"));
         }

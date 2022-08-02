@@ -52,8 +52,13 @@ namespace SchedulerJobs.UnitTests.Functions
         [Test]
         public async Task Should_Call_And_ImportJudiciaryPeopleAsync_On_Specific_Date()
         {
-            var dateRangeStart = DateTime.UtcNow.AddDays(-_servicesConfiguration.Object.Value.ELinksApiGetPeopleUpdatedSinceDays).AddMinutes(-1);
-            var dateRangeEnd = DateTime.UtcNow.AddDays(-_servicesConfiguration.Object.Value.ELinksApiGetPeopleUpdatedSinceDays).AddMinutes(1);
+            var mockDate = DateTime.UtcNow;
+            
+            var dateRangeStart = mockDate.AddMinutes(-1);
+            var dateRangeEnd = mockDate.AddMinutes(1);
+            _mocker.Mock<IJobHistoryService>().Setup(x => x.GetMostRecentSuccessfulRunDate(It.IsAny<string>()))
+                                              .ReturnsAsync(mockDate);
+            
             await _sut.RunAsync(_timerInfo, _logger);
             _elinksService.Verify(x => x.ImportJudiciaryPeopleAsync(It.IsInRange(dateRangeStart, dateRangeEnd, Moq.Range.Inclusive)), Times.Once);
         }
@@ -61,10 +66,34 @@ namespace SchedulerJobs.UnitTests.Functions
         [Test]
         public async Task Should_Call_And_ImportLeaversJudiciaryPeopleAsync_On_Specific_Date()
         {
-            var dateRangeStart = DateTime.UtcNow.AddDays(-_servicesConfiguration.Object.Value.ELinksApiGetPeopleUpdatedSinceDays).AddMinutes(-1);
-            var dateRangeEnd = DateTime.UtcNow.AddDays(-_servicesConfiguration.Object.Value.ELinksApiGetPeopleUpdatedSinceDays).AddMinutes(1);
+            var mockDate = DateTime.UtcNow;
+            
+            var dateRangeStart = mockDate.AddMinutes(-1);
+            var dateRangeEnd = mockDate.AddMinutes(1);
+            _mocker.Mock<IJobHistoryService>().Setup(x => x.GetMostRecentSuccessfulRunDate(It.IsAny<string>()))
+                .ReturnsAsync(mockDate);
+
+            
             await _sut.RunAsync(_timerInfo, _logger);
             _elinksService.Verify(x => x.ImportLeaversJudiciaryPeopleAsync(It.IsInRange(dateRangeStart, dateRangeEnd, Moq.Range.Inclusive)), Times.Once);
+        }
+        
+        [Test]
+        public async Task Should_call_job_history_with_false_when_error_thrown()
+        {
+
+            _mocker.Mock<IELinksService>()
+                .Setup(e => e.ImportJudiciaryPeopleAsync(It.IsAny<DateTime>())).Throws<Exception>();
+            try
+            {
+                // Act
+                await _sut.RunAsync(_timerInfo, _logger);
+            }
+            catch(Exception)
+            {
+                // Assert
+                _mocker.Mock<IJobHistoryService>().Verify(x => x.UpdateJobHistory(It.IsAny<string>(), false), Times.Once);
+            }
         }
     }
 }
