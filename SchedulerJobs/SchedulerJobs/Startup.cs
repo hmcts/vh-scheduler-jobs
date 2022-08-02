@@ -115,8 +115,9 @@ namespace SchedulerJobs
             
             services.AddScoped<IAzureTokenProvider, AzureTokenProvider>();
 
+            const string applicationInsightsKey = configuration["ApplicationInsights:InstrumentationKey"];
             services.AddLogging(builder =>
-              builder.AddApplicationInsights(configuration["ApplicationInsights:InstrumentationKey"])
+              builder.AddApplicationInsights(applicationInsightsKey)
             );
 
             services.AddScoped<ICloseConferenceService, CloseConferenceService>();
