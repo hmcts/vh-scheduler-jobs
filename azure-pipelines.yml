@@ -48,7 +48,7 @@ parameters:
     secret: true
     
   # Feature Toggle
-  - name: FeatureToggles:SDK-Key
+  - name: FeatureToggles:SdkKey
     value: vh-admin-web-Feature-Toggle
     secret: true
 
@@ -94,6 +94,7 @@ parameters:
     secret: true
   - name: VhServices:UserApiUrl
     value: $(user_api_url)
+    
   - name: VhServices:ELinksLeaversBaseUrl
     value: $(elinks_leavers_api_url_staging)
   - name: VhServices:ELinksPeoplesBaseUrl
@@ -121,7 +122,7 @@ parameters:
     secret: true
     
     # Feature Toggle
-  - name: FeatureToggles:SDK-Key
+  - name: FeatureToggles:SdkKey
     value: vh-admin-web-Feature-Toggle
     secret: true
 

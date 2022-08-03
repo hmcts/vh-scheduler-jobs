@@ -3,18 +3,18 @@ WORKDIR /version
 COPY .git .git
 RUN /tools/dotnet-gitversion /ensureassemblyinfo /updateassemblyinfo AssemblyInfo.cs /nofetch /config /GitVersion.yml
 
-FROM mcr.microsoft.com/dotnet/core/sdk:3.1-buster AS build
+FROM mcr.microsoft.com/dotnet/core/sdk:3.1 AS installer-env
 RUN mkdir -p /home/site/wwwroot
 COPY SchedulerJobs .
-RUN dotnet restore --configfile nuget.config SchedulerJobs
 COPY --from=gitversion /version/AssemblyInfo.cs .
-RUN dotnet build SchedulerJobs -c Release
 
-FROM build AS publish
-RUN dotnet publish SchedulerJobs -c Release -o /home/site/wwwroot
+RUN dotnet publish SchedulerJobs --configfile nuget.config -c Production -o /home/site/wwwroot
 
 FROM mcr.microsoft.com/azure-functions/dotnet:3.0
 ENV AzureWebJobsScriptRoot=/home/site/wwwroot \
-    AzureFunctionsJobHost__Logging__Console__IsEnabled=true
+    AzureFunctionsJobHost__Logging__Console__IsEnabled=true 
+RUN apt-get update && apt-get -yq install curl
+EXPOSE 80
+EXPOSE 443
 
-COPY --from=publish ["/home/site/wwwroot", "/home/site/wwwroot"]
+COPY --from=installer-env ["/home/site/wwwroot", "/home/site/wwwroot"]
