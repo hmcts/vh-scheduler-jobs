@@ -21,7 +21,6 @@ using SchedulerJobs.Services.Interfaces;
 using NotificationApi.Client;
 using SchedulerJobs.Services.Configuration;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 
 [assembly: FunctionsStartup(typeof(SchedulerJobs.Startup))]
@@ -36,7 +35,6 @@ namespace SchedulerJobs
             {
                 throw new ArgumentNullException(nameof(builder));
             }
-
 
             base.ConfigureAppConfiguration(builder);
 
@@ -104,7 +102,6 @@ namespace SchedulerJobs
             Console.WriteLine("VH Scheduler jobs: RegisterServices : resolving dependency for azure config with singleton middleware");
             services.AddSingleton(configuration.GetSection("AzureConfiguration").Get<AzureConfiguration>());
             
-            
             var vhBlobServiceClient = new BlobServiceClient(new Uri(azureConfiguration.StorageEndpoint),
                 new StorageSharedKeyCredential(azureConfiguration.StorageAccountName, azureConfiguration.StorageAccountKey));
             var blobClientExtension = new BlobClientExtension();
@@ -115,9 +112,8 @@ namespace SchedulerJobs
             
             services.AddScoped<IAzureTokenProvider, AzureTokenProvider>();
 
-            var applicationInsightsKey = configuration["ApplicationInsights:InstrumentationKey"];
             services.AddLogging(builder =>
-              builder.AddApplicationInsights(applicationInsightsKey)
+              builder.AddApplicationInsights(configuration["ApplicationInsights:InstrumentationKey"])
             );
 
             services.AddScoped<ICloseConferenceService, CloseConferenceService>();
