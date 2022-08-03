@@ -23,21 +23,6 @@ parameters:
   - Prod
 
 #####################################################
-# Generate Entity Framework Script. #################
-
-stages:
-  - stage: pre_run_tasks
-    displayName: Pre-Release Tasks
-    variables:
-      - template: variables/shared.yaml
-      - ${{ if contains(variables['Build.SourceBranch'], 'refs/heads/release') }}:
-        - template: variables/production.yaml
-      - ${{ else }}:
-        - template: variables/staging.yaml
-    jobs:
-      
-
-#####################################################
 # Approval Gate for Video API Release. ############
 
   - stage: Approve_Helm_Release
