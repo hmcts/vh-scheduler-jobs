@@ -22,6 +22,7 @@ parameters:
   - Staging
   - Prod
 
+stages:
 #####################################################
 # Approval Gate for Video API Release. ############
 
