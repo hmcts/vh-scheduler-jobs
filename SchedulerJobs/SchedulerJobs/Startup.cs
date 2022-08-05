@@ -20,10 +20,13 @@ using VideoApi.Client;
 using SchedulerJobs.Services.Interfaces;
 using NotificationApi.Client;
 using SchedulerJobs.Services.Configuration;
+using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 [assembly: FunctionsStartup(typeof(SchedulerJobs.Startup))]
 namespace SchedulerJobs
 {
+    [ExcludeFromCodeCoverage]
     public class Startup : FunctionsStartup
     {
         public override void ConfigureAppConfiguration(IFunctionsConfigurationBuilder builder)
@@ -33,20 +36,28 @@ namespace SchedulerJobs
                 throw new ArgumentNullException(nameof(builder));
             }
 
-
             base.ConfigureAppConfiguration(builder);
 
-            const string vhInfraCore = "/mnt/secrets/vh-infra-core";
-            const string vhSchedulerJobs = "/mnt/secrets/vh-scheduler-jobs";
+            var keyVaults=new List<string> (){
+                "vh-infra-core",
+                "vh-scheduler-jobs",
+                "vh-bookings-api",
+                "vh-video-api",
+                "vh-notification-api",
+                "vh-user-api"
+            };
 
             var context = builder.GetContext();
             builder.ConfigurationBuilder
                 .AddJsonFile(Path.Combine(context.ApplicationRootPath, $"appsettings.json"), true)
                 .AddJsonFile(Path.Combine(context.ApplicationRootPath, $"appsettings.{context.EnvironmentName}.json"), true)
-                .AddAksKeyVaultSecretProvider(vhInfraCore)
-                .AddAksKeyVaultSecretProvider(vhSchedulerJobs)
                 .AddUserSecrets("518CD6B6-4F2B-4431-94C8-4D0F4137295F")
                 .AddEnvironmentVariables();
+            
+            foreach (var keyVault in keyVaults)
+            {
+                builder.ConfigurationBuilder.AddAksKeyVaultSecretProvider($"/mnt/secrets/{keyVault}");
+            }
         }
 
         public override void Configure(IFunctionsHostBuilder builder)
@@ -88,9 +99,8 @@ namespace SchedulerJobs
             var azureConfiguration = new AzureConfiguration();
             configuration.GetSection("AzureConfiguration").Bind(azureConfiguration);
             
-            
+            Console.WriteLine("VH Scheduler jobs: RegisterServices : resolving dependency for azure config with singleton middleware");
             services.AddSingleton(configuration.GetSection("AzureConfiguration").Get<AzureConfiguration>());
-            
             
             var vhBlobServiceClient = new BlobServiceClient(new Uri(azureConfiguration.StorageEndpoint),
                 new StorageSharedKeyCredential(azureConfiguration.StorageAccountName, azureConfiguration.StorageAccountKey));
@@ -116,7 +126,7 @@ namespace SchedulerJobs
 
             bool.TryParse(configuration["UseELinksStub"], out var useELinksStub);
 
-            var featureToggle = new FeatureToggles(configuration.GetSection("FeatureToggles:SDK-Key").Value);
+            var featureToggle = new FeatureToggles(configuration.GetSection("FeatureToggles:SdkKey").Value);
             
             if (useELinksStub)
             {
