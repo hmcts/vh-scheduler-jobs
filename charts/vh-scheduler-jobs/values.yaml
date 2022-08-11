@@ -38,6 +38,8 @@ java:
         - azuread--clientsecret
         - azuread--clientid
         - azuread--identifieruri
+        - name: azuread--identifieruri
+          alias: azuread--VHSchedulerJobsRESOURCEID
         - VhServices--ELinksLeaversBaseUrl
         - VhServices--ELinksPeoplesBaseUrl
         - VhServices--ELinksApiKey
@@ -85,7 +87,6 @@ java:
     APPINSIGHTS_PROFILERFEATURE_VERSION: disabled
     APPINSIGHTS_SNAPSHOTFEATURE_VERSION: disabled
     APPLICATIONINSIGHTSAGENT_EXTENSION_VERSION: ~2
-    AZUREAD__VHSchedulerJobsRESOURCEID: http://vh-scheduler-jobs.{{ .Values.global.environment }}.platform.hmcts.net/
     MSDEPLOY_RENAME_LOCKED_FILES: 1
     SERVICES__SchedulerJobsURL: http://vh-scheduler-jobs.{{ .Values.global.environment }}.platform.hmcts.net
     Logging__LogLevel__Default: debug
@@ -94,3 +95,5 @@ java:
     FUNCTIONS_EXTENSION_VERSION: ~3
     FUNCTIONS_WORKER_RUNTIME: dotnet
     VhServices__ELinksApiGetPeopleUpdatedSinceDays: "8000"
+    AzureWebJobs.AnonymiseHearingsConferencesAndDeleteAadUsersFunction.Disabled: 0
+    AzureWebJobs.GetJudiciaryUsersFunction.Disabled: 0
