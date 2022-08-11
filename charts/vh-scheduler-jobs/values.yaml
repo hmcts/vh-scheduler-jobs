@@ -95,3 +95,5 @@ java:
     FUNCTIONS_EXTENSION_VERSION: ~3
     FUNCTIONS_WORKER_RUNTIME: dotnet
     VhServices__ELinksApiGetPeopleUpdatedSinceDays: "8000"
+    AzureWebJobs.AnonymiseHearingsConferencesAndDeleteAadUsersFunction.Disabled: 0
+    AzureWebJobs.GetJudiciaryUsersFunction.Disabled: 0
