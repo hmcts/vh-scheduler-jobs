@@ -5,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using SchedulerJobs.AcceptanceTests.Helpers;
 using SchedulerJobs.Common.Configuration;
+using ConfigurationManager = AcceptanceTests.Common.Configuration.ConfigurationManager;
 
 namespace SchedulerJobs.AcceptanceTests.Configuration
 {

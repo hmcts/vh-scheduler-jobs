@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
-		<TargetFramework>netcoreapp3.1</TargetFramework>
+		<TargetFramework>net6.0</TargetFramework>
 		<AzureFunctionsVersion>v3</AzureFunctionsVersion>
 		<UserSecretsId>518CD6B6-4F2B-4431-94C8-4D0F4137295F</UserSecretsId>
 		<DockerFastModeProjectMountDirectory>/home/site/wwwroot</DockerFastModeProjectMountDirectory>
@@ -24,6 +24,7 @@
 		<PackageReference Include="Microsoft.Extensions.Http" Version="3.1.12" />
 		<PackageReference Include="Microsoft.NET.Sdk.Functions" Version="3.0.11" />
 		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.10.9" />
+		<PackageReference Include="System.Runtime" Version="4.3.1" />
 		<PackageReference Include="System.Threading.Tasks.Extensions" Version="4.5.4" />
 		<PackageReference Include="VH.Core.Configuration" Version="0.1.13" />
 
