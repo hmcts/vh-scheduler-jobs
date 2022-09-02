@@ -5,7 +5,7 @@ resources:
     - repository: azTemplates
       type: github
       name: hmcts/azure-devops-templates
-      ref: dotnet6-test-branch
+      ref: master
       endpoint: hmcts
       
 trigger: none
@@ -61,7 +61,7 @@ stages:
                 - "[*]SchedulerJobs.Common.*"
                 - "[*]SchedulerJobs.UnitTests.*"
                 - "[Testing.Common]*"
-
+               
           - template: templates/sonarCloud/runAnalysis.yml@azTemplates
 
 #####################################################
