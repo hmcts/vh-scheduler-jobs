@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
 		<TargetFramework>net6.0</TargetFramework>
-		<AzureFunctionsVersion>v3</AzureFunctionsVersion>
+		<AzureFunctionsVersion>v4</AzureFunctionsVersion>
 		<UserSecretsId>518CD6B6-4F2B-4431-94C8-4D0F4137295F</UserSecretsId>
 		<DockerFastModeProjectMountDirectory>/home/site/wwwroot</DockerFastModeProjectMountDirectory>
 		<DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
