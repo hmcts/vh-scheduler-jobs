@@ -10,6 +10,7 @@ java:
   livenessDelay: 360
   livenessPeriod: 120
   aadIdentityName: vh-aad-identity
+  kind: job
   keyVaults:
     vh-infra-core:
       excludeEnvironmentSuffix: false
