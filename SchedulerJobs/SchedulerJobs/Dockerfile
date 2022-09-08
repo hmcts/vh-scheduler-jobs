@@ -10,7 +10,7 @@ COPY --from=gitversion /version/AssemblyInfo.cs .
 
 RUN dotnet publish SchedulerJobs --configfile nuget.config -c Production -o /home/site/wwwroot
 
-FROM mcr.microsoft.com/azure-functions/dotnet:6.0
+FROM mcr.microsoft.com/azure-functions/dotnet:4.0
 ENV AzureWebJobsScriptRoot=/home/site/wwwroot \
     AzureFunctionsJobHost__Logging__Console__IsEnabled=true 
 RUN apt-get update && apt-get -yq install curl
