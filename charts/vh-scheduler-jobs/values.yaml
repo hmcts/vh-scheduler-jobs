@@ -1,5 +1,5 @@
 ---
-java:
+job:
   image: 'sdshmctspublic.azurecr.io/vh/scheduler-jobs:20210210.6'
   applicationPort: 8080
   replicas: 1
@@ -10,7 +10,6 @@ java:
   livenessDelay: 360
   livenessPeriod: 120
   aadIdentityName: vh-aad-identity
-  kind: job
   keyVaults:
     vh-infra-core:
       excludeEnvironmentSuffix: false
