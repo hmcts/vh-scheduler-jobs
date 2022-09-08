@@ -4,7 +4,6 @@ job:
   applicationPort: 8080
   replicas: 1
   ingressHost: vh-scheduler-jobs.{{ .Values.global.environment }}.platform.hmcts.net
-  releaseNameOverride: vh-scheduler-jobs
   readinessPath: /health/liveness
   livenessPath: /health/liveness
   livenessDelay: 360
