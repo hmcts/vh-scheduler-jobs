@@ -21,7 +21,7 @@
   },
   "masterKey": {
     "name": "master",
-    "value": "Bwdf9mpBwRKLNHhOESgioZrFFksbbJGj",
+    "value": "",
     "encrypted": false
   },
   "functionKeys": [ ]
