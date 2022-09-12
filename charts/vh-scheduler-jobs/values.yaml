@@ -97,4 +97,4 @@ java:
     VhServices__ELinksApiGetPeopleUpdatedSinceDays: "8000"
     AzureWebJobs.AnonymiseHearingsConferencesAndDeleteAadUsersFunction.Disabled: 0
     AzureWebJobs.GetJudiciaryUsersFunction.Disabled: 0
-    masterKey_value: Bwdf9mpBwRKLNHhOESgioZrFFksbbJGj
+    AzureWebJobsSecretStorageType: kubernetes
