@@ -13,7 +13,8 @@ RUN dotnet publish SchedulerJobs --configfile nuget.config -c Production -o /hom
 FROM mcr.microsoft.com/azure-functions/dotnet:3.0
 ENV AzureWebJobsScriptRoot=/home/site/wwwroot \
     AzureFunctionsJobHost__Logging__Console__IsEnabled=true 
-RUN apt-get update && apt-get -yq install curl && touch /mnt/vh-scheduler-jobs/function-host-key; echo 'A2JXEpKhVqbhu0SYVbRjPDzDadOOPlmQ' > /mnt/vh-scheduler-jobs/function-host-key && cp /mnt/vh-scheduler-jobs/function-host-key /run/secrets/functions-keys/host.master
+RUN apt-get update && apt-get -yq install curl
+RUN touch /mnt/vh-scheduler-jobs/function-host-key; echo 'A2JXEpKhVqbhu0SYVbRjPDzDadOOPlmQ' > /mnt/vh-scheduler-jobs/function-host-key; mkdir /run; mkdir /run/secrets; mkdir /run/secrets/functions-keys; cp /mnt/vh-scheduler-jobs/function-host-key /run/secrets/functions-keys/host.master
 EXPOSE 80
 EXPOSE 443
 
