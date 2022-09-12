@@ -18,5 +18,12 @@
     "LogLevel": {
       "Default": "Information"
     }
-  }
+  },
+  "masterKey": {
+    "name": "master",
+    "value": "",
+    "encrypted": false
+  },
+  "functionKeys": [ ]
+  
 }
