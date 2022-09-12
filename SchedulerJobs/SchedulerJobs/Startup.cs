@@ -74,6 +74,8 @@ namespace SchedulerJobs
 
         public void RegisterServices(IServiceCollection services, IConfiguration configuration)
         {
+            var tz = TimeZoneConverter.TZConvert.GetTimeZoneInfo("Eastern Standard Time");
+            
             var memoryCache = new MemoryCache(Options.Create(new MemoryCacheOptions()));
             services.AddSingleton<IMemoryCache>(memoryCache);
             

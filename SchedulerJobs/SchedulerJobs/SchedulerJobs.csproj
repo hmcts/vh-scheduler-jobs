@@ -25,6 +25,7 @@
 		<PackageReference Include="Microsoft.NET.Sdk.Functions" Version="3.0.11" />
 		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.10.9" />
 		<PackageReference Include="System.Threading.Tasks.Extensions" Version="4.5.4" />
+		<PackageReference Include="TimeZoneConverter" Version="6.0.1" />
 		<PackageReference Include="VH.Core.Configuration" Version="0.1.13" />
 
 	</ItemGroup>

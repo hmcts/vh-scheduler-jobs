@@ -2283,8 +2283,8 @@
       },
       "TimeZoneConverter": {
         "type": "Transitive",
-        "resolved": "5.0.0",
-        "contentHash": "U7Oilf3Ya6Rmu6gOaBfWyT3q0kwy2av6a5PfTn05CF54C+7DvuLsE3ljASvYmCpsSQeJvpnqU5Uzag6+ysWUeA=="
+        "resolved": "6.0.1",
+        "contentHash": "vvhLOgRSOvfq5fBv0/Dd1S3N7K2ibO5wp06B5AkuxUpXkgv2aDHw9jB5ZvPg83y9sy+jF9qE7qWybMK46BXBuw=="
       },
       "UserApi.Client": {
         "type": "Transitive",
@@ -2344,6 +2344,7 @@
           "SchedulerJobs.Common": "1.0.0",
           "SchedulerJobs.Services": "1.0.0",
           "System.Threading.Tasks.Extensions": "4.5.4",
+          "TimeZoneConverter": "6.0.1",
           "VH.Core.Configuration": "0.1.13"
         }
       },
