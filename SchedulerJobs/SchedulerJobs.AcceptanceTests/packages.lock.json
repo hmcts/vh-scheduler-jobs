@@ -2292,7 +2292,6 @@
       "schedulerjobs.services": {
         "type": "Project",
         "dependencies": {
-          "Azure.Core": "1.25.0",
           "Azure.Storage.Blobs": "12.13.1",
           "BookingsApi.Client": "1.39.15",
           "Microsoft.Extensions.Logging.Abstractions": "6.0.2",

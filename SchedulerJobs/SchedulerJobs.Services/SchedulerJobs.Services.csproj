@@ -9,7 +9,6 @@
   </PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Azure.Core" Version="1.25.0" />
 		<PackageReference Include="BookingsApi.Client" Version="1.39.15" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="6.0.2" />
 		<PackageReference Include="NotificationApi.Client" Version="1.38.5" />
