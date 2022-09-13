@@ -165,9 +165,10 @@ extends:
     coreProjectPath: SchedulerJobs/SchedulerJobs
     PackageApp: ${{ parameters.PackageApp }}
     PackageAcceptanceTests: ${{ parameters.PackageACTests }}
-    netVersion: 3.1.x
+    netVersion: 6.x
     Test: ${{ or(parameters.RunUnitTests, parameters.RunIntegTests, parameters.RunMutationTests) }}
     testParameters:
+      netVersion: 6.x
       baseAgent: windows-latest
       coreProjectPath: SchedulerJobs/SchedulerJobs
       unitTestProjectPath: SchedulerJobs/SchedulerJobs.UnitTests
@@ -194,7 +195,6 @@ extends:
     ACTest: ${{ parameters.RunACTests }}
     releaseParameters:
       environment: Preview
-      netVersion: 3.1.x
       subscription: $(pr_Subscription)
       secrets_KeyVault: $(pr_Secret_KeyVault)
       secrets_Subscription: $(pr_Secret_Subscription)
