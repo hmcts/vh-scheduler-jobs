@@ -1,7 +1,7 @@
 {
   "version": 1,
   "dependencies": {
-    ".NETCoreApp,Version=v3.1": {
+    "net6.0": {
       "Microsoft.Extensions.Configuration.UserSecrets": {
         "type": "Direct",
         "requested": "[5.0.0, )",
@@ -459,10 +459,10 @@
       },
       "Microsoft.Azure.WebJobs": {
         "type": "Transitive",
-        "resolved": "3.0.14",
-        "contentHash": "0LV6fEI8xMUur/P2NaluWv6rmVkrErfEwBg38NclhRNLDW/wUgs05H10BolUZrnaFd77fGGFflW+gf82Fsq2OA==",
+        "resolved": "3.0.18",
+        "contentHash": "aYJ76yjPkIpsafqFp1Xz1sA06RvhUwqJnk4AqX4I0teuRjPyig9Sv7LTzxUMAppKXc4JyR/Asos2At/LMiblqg==",
         "dependencies": {
-          "Microsoft.Azure.WebJobs.Core": "3.0.14",
+          "Microsoft.Azure.WebJobs.Core": "3.0.18",
           "Microsoft.Extensions.Configuration": "2.1.0",
           "Microsoft.Extensions.Configuration.Abstractions": "2.1.0",
           "Microsoft.Extensions.Configuration.EnvironmentVariables": "2.1.0",
@@ -477,8 +477,8 @@
       },
       "Microsoft.Azure.WebJobs.Core": {
         "type": "Transitive",
-        "resolved": "3.0.14",
-        "contentHash": "p4R88nkOZTJqRkVjbedSEe08VtShiehGUBH0RjRVYldIpDyqtZUxsF9lcMsoaBrFjZl9vELQ4KTmrDXey7Z9ig==",
+        "resolved": "3.0.18",
+        "contentHash": "ajYI8pPzPn4qq7FL8C2tz9WmFEG5PorUlkw8W9CF5M+5egnFJaF7yH48WYC+zBoQIzv2vHmFq0zhQpnv+O8v5Q==",
         "dependencies": {
           "System.ComponentModel.Annotations": "4.4.0",
           "System.Diagnostics.TraceSource": "4.3.0"
@@ -486,21 +486,21 @@
       },
       "Microsoft.Azure.WebJobs.Extensions": {
         "type": "Transitive",
-        "resolved": "3.0.6",
-        "contentHash": "y7RgGsJFHhlD/2SIoQpgyjM1By9sbBpY9YaQCS183z743rErqBGAO3BrJ01z52IIveP2NW/7qLD1zm/bFI2MPg==",
+        "resolved": "4.0.1",
+        "contentHash": "e6cgsrI7Wrf80UJkyj+aOniG30EzRhOfCfPl+DuJuL+lrkuqCWw0XWVMLi0nenUDr20alrQrErDhJftuYbAuQg==",
         "dependencies": {
-          "Microsoft.Azure.WebJobs": "3.0.14",
-          "Microsoft.Azure.WebJobs.Host.Storage": "3.0.14",
+          "Microsoft.Azure.WebJobs": "3.0.18",
+          "Microsoft.Azure.WebJobs.Host.Storage": "4.0.1",
           "ncrontab.signed": "3.3.0"
         }
       },
       "Microsoft.Azure.WebJobs.Host.Storage": {
         "type": "Transitive",
-        "resolved": "3.0.14",
-        "contentHash": "1M9VzF4/skqaFezaNI6QUo5ftI1ifGAc6TQfbDdi94lUkUcnSnlBq/uBzx1P73SQgY9WzIE0KZn2+DOx6CL9Sg==",
+        "resolved": "4.0.1",
+        "contentHash": "oselyf1lrAqVX/LB0rmGbcKUKpgKgnHvdVhgtwcuIXf9lP+F6ffVYF6iscgTq5FDc16oIAk/NlzQZ4kcJTx6nA==",
         "dependencies": {
-          "Microsoft.Azure.WebJobs": "3.0.14",
-          "WindowsAzure.Storage": "9.3.1"
+          "Microsoft.Azure.Storage.Blob": "11.1.7",
+          "Microsoft.Azure.WebJobs": "3.0.18"
         }
       },
       "Microsoft.Bcl.AsyncInterfaces": {
@@ -632,8 +632,7 @@
           "Microsoft.Extensions.Configuration": "5.0.0",
           "Microsoft.Extensions.Configuration.Abstractions": "5.0.0",
           "Microsoft.Extensions.Configuration.FileExtensions": "5.0.0",
-          "Microsoft.Extensions.FileProviders.Abstractions": "5.0.0",
-          "System.Text.Json": "5.0.0"
+          "Microsoft.Extensions.FileProviders.Abstractions": "5.0.0"
         }
       },
       "Microsoft.Extensions.DependencyInjection": {
@@ -2058,8 +2057,8 @@
       },
       "System.Text.Json": {
         "type": "Transitive",
-        "resolved": "5.0.0",
-        "contentHash": "+luxMQNZ2WqeffBU7Ml6njIvxc8169NW2oU+ygNudXQGZiarjE7DOtN7bILiQjTZjkmwwRZGTtLzmdrSI/Ustw=="
+        "resolved": "4.7.2",
+        "contentHash": "TcMd95wcrubm9nHvJEQs70rC0H/8omiSGGpU4FQ/ZA1URIqD4pjmFJh2Mfv1yH1eHgJDWTi2hMDXwTET+zOOyg=="
       },
       "System.Text.RegularExpressions": {
         "type": "Transitive",
@@ -2261,15 +2260,6 @@
           "Newtonsoft.Json": "12.0.3"
         }
       },
-      "WindowsAzure.Storage": {
-        "type": "Transitive",
-        "resolved": "9.3.1",
-        "contentHash": "NooNF4glP6BO7U4dno/xSfiEVVIv6OFcFfisX24Us2CZa9NQR3TSVEj9eVUlM5rLat5H9CHxk6M/mNSIaq7Vrw==",
-        "dependencies": {
-          "NETStandard.Library": "1.6.1",
-          "Newtonsoft.Json": "10.0.2"
-        }
-      },
       "schedulerjobs.common": {
         "type": "Project",
         "dependencies": {
@@ -2307,7 +2297,7 @@
       "testing.common": {
         "type": "Project",
         "dependencies": {
-          "Microsoft.Azure.WebJobs.Extensions": "3.0.6",
+          "Microsoft.Azure.WebJobs.Extensions": "4.0.1",
           "Microsoft.Extensions.Logging.Abstractions": "3.1.1"
         }
       }
