@@ -97,5 +97,6 @@ java:
     VhServices__ELinksApiGetPeopleUpdatedSinceDays: "8000"
     AzureWebJobs.AnonymiseHearingsConferencesAndDeleteAadUsersFunction.Disabled: 0
     AzureWebJobs.GetJudiciaryUsersFunction.Disabled: 0
-    #AzureWebJobsSecretStorageType: kubernetes
-    AzureFunctionsJobHost__masterKey__value: st39ZEM9Aazue3OLmzpwOg0DWiCOnS85
+    AzureWebJobsSecretStorageType: keyvault
+    AzureWebJobsSecretStorageKeyVaultName: vh-scheduler-jobs-{{ .Values.global.environment }}
+    #AzureFunctionsJobHost__masterKey__value: st39ZEM9Aazue3OLmzpwOg0DWiCOnS85
