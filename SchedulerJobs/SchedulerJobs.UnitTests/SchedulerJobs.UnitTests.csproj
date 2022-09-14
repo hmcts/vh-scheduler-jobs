@@ -1,10 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>netcoreapp3.1</TargetFramework>
+		<TargetFramework>net6.0</TargetFramework>
 		<IsPackable>false</IsPackable>
 		<RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
 		<DisableImplicitNuGetFallbackFolder>true</DisableImplicitNuGetFallbackFolder>
+		<LangVersion>latestmajor</LangVersion>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -15,14 +16,14 @@
 		</PackageReference>
 		<PackageReference Include="FluentAssertions" Version="5.9.0" />
 		<PackageReference Include="Moq" Version="4.13.1" />
-		<PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
 		<PackageReference Include="nunit" Version="3.12.0" />
 		<PackageReference Include="NUnit3TestAdapter" Version="3.13.0" />
-		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.0.1" />
+		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.3.1" />
 		<PackageReference Include="dotnet-reportgenerator-cli" Version="4.1.4" />
-		<PackageReference Include="Microsoft.IdentityModel.Clients.ActiveDirectory" Version="4.3.0" />
+		<PackageReference Include="Microsoft.IdentityModel.Clients.ActiveDirectory" Version="5.2.9" />
 		<PackageReference Include="Microsoft.TestPlatform" Version="16.0.1" />
-		<PackageReference Include="NBuilder" Version="6.0.0" />
+		<PackageReference Include="NBuilder" Version="6.1.0" />
 	</ItemGroup>
 
 	<ItemGroup>
