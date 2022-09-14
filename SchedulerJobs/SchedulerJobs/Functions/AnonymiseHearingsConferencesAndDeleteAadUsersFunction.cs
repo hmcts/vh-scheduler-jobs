@@ -3,6 +3,9 @@ using System.Threading.Tasks;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Logging;
 using SchedulerJobs.Services;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Azure.WebJobs.Extensions.Http;
 
 namespace SchedulerJobs.Functions
 {
@@ -32,6 +35,33 @@ namespace SchedulerJobs.Functions
             {
                 log.LogTrace("Anonymise data function running late");
             }
+            try
+            {
+                await _anonymiseHearingsConferencesDataService.AnonymiseHearingsConferencesDataAsync()
+                    .ConfigureAwait(false);
+                jobSucceeded = true;
+                log.LogInformation(LogInformationMessage);
+            }
+            catch (Exception)
+            {
+                jobSucceeded = false;
+                throw;
+            }
+            finally
+            {
+                await _jobHistoryService.UpdateJobHistory(GetType().Name, jobSucceeded);
+            }
+        }
+
+        /// <summary>
+        ///     Function to anonymise hearing and conference data older than three months
+        /// </summary>
+        /// <param name="log"></param>
+        [FunctionName("AnonymiseHearingsConferencesAndDeleteAadUsersFunctionHttp")]
+        public async Task Run(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = null)]
+            HttpRequest req, ILogger log)
+        {
             try
             {
                 await _anonymiseHearingsConferencesDataService.AnonymiseHearingsConferencesDataAsync()

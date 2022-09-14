@@ -2,6 +2,9 @@ using System.Threading.Tasks;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Logging;
 using SchedulerJobs.Services;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Azure.WebJobs.Extensions.Http;
 
 namespace SchedulerJobs.Functions
 {
@@ -31,6 +34,19 @@ namespace SchedulerJobs.Functions
             await _clearConferenceChatHistoryService.ClearChatHistoryForClosedConferences();
             log.LogInformation("Cleared chat history for closed conferences");
 
+        }
+
+        /// <summary>
+        /// Function is cleaning Conference Instance Messages History
+        /// </summary>
+        /// <param name="log"></param>
+        [FunctionName("ClearConferenceInstantMessageHistoryHttp")]
+        public async Task Run(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = null)]
+            HttpRequest req, ILogger log)
+        {
+            await _clearConferenceChatHistoryService.ClearChatHistoryForClosedConferences();
+            log.LogInformation("Cleared chat history for closed conferences");
         }
     }
 }

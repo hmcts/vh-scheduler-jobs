@@ -2,6 +2,9 @@
 using Microsoft.Extensions.Logging;
 using SchedulerJobs.Services.Interfaces;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Azure.WebJobs.Extensions.Http;
 
 namespace SchedulerJobs.Functions
 {
@@ -30,6 +33,20 @@ namespace SchedulerJobs.Functions
                 log.LogTrace("Reconcile audio recording files with number of conferences for the day");
             }
 
+            await _reconcileHearingAudioService.ReconcileAudiorecordingsWithConferencesAsync();
+
+            log.LogTrace("Reconcile audio recording files with number of conferences for the day - Done");
+        }
+
+        /// <summary>
+        /// Function is reconcile audio files in wowza with conferences (InSession) for a date 
+        /// </summary>
+        /// <param name="log"></param>
+        [FunctionName("ReconcileHearingAudioWithStorageFunctionHttp")]
+        public async Task Run(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = null)]
+            HttpRequest req, ILogger log)
+        {
             await _reconcileHearingAudioService.ReconcileAudiorecordingsWithConferencesAsync();
 
             log.LogTrace("Reconcile audio recording files with number of conferences for the day - Done");

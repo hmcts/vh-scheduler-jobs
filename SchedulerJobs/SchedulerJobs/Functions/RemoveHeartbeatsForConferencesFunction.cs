@@ -2,6 +2,9 @@ using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Logging;
 using SchedulerJobs.Services;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Azure.WebJobs.Extensions.Http;
 
 namespace SchedulerJobs.Functions
 {
@@ -27,6 +30,20 @@ namespace SchedulerJobs.Functions
             {
                 log.LogTrace("Remove heartbeats for conferences function running late");
             }
+
+            await _removeHeartbeatsForConferencesService.RemoveHeartbeatsForConferencesAsync().ConfigureAwait(false);
+            log.LogInformation("Removed heartbeats for conferences older than 14 days.");
+        }
+
+        /// <summary>
+        /// This function will delete heartbeat data for conferences that are older than 14 days.
+        /// </summary>
+        /// <param name="log"></param>
+        [FunctionName("RemoveHeartbeatsForConferencesFunctionHttp")]
+        public async Task Run(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = null)]
+            HttpRequest req, ILogger log)
+        {
 
             await _removeHeartbeatsForConferencesService.RemoveHeartbeatsForConferencesAsync().ConfigureAwait(false);
             log.LogInformation("Removed heartbeats for conferences older than 14 days.");

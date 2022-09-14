@@ -5,6 +5,8 @@ using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Extensions.Logging;
 using SchedulerJobs.Services.Interfaces;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
 
 namespace SchedulerJobs.Functions
 {
@@ -33,6 +35,20 @@ namespace SchedulerJobs.Functions
                 log.LogInformation($"Send hearing notifications function triggered at: {DateTime.Now} ");
             }
 
+            await _hearingNotificationService.SendNotificationsAsync();
+
+            log.LogInformation($"Send hearing notifications - Completed at:{DateTime.Now} ");
+        }
+
+        /// <summary>
+        /// Function is send notifications for hearing in next 48 to 72 hrs 
+        /// </summary>
+        /// <param name="log"></param>
+        [FunctionName("SendHearingNotificationsFunctionHttp")]
+        public async Task Run(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = null)]
+            HttpRequest req, ILogger log)
+        {
             await _hearingNotificationService.SendNotificationsAsync();
 
             log.LogInformation($"Send hearing notifications - Completed at:{DateTime.Now} ");
