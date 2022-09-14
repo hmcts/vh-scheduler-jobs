@@ -217,6 +217,9 @@ stages:
           - name: FeatureToggles:SdkKey
             value: vh-admin-web-Feature-Toggle
             secret: true
+          #AzureFunction Version
+          - name: FUNCTIONS_EXTENSION_VERSION
+            value: ~4
         acceptanceTestSettings:
           - name: ApplicationInsights:InstrumentationKey
             value: vh-core-infra-AppInsightsKey
