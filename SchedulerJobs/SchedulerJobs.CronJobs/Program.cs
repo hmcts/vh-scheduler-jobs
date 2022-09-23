@@ -31,42 +31,42 @@ await host.RunAsync();
 
 void RegisterJobs(IServiceCollection services, IEnumerable<string> args)
 {
-    if (args.Contains("AnonymiseHearingsConferencesAndDeleteAadUsersJob")) 
+    if (args.Contains(nameof(AnonymiseHearingsConferencesAndDeleteAadUsersJob))) 
     { 
         services.AddHostedService<AnonymiseHearingsConferencesAndDeleteAadUsersJob>(); 
     }
     
-    if (args.Contains("ClearConferenceInstantMessageHistoryJob")) 
+    if (args.Contains(nameof(ClearConferenceInstantMessageHistoryJob))) 
     { 
         services.AddHostedService<ClearConferenceInstantMessageHistoryJob>(); 
     }
 
-    if (args.Contains("ClearHearingsJob"))
+    if (args.Contains(nameof(ClearHearingsJob)))
     {
         services.AddHostedService<ClearHearingsJob>();
     }
 
-    if (args.Contains("DeleteAudiorecordingApplicationsJob"))
+    if (args.Contains(nameof(DeleteAudiorecordingApplicationsJob)))
     {
         services.AddHostedService<DeleteAudiorecordingApplicationsJob>();
     }
 
-    if (args.Contains("GetJudiciaryUsersJob"))
+    if (args.Contains(nameof(GetJudiciaryUsersJob)))
     {
         services.AddHostedService<GetJudiciaryUsersJob>();   
     }
 
-    if (args.Contains("ReconcileHearingAudioWithStorageJob"))
+    if (args.Contains(nameof(ReconcileHearingAudioWithStorageJob)))
     {
         services.AddHostedService<ReconcileHearingAudioWithStorageJob>();
     }
 
-    if (args.Contains("RemoveHeartbeatsForConferencesJob"))
+    if (args.Contains(nameof(RemoveHeartbeatsForConferencesJob)))
     {
         services.AddHostedService<RemoveHeartbeatsForConferencesJob>();
     }
 
-    if (args.Contains("SendHearingNotificationsJob"))
+    if (args.Contains(nameof(SendHearingNotificationsJob)))
     {
         services.AddHostedService<SendHearingNotificationsJob>();
     }
