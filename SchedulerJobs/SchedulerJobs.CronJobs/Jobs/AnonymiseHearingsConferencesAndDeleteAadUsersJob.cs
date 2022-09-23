@@ -1,0 +1,46 @@
+using SchedulerJobs.Services;
+
+namespace SchedulerJobs.CronJobs.Jobs
+{
+    public class AnonymiseHearingsConferencesAndDeleteAadUsersJob : BaseJob
+    {
+        private const string LogInformationMessage = "Data anonymised for hearings, conferences older than 3 months.";
+        private readonly ILogger<AnonymiseHearingsConferencesAndDeleteAadUsersJob> _logger;
+        private readonly IServiceProvider _serviceProvider;
+        private bool _jobSucceeded;
+    
+        public AnonymiseHearingsConferencesAndDeleteAadUsersJob(
+            ILogger<AnonymiseHearingsConferencesAndDeleteAadUsersJob> logger,
+            IHostApplicationLifetime lifetime,
+            IServiceProvider serviceProvider) : base(lifetime)
+        {
+            _logger = logger;
+            _serviceProvider = serviceProvider;
+        }
+
+        protected override async Task DoWorkAsync()
+        {
+            using var scope = _serviceProvider.CreateScope();
+            var anonymiseHearingsConferencesDataService = scope.ServiceProvider.GetRequiredService<IAnonymiseHearingsConferencesDataService>();
+            var jobHistoryService = scope.ServiceProvider.GetRequiredService<IJobHistoryService>();
+                
+            try
+            {
+                await anonymiseHearingsConferencesDataService.AnonymiseHearingsConferencesDataAsync()
+                    .ConfigureAwait(false);
+                _jobSucceeded = true;
+                _logger.LogInformation(LogInformationMessage);
+            }
+            catch (Exception)
+            {
+                _jobSucceeded = false;
+                throw;
+            }
+            finally
+            {
+                await jobHistoryService.UpdateJobHistory(GetType().Name, _jobSucceeded);
+            }
+        }
+    }
+   
+}
