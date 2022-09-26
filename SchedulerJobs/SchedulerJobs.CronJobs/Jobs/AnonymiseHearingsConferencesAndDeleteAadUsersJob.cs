@@ -18,7 +18,7 @@ namespace SchedulerJobs.CronJobs.Jobs
             _serviceProvider = serviceProvider;
         }
 
-        protected override async Task DoWorkAsync()
+        public override async Task DoWorkAsync()
         {
             using var scope = _serviceProvider.CreateScope();
             var anonymiseHearingsConferencesDataService = scope.ServiceProvider.GetRequiredService<IAnonymiseHearingsConferencesDataService>();

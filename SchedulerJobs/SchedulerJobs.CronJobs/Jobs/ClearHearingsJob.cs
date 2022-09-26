@@ -14,8 +14,8 @@ namespace SchedulerJobs.CronJobs.Jobs
             _logger = logger;
             _serviceProvider = serviceProvider;
         }
-        
-        protected override async Task DoWorkAsync()
+
+        public override async Task DoWorkAsync()
         {
             using var scope = _serviceProvider.CreateScope();
             var closeConferenceService = scope.ServiceProvider.GetRequiredService<ICloseConferenceService>();

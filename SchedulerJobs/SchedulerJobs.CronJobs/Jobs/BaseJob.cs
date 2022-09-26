@@ -9,7 +9,7 @@ namespace SchedulerJobs.CronJobs.Jobs
             _lifetime = lifetime;
         }
         
-        protected abstract Task DoWorkAsync();
+        public abstract Task DoWorkAsync();
         
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
