@@ -11,24 +11,31 @@ namespace SchedulerJobs.CronJobs.UnitTests.Jobs
 {
     public class ClearConferenceInstantMessageHistoryTests : JobTestBaseSetup<ClearConferenceInstantMessageHistoryJob>
     {
-        [Test]
-        public async Task Timer_should_log_message()
+        private ClearConferenceInstantMessageHistoryJob _sut;
+        private Mock<IClearConferenceChatHistoryService> _clearConferenceChatHistoryService;
+        
+        [SetUp]
+        public void Setup()
         {
-            // Arrange
+            // TODO move to single base setup class so we don't need to repeat for each job
             var services = new ServiceCollection();
-            var clearConferenceChatHistoryService = new Mock<IClearConferenceChatHistoryService>();
-            services.AddScoped(s => clearConferenceChatHistoryService.Object);
+            _clearConferenceChatHistoryService = new Mock<IClearConferenceChatHistoryService>();
+            services.AddScoped(s => _clearConferenceChatHistoryService.Object);
 
             var serviceProvider = services.BuildServiceProvider();
 
-            var sut = new ClearConferenceInstantMessageHistoryJob(Logger, Lifetime.Object, serviceProvider);
-
+            _sut = new ClearConferenceInstantMessageHistoryJob(Logger, Lifetime.Object, serviceProvider);
+        }
+        
+        [Test]
+        public async Task Timer_should_log_message()
+        {
             // Act
-            await sut.DoWorkAsync();
+            await _sut.DoWorkAsync();
 
             // Assert
             Logger.GetLoggedMessages().Last().Should().Be("Cleared chat history for closed conferences");
-            clearConferenceChatHistoryService.Verify(x => x.ClearChatHistoryForClosedConferences(), Times.Once);
+            _clearConferenceChatHistoryService.Verify(x => x.ClearChatHistoryForClosedConferences(), Times.Once);
         }
     }
 }
