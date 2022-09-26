@@ -17,5 +17,4 @@ namespace SchedulerJobs.CronJobs.UnitTests.Jobs
             Lifetime = new Mock<IHostApplicationLifetime>();
         }
     }
-   
 }
