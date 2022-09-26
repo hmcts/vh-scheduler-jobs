@@ -4,7 +4,7 @@ namespace SchedulerJobs.CronJobs.Jobs
 {
     public class ClearConferenceInstantMessageHistoryJob : BaseJob
     {
-        private readonly ILogger<ClearConferenceInstantMessageHistoryJob> _logger;
+        private readonly ILogger _logger;
         private readonly IServiceProvider _serviceProvider;
 
         public ClearConferenceInstantMessageHistoryJob(
@@ -16,7 +16,7 @@ namespace SchedulerJobs.CronJobs.Jobs
             _serviceProvider = serviceProvider;
         }
 
-        protected override async Task DoWorkAsync()
+        public override async Task DoWorkAsync()
         {
             using var scope = _serviceProvider.CreateScope();
             var clearConferenceChatHistoryService = scope.ServiceProvider.GetRequiredService<IClearConferenceChatHistoryService>();
