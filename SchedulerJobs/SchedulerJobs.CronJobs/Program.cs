@@ -72,7 +72,6 @@ void RegisterJobs(IServiceCollection services, IEnumerable<string> args)
     }
 }
 
-// TODO can we re-use the method in the non-cron jobs project?
 void RegisterServices(IServiceCollection services, IConfiguration configuration)
 {
     var memoryCache = new MemoryCache(Options.Create(new MemoryCacheOptions()));
