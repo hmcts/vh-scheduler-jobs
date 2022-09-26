@@ -21,13 +21,13 @@ namespace SchedulerJobs.CronJobs.UnitTests.Jobs
 
             var serviceProvider = services.BuildServiceProvider();
 
-            var sut = new ClearConferenceInstantMessageHistoryJob(_logger, _lifetime.Object, serviceProvider);
+            var sut = new ClearConferenceInstantMessageHistoryJob(Logger, Lifetime.Object, serviceProvider);
 
             // Act
             await sut.DoWorkAsync();
 
             // Assert
-            _logger.GetLoggedMessages().Last().Should().Be("Cleared chat history for closed conferences");
+            Logger.GetLoggedMessages().Last().Should().Be("Cleared chat history for closed conferences");
             clearConferenceChatHistoryService.Verify(x => x.ClearChatHistoryForClosedConferences(), Times.Once);
         }
     }
