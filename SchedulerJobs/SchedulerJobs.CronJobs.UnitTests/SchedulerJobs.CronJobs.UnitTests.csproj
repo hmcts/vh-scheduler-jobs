@@ -27,8 +27,8 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\SchedulerJobs.CronJobs\SchedulerJobs.CronJobs.csproj" />
-      <ProjectReference Include="..\..\Testing.Common\Testing.Common.csproj" />
+      <ProjectReference Include="..\SchedulerJobs.CronJobs\SchedulerJobs.CronJobs.csproj" />
+      <ProjectReference Include="..\Testing.Common\Testing.Common.csproj" />
     </ItemGroup>
     
 </Project>
