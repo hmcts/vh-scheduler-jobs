@@ -4,7 +4,7 @@ namespace SchedulerJobs.CronJobs.Jobs
 {
     public class AnonymiseHearingsConferencesAndDeleteAadUsersJob : BaseJob
     {
-        private const string LogInformationMessage = "Data anonymised for hearings, conferences older than 3 months.";
+        public const string LogInformationMessage = "Data anonymised for hearings, conferences older than 3 months.";
         private readonly ILogger<AnonymiseHearingsConferencesAndDeleteAadUsersJob> _logger;
         private readonly IServiceProvider _serviceProvider;
         private bool _jobSucceeded;

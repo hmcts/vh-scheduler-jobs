@@ -9,7 +9,7 @@ using SchedulerJobs.Services;
 
 namespace SchedulerJobs.CronJobs.UnitTests.Jobs
 {
-    public class ClearConferenceInstantMessageHistoryTests : JobTestBaseSetup<ClearConferenceInstantMessageHistoryJob>
+    public class ClearConferenceInstantMessageHistoryJobTests : JobTestBaseSetup<ClearConferenceInstantMessageHistoryJob>
     {
         private ClearConferenceInstantMessageHistoryJob _sut;
         private Mock<IClearConferenceChatHistoryService> _clearConferenceChatHistoryService;
