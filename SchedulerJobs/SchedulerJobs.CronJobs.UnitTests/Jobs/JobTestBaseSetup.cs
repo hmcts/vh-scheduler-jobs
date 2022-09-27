@@ -13,7 +13,7 @@ namespace SchedulerJobs.CronJobs.UnitTests.Jobs
         [SetUp]
         protected void MockerSetup()
         {
-            Logger = TestFactory.CreateFakeLogger<T>(LoggerTypes.List);
+            Logger = new LoggerFakeGeneric<T>();
             Lifetime = new Mock<IHostApplicationLifetime>();
         }
     }
