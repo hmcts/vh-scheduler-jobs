@@ -1,0 +1,18 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: vh-clear-conference-instant-message-history-job
+spec:
+  schedule: "0 0 * * *"
+  concurrencyPolicy: Forbid
+  jobTemplate:
+    spec:
+      backoffLimit: 0
+      template:
+        spec:
+          containers:
+            - name: vh-clear-conference-instant-message-history-job
+              image: sdshmctspublic.azurecr.io/vh/scheduler-jobs:latest
+              args: ["ClearConferenceInstantMessageHistoryJob"]
+              env:
+          restartPolicy: Never
