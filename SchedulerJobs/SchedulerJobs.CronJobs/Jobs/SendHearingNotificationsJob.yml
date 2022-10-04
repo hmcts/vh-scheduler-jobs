@@ -1,0 +1,18 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: vh-send-hearing-notifications-job
+spec:
+  schedule: "0 0 10 * *"
+  concurrencyPolicy: Forbid
+  jobTemplate:
+    spec:
+      backoffLimit: 0
+      template:
+        spec:
+          containers:
+            - name: vh-send-hearing-notifications-job
+              image: sdshmctspublic.azurecr.io/vh/scheduler-jobs:latest
+              args: ["SendHearingNotificationsJob"]
+              env:
+          restartPolicy: Never
