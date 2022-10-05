@@ -2,7 +2,7 @@ image: 'sdshmctspublic.azurecr.io/vh/scheduler-jobs:20210210.6'
 
 jobs:
   # first cron
-  - resourceName: vh-anonymise-hearings-conferences-and-delete-aad-users-job
+  - resourceName: vh-anonymise-job
     name: AnonymiseHearingsConferencesAndDeleteAadUsersJob
     schedule: "0 30 5 * *"
   # second cron
