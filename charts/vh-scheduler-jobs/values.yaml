@@ -1,14 +1,30 @@
 image: 'sdshmctspublic.azurecr.io/vh/scheduler-jobs:20210210.6'
 
 jobs:
-  # first cron
-  - resourceName: vh-anonymise-job
+  - resourceName: vh-anonymise-hearings-and-conferences-job
     name: AnonymiseHearingsConferencesAndDeleteAadUsersJob
     schedule: "30 5 * * *"
-  # second cron
   - resourceName: vh-clear-conference-instant-message-history-job
     name: ClearConferenceInstantMessageHistoryJob
     schedule: "0 * * * *"
+  - resourceName: vh-clear-hearings-job
+    name: ClearHearingsJob
+    schedule: "0 23 * * *"
+  - resourceName: vh-delete-audio-recording-applications-job
+    name: DeleteAudiorecordingApplicationsJob
+    schedule: "0 22 * * *"
+  - resourceName: vh-get-judiciary-users-job
+    name: GetJudiciaryUsersJob
+    schedule: "0 2 * * *"
+  - resourceName: vh-reconcile-hearing-audio-with-storage-job
+    name: ReconcileHearingAudioWithStorageJob
+    schedule: "0 22 * * *"
+  - resourceName: vh-remove-heartbeats-for-conferences-job
+    name: RemoveHeartbeatsForConferencesJob
+    schedule: "40 5 * * *"
+  - resourceName: vh-send-hearing-notifications-job
+    name: SendHearingNotificationsJob
+    schedule: "0 10 * * *"
 java:
   applicationPort: 8080
   replicas: 1
