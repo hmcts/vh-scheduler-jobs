@@ -26,6 +26,7 @@ using System.Diagnostics.CodeAnalysis;
 [assembly: FunctionsStartup(typeof(SchedulerJobs.Startup))]
 namespace SchedulerJobs
 {
+
     [ExcludeFromCodeCoverage]
     public class Startup : FunctionsStartup
     {
