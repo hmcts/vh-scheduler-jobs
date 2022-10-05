@@ -117,14 +117,14 @@ stages:
               projectName: '${{ variables.acrName }}/${{ variables.repositoryName }}'
               qualifyImageNames: false
               dockerComposeCommand: build
-              dockerComposeFile: docker-compose-sds.yml
+              dockerComposeFile: docker-compose-sds.yml # TODO add this to the docker-compose.yaml template as a parameter
 
           - template: templates\Containerisation\docker\docker-push-azure.yaml@azTemplates
             parameters:
               azureSubscription: ${{ variables.acrSubscription }}
               acrName: ${{ variables.acrName }}
               repositoryName:  ${{ variables.repositoryName }}
-              imageName: "${{ replace(variables.git_repo_name, '-', '') }}"
+              imageName: "${{ replace(variables.git_repo_name, '-', '') }}-sds"
               imageTags:
                 - '${{ variables.prTagName }}'
 
