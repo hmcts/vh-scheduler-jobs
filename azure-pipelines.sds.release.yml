@@ -19,11 +19,11 @@ parameters:
   default:
   - Dev
   - Staging
-  - Prod 
+  - Prod
 
+stages:
 #####################################################
 # Approval Gate for Scheduler Jobs Release. #########
-
   - ${{ if contains(variables['Build.SourceBranch'], 'refs/heads/release') }}:
     - stage: Approve_Helm_Release
       displayName: 'Approve Helm Release'
@@ -84,7 +84,6 @@ parameters:
 
 #########################################
 # Push Helm Charts to Repo. #############
-
   - stage: Helm
     displayName: Push Helm Charts
     dependsOn: Docker_Build_Push
