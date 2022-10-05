@@ -12,7 +12,7 @@ spec:
         spec:
           containers:
             - name: vh-send-hearing-notifications-job
-              image: sdshmctspublic.azurecr.io/vh/scheduler-jobs:latest
+              image: sdshmctspublic.azurecr.io/vh/scheduler-jobs-sds:latest
               args: ["SendHearingNotificationsJob"]
               env:
           restartPolicy: Never
