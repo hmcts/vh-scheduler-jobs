@@ -19,11 +19,11 @@ parameters:
   default:
   - Dev
   - Staging
-  - Prod 
+  - Prod
 
+stages:
 #####################################################
-# Approval Gate for Video API Release. ############
-
+# Approval Gate for Scheduler Jobs Release. #########
   - ${{ if contains(variables['Build.SourceBranch'], 'refs/heads/release') }}:
     - stage: Approve_Helm_Release
       displayName: 'Approve Helm Release'
@@ -51,7 +51,6 @@ parameters:
         - template: variables/production.yaml
       - ${{ else }}:
         - template: variables/staging.yaml
-
       - template: variables/shared.yaml
     jobs:
       - job: Docker_Build
