@@ -102,11 +102,21 @@ stages:
             displayName: Add NuGet Feed Authentication
             workingDirectory: SchedulerJobs
 
-          - template: templates\Containerisation\docker\docker-compose.yaml@azTemplates
-            parameters:
+#          - template: templates\Containerisation\docker\docker-compose.yaml@azTemplates
+#            parameters:
+#              azureSubscription: ${{ variables.acrSubscription }}
+#              acrName: ${{ variables.acrName }}
+#              repositoryName:  ${{ variables.repositoryName }}
+#              dockerComposeFile: docker-compose-sds.yml
+              
+          - task: DockerCompose@0
+            displayName: 'Run a Docker Compose Build'
+            inputs:
               azureSubscription: ${{ variables.acrSubscription }}
-              acrName: ${{ variables.acrName }}
-              repositoryName:  ${{ variables.repositoryName }}
+              azureContainerRegistry: '{"loginServer":"${{ variables.acrName }}.azurecr.io", "id" : "$(acrId)"}'
+              projectName: '${{ variables.acrName }}/${{ variables.repositoryName }}'
+              qualifyImageNames: false
+              dockerComposeCommand: build
               dockerComposeFile: docker-compose-sds.yml
 
           - template: templates\Containerisation\docker\docker-push-azure.yaml@azTemplates
