@@ -1,0 +1,20 @@
+{{- range $job := .Values.jobs }}
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ $job.resourceName }}
+spec:
+  schedule: {{ $job.schedule }}
+  concurrencyPolicy: Forbid
+  jobTemplate:
+    spec:
+      backoffLimit: 0
+      template:
+        spec:
+          containers:
+            - name: {{ $job.resourceName }}
+              image: {{ .Values.java.image }}
+              args: [${{ $job.name}}]
+          restartPolicy: Never
+  {{- end }}

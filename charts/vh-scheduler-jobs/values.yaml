@@ -1,4 +1,14 @@
 ---
+jobs:
+  # first cron
+  - resourceName: vh-anonymise-hearings-conferences-and-delete-aad-users-job
+    name: AnonymiseHearingsConferencesAndDeleteAadUsersJob
+    schedule: "0 30 5 * *"
+  # second cron
+  - resourceName: vh-clear-conference-instant-message-history-job
+    name: ClearConferenceInstantMessageHistoryJob
+    schedule: "0 0 * * *"
+---
 java:
   image: 'sdshmctspublic.azurecr.io/vh/scheduler-jobs:20210210.6'
   applicationPort: 8080
