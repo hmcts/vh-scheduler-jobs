@@ -14,7 +14,7 @@ spec:
         spec:
           containers:
             - name: {{ $job.resourceName }}
-              image: {{ .Values.java.image }}
-              args: [${{ $job.name}}]
+              image: {{ $.Values.image }}
+              args: ["{{ $job.name}}"]
           restartPolicy: Never
   {{- end }}
