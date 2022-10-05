@@ -12,7 +12,7 @@ spec:
         spec:
           containers:
             - name: vh-delete-audio-recording-applications-job
-              image: sdshmctspublic.azurecr.io/vh/scheduler-jobs:latest
+              image: sdshmctspublic.azurecr.io/vh/scheduler-jobs-sds:latest
               args: ["DeleteAudiorecordingApplicationsJob"]
               env:
           restartPolicy: Never

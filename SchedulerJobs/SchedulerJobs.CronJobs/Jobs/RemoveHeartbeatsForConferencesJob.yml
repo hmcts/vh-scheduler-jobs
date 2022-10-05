@@ -12,7 +12,7 @@ spec:
         spec:
           containers:
             - name: vh-remove-heartbeats-for-conferences-job
-              image: sdshmctspublic.azurecr.io/vh/scheduler-jobs:latest
+              image: sdshmctspublic.azurecr.io/vh/scheduler-jobs-sds:latest
               args: ["RemoveHeartbeatsForConferencesJob"]
               env:
           restartPolicy: Never

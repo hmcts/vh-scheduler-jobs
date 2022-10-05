@@ -12,7 +12,7 @@ spec:
         spec:
           containers:
             - name: vh-get-judiciary-users-job
-              image: sdshmctspublic.azurecr.io/vh/scheduler-jobs:latest
+              image: sdshmctspublic.azurecr.io/vh/scheduler-jobs-sds:latest
               args: ["GetJudiciaryUsersJob"]
               env:
           restartPolicy: Never

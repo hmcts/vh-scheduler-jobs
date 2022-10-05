@@ -12,7 +12,7 @@ spec:
         spec:
           containers:
             - name: vh-reconcile-hearing-audio-with-storage-job
-              image: sdshmctspublic.azurecr.io/vh/scheduler-jobs:latest
+              image: sdshmctspublic.azurecr.io/vh/scheduler-jobs-sds:latest
               args: ["ReconcileHearingAudioWithStorageJob"]
               env:
           restartPolicy: Never

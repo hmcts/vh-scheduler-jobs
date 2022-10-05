@@ -1,7 +1,7 @@
 version: '3.4'
 services:
   schedulerjobs:
-    image: ${DOCKER_REGISTRY-}schedulerjobs-cronjobs:latest
+    image: ${DOCKER_REGISTRY-}schedulerjobs-sds:latest
     build:
       context: .
       dockerfile: SchedulerJobs/SchedulerJobs.CronJobs/Dockerfile
