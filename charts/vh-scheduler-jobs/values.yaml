@@ -76,7 +76,7 @@ job:
   kind: CronJob
   releaseNameOverride: job-1
   schedule: "30 5 * * *"
-  keyVaults: "{{ .Values.global.vaults }}"
+  keyVaults: {{ .Values.global.vaults }}
   args:
     - AnonymiseHearingsConferencesAndDeleteAadUsersJob
   environment:
