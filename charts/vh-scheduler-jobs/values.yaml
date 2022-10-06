@@ -1,10 +1,8 @@
 job:
   image: 'sdshmctspublic.azurecr.io/vh/scheduler-jobs:latest'
-  releaseNameOverride: vh-anonymise-hearings-and-conferences-job
   kind: CronJob
+  releaseNameOverride: vh-anonymise-hearings-and-conferences-job
   schedule: "30 5 * * *"
-  successfulJobsHistoryLimit: 3
-  failedJobsHistoryLimit: 3
   keyVaults:
     vh-infra-core:
       excludeEnvironmentSuffix: false
@@ -78,7 +76,6 @@ job:
         - name: azuread--identifieruri
           alias: VhServices--UserApiUrl
   environment:
-    ASPNETCORE_URLS: http://+:8080
     SERVICES__SCHEDULERJOBSURL: http://vh-scheduler-jobs.{{ .Values.global.environment }}.platform.hmcts.net
     Logging__LogLevel__Default: debug
     Logging__LogLevel__System: debug
