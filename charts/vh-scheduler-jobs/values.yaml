@@ -1,40 +1,10 @@
-image: 'sdshmctspublic.azurecr.io/vh/scheduler-jobs:20210210.6'
-
-jobs:
-  - resourceName: vh-anonymise-hearings-and-conferences-job
-    name: AnonymiseHearingsConferencesAndDeleteAadUsersJob
-    schedule: "30 5 * * *"
-  - resourceName: vh-clear-conference-instant-message-history-job
-    name: ClearConferenceInstantMessageHistoryJob
-    schedule: "0 * * * *"
-  - resourceName: vh-clear-hearings-job
-    name: ClearHearingsJob
-    schedule: "0 23 * * *"
-  - resourceName: vh-delete-audio-recording-applications-job
-    name: DeleteAudiorecordingApplicationsJob
-    schedule: "0 22 * * *"
-  - resourceName: vh-get-judiciary-users-job
-    name: GetJudiciaryUsersJob
-    schedule: "0 2 * * *"
-  - resourceName: vh-reconcile-hearing-audio-with-storage-job
-    name: ReconcileHearingAudioWithStorageJob
-    schedule: "0 22 * * *"
-  - resourceName: vh-remove-heartbeats-for-conferences-job
-    name: RemoveHeartbeatsForConferencesJob
-    schedule: "40 5 * * *"
-  - resourceName: vh-send-hearing-notifications-job
-    name: SendHearingNotificationsJob
-    schedule: "0 10 * * *"
-java:
-  applicationPort: 8080
-  replicas: 1
-  ingressHost: vh-scheduler-jobs.{{ .Values.global.environment }}.platform.hmcts.net
-  releaseNameOverride: vh-scheduler-jobs
-  readinessPath: /health/liveness
-  livenessPath: /health/liveness
-  livenessDelay: 360
-  livenessPeriod: 120
-  aadIdentityName: vh-aad-identity
+job:
+  image: 'sdshmctspublic.azurecr.io/vh/scheduler-jobs:latest'
+  releaseNameOverride: vh-anonymise-hearings-and-conferences-job
+  kind: CronJob
+  schedule: "30 5 * * *"
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 3
   keyVaults:
     vh-infra-core:
       excludeEnvironmentSuffix: false
@@ -109,16 +79,116 @@ java:
           alias: VhServices--UserApiUrl
   environment:
     ASPNETCORE_URLS: http://+:8080
-    APPINSIGHTS_PROFILERFEATURE_VERSION: disabled
-    APPINSIGHTS_SNAPSHOTFEATURE_VERSION: disabled
-    APPLICATIONINSIGHTSAGENT_EXTENSION_VERSION: ~2
-    MSDEPLOY_RENAME_LOCKED_FILES: 1
-    SERVICES__SchedulerJobsURL: http://vh-scheduler-jobs.{{ .Values.global.environment }}.platform.hmcts.net
+    SERVICES__SCHEDULERJOBSURL: http://vh-scheduler-jobs.{{ .Values.global.environment }}.platform.hmcts.net
     Logging__LogLevel__Default: debug
     Logging__LogLevel__System: debug
     Logging__LogLevel__Microsoft: debug
-    FUNCTIONS_EXTENSION_VERSION: ~4
-    FUNCTIONS_WORKER_RUNTIME: dotnet
-    VhServices__ELinksApiGetPeopleUpdatedSinceDays: "8000"
-    AzureWebJobs.AnonymiseHearingsConferencesAndDeleteAadUsersFunction.Disabled: 0
-    AzureWebJobs.GetJudiciaryUsersFunction.Disabled: 0
+  args:
+    - AnonymiseHearingsConferencesAndDeleteAadUsersJob
+---
+  # - resourceName: vh-anonymise-hearings-and-conferences-job
+  #   name: AnonymiseHearingsConferencesAndDeleteAadUsersJob
+  #   schedule: "30 5 * * *"
+  # - resourceName: vh-clear-conference-instant-message-history-job
+  #   name: ClearConferenceInstantMessageHistoryJob
+  #   schedule: "0 * * * *"
+  # - resourceName: vh-clear-hearings-job
+  #   name: ClearHearingsJob
+  #   schedule: "0 23 * * *"
+  # - resourceName: vh-delete-audio-recording-applications-job
+  #   name: DeleteAudiorecordingApplicationsJob
+  #   schedule: "0 22 * * *"
+  # - resourceName: vh-get-judiciary-users-job
+  #   name: GetJudiciaryUsersJob
+  #   schedule: "0 2 * * *"
+  # - resourceName: vh-reconcile-hearing-audio-with-storage-job
+  #   name: ReconcileHearingAudioWithStorageJob
+  #   schedule: "0 22 * * *"
+  # - resourceName: vh-remove-heartbeats-for-conferences-job
+  #   name: RemoveHeartbeatsForConferencesJob
+  #   schedule: "40 5 * * *"
+  # - resourceName: vh-send-hearing-notifications-job
+  #   name: SendHearingNotificationsJob
+  #   schedule: "0 10 * * *"
+# java:
+#   applicationPort: 8080
+#   replicas: 1
+#   ingressHost: vh-scheduler-jobs.{{ .Values.global.environment }}.platform.hmcts.net
+#   releaseNameOverride: vh-scheduler-jobs
+#   readinessPath: /health/liveness
+#   livenessPath: /health/liveness
+#   livenessDelay: 360
+#   livenessPeriod: 120
+#   aadIdentityName: vh-aad-identity
+#   keyVaults:
+#     vh-infra-core:
+#       excludeEnvironmentSuffix: false
+#       resourceGroup: vh-infra-core-{{ .Values.global.environment }}
+#       usePodIdentity: true
+#       secrets:
+#         - applicationinsights--instrumentationkey
+#         - azuread--tenantid
+#         - name: azuread--appinsightskey
+#           alias: AppInsightsKey
+#         - name: storage-account-key
+#           alias: AzureConfiguration--StorageAccountKey
+#         - name: storage-account-name
+#           alias: AzureConfiguration--StorageAccountName
+#         - name: storage-account-endpoint
+#           alias: AzureConfiguration--StorageEndpoint
+#         - name: storage-account-container-elinks-name
+#           alias: AzureConfiguration--StorageContainerName
+#         - name: storage-account-web-jobs-connection-string
+#           alias: AzureWebJobsStorage
+#     vh-scheduler-jobs:
+#       excludeEnvironmentSuffix: false
+#       resourceGroup: vh-infra-core-{{ .Values.global.environment }}
+#       usePodIdentity: true
+#       secrets:
+#         - azuread--clientsecret
+#         - azuread--clientid
+#         - azuread--identifieruri
+#         - name: azuread--identifieruri
+#           alias: azuread--VHSchedulerJobsRESOURCEID
+#         - VhServices--ELinksLeaversBaseUrl
+#         - VhServices--ELinksPeoplesBaseUrl
+#         - VhServices--ELinksApiKey
+#         - VhServices--ELinksApiUrl
+#         - name: FeatureToggles--SDK-Key
+#           alias: FeatureToggles--SdkKey
+#     vh-bookings-api:
+#       excludeEnvironmentSuffix: false
+#       resourceGroup: vh-infra-core-{{ .Values.global.environment }}
+#       usePodIdentity: true
+#       secrets:
+#         - name: azuread--identifieruri
+#           alias: VhServices--BookingsApiResourceId
+#         - name: azuread--identifieruri
+#           alias: VhServices--BookingsApiUrl
+#     vh-video-api:
+#       excludeEnvironmentSuffix: false
+#       resourceGroup: vh-infra-core-{{ .Values.global.environment }}
+#       usePodIdentity: true
+#       secrets:
+#         - name: azuread--identifieruri
+#           alias: VhServices--VideoApiResourceId
+#         - name: azuread--identifieruri
+#           alias: VhServices--VideoApiUrl
+#     vh-notification-api:
+#       excludeEnvironmentSuffix: false
+#       resourceGroup: vh-infra-core-{{ .Values.global.environment }}
+#       usePodIdentity: true
+#       secrets:
+#         - name: azuread--identifieruri
+#           alias: VhServices--NotificationApiResourceId
+#         - name: azuread--identifieruri
+#           alias: VhServices--NotificationApiUrl
+#     vh-user-api:
+#       excludeEnvironmentSuffix: false
+#       resourceGroup: vh-infra-core-{{ .Values.global.environment }}
+#       usePodIdentity: true
+#       secrets:
+#         - name: azuread--identifieruri
+#           alias: VhServices--UserApiResourceId
+#         - name: azuread--identifieruri
+#           alias: VhServices--UserApiUrl
