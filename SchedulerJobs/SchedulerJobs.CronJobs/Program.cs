@@ -13,6 +13,7 @@ using SchedulerJobs.Services.Configuration;
 using SchedulerJobs.Services.HttpClients;
 using SchedulerJobs.Services.Interfaces;
 using UserApi.Client;
+using VH.Core.Configuration;
 using VideoApi.Client;
 
 var hostBuilder = Host.CreateDefaultBuilder(args);
@@ -25,9 +26,40 @@ hostBuilder.ConfigureServices((hostContext, services) =>
     RegisterServices(services, configuration);
 });
 
+hostBuilder.ConfigureAppConfiguration(ConfigureAppConfiguration);
+
 var host = hostBuilder.Build();
 
 await host.RunAsync();
+
+void ConfigureAppConfiguration(HostBuilderContext context, IConfigurationBuilder builder)
+{
+    if (builder == null)
+    {
+        throw new ArgumentNullException(nameof(builder));
+    }
+    
+    var keyVaults=new List<string> (){
+        "vh-infra-core",
+        "vh-scheduler-jobs",
+        "vh-bookings-api",
+        "vh-video-api",
+        "vh-notification-api",
+        "vh-user-api"
+    };
+
+    builder
+        .SetBasePath(Directory.GetCurrentDirectory())
+        .AddJsonFile("appsettings.json", true)
+        .AddJsonFile($"appsettings.{context.HostingEnvironment.EnvironmentName}.json", true)
+        .AddUserSecrets("eb01af44-05dd-4541-90b1-6fed69c33e3a")
+        .AddEnvironmentVariables();
+    
+    foreach (var keyVault in keyVaults)
+    {
+        builder.AddAksKeyVaultSecretProvider($"/mnt/secrets/{keyVault}");
+    }
+}
 
 void RegisterJobs(IServiceCollection services, IEnumerable<string> args)
 {

@@ -296,6 +296,15 @@
           "Microsoft.AspNetCore.Authorization": "2.2.0"
         }
       },
+      "Microsoft.AspNetCore.Connections.Abstractions": {
+        "type": "Transitive",
+        "resolved": "3.1.10",
+        "contentHash": "+bggAAN8KS7tE5QfK1ZXJSukL+LRUX1t/DrN2iRT3CD3lErUsyww9hHyIaIX+YK1A8UpmqjVukFxgc5w7lvlKg==",
+        "dependencies": {
+          "Microsoft.AspNetCore.Http.Features": "3.1.10",
+          "System.IO.Pipelines": "4.7.3"
+        }
+      },
       "Microsoft.AspNetCore.Hosting.Abstractions": {
         "type": "Transitive",
         "resolved": "2.2.0",
@@ -336,6 +345,14 @@
           "System.Text.Encodings.Web": "4.5.0"
         }
       },
+      "Microsoft.AspNetCore.Http.Connections.Common": {
+        "type": "Transitive",
+        "resolved": "3.1.10",
+        "contentHash": "D/nIhfWpIqNZTD+5g6q4RXO5OvFdcmLByY9RnrDV+40DHmJ+NPd4n/wC/EbUvv8WL8d7MZqT4kux1bK/I9ETyQ==",
+        "dependencies": {
+          "Microsoft.AspNetCore.Connections.Abstractions": "3.1.10"
+        }
+      },
       "Microsoft.AspNetCore.Http.Extensions": {
         "type": "Transitive",
         "resolved": "2.2.0",
@@ -349,10 +366,11 @@
       },
       "Microsoft.AspNetCore.Http.Features": {
         "type": "Transitive",
-        "resolved": "2.2.0",
-        "contentHash": "ziFz5zH8f33En4dX81LW84I6XrYXKf9jg6aM39cM+LffN9KJahViKZ61dGMSO2gd3e+qe5yBRwsesvyqlZaSMg==",
+        "resolved": "3.1.10",
+        "contentHash": "/uQT0Wx1QMkrefYCuyPzJw0/CZbC++yUBLqGj1WDL7paqC7OqXxfQVT6o9xU0ni+d9SP2Y76UIaYUayvEMNm1w==",
         "dependencies": {
-          "Microsoft.Extensions.Primitives": "2.2.0"
+          "Microsoft.Extensions.Primitives": "3.1.10",
+          "System.IO.Pipelines": "4.7.3"
         }
       },
       "Microsoft.AspNetCore.Mvc.Abstractions": {
@@ -545,21 +563,6 @@
           "System.Runtime.InteropServices.RuntimeInformation": "4.0.0"
         }
       },
-      "Microsoft.DotNet.PlatformAbstractions": {
-        "type": "Transitive",
-        "resolved": "2.1.0",
-        "contentHash": "9KPDwvb/hLEVXYruVHVZ8BkebC8j17DmPb56LnqRF74HqSPLjCkrlFUjOtFpQPA2DeADBRTI/e69aCfRBfrhxw==",
-        "dependencies": {
-          "System.AppContext": "4.1.0",
-          "System.Collections": "4.0.11",
-          "System.IO": "4.1.0",
-          "System.IO.FileSystem": "4.0.1",
-          "System.Reflection.TypeExtensions": "4.1.0",
-          "System.Runtime.Extensions": "4.1.0",
-          "System.Runtime.InteropServices": "4.1.0",
-          "System.Runtime.InteropServices.RuntimeInformation": "4.0.0"
-        }
-      },
       "Microsoft.Extensions.Caching.Abstractions": {
         "type": "Transitive",
         "resolved": "6.0.0",
@@ -647,6 +650,15 @@
           "System.Text.Json": "6.0.0"
         }
       },
+      "Microsoft.Extensions.Configuration.KeyPerFile": {
+        "type": "Transitive",
+        "resolved": "3.1.11",
+        "contentHash": "u3Y7Hs22o7vtN3hVtiS9/FwhG1BI5Vc24wucLU1wUvWS4jY1Ddx9h6H1srVtdtXA04tZbGrYBUoCbZDHEyddzQ==",
+        "dependencies": {
+          "Microsoft.Extensions.Configuration": "3.1.11",
+          "Microsoft.Extensions.FileProviders.Physical": "3.1.11"
+        }
+      },
       "Microsoft.Extensions.Configuration.UserSecrets": {
         "type": "Transitive",
         "resolved": "6.0.1",
@@ -674,14 +686,10 @@
       },
       "Microsoft.Extensions.DependencyModel": {
         "type": "Transitive",
-        "resolved": "2.1.0",
-        "contentHash": "nS2XKqi+1A1umnYNLX2Fbm/XnzCxs5i+zXVJ3VC6r9t2z0NZr9FLnJN4VQpKigdcWH/iFTbMuX6M6WQJcTjVIg==",
+        "resolved": "3.1.6",
+        "contentHash": "/UlDKULIVkLQYn1BaHcy/rc91ApDxJb7T75HcCbGdqwvxhnRQRKM2di1E70iCPMF9zsr6f4EgQTotBGxFIfXmw==",
         "dependencies": {
-          "Microsoft.DotNet.PlatformAbstractions": "2.1.0",
-          "Newtonsoft.Json": "9.0.1",
-          "System.Diagnostics.Debug": "4.0.11",
-          "System.Dynamic.Runtime": "4.0.11",
-          "System.Linq": "4.1.0"
+          "System.Text.Json": "4.7.2"
         }
       },
       "Microsoft.Extensions.FileProviders.Abstractions": {
@@ -1112,6 +1120,11 @@
         "resolved": "4.3.2",
         "contentHash": "leXiwfiIkW7Gmn7cgnNcdtNAU70SjmKW3jxGj1iKHOvdn0zRWsgv/l2OJUO5zdGdiv2VRFnAsxxhDgMzofPdWg=="
       },
+      "SonarAnalyzer.CSharp": {
+        "type": "Transitive",
+        "resolved": "8.2.0.14119",
+        "contentHash": "uq6tGr6guoDzeGjM/7kQWSTYUqv6RgPCVfzYoJg0jdVhIjNPQvSL0kMcugDziOWFP1OIv89kBD9LubVOMbCvvg=="
+      },
       "System.AppContext": {
         "type": "Transitive",
         "resolved": "4.1.0",
@@ -1429,6 +1442,11 @@
         "type": "Transitive",
         "resolved": "6.0.0",
         "contentHash": "Rfm2jYCaUeGysFEZjDe7j1R4x6Z6BzumS/vUT5a1AA/AWJuGX71PoGB0RmpyX3VmrGqVnAwtfMn39OHR8Y/5+g=="
+      },
+      "System.IO.Pipelines": {
+        "type": "Transitive",
+        "resolved": "4.7.3",
+        "contentHash": "zykThu9scJyg2Yeg27GMZCbjzniIsmjtNP5x6kQCd/8rEeKXRy20fP2NOMS7xQ+0pS/E85LZQA+K1aoQLxiUdw=="
       },
       "System.Linq": {
         "type": "Transitive",
@@ -2157,6 +2175,18 @@
           "Newtonsoft.Json": "12.0.3"
         }
       },
+      "VH.Core.Configuration": {
+        "type": "Transitive",
+        "resolved": "0.1.13",
+        "contentHash": "fEtq8dy7GbJ8eUDc5kmwg3Ze+6C7JEPSHlmvz22W8UPX/x7ujBTr5MqUdpKNQganaHalt/6DHfHi+gxlPSUjiw==",
+        "dependencies": {
+          "Microsoft.AspNetCore.Http.Connections.Common": "3.1.10",
+          "Microsoft.AspNetCore.Mvc.Core": "2.2.5",
+          "Microsoft.Extensions.Configuration.KeyPerFile": "3.1.11",
+          "Microsoft.Extensions.DependencyModel": "3.1.6",
+          "SonarAnalyzer.CSharp": "8.2.0.14119"
+        }
+      },
       "VideoApi.Client": {
         "type": "Transitive",
         "resolved": "1.38.9",
@@ -2191,7 +2221,8 @@
           "Microsoft.Extensions.Http": "6.0.0",
           "Microsoft.Extensions.Logging.ApplicationInsights": "2.21.0",
           "Microsoft.VisualStudio.Azure.Containers.Tools.Targets": "1.16.1",
-          "SchedulerJobs.Services": "1.0.0"
+          "SchedulerJobs.Services": "1.0.0",
+          "VH.Core.Configuration": "0.1.13"
         }
       },
       "schedulerjobs.services": {
