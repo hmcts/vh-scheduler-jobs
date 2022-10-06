@@ -2,4 +2,3 @@
 job:
   image: '${IMAGE_NAME}'
   releaseNameOverride: ${RELEASE_NAME}
-
