@@ -2,42 +2,42 @@
 image: '${IMAGE_NAME}'
 releaseNameOverride: ${RELEASE_NAME}
 crons:
-  - cronJobName: vh-anonymise-hearings-and-conferences-job-${PR_NUMBER}
+  - cronJobName: vh-anonymise-hearings-and-conferences-job-pr-${PR_NUMBER}
     schedule: "30 5 * * *"
     args: 
     - AnonymiseHearingsConferencesAndDeleteAadUsersJob
 
-  - cronJobName: vh-clear-conference-instant-message-history-job-${PR_NUMBER}
+  - cronJobName: vh-clear-conference-instant-message-history-job-pr-${PR_NUMBER}
     schedule: "0 20 * * *"
     args: 
     - ClearConferenceInstantMessageList
 
-  - cronJobName: vh-clear-hearings-job-${PR_NUMBER}
+  - cronJobName: vh-clear-hearings-job-pr-${PR_NUMBER}
     schedule: "0 23 * * *"
     args:
     - ClearHearingsJob
 
-  - cronJobName: vh-delete-audio-recording-applications-job-${PR_NUMBER}
+  - cronJobName: vh-delete-audio-recording-applications-job-pr-${PR_NUMBER}
     schedule: "0 22 * * *"
     args:
     - DeleteAudiorecordingApplicationsJob
     
-  - cronJobName: vh-get-judiciary-users-job-${PR_NUMBER}
+  - cronJobName: vh-get-judiciary-users-job-pr-${PR_NUMBER}
     schedule: "0 2 * * *"
     args:
     - GetJudiciaryUsersJob
 
-  - cronJobName: vh-reconcile-hearing-audio-with-storage-job-${PR_NUMBER}
+  - cronJobName: vh-reconcile-hearing-audio-with-storage-job-pr-${PR_NUMBER}
     schedule: "0 22 * * *"
     args: 
     - ReconcileHearingAudioWithStorageJob
 
-  - cronJobName: vh-remove-heartbeats-for-conferences-job-${PR_NUMBER}
+  - cronJobName: vh-remove-heartbeats-for-conferences-job-pr-${PR_NUMBER}
     schedule: "40 5 * * *"
     args:
     - RemoveHeartbeatsForConferencesJob
 
-  - cronJobName: vh-send-hearing-notifications-job-${PR_NUMBER}
+  - cronJobName: vh-send-hearing-notifications-job-pr-${PR_NUMBER}
     schedule: "0 10 * * *"
     args:
     - SendHearingNotificationsJob
