@@ -188,6 +188,7 @@ stages:
               aksClusterName: "$(aksCluster.name)"
               dnsSubscriptionName: "${{ variables.dnsZoneSubscription }}"
               dnsResourceGroupName: "${{ variables.dnsZoneResourceGroup }}"
+              prNumber: "${{ variables.prNumber }}"
 
       - ${{ if eq(variables.run_acceptance_tests, true) }}:
         - job: AcceptanceTestsDev
