@@ -8,7 +8,7 @@ crons:
     - AnonymiseHearingsConferencesAndDeleteAadUsersJob
 
   - cronJobName: vh-clear-conference-message-history-job-pr-${PR_NUMBER}
-    schedule: "0 20 * * *"
+    schedule: "0 * * * *"
     args: 
     - ClearConferenceInstantMessageList
 
