@@ -12,14 +12,15 @@ crons:
     - ClearConferenceInstantMessageList
 
   - cronJobName: vh-clear-hearings-job
-    name: ClearHearingsJob
-    args: "0 23 * * *"
+    schedule: "0 23 * * *"
+    args:
+    - ClearHearingsJob
 
   - cronJobName: vh-delete-audio-recording-applications-job
     schedule: "0 22 * * *"
     args:
     - DeleteAudiorecordingApplicationsJob
-
+    
   - cronJobName: vh-get-judiciary-users-job
     schedule: "0 2 * * *"
     args:
