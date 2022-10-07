@@ -1,4 +1,3 @@
 ---
-job:
-  image: '${IMAGE_NAME}'
-  releaseNameOverride: ${RELEASE_NAME}
+image: '${IMAGE_NAME}'
+releaseNameOverride: ${RELEASE_NAME}
