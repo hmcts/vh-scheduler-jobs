@@ -9,7 +9,7 @@ crons:
   - cronJobName: vh-clear-conference-message-history-job
     schedule: "0 * * * *"
     args: 
-    - ClearConferenceInstantMessageList
+    - ClearConferenceInstantMessageHistoryJob
 
   - cronJobName: vh-clear-hearings-job
     schedule: "0 23 * * *"
