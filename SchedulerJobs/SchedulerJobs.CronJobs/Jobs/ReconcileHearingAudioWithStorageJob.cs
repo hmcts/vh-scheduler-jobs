@@ -23,7 +23,7 @@ namespace SchedulerJobs.CronJobs.Jobs
         
             await reconcileHearingAudioService.ReconcileAudiorecordingsWithConferencesAsync();
 
-            _logger.LogTrace("Reconcile audio recording files with number of conferences for the day - Done");
+            _logger.LogInformation("Reconcile audio recording files with number of conferences for the day - Done");
         }
     }
    

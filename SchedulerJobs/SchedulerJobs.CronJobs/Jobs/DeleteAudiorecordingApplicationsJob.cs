@@ -22,7 +22,7 @@ namespace SchedulerJobs.CronJobs.Jobs
             var closeConferenceService = scope.ServiceProvider.GetRequiredService<ICloseConferenceService>();
             
             var audioFilesCount = await closeConferenceService.DeleteAudiorecordingApplicationsAsync();
-            _logger.LogTrace($"Delete audiorecording applications job executed for {audioFilesCount} conferences");
+            _logger.LogInformation($"Delete audiorecording applications job executed for {audioFilesCount} conferences");
         }
     }
 }

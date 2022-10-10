@@ -1,4 +1,5 @@
 using SchedulerJobs.Services;
+
 namespace SchedulerJobs.CronJobs.Jobs
 {
     public class ClearHearingsJob : BaseJob
@@ -21,7 +22,7 @@ namespace SchedulerJobs.CronJobs.Jobs
             var closeConferenceService = scope.ServiceProvider.GetRequiredService<ICloseConferenceService>();
             
             var conferencesCount = await closeConferenceService.CloseConferencesAsync();
-            _logger.LogTrace($"Close hearings job executed and  {conferencesCount} hearings closed");
+            _logger.LogInformation($"Close hearings job executed and  {conferencesCount} hearings closed");
         }
     }   
 }
