@@ -2131,6 +2131,7 @@
         "dependencies": {
           "Azure.Storage.Blobs": "12.13.1",
           "BookingsApi.Client": "1.39.15",
+          "Microsoft.ApplicationInsights": "2.21.0",
           "Microsoft.Extensions.Logging.Abstractions": "6.0.2",
           "Newtonsoft.Json": "13.0.1",
           "NotificationApi.Client": "1.38.5",

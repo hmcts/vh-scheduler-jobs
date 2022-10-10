@@ -1,6 +1,7 @@
 using Azure.Storage;
 using Azure.Storage.Blobs;
 using BookingsApi.Client;
+using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
 using NotificationApi.Client;
@@ -144,6 +145,7 @@ void RegisterServices(IServiceCollection services, IConfiguration configuration)
     services.AddLogging(builder =>
       builder.AddApplicationInsights(configuration["ApplicationInsights:InstrumentationKey"])
     );
+    services.AddSingleton<ITelemetryInitializer>(new CloudRoleNameInitializer());
 
     services.AddScoped<ICloseConferenceService, CloseConferenceService>();
     services.AddScoped<IClearConferenceChatHistoryService, ClearConferenceChatHistoryService>();
