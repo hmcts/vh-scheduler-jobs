@@ -7,9 +7,7 @@ Create job spec.
 {{- $languageValues = (deepCopy .Values | merge (pluck .Values.language .Values | first) )}}
 {{- end -}}
 spec:
-  {{- if $languageValues.backoffLimit }}
   backoffLimit: {{ $languageValues.backoffLimit }}
-  {{- end }}
   {{- if $languageValues.activeDeadlineSeconds }}
   activeDeadlineSeconds: {{ $languageValues.activeDeadlineSeconds }}
   {{- end }}
