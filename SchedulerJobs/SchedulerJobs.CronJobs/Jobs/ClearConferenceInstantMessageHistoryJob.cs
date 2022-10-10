@@ -20,9 +20,7 @@ namespace SchedulerJobs.CronJobs.Jobs
         {
             using var scope = _serviceProvider.CreateScope();
             var clearConferenceChatHistoryService = scope.ServiceProvider.GetRequiredService<IClearConferenceChatHistoryService>();
-            
-            throw new InvalidOperationException("Test exception in ClearConferenceInstantMessageHistoryJob");
-            
+
             await clearConferenceChatHistoryService.ClearChatHistoryForClosedConferences();
             _logger.LogInformation("Cleared chat history for closed conferences");
         }
