@@ -130,3 +130,4 @@ devmemoryLimits: '1024Mi'
 devcpuLimits: '2500m'
 restartPolicy: Never
 backoffLimit: 0
+concurrencyPolicy: Forbid
