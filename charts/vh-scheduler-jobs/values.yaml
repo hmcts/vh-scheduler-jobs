@@ -129,3 +129,4 @@ devcpuRequests: '25m'
 devmemoryLimits: '1024Mi'
 devcpuLimits: '2500m'
 restartPolicy: Never
+backoffLimit: 0
