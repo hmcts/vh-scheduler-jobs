@@ -1,4 +1,5 @@
 image: 'sdshmctspublic.azurecr.io/vh/scheduler-jobs-sds:latest'
+aadIdentityName: vh-aad-identity
 kind: CronJob
 crons:
   - cronJobName: vh-anonymise-hearings-and-conferences-job
