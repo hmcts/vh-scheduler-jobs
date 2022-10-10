@@ -13,7 +13,7 @@ spec:
   startingDeadlineSeconds: {{int .startingDeadlineSeconds }}
   {{- end }}
   {{- if .concurrencyPolicy }}
-  concurrencyPolicy: "{{ .concurrencyPolicy }}"
+  concurrencyPolicy: {{ .concurrencyPolicy }}
   {{- end }}
   {{- if .successfulJobsHistoryLimit }}
   successfulJobsHistoryLimit: "{{ .successfulJobsHistoryLimit }}"
