@@ -19,7 +19,7 @@ variables:
     value: 'SchedulerJobs'
   - group: vh-scheduler-jobs
   - name: run_acceptance_tests
-    value: false
+    value: true
 
 stages:
 #####################################################
