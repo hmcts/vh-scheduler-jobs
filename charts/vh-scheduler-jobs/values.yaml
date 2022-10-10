@@ -1,5 +1,6 @@
 image: 'sdshmctspublic.azurecr.io/vh/scheduler-jobs-sds:latest'
 aadIdentityName: vh-aad-identity
+backoffLimit: 0
 kind: CronJob
 crons:
   - cronJobName: vh-anonymise-hearings-and-conferences-job
@@ -41,6 +42,7 @@ crons:
     schedule: "0 10 * * *"
     args:
     - SendHearingNotificationsJob
+concurrencyPolicy: Forbid
 
 keyVaults:
   vh-infra-core:
@@ -129,5 +131,3 @@ devcpuRequests: '25m'
 devmemoryLimits: '1024Mi'
 devcpuLimits: '2500m'
 restartPolicy: Never
-backoffLimit: 0
-concurrencyPolicy: Forbid
