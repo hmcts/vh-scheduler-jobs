@@ -141,11 +141,12 @@ void RegisterServices(IServiceCollection services, IConfiguration configuration)
     services.AddSingleton<IAzureStorageService>(x => azureStorage);
     
     services.AddScoped<IAzureTokenProvider, AzureTokenProvider>();
-
+    
     services.AddLogging(builder =>
       builder.AddApplicationInsights(configuration["ApplicationInsights:InstrumentationKey"])
     );
-    services.AddSingleton<ITelemetryInitializer>(new CloudRoleNameInitializer());
+    services.AddApplicationInsightsTelemetryWorkerService();
+    services.AddSingleton<ITelemetryInitializer, CloudRoleNameInitializer>();
 
     services.AddScoped<ICloseConferenceService, CloseConferenceService>();
     services.AddScoped<IClearConferenceChatHistoryService, ClearConferenceChatHistoryService>();
