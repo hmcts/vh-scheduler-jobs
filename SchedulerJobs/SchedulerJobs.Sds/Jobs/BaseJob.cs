@@ -1,5 +1,8 @@
+using System.Diagnostics.CodeAnalysis;
+
 namespace SchedulerJobs.Sds.Jobs
 {
+    [ExcludeFromCodeCoverage]
     public abstract class BaseJob : BackgroundService
     {
         private readonly IHostApplicationLifetime _lifetime;
