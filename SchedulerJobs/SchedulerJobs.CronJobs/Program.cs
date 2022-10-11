@@ -145,8 +145,6 @@ void RegisterServices(IServiceCollection services, IConfiguration configuration)
     services.AddLogging(builder =>
       builder.AddApplicationInsights(configuration["ApplicationInsights:InstrumentationKey"])
     );
-    services.AddApplicationInsightsTelemetryWorkerService();
-    services.AddSingleton<ITelemetryInitializer, CloudRoleNameInitializer>();
 
     services.AddScoped<ICloseConferenceService, CloseConferenceService>();
     services.AddScoped<IClearConferenceChatHistoryService, ClearConferenceChatHistoryService>();
