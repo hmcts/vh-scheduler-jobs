@@ -17,7 +17,6 @@ namespace SchedulerJobs.Sds.UnitTests.Jobs
         [SetUp]
         public void Setup()
         {
-            // TODO move to single base setup class so we don't need to repeat for each job
             var services = new ServiceCollection();
             _removeHeartbeatsForConferencesService = new Mock<IRemoveHeartbeatsForConferencesService>();
             services.AddScoped(s => _removeHeartbeatsForConferencesService.Object);
