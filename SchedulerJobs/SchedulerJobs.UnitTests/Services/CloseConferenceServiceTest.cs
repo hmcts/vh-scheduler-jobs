@@ -63,6 +63,21 @@ namespace SchedulerJobs.UnitTests.Services
         }
 
         [Test]
+        public void Close_conferences_with_exit_true()
+        {
+            var response = new ExpiredConferencesResponse
+            {
+                Id = new Guid("a02dea09-4442-424d-bcaa-033d703e5cb7"),
+            };
+           
+            var conferences = new List<ExpiredConferencesResponse> { response };
+            _videoApiClient.Setup(x => x.GetExpiredOpenConferencesAsync()).ReturnsAsync(conferences);
+
+            _closeConferenceService.CloseConferencesAsync(true);
+            _videoApiClient.Verify(x => x.CloseConferenceAsync(It.IsAny<Guid>()), Times.Never);
+        }
+
+        [Test]
         public void Should_return_empty_list_of_closed_conferences()
         {
             _videoApiClient = new Mock<IVideoApiClient>();
