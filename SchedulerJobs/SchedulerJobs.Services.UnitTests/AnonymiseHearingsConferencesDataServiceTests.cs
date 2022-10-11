@@ -9,13 +9,12 @@ using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
 using SchedulerJobs.Common.Constants;
-using SchedulerJobs.Services;
 using UserApi.Client;
 using UserApi.Contract.Responses;
 using VideoApi.Client;
 using VideoApi.Contract.Requests;
 
-namespace SchedulerJobs.Sds.UnitTests.Services
+namespace SchedulerJobs.Services.UnitTests
 {
     public class AnonymiseHearingsConferencesDataServiceTests
     {
@@ -134,7 +133,7 @@ namespace SchedulerJobs.Sds.UnitTests.Services
             await _anonymiseHearingsConferencesDataService.AnonymiseHearingsConferencesDataAsync();
 
             _userApiClient.Verify(userApi => userApi.DeleteUserAsync(It.Is<string>(username => username == usernameNotToDeleteFromAd)), Times.Never);
-            _userApiClient.Verify(userApi => userApi.DeleteUserAsync(It.Is<string>(username => username == _anonymisationDataResponse.Usernames.Last())), Times.Once);
+            _userApiClient.Verify(userApi => userApi.DeleteUserAsync(It.Is<string>(username => username == Enumerable.Last<string>(_anonymisationDataResponse.Usernames))), Times.Once);
         }
 
         [Test]
@@ -157,7 +156,7 @@ namespace SchedulerJobs.Sds.UnitTests.Services
             await _anonymiseHearingsConferencesDataService.AnonymiseHearingsConferencesDataAsync();
 
             _userApiClient.Verify(userApi => userApi.DeleteUserAsync(It.Is<string>(username => username == usernameNotToDeleteFromAd)), Times.Never);
-            _userApiClient.Verify(userApi => userApi.DeleteUserAsync(It.Is<string>(username => username == _anonymisationDataResponse.Usernames.Last())), Times.Once);
+            _userApiClient.Verify(userApi => userApi.DeleteUserAsync(It.Is<string>(username => username == Enumerable.Last<string>(_anonymisationDataResponse.Usernames))), Times.Once);
         }
 
         [Test]

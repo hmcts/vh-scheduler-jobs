@@ -4,12 +4,11 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
-using SchedulerJobs.Services;
 using SchedulerJobs.Services.Interfaces;
 using VideoApi.Client;
 using VideoApi.Contract.Responses;
 
-namespace SchedulerJobs.Sds.UnitTests.Services
+namespace SchedulerJobs.Services.UnitTests
 {
     public class ReconcileHearingAudioServiceTests
     {

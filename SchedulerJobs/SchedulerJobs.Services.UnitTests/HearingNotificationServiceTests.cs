@@ -9,11 +9,10 @@ using Moq;
 using NotificationApi.Client;
 using NUnit.Framework;
 using SchedulerJobs.Common.Configuration;
-using SchedulerJobs.Services;
 using SchedulerJobs.Services.Interfaces;
 using SchedulerJobs.Services.Mappers;
 
-namespace SchedulerJobs.Sds.UnitTests.Services
+namespace SchedulerJobs.Services.UnitTests
 {
     public class HearingNotificationServiceTests
     {

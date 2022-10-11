@@ -11,10 +11,9 @@ using Newtonsoft.Json;
 using NUnit.Framework;
 using SchedulerJobs.Common.Configuration;
 using SchedulerJobs.Common.Models;
-using SchedulerJobs.Services;
 using SchedulerJobs.Services.HttpClients;
 
-namespace SchedulerJobs.Sds.UnitTests.Services
+namespace SchedulerJobs.Services.UnitTests
 {
     [TestFixture]
     public class ELinksServiceTests
