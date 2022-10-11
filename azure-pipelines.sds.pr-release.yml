@@ -57,6 +57,12 @@ stages:
         steps:
           - checkout: self
 
+          - template: templates/sonarCloud/prepare.yml@azTemplates
+            parameters:
+              ExtraProperties: |
+                sonar.cs.opencover.reportsPaths=$(Common.TestResultsDirectory)\Coverage\coverage.opencover.xml
+                sonar.coverage.exclusions=**/VideoApiService.cs, **/Startup.cs, **/Testing.Common/**, **/SchedulerJobs.Common/ApiHelper/**, **/SchedulerJobs.Common/Helper/Configuration/**, **/SchedulerJobs.Common/Helper/Security/**
+
           - task: UseDotNet@2
             displayName: 'Install .NET Core SDK ${{ variables.dotnetCoreVersion }}'
             inputs:
