@@ -29,10 +29,8 @@ variables:
 
 parameters:
   - name: sdsUnitTestsCoverletCoverageExclusions
-    value:
-      - "[*]SchedulerJobs.Common.*"
-      - "[*]SchedulerJobs.Sds.UnitTests.*"
-      - "[Testing.Common]*"
+    type: object
+    default: ["[*]SchedulerJobs.Common.*", "[*]SchedulerJobs.Sds.UnitTests.*", "[Testing.Common]*"]
 
 stages:
 #####################################################
