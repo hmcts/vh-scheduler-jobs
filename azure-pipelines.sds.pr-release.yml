@@ -24,13 +24,13 @@ variables:
     value: "6.x"
   - name: nugetPackagePath
     value: $(Pipeline.Workspace)/.nuget/packages
-  - name: sdsUnitTestsCoverletCoverageExclusions
-    value: 
-      - "[*]SchedulerJobs.Common.*"
-      - "[*]SchedulerJobs.Sds.UnitTests.*"
-      - "[Testing.Common]*"
   - name: vstsFeedId
     value: ''
+  
+sdsUnitTestsCoverletCoverageExclusions:
+  - "[*]SchedulerJobs.Common.*"
+  - "[*]SchedulerJobs.Sds.UnitTests.*"
+  - "[Testing.Common]*"
 
 stages:
 #####################################################
@@ -100,7 +100,7 @@ stages:
               command: test
               projects: |
                 ${{ variables.app_path }}/${{ variables.app_path }}.Sds.UnitTests/*.csproj
-              arguments: ${{ format('--configuration Release /p:CollectCoverage=true /p:CoverletOutputFormat="\"opencover,cobertura,json,lcov\"" /p:Exclude="\"{0}\"" /p:CoverletOutput=$(Common.TestResultsDirectory)/Coverage/ /p:MergeWith=$(Common.TestResultsDirectory)/Coverage/coverage.json', join(',', variables.sdsUnitTestsCoverletCoverageExclusions)) }}
+              arguments: ${{ format('--configuration Release /p:CollectCoverage=true /p:CoverletOutputFormat="\"opencover,cobertura,json,lcov\"" /p:Exclude="\"{0}\"" /p:CoverletOutput=$(Common.TestResultsDirectory)/Coverage/ /p:MergeWith=$(Common.TestResultsDirectory)/Coverage/coverage.json', join(',', sdsUnitTestsCoverletCoverageExclusions)) }}
 
 #          - template: templates/sonarCloud/prepare.yml@azTemplates
 #            parameters:
