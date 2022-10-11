@@ -67,8 +67,8 @@ stages:
           - powershell: |
               $dotNetLocation = (dotnet nuget locals global-packages -l).replace('global-packages: ', '')
               Write-Host "##vso[task.setvariable variable=cacheLocation;isOutput=true]$dotNetLocation"
-              displayName: 'Find NuGet Cache'
-              name: findCache
+            displayName: 'Find NuGet Cache'
+            name: findCache
              
           # Scheduler Jobs Sds Unit Tests
           
