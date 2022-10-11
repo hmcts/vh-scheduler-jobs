@@ -42,7 +42,7 @@ stages:
   #             chartValuesPath: ${{ variables.chartPath }}
 
       - job: UnitTests
-        displayName: "Unit Tests"
+        displayName: "Scheduler Jobs Sds Unit Tests"
         steps:
           - checkout: self
 
@@ -61,6 +61,30 @@ stages:
               coverletCoverageExclusions:
                 - "[*]SchedulerJobs.Common.*"
                 - "[*]SchedulerJobs.Sds.UnitTests.*"
+                - "[Testing.Common]*"
+
+          - template: templates/sonarCloud/runAnalysis.yml@azTemplates
+
+      - job: UnitTests
+        displayName: "Services Unit Tests"
+        steps:
+          - checkout: self
+
+          - template: templates/sonarCloud/prepare.yml@azTemplates
+            parameters:
+              ExtraProperties: |
+                sonar.cs.opencover.reportsPaths=$(Common.TestResultsDirectory)\Coverage\coverage.opencover.xml
+                sonar.coverage.exclusions=**/VideoApiService.cs, **/Startup.cs, **/Testing.Common/**, **/SchedulerJobs.Common/ApiHelper/**, **/SchedulerJobs.Common/Helper/Configuration/**, **/SchedulerJobs.Common/Helper/Security/**
+
+          - template: stages\dotnet-tests\unit-tests.yml@azTemplates
+            parameters:
+              #vstsFeedId: 'Video Hearings/vh-packages'
+              nugetConfigPath: ${{ variables.app_path }} # Temp - Change To SDS Feed When Possible.
+              unitTestProjectPath: "${{ variables.app_path }}/${{ variables.app_path }}.Services.UnitTests"
+              dotnetCoreVersion: "6.x"
+              coverletCoverageExclusions:
+                - "[*]SchedulerJobs.Common.*"
+                - "[*]SchedulerJobs.Services.UnitTests.*"
                 - "[Testing.Common]*"
 
           - template: templates/sonarCloud/runAnalysis.yml@azTemplates
