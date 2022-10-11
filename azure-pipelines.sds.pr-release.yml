@@ -24,13 +24,13 @@ variables:
 stages:
 #####################################################
 # CI Build Checks. ##################################
-  # - stage: CI_Build
-  #   displayName: CI Build
-  #   variables: 
-  #     - template: variables/shared.yaml
-  #       parameters:
-  #         env: ''
-  #   jobs:
+  - stage: CI_Build
+    displayName: CI Build
+    variables: 
+      - template: variables/shared.yaml
+        parameters:
+          env: ''
+    jobs:
   #     - job: CI_Helm
   #       displayName: "Helm CI"
   #       steps:
@@ -41,36 +41,36 @@ stages:
   #             chartPath: ${{ variables.chartPath }}
   #             chartValuesPath: ${{ variables.chartPath }}
 
-  #     - job: UnitTests
-  #       displayName: "Unit Tests"
-  #       steps:
-  #         - checkout: self
+      - job: UnitTests
+        displayName: "Unit Tests"
+        steps:
+          - checkout: self
 
-  #         - template: templates/sonarCloud/prepare.yml@azTemplates
-  #           parameters:
-  #             ExtraProperties: |
-  #               sonar.cs.opencover.reportsPaths=$(Common.TestResultsDirectory)\Coverage\coverage.opencover.xml
-  #               sonar.coverage.exclusions=**/VideoApiService.cs, **/Startup.cs, **/Testing.Common/**, **/SchedulerJobs.Common/ApiHelper/**, **/SchedulerJobs.Common/Helper/Configuration/**, **/SchedulerJobs.Common/Helper/Security/**
+          - template: templates/sonarCloud/prepare.yml@azTemplates
+            parameters:
+              ExtraProperties: |
+                sonar.cs.opencover.reportsPaths=$(Common.TestResultsDirectory)\Coverage\coverage.opencover.xml
+                sonar.coverage.exclusions=**/VideoApiService.cs, **/Startup.cs, **/Testing.Common/**, **/SchedulerJobs.Common/ApiHelper/**, **/SchedulerJobs.Common/Helper/Configuration/**, **/SchedulerJobs.Common/Helper/Security/**
       
-  #         - template: stages\dotnet-tests\unit-tests.yml@azTemplates
-  #           parameters:
-  #             #vstsFeedId: 'Video Hearings/vh-packages'
-  #             nugetConfigPath: ${{ variables.app_path }} # Temp - Change To SDS Feed When Possible.
-  #             unitTestProjectPath: "${{ variables.app_path }}/${{ variables.app_path }}.CronJobs.UnitTests"
-  #             dotnetCoreVersion: "6.x"
-  #             coverletCoverageExclusions:
-  #               - "[*]SchedulerJobs.Common.*"
-  #               - "[*]SchedulerJobs.CronJobs.UnitTests.*"
-  #               - "[Testing.Common]*"
+          - template: stages\dotnet-tests\unit-tests.yml@azTemplates
+            parameters:
+              #vstsFeedId: 'Video Hearings/vh-packages'
+              nugetConfigPath: ${{ variables.app_path }} # Temp - Change To SDS Feed When Possible.
+              unitTestProjectPath: "${{ variables.app_path }}/${{ variables.app_path }}.CronJobs.UnitTests"
+              dotnetCoreVersion: "6.x"
+              coverletCoverageExclusions:
+                - "[*]SchedulerJobs.Common.*"
+                - "[*]SchedulerJobs.CronJobs.UnitTests.*"
+                - "[Testing.Common]*"
 
-  #         - template: templates/sonarCloud/runAnalysis.yml@azTemplates
+          - template: templates/sonarCloud/runAnalysis.yml@azTemplates
 
 #####################################################
 # Pre Steps. ########################################
 # Build Docker Image & Generate EF Script. ##########
   - stage: Dock
     displayName: Build API
-    #dependsOn: CI_Build
+    dependsOn: CI_Build
     variables: 
       - template: variables/dev.yaml
       - template: variables/shared.yaml
@@ -108,16 +108,6 @@ stages:
               acrName: ${{ variables.acrName }}
               repositoryName:  ${{ variables.repositoryName }}
               dockerComposeFile: docker-compose-sds.yml
-              
-#          - task: DockerCompose@0
-#            displayName: 'Run a Docker Compose Build'
-#            inputs:
-#              azureSubscription: ${{ variables.acrSubscription }}
-#              azureContainerRegistry: '{"loginServer":"${{ variables.acrName }}.azurecr.io", "id" : "$(acrId)"}'
-#              projectName: '${{ variables.acrName }}/${{ variables.repositoryName }}'
-#              qualifyImageNames: false
-#              dockerComposeCommand: build
-#              dockerComposeFile: docker-compose-sds.yml # TODO add this to the docker-compose.yaml template as a parameter
 
           - template: templates\Containerisation\docker\docker-push-azure.yaml@azTemplates
             parameters:
