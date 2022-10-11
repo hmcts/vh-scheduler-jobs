@@ -56,11 +56,11 @@ stages:
             parameters:
               #vstsFeedId: 'Video Hearings/vh-packages'
               nugetConfigPath: ${{ variables.app_path }} # Temp - Change To SDS Feed When Possible.
-              unitTestProjectPath: "${{ variables.app_path }}/${{ variables.app_path }}.CronJobs.UnitTests"
+              unitTestProjectPath: "${{ variables.app_path }}/${{ variables.app_path }}.Sds.UnitTests"
               dotnetCoreVersion: "6.x"
               coverletCoverageExclusions:
                 - "[*]SchedulerJobs.Common.*"
-                - "[*]SchedulerJobs.CronJobs.UnitTests.*"
+                - "[*]SchedulerJobs.Sds.UnitTests.*"
                 - "[Testing.Common]*"
 
           - template: templates/sonarCloud/runAnalysis.yml@azTemplates
