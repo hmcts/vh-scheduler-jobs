@@ -17,9 +17,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SchedulerJobs.UnitTests", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SchedulerJobs.AcceptanceTests", "SchedulerJobs.AcceptanceTests\SchedulerJobs.AcceptanceTests.csproj", "{04942713-930C-4CEA-BDFB-6F71F565C23B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SchedulerJobs.CronJobs", "SchedulerJobs.CronJobs\SchedulerJobs.CronJobs.csproj", "{04F03D1B-9537-4E94-8E52-43D82953363E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SchedulerJobs.Sds", "SchedulerJobs.Sds\SchedulerJobs.Sds.csproj", "{04F03D1B-9537-4E94-8E52-43D82953363E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SchedulerJobs.CronJobs.UnitTests", "SchedulerJobs.CronJobs.UnitTests\SchedulerJobs.CronJobs.UnitTests.csproj", "{71F9EB78-0B25-4CCD-A343-88815482C191}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SchedulerJobs.Sds.UnitTests", "SchedulerJobs.Sds.UnitTests\SchedulerJobs.Sds.UnitTests.csproj", "{71F9EB78-0B25-4CCD-A343-88815482C191}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
