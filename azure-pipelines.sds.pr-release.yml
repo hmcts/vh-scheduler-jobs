@@ -58,10 +58,10 @@ stages:
           - checkout: self
 
           - task: UseDotNet@2
-            displayName: 'Install .NET Core SDK ${{ parameters.dotnetCoreVersion }}'
+            displayName: 'Install .NET Core SDK ${{ variables.dotnetCoreVersion }}'
             inputs:
               packageType: sdk
-              version: ${{ parameters.dotnetCoreVersion }}
+              version: ${{ variables.dotnetCoreVersion }}
               installationPath: $(Agent.ToolsDirectory)/dotnet
 
           - powershell: |
