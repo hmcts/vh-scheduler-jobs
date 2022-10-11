@@ -7,7 +7,7 @@ namespace SchedulerJobs.Services
 {
     public interface ICloseConferenceService
     {
-        Task<int> CloseConferencesAsync();
+        Task<int> CloseConferencesAsync(bool exit = false);
 
         Task<int> DeleteAudiorecordingApplicationsAsync();
     }
@@ -21,8 +21,13 @@ namespace SchedulerJobs.Services
             _videoApiClient = videoApiClient;
         }
 
-        public async Task<int> CloseConferencesAsync()
+        public async Task<int> CloseConferencesAsync(bool exit = false)
         {
+            if (exit)
+            {
+                return 0;
+            }
+            
             var conferences = await _videoApiClient.GetExpiredOpenConferencesAsync();
             var conferenceCount = 0;
             if (conferences != null && conferences.Any())

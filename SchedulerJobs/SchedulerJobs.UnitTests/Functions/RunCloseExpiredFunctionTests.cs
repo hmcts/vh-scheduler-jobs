@@ -17,7 +17,7 @@ namespace SchedulerJobs.UnitTests.Functions
             await _sut.Run(_timerInfo, _logger);
 
             // Assert
-            _mocker.Mock<ICloseConferenceService>().Verify(x => x.CloseConferencesAsync(), Times.Once);
+            _mocker.Mock<ICloseConferenceService>().Verify(x => x.CloseConferencesAsync(false), Times.Once);
             _logger.GetLoggedMessages().Last().Should().StartWith("Close hearings function executed");
         }
     }
