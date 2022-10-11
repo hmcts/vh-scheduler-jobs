@@ -25,7 +25,10 @@ variables:
   - name: nugetPackagePath
     value: $(Pipeline.Workspace)/.nuget/packages
   - name: sdsUnitTestsCoverletCoverageExclusions
-    value: ["[*]SchedulerJobs.Common.*", "[*]SchedulerJobs.Sds.UnitTests.*", "[Testing.Common]*"]
+    value: 
+      - "[*]SchedulerJobs.Common.*"
+      - "[*]SchedulerJobs.Sds.UnitTests.*"
+      - "[Testing.Common]*"
   - name: vstsFeedId
     value: ''
 
