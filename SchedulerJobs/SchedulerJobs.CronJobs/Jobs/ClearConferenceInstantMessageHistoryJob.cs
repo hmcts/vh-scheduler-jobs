@@ -10,7 +10,7 @@ namespace SchedulerJobs.CronJobs.Jobs
         public ClearConferenceInstantMessageHistoryJob(
             ILogger<ClearConferenceInstantMessageHistoryJob> logger,
             IHostApplicationLifetime lifetime,
-            IServiceProvider serviceProvider) : base(lifetime)
+            IServiceProvider serviceProvider) : base(lifetime, logger)
         {
             _logger = logger;
             _serviceProvider = serviceProvider;

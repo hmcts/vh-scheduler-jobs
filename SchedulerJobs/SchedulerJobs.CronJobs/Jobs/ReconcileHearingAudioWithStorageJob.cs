@@ -10,7 +10,7 @@ namespace SchedulerJobs.CronJobs.Jobs
         public ReconcileHearingAudioWithStorageJob(
             IHostApplicationLifetime lifetime,
             ILogger<ReconcileHearingAudioWithStorageJob> logger,
-            IServiceProvider serviceProvider) : base(lifetime)
+            IServiceProvider serviceProvider) : base(lifetime, logger)
         {
             _logger = logger;
             _serviceProvider = serviceProvider;

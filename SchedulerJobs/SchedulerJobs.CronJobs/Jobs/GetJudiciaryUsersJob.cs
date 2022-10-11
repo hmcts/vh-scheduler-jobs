@@ -11,7 +11,7 @@ namespace SchedulerJobs.CronJobs.Jobs
         public GetJudiciaryUsersJob(
             IHostApplicationLifetime lifetime,
             ILogger<GetJudiciaryUsersJob> logger,
-            IServiceProvider serviceProvider) : base(lifetime)
+            IServiceProvider serviceProvider) : base(lifetime, logger)
         {
             _logger = logger;
             _serviceProvider = serviceProvider;
