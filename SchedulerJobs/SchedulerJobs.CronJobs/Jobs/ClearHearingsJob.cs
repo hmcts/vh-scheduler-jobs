@@ -21,6 +21,12 @@ namespace SchedulerJobs.CronJobs.Jobs
             using var scope = _serviceProvider.CreateScope();
             var closeConferenceService = scope.ServiceProvider.GetRequiredService<ICloseConferenceService>();
             
+            _logger.LogDebug("Test - debug logging");
+            _logger.LogInformation("Test - information logging");
+            _logger.LogWarning("Test - warning logging");
+            _logger.LogError("Test - error logging");
+            throw new InvalidOperationException("Test exception");
+            
             var conferencesCount = await closeConferenceService.CloseConferencesAsync();
             _logger.LogInformation($"Close hearings job executed and  {conferencesCount} hearings closed");
         }
