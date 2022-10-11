@@ -135,7 +135,7 @@ namespace SchedulerJobs.Services.UnitTests
         }
 
 
-        private HearingDetailsResponse CreateHearing()
+        private static HearingDetailsResponse CreateHearing()
         {
             Guid id = Guid.NewGuid();
 
@@ -243,7 +243,7 @@ namespace SchedulerJobs.Services.UnitTests
             };
         }
 
-        private HearingDetailsResponse CreateHearingWithEjud()
+        private static HearingDetailsResponse CreateHearingWithEjud()
         {
             Guid id = Guid.NewGuid();
 
@@ -350,7 +350,7 @@ namespace SchedulerJobs.Services.UnitTests
                 GroupId = id
             };
         }
-        private HearingDetailsResponse CreateHearingWithNoRoles()
+        private static HearingDetailsResponse CreateHearingWithNoRoles()
         {
             Guid id = Guid.NewGuid();
 
