@@ -78,7 +78,9 @@ Additional details:
 
 More information on cron jobs here: https://kubernetes.io/docs/concepts/workloads/controllers/cron-jobs/
 
-To run one of the cron jobs on demand in Kubernetes (eg for testing) you can edit the schedule inside the yml file for the `CronJob` resource under `Workloads` using a tool like Lens: https://k8slens.dev/
+To run one of the cron jobs on demand in Kubernetes (eg for testing) you can edit the schedule inside the yml file for the `CronJob` resource under `Workloads` using a tool like Lens. Full setup guide for using Lens on the SDS cluster is here: https://tools.hmcts.net/confluence/display/PUBH/Troubleshooting
+
+This is an alternative to the Trigger command which cannot currently be used due to permission restrictions on the cluster.
 
 #### Example - changing the ClearHearingsJob to run at 10am UTC
 ````
