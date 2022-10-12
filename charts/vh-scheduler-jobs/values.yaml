@@ -74,6 +74,9 @@ keyVaults:
     resourceGroup: vh-infra-core-{{ .Values.global.environment }}
     usePodIdentity: true
     secrets:
+      - azuread--clientsecret
+      - azuread--clientid
+      - azuread--identifieruri
       - VhServices--ELinksLeaversBaseUrl
       - VhServices--ELinksPeoplesBaseUrl
       - VhServices--ELinksApiKey
