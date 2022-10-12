@@ -9,9 +9,9 @@ using SchedulerJobs.Services;
 
 namespace SchedulerJobs.Sds.UnitTests.Jobs
 {
-    public class DeleteAudiorecordingApplicationsJobTests : JobTestBaseSetup<DeleteAudiorecordingApplicationsJob>
+    public class DeleteAudioRecordingApplicationsJobTests : JobTestBaseSetup<DeleteAudioRecordingApplicationsJob>
     {
-        private DeleteAudiorecordingApplicationsJob _sut;
+        private DeleteAudioRecordingApplicationsJob _sut;
         private Mock<ICloseConferenceService> _closeConferenceService;
         
         [SetUp]
@@ -23,7 +23,7 @@ namespace SchedulerJobs.Sds.UnitTests.Jobs
 
             var serviceProvider = services.BuildServiceProvider();
 
-            _sut = new DeleteAudiorecordingApplicationsJob(Logger, Lifetime.Object, serviceProvider);
+            _sut = new DeleteAudioRecordingApplicationsJob(Logger, Lifetime.Object, serviceProvider);
         }
         
         [Test]
@@ -36,7 +36,7 @@ namespace SchedulerJobs.Sds.UnitTests.Jobs
             await _sut.DoWorkAsync();
 
             // Assert
-            Logger.GetLoggedMessages().Last().Should().StartWith("Delete audiorecording applications job executed for 3 conferences");
+            Logger.GetLoggedMessages().Last().Should().StartWith("Delete audio recording applications job executed for 3 conferences");
         }
     }
 }

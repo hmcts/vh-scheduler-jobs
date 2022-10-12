@@ -2,13 +2,13 @@ using SchedulerJobs.Services;
 
 namespace SchedulerJobs.Sds.Jobs
 {
-    public class DeleteAudiorecordingApplicationsJob : BaseJob
+    public class DeleteAudioRecordingApplicationsJob : BaseJob
     {
-        private readonly ILogger<DeleteAudiorecordingApplicationsJob> _logger;
+        private readonly ILogger<DeleteAudioRecordingApplicationsJob> _logger;
         private readonly IServiceProvider _serviceProvider;
         
-        public DeleteAudiorecordingApplicationsJob(
-            ILogger<DeleteAudiorecordingApplicationsJob> logger,
+        public DeleteAudioRecordingApplicationsJob(
+            ILogger<DeleteAudioRecordingApplicationsJob> logger,
             IHostApplicationLifetime lifetime,
             IServiceProvider serviceProvider) : base(lifetime, logger)
         {
@@ -22,7 +22,7 @@ namespace SchedulerJobs.Sds.Jobs
             var closeConferenceService = scope.ServiceProvider.GetRequiredService<ICloseConferenceService>();
             
             var audioFilesCount = await closeConferenceService.DeleteAudiorecordingApplicationsAsync();
-            _logger.LogInformation($"Delete audiorecording applications job executed for {audioFilesCount} conferences");
+            _logger.LogInformation($"Delete audio recording applications job executed for {audioFilesCount} conferences");
         }
     }
 }

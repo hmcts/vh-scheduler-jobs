@@ -24,7 +24,7 @@ crons:
     schedule: "0 22 * * *"
     concurrencyPolicy: Forbid
     args:
-    - DeleteAudiorecordingApplicationsJob
+    - DeleteAudioRecordingApplicationsJob
     
   - cronJobName: vh-get-judiciary-users-job-pr-${PR_NUMBER}
     schedule: "0 2 * * *"

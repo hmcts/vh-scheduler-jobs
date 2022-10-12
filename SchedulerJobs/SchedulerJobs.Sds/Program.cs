@@ -82,9 +82,9 @@ public static partial class Program
             services.AddHostedService<ClearHearingsJob>();
         }
 
-        if (args.Contains(nameof(DeleteAudiorecordingApplicationsJob)))
+        if (args.Contains(nameof(DeleteAudioRecordingApplicationsJob)))
         {
-            services.AddHostedService<DeleteAudiorecordingApplicationsJob>();
+            services.AddHostedService<DeleteAudioRecordingApplicationsJob>();
         }
 
         if (args.Contains(nameof(GetJudiciaryUsersJob)))
