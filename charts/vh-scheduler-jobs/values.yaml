@@ -69,18 +69,11 @@ keyVaults:
         alias: AzureConfiguration--StorageEndpoint
       - name: storage-account-container-elinks-name
         alias: AzureConfiguration--StorageContainerName
-      - name: storage-account-web-jobs-connection-string
-        alias: AzureWebJobsStorage
   vh-scheduler-jobs:
     excludeEnvironmentSuffix: false
     resourceGroup: vh-infra-core-{{ .Values.global.environment }}
     usePodIdentity: true
     secrets:
-      - azuread--clientsecret
-      - azuread--clientid
-      - azuread--identifieruri
-      - name: azuread--identifieruri
-        alias: azuread--VHSchedulerJobsRESOURCEID
       - VhServices--ELinksLeaversBaseUrl
       - VhServices--ELinksPeoplesBaseUrl
       - VhServices--ELinksApiKey
@@ -124,7 +117,6 @@ keyVaults:
       - name: azuread--identifieruri
         alias: VhServices--UserApiUrl
 environment:
-  SERVICES__SCHEDULERJOBSURL: http://vh-scheduler-jobs.{{ .Values.global.environment }}.platform.hmcts.net
   Logging__LogLevel__Default: debug
   Logging__LogLevel__System: debug
   Logging__LogLevel__Microsoft: debug
