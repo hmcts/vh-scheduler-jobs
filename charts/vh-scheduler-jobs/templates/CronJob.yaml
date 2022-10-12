@@ -1,0 +1,32 @@
+{{- $languageValues := deepCopy .Values }}
+{{- $jobKind := (default $languageValues.kind) -}}
+{{ if (and $jobKind (eq $jobKind "CronJob")) }}
+{{ range $languageValues.crons }}
+---
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: {{ .cronJobName }}
+spec:
+  schedule: "{{ .schedule }}"
+  {{- if .startingDeadlineSeconds }}
+  startingDeadlineSeconds: {{int .startingDeadlineSeconds }}
+  {{- end }}
+  {{- if .concurrencyPolicy }}
+  concurrencyPolicy: {{ .concurrencyPolicy }}
+  {{- end }}
+  {{- if .successfulJobsHistoryLimit }}
+  successfulJobsHistoryLimit: "{{ .successfulJobsHistoryLimit }}"
+  {{- end }}
+  {{- if .failedJobsHistoryLimit }}
+  failedJobsHistoryLimit: "{{ .failedJobsHistoryLimit }}"
+  {{- end }}
+  {{- if .suspend }}
+  suspend: {{ .suspend }}
+  {{- end }}
+  jobTemplate:
+{{- $merge := mergeOverwrite $.Values .  }}
+{{- $root := mergeOverwrite $ $merge }}
+{{ include "job.spec" $root  | indent 4 }}
+{{- end -}}
+{{- end}}

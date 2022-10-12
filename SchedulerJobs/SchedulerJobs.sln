@@ -1,4 +1,4 @@
-﻿
+
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29418.71
@@ -16,6 +16,12 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SchedulerJobs.UnitTests", "SchedulerJobs.UnitTests\SchedulerJobs.UnitTests.csproj", "{BB930C06-2A7F-49C4-8AAC-48423EC97D63}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SchedulerJobs.AcceptanceTests", "SchedulerJobs.AcceptanceTests\SchedulerJobs.AcceptanceTests.csproj", "{04942713-930C-4CEA-BDFB-6F71F565C23B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SchedulerJobs.Sds", "SchedulerJobs.Sds\SchedulerJobs.Sds.csproj", "{04F03D1B-9537-4E94-8E52-43D82953363E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SchedulerJobs.Sds.UnitTests", "SchedulerJobs.Sds.UnitTests\SchedulerJobs.Sds.UnitTests.csproj", "{71F9EB78-0B25-4CCD-A343-88815482C191}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SchedulerJobs.Services.UnitTests", "SchedulerJobs.Services.UnitTests\SchedulerJobs.Services.UnitTests.csproj", "{D098B8AF-1802-4C8D-ACC6-0C424AFA85C6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -47,6 +53,18 @@ Global
 		{04942713-930C-4CEA-BDFB-6F71F565C23B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{04942713-930C-4CEA-BDFB-6F71F565C23B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{04942713-930C-4CEA-BDFB-6F71F565C23B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{04F03D1B-9537-4E94-8E52-43D82953363E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{04F03D1B-9537-4E94-8E52-43D82953363E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{04F03D1B-9537-4E94-8E52-43D82953363E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{04F03D1B-9537-4E94-8E52-43D82953363E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{71F9EB78-0B25-4CCD-A343-88815482C191}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{71F9EB78-0B25-4CCD-A343-88815482C191}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{71F9EB78-0B25-4CCD-A343-88815482C191}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{71F9EB78-0B25-4CCD-A343-88815482C191}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D098B8AF-1802-4C8D-ACC6-0C424AFA85C6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D098B8AF-1802-4C8D-ACC6-0C424AFA85C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D098B8AF-1802-4C8D-ACC6-0C424AFA85C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D098B8AF-1802-4C8D-ACC6-0C424AFA85C6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -55,6 +73,8 @@ Global
 		{283C7743-A526-4FED-9A5B-3334992A9F7D} = {23010683-4140-42E6-9A0D-B173B6444549}
 		{BB930C06-2A7F-49C4-8AAC-48423EC97D63} = {23010683-4140-42E6-9A0D-B173B6444549}
 		{04942713-930C-4CEA-BDFB-6F71F565C23B} = {23010683-4140-42E6-9A0D-B173B6444549}
+		{71F9EB78-0B25-4CCD-A343-88815482C191} = {23010683-4140-42E6-9A0D-B173B6444549}
+		{D098B8AF-1802-4C8D-ACC6-0C424AFA85C6} = {23010683-4140-42E6-9A0D-B173B6444549}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7C853338-83FD-4CFB-9035-2DC05671F827}

@@ -68,6 +68,7 @@ stages:
               azureSubscription: ${{ variables.acrSubscription }}
               acrName: ${{ variables.acrName }}
               repositoryName:  ${{ variables.repositoryName }}
+              dockerComposeFile: docker-compose-sds.yml
             
           - template: templates\Containerisation\docker\docker-push-azure.yaml@azTemplates
             parameters:
