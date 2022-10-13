@@ -43,16 +43,15 @@ stages:
         parameters:
           env: ''
     jobs:
-      - job: CI_Helm
-        displayName: "Helm CI"
-        steps:
-          - checkout: self
+      # - job: CI_Helm
+      #   displayName: "Helm CI"
+      #   steps:
+      #     - checkout: self
 
-          - template: templates\Containerisation\helm\helm-lint.yaml@azTemplates
-            parameters:
-              chartPath: ${{ variables.chartPath }}
-              chartValuesPath: ${{ variables.chartPath }}
-              additionalHelmArgs: $("--set", "global.environment=ci")
+      #     - template: templates\Containerisation\helm\helm-lint.yaml@azTemplates
+      #       parameters:
+      #         chartPath: ${{ variables.chartPath }}
+      #         chartValuesPath: ${{ variables.chartPath }}
 
       - job: UnitTests
         displayName: "Unit Tests"
