@@ -1,7 +1,8 @@
-image: 'sdshmctspublic.azurecr.io/vh/scheduler-jobs-sds:latest'
 aadIdentityName: vh-aad-identity
 backoffLimit: 0
+image: 'sdshmctspublic.azurecr.io/vh/scheduler-jobs-sds:latest'
 kind: CronJob
+releaseNameOverride: vh-scheduler-jobs
 crons:
   - cronJobName: vh-anonymise-hearings-and-conferences-job
     schedule: "30 5 * * *"

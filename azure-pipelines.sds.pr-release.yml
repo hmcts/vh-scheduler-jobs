@@ -43,6 +43,17 @@ stages:
         parameters:
           env: ''
     jobs:
+      - job: CI_Helm
+        displayName: "Helm CI"
+        steps:
+          - checkout: self
+
+          - template: templates\Containerisation\helm\helm-lint.yaml@azTemplates
+            parameters:
+              chartPath: ${{ variables.chartPath }}
+              chartValuesPath: ${{ variables.chartPath }}
+              additionalHelmArgs: "--set global.enableKeyVaults=true --set global.environment=ci"
+
       - job: UnitTests
         displayName: "Unit Tests"
         steps:
@@ -148,7 +159,7 @@ stages:
 # Pre Steps. ########################################
 # Build Docker Image & Generate EF Script. ##########
   - stage: Dock
-    displayName: Build API
+    displayName: Build Scheduler Jobs
     dependsOn: CI_Build
     variables: 
       - template: variables/dev.yaml
@@ -196,8 +207,6 @@ stages:
               imageName: "${{ replace(variables.git_repo_name, '-', '') }}-sds"
               imageTags:
                 - '${{ variables.prTagName }}'
-
- 
 
 #####################################################
 # Deploy Helm Chart to Dev. ######################### 

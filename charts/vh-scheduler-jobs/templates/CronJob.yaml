@@ -2,10 +2,13 @@
 {{- $jobKind := (default $languageValues.kind) -}}
 {{ if (and $jobKind (eq $jobKind "CronJob")) }}
 {{ range $languageValues.crons }}
+{{ $_  := set . "releaseNameOverride" .cronJobName}}
+{{- $merge := mergeOverwrite $.Values . }}
+{{- $root := mergeOverwrite $ $merge }}
 ---
 apiVersion: batch/v1beta1
 kind: CronJob
-{{- include "cronjob.metadata" (dict "root" $ "cron" .) }}
+{{ include "hmcts.metadata.v2" $ }}
 spec:
   schedule: "{{ .schedule }}"
   {{- if .startingDeadlineSeconds }}
@@ -24,8 +27,6 @@ spec:
   suspend: {{ .suspend }}
   {{- end }}
   jobTemplate:
-{{- $merge := mergeOverwrite $.Values .  }}
-{{- $root := mergeOverwrite $ $merge }}
 {{ include "job.spec" $root  | indent 4 }}
 {{- end -}}
 {{- end}}
