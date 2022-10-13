@@ -133,3 +133,5 @@ devcpuRequests: '25m'
 devmemoryLimits: '1024Mi'
 devcpuLimits: '2500m'
 restartPolicy: Never
+
+dnsConfig: {} # required due to prevent nil pointer when evaluating expression in chart-library.
