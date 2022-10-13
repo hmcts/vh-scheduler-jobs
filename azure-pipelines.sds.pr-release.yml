@@ -18,6 +18,8 @@ variables:
   - name: app_path
     value: 'SchedulerJobs'
   - group: vh-scheduler-jobs
+  - name: run_acceptance_tests
+    value: false
   - name: dotnetCoreVersion
     value: "6.x"
   - name: nugetPackagePath
@@ -258,3 +260,39 @@ stages:
               dnsSubscriptionName: "${{ variables.dnsZoneSubscription }}"
               dnsResourceGroupName: "${{ variables.dnsZoneResourceGroup }}"
               prNumber: "${{ variables.prNumber }}"
+
+      - ${{ if eq(variables.run_acceptance_tests, true) }}:
+        - job: AcceptanceTestsDev
+          displayName: Acceptance Tests Dev
+          steps:
+          - template: templates/dotnet/run-acceptance-tests.yml@azTemplates
+            parameters:
+              environment: ${{ variables.env }}
+              azureSubscription: ${{ variables.subscriptionName }}
+              acceptanceTestSettings:
+                - name: Services:SchedulerJobsUrl
+                  value: "https://vh-scheduler-jobs.dev.platform.hmcts.net"
+                - name: ApplicationInsights:InstrumentationKey
+                  value: applicationinsights--instrumentationkey
+                  keyVaultName: vh-infra-core-${{ variables.env }}
+                  secret: true
+                - name: AzureAd:ClientId
+                  value: azuread--clientid
+                  keyVaultName: vh-scheduler-jobs-${{ variables.env }}
+                  secret: true
+                - name: AzureAd:ClientSecret
+                  value: azuread--clientsecret
+                  keyVaultName: vh-scheduler-jobs-${{ variables.env }}
+                  secret: true
+                - name: AzureAd:TenantId
+                  value: azuread--tenantid
+                  keyVaultName: vh-infra-core-${{ variables.env }}
+                  secret: true
+
+                # Services Configuration
+                - name: Services:SchedulerJobsResourceId
+                  value: azuread--identifieruri
+                  keyVaultName: vh-scheduler-jobs-${{ variables.env }}
+                  secret: true
+                - name: Services:CallbackUri
+                  value: $(CallbackUri)
