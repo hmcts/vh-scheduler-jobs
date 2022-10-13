@@ -2,6 +2,7 @@
 {{- $jobKind := (default $languageValues.kind) -}}
 {{ if (and $jobKind (eq $jobKind "CronJob")) }}
 {{ range $languageValues.crons }}
+{{ $_  := set . "releaseNameOverride" .cronJobName}}
 {{- $merge := mergeOverwrite $.Values . }}
 {{- $root := mergeOverwrite $ $merge }}
 ---
