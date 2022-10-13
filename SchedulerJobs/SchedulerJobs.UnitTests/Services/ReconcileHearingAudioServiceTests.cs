@@ -1,14 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
+using SchedulerJobs.Services;
 using SchedulerJobs.Services.Interfaces;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using VideoApi.Client;
 using VideoApi.Contract.Responses;
 
-namespace SchedulerJobs.Services.UnitTests
+namespace SchedulerJobs.UnitTests.Services
 {
     public class ReconcileHearingAudioServiceTests
     {

@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
+using SchedulerJobs.Services;
 using VideoApi.Client;
 using VideoApi.Contract.Responses;
 
-namespace SchedulerJobs.Services.UnitTests
+namespace SchedulerJobs.UnitTests.Services
 {
     [TestFixture]
     public class CloseConferenceServiceTest

@@ -7,8 +7,9 @@ using BookingsApi.Client;
 using BookingsApi.Contract.Requests;
 using Moq;
 using NUnit.Framework;
+using SchedulerJobs.Services;
 
-namespace SchedulerJobs.Services.UnitTests
+namespace SchedulerJobs.UnitTests.Services
 {
     public class ELinksServiceStubTests
     {

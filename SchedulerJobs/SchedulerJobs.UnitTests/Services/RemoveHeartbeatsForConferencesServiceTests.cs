@@ -1,8 +1,9 @@
 ﻿using Moq;
 using NUnit.Framework;
+using SchedulerJobs.Services;
 using VideoApi.Client;
 
-namespace SchedulerJobs.Services.UnitTests
+namespace SchedulerJobs.UnitTests.Services
 {
     [TestFixture]
     public class RemoveHeartbeatsForConferencesServiceTests

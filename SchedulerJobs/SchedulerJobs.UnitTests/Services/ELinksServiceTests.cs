@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using BookingsApi.Client;
 using BookingsApi.Contract.Requests;
 using BookingsApi.Contract.Responses;
@@ -9,11 +5,16 @@ using Microsoft.Extensions.Logging;
 using Moq;
 using Newtonsoft.Json;
 using NUnit.Framework;
-using SchedulerJobs.Common.Configuration;
 using SchedulerJobs.Common.Models;
+using SchedulerJobs.Services;
 using SchedulerJobs.Services.HttpClients;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using SchedulerJobs.Common.Configuration;
 
-namespace SchedulerJobs.Services.UnitTests
+namespace SchedulerJobs.UnitTests.Services
 {
     [TestFixture]
     public class ELinksServiceTests

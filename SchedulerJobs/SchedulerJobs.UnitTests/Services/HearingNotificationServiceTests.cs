@@ -1,18 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using BookingsApi.Client;
+﻿using BookingsApi.Client;
 using BookingsApi.Contract.Responses;
 using Microsoft.Extensions.Logging;
 using Moq;
 using NotificationApi.Client;
 using NUnit.Framework;
 using SchedulerJobs.Common.Configuration;
+using SchedulerJobs.Services;
 using SchedulerJobs.Services.Interfaces;
 using SchedulerJobs.Services.Mappers;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
-namespace SchedulerJobs.Services.UnitTests
+namespace SchedulerJobs.UnitTests.Services
 {
     public class HearingNotificationServiceTests
     {
@@ -135,7 +136,7 @@ namespace SchedulerJobs.Services.UnitTests
         }
 
 
-        private static HearingDetailsResponse CreateHearing()
+        private HearingDetailsResponse CreateHearing()
         {
             Guid id = Guid.NewGuid();
 
@@ -243,7 +244,7 @@ namespace SchedulerJobs.Services.UnitTests
             };
         }
 
-        private static HearingDetailsResponse CreateHearingWithEjud()
+        private HearingDetailsResponse CreateHearingWithEjud()
         {
             Guid id = Guid.NewGuid();
 
@@ -350,7 +351,7 @@ namespace SchedulerJobs.Services.UnitTests
                 GroupId = id
             };
         }
-        private static HearingDetailsResponse CreateHearingWithNoRoles()
+        private HearingDetailsResponse CreateHearingWithNoRoles()
         {
             Guid id = Guid.NewGuid();
 

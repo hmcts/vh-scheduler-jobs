@@ -32,7 +32,7 @@ variables:
   - name: acrName
     value: 'sdshmctspublic'
   - name: repositoryName
-    value: 'vh/${{ variables.git_repo_name }}-sds'
+    value: 'vh/${{ variables.git_repo_name }}'
   - name: gitRepoName
     value: vh-${{ variables.git_repo_name }}
 

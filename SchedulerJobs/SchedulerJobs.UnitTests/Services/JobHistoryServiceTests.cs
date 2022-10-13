@@ -6,8 +6,9 @@ using BookingsApi.Contract.Responses;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
+using SchedulerJobs.Services;
 
-namespace SchedulerJobs.Services.UnitTests
+namespace SchedulerJobs.UnitTests.Services
 {
     public class JobHistoryServiceTests
     {
