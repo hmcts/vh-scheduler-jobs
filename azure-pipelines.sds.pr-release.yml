@@ -43,15 +43,16 @@ stages:
         parameters:
           env: ''
     jobs:
-      # - job: CI_Helm
-      #   displayName: "Helm CI"
-      #   steps:
-      #     - checkout: self
+      - job: CI_Helm
+        displayName: "Helm CI"
+        steps:
+          - checkout: self
 
-      #     - template: templates\Containerisation\helm\helm-lint.yaml@azTemplates
-      #       parameters:
-      #         chartPath: ${{ variables.chartPath }}
-      #         chartValuesPath: ${{ variables.chartPath }}
+          - template: templates\Containerisation\helm\helm-lint.yaml@azTemplates
+            parameters:
+              chartPath: ${{ variables.chartPath }}
+              chartValuesPath: ${{ variables.chartPath }}
+              additionalHelmArgs: "--set global.enableKeyVaults=true --set global.environment=ci"
 
       - job: UnitTests
         displayName: "Unit Tests"
