@@ -52,7 +52,7 @@ stages:
             parameters:
               chartPath: ${{ variables.chartPath }}
               chartValuesPath: ${{ variables.chartPath }}
-              additionalHelmArgs: ("--set", "global.environment=ci")
+              additionalHelmArgs: '"--set", "global.environment=ci"'
 
       - job: UnitTests
         displayName: "Unit Tests"
