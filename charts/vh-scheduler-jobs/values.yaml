@@ -19,7 +19,7 @@ crons:
     - ClearConferenceInstantMessageHistoryJob
 
   - cronJobName: vh-clear-hearings-job
-    releaseNameOverride: vh-clear-conference-message-history-job
+    releaseNameOverride: vh-clear-hearings-job
     schedule: "0 23 * * *"
     concurrencyPolicy: Forbid
     args:
