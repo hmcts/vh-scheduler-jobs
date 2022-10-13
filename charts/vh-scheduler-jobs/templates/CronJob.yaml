@@ -5,7 +5,8 @@
 ---
 apiVersion: batch/v1beta1
 kind: CronJob
-{{- include "cronjob.metadata" (dict "root" $ "cron" .) }}
+metadata:
+  name: {{ .cronJobName }}
 spec:
   schedule: "{{ .schedule }}"
   {{- if .startingDeadlineSeconds }}
