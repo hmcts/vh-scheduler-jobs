@@ -24,7 +24,7 @@ variables:
     value: '${{ variables.prTagPrefix }}-$(Build.BuildNumber)'
 
   - name: imageName
-    value: "${{ replace(variables.git_repo_name, '-', '') }}"
+    value: "${{ replace(variables.git_repo_name, '-', '') }}-sds"
   - name: subscriptionName
     value: "DTS-SHAREDSERVICES-${{ upper(parameters.env) }}-Video Hearings"
   - name: acrSubscription
