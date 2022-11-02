@@ -106,6 +106,11 @@ public static partial class Program
         {
             services.AddHostedService<SendHearingNotificationsJob>();
         }
+        
+        if (args.Contains(nameof(HearingsAllocationJob)))
+        {
+            services.AddHostedService<HearingsAllocationJob>();
+        }
     }
 
     private static void RegisterServices(IServiceCollection services, IConfiguration configuration)
