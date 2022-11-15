@@ -2,10 +2,14 @@ using System.Threading.Tasks;
 using BookingsApi.Client;
 using Microsoft.Extensions.Logging;
 using SchedulerJobs.Common.Configuration;
-using SchedulerJobs.Services.Interfaces;
 
 namespace SchedulerJobs.Services
 {
+    public interface IHearingAllocationService
+    {
+        Task AllocateHearingsAsync();
+    }
+    
     public class HearingAllocationService : IHearingAllocationService
     {
         private readonly IBookingsApiClient _bookingsApiClient;
