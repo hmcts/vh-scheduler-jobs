@@ -123,6 +123,7 @@ namespace SchedulerJobs
             services.AddScoped<IReconcileHearingAudioService, ReconcileHearingAudioService>();
             services.AddScoped<IHearingNotificationService, HearingNotificationService>();
             services.AddScoped<IJobHistoryService, JobHistoryService>();
+            services.AddScoped<IHearingAllocationService, HearingAllocationService>();
 
             bool.TryParse(configuration["UseELinksStub"], out var useELinksStub);
 
