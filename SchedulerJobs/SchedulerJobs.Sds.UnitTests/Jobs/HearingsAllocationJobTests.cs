@@ -12,12 +12,15 @@ namespace SchedulerJobs.Sds.UnitTests.Jobs
     public class HearingsAllocationJobTests : JobTestBaseSetup<HearingsAllocationJob>
     {
         private HearingsAllocationJob _sut;
+        private Mock<IHearingAllocationService> _hearingAllocationService;
         
         [SetUp]
         public void Setup()
         {
             var services = new ServiceCollection();
-
+            _hearingAllocationService = new Mock<IHearingAllocationService>();
+            services.AddScoped(_ => _hearingAllocationService.Object);
+            
             var serviceProvider = services.BuildServiceProvider();
 
             _sut = new HearingsAllocationJob(Lifetime.Object, Logger, serviceProvider);
@@ -30,8 +33,8 @@ namespace SchedulerJobs.Sds.UnitTests.Jobs
             await _sut.DoWorkAsync();
 
             // Assert
-            
-            Logger.GetLoggedMessages().Last().Should().StartWith("Close hearings function executed and allocated");
+            Logger.GetLoggedMessages().Last().Should().StartWith("Close hearings function executed");
+            _hearingAllocationService.Verify(x => x.AllocateHearingsAsync(), Times.Once);
         }
     }   
 }

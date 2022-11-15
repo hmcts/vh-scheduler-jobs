@@ -51,6 +51,12 @@ crons:
     concurrencyPolicy: Forbid
     args:
     - SendHearingNotificationsJob
+      
+  - cronJobName: vh-hearing-allocations-job
+    schedule: "0 3 * * *"
+    concurrencyPolicy: Forbid
+    args:
+    - HearingsAllocationJob
 
 keyVaults:
   vh-infra-core:

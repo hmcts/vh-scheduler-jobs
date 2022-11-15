@@ -17,7 +17,8 @@ namespace SchedulerJobs.UnitTests.Functions
             await _sut.Run(_timerInfo, _logger);
 
             // Assert
-            _logger.GetLoggedMessages().Last().Should().StartWith("Close hearings function executed and allocated");
+            _logger.GetLoggedMessages().Last().Should().StartWith("Close hearings function executed");
+            _mocker.Mock<IHearingAllocationService>().Verify(x => x.AllocateHearingsAsync(), Times.Once);
         }
     }
 }

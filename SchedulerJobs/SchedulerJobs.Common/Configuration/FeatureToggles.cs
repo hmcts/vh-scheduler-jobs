@@ -8,6 +8,7 @@ namespace SchedulerJobs.Common.Configuration
     {
         public bool BookAndConfirmToggle();
         public bool StorePeopleIngestion();
+        public bool WorkAllocationToggle();
     }
     
     public class FeatureToggles : IFeatureToggles
@@ -17,6 +18,8 @@ namespace SchedulerJobs.Common.Configuration
         private const string LdUser = "vh-scheduler-jobs";
         private const string BookAndConfirmToggleKey = "Book_and_Confirm";
         private const string StorePeopleIngestionToggleKey = "store-people-ingestion";
+        private const string WorkAllocationToggleKey = "vho-work-allocation";
+        
         public FeatureToggles(string sdkKey)
         {
             _ldClient = new LdClient(sdkKey);
@@ -26,5 +29,7 @@ namespace SchedulerJobs.Common.Configuration
         public bool BookAndConfirmToggle() => _ldClient.BoolVariation(BookAndConfirmToggleKey, _user);
         
         public bool StorePeopleIngestion() => _ldClient.BoolVariation(StorePeopleIngestionToggleKey, _user);
+
+        public bool WorkAllocationToggle() => _ldClient.BoolVariation(WorkAllocationToggleKey, _user);
     }
 }
