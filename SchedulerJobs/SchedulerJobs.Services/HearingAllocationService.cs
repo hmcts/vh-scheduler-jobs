@@ -25,16 +25,34 @@ namespace SchedulerJobs.Services
         {
             if (!_featureToggles.WorkAllocationToggle())
             {
-                _logger.LogInformation("AllocateHearingsAsync - Feature WorkAllocation is turned off!");
+                _logger.LogInformation("AllocateHearings: Feature WorkAllocation is turned off!");
                 return;
             }
             
+            _logger.LogInformation("AllocateHearings: Starting to allocate hearings");
+            
             var hearings = await _bookingsApiClient.GetUnallocatedHearingsAsync();
 
+            var hearingsAllocated = 0;
             foreach (var hearing in hearings)
             {
-                var allocatedUser = await _bookingsApiClient.AllocateHearingAutomaticallyAsync(hearing.Id);
+                try
+                {
+                    var allocatedUser = await _bookingsApiClient.AllocateHearingAutomaticallyAsync(hearing.Id);
+                    _logger.LogInformation("AllocateHearings: Allocated user {allocatedUsername} to hearing {hearingId}", 
+                        allocatedUser.Username, 
+                        hearing.Id);
+                    hearingsAllocated++;
+                }
+                catch (BookingsApiException e)
+                {
+                    _logger.LogError(e, "AllocateHearings: Error allocating hearing {hearingId}", hearing.Id);
+                }
             }
+            
+            _logger.LogInformation("AllocateHearings: Completed allocation of hearings, {hearingsAllocated} of {hearingsToAllocate} hearings allocated",
+                hearingsAllocated,
+                hearings.Count);
         }
     }
 }
