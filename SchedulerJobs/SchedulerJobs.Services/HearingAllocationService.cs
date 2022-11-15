@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Threading.Tasks;
 using BookingsApi.Client;
 using Microsoft.Extensions.Logging;
@@ -38,19 +39,19 @@ namespace SchedulerJobs.Services
             var hearings = await _bookingsApiClient.GetUnallocatedHearingsAsync();
 
             var hearingsAllocated = 0;
-            foreach (var hearing in hearings)
+            foreach (var hearingId in hearings.Select(h => h.Id).ToList())
             {
                 try
                 {
-                    var allocatedUser = await _bookingsApiClient.AllocateHearingAutomaticallyAsync(hearing.Id);
+                    var allocatedUser = await _bookingsApiClient.AllocateHearingAutomaticallyAsync(hearingId);
                     _logger.LogInformation("AllocateHearings: Allocated user {allocatedUsername} to hearing {hearingId}", 
                         allocatedUser.Username, 
-                        hearing.Id);
+                        hearingId);
                     hearingsAllocated++;
                 }
                 catch (BookingsApiException e)
                 {
-                    _logger.LogError(e, "AllocateHearings: Error allocating hearing {hearingId}", hearing.Id);
+                    _logger.LogError(e, "AllocateHearings: Error allocating hearing {hearingId}", hearingId);
                 }
             }
             
