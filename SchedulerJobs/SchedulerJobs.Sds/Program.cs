@@ -161,6 +161,7 @@ public static partial class Program
         services.AddScoped<IReconcileHearingAudioService, ReconcileHearingAudioService>();
         services.AddScoped<IHearingNotificationService, HearingNotificationService>();
         services.AddScoped<IJobHistoryService, JobHistoryService>();
+        services.AddScoped<IHearingAllocationService, HearingAllocationService>();
 
         var useELinksStub = false;
         if (bool.TryParse(configuration["UseELinksStub"], out var parsedUseELinksStub))

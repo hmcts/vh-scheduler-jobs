@@ -7,10 +7,11 @@ namespace SchedulerJobs.Functions
 {
     public class HearingsAllocationFunction
     {
+        private readonly IHearingAllocationService _hearingAllocationService;
 
-        public HearingsAllocationFunction()
+        public HearingsAllocationFunction(IHearingAllocationService hearingAllocationService)
         {
-            
+            _hearingAllocationService = hearingAllocationService;
         }
 
         /// <summary>
@@ -26,8 +27,9 @@ namespace SchedulerJobs.Functions
                 log.LogTrace("Closed hearings function running late");
             }
 
+            await _hearingAllocationService.AllocateHearingsAsync();
             
-            log.LogTrace($"Close hearings function executed and allocated 10 hearings");
+            log.LogTrace($"Close hearings function executed");
         }
     }
 }

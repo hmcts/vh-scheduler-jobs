@@ -167,11 +167,10 @@
       },
       "BookingsApi.Client": {
         "type": "Transitive",
-        "resolved": "1.39.15",
-        "contentHash": "zLz4q3gQLjt9kOVxmmM/vCYbz8Az0EB4uJwh/fiEf1n4M4ziB27BnTLMsqadyUGY02dWYFap+RmR2yBRjzU7Zg==",
+        "resolved": "1.39.44",
+        "contentHash": "BJC1KMAtmmzxqm3UITNCzuJMmDV+sZvrt9pc3eV09Z5g/kX3BtYJ4ZOkAD8p/pX2dwqcwGTqyy3fUPLlMxRAFA==",
         "dependencies": {
-          "Microsoft.AspNetCore.Mvc.Core": "2.2.5",
-          "Newtonsoft.Json": "12.0.3"
+          "Microsoft.AspNetCore.Mvc.Core": "2.2.5"
         }
       },
       "Castle.Core": {
@@ -2065,7 +2064,7 @@
         "type": "Project",
         "dependencies": {
           "Azure.Storage.Blobs": "12.13.1",
-          "BookingsApi.Client": "1.39.15",
+          "BookingsApi.Client": "1.39.44",
           "Microsoft.Extensions.Logging.Abstractions": "6.0.2",
           "Newtonsoft.Json": "13.0.1",
           "NotificationApi.Client": "1.38.5",

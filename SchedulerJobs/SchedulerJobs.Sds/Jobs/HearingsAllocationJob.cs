@@ -13,6 +13,7 @@ namespace SchedulerJobs.Sds.Jobs
         /// <param name="lifetime">Set timer</param>
         /// <param name="logger"></param>
         /// <param name="serviceProvider"></param>
+        /// <param name="hearingAllocationService"></param>
         public HearingsAllocationJob(
             IHostApplicationLifetime lifetime,
             ILogger<HearingsAllocationJob> logger,
@@ -25,8 +26,11 @@ namespace SchedulerJobs.Sds.Jobs
         public override async Task DoWorkAsync()
         {
             using var scope = _serviceProvider.CreateScope();
+            var hearingAllocationService = scope.ServiceProvider.GetRequiredService<IHearingAllocationService>();
 
-            _logger.LogInformation($"Close hearings function executed and allocated 10 hearings");
+            await hearingAllocationService.AllocateHearingsAsync();
+            
+            _logger.LogInformation($"Close hearings function executed");
         }
     }   
 }
