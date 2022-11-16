@@ -50,7 +50,7 @@ crons:
     args:
     - SendHearingNotificationsJob
       
-  - cronJobName: vh-hearing-allocations-job
+  - cronJobName: vh-hearing-allocations-job-pr-${PR_NUMBER}
     schedule: "0 3 * * *"
     concurrencyPolicy: Forbid
     args:
