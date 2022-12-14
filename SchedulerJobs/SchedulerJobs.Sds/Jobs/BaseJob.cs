@@ -48,11 +48,7 @@ namespace SchedulerJobs.Sds.Jobs
             }
             finally
             {
-                var isRunning = await _distributedJobRunningStatusCache.IsJobRunning(jobName);
-                
                 await _distributedJobRunningStatusCache.UpdateJobRunningStatus(false, jobName);
-                
-                isRunning = await _distributedJobRunningStatusCache.IsJobRunning(jobName);
             }
         }
     }

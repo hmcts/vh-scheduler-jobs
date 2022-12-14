@@ -11,7 +11,7 @@ namespace SchedulerJobs.Common.Caching
         private readonly IDistributedCache _distributedCache;
         public abstract DistributedCacheEntryOptions CacheEntryOptions { get; protected set; }
 
-        public RedisCacheBase(IDistributedCache distributedCache)
+        protected RedisCacheBase(IDistributedCache distributedCache)
         {
             _distributedCache = distributedCache;
         }
