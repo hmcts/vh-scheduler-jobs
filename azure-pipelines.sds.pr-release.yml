@@ -33,6 +33,10 @@ parameters:
     type: object
     default: [ "[*]SchedulerJobs.Common.*", "[*]SchedulerJobs.Services.UnitTests.*", "[Testing.Common]*" ]
 
+
+pool: 
+  vmImage: ubuntu-22.04
+
 stages:
 #####################################################
 # CI Build Checks. ##################################
