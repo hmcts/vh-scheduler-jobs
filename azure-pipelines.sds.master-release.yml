@@ -21,6 +21,9 @@ parameters:
   - Staging
   - Prod
 
+pool: 
+  vmImage: ubuntu-22.04
+
 stages:
 
 #####################################################
