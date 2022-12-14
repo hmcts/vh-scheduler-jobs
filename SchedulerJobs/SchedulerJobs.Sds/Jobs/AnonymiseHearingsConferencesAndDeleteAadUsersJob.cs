@@ -25,15 +25,13 @@ namespace SchedulerJobs.Sds.Jobs
             using var scope = _serviceProvider.CreateScope();
             var anonymiseHearingsConferencesDataService = scope.ServiceProvider.GetRequiredService<IAnonymiseHearingsConferencesDataService>();
             var jobHistoryService = scope.ServiceProvider.GetRequiredService<IJobHistoryService>();
-
+                
             try
             {
-                Thread.Sleep(30000);
-                
-                // await anonymiseHearingsConferencesDataService.AnonymiseHearingsConferencesDataAsync()
-                //     .ConfigureAwait(false);
-                // _jobSucceeded = true;
-                // _logger.LogInformation(LogInformationMessage);
+                await anonymiseHearingsConferencesDataService.AnonymiseHearingsConferencesDataAsync()
+                    .ConfigureAwait(false);
+                _jobSucceeded = true;
+                _logger.LogInformation(LogInformationMessage);
             }
             catch (Exception)
             {
@@ -42,7 +40,7 @@ namespace SchedulerJobs.Sds.Jobs
             }
             finally
             {
-                //await jobHistoryService.UpdateJobHistory(GetType().Name, _jobSucceeded);
+                await jobHistoryService.UpdateJobHistory(GetType().Name, _jobSucceeded);
             }
         }
     }
