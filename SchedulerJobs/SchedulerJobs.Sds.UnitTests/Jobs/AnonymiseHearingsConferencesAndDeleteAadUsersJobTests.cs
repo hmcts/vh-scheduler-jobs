@@ -5,6 +5,7 @@ using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using NUnit.Framework;
+using SchedulerJobs.Common.Caching;
 using SchedulerJobs.Sds.Jobs;
 using SchedulerJobs.Services;
 
@@ -15,6 +16,7 @@ namespace SchedulerJobs.Sds.UnitTests.Jobs
         private AnonymiseHearingsConferencesAndDeleteAadUsersJob _sut;
         private Mock<IAnonymiseHearingsConferencesDataService> _anonymiseHearingsConferencesDataService;
         private Mock<IJobHistoryService> _jobHistoryService;
+        private Mock<IDistributedJobCache> _distributedJobCache;
         
         [SetUp]
         public void Setup()
@@ -22,8 +24,10 @@ namespace SchedulerJobs.Sds.UnitTests.Jobs
             var services = new ServiceCollection();
             _anonymiseHearingsConferencesDataService = new Mock<IAnonymiseHearingsConferencesDataService>();
             _jobHistoryService = new Mock<IJobHistoryService>();
+            _distributedJobCache = new Mock<IDistributedJobCache>();
             services.AddScoped(s => _anonymiseHearingsConferencesDataService.Object);
             services.AddScoped(s => _jobHistoryService.Object);
+            services.AddScoped(s => _distributedJobCache.Object);
 
             var serviceProvider = services.BuildServiceProvider();
 

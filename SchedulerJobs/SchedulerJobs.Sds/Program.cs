@@ -13,6 +13,7 @@ using SchedulerJobs.Services.Configuration;
 using SchedulerJobs.Services.HttpClients;
 using SchedulerJobs.Services.Interfaces;
 using System.Diagnostics.CodeAnalysis;
+using SchedulerJobs.Common.Caching;
 using UserApi.Client;
 using VH.Core.Configuration;
 using VideoApi.Client;
@@ -247,5 +248,10 @@ public static partial class Program
             });
 
         services.AddSingleton<IFeatureToggles>(featureToggle);
+        
+        var connectionStrings = new ConnectionStrings();
+        configuration.GetSection("ConnectionStrings").Bind(connectionStrings);
+        services.AddStackExchangeRedisCache(options => { options.Configuration = connectionStrings.RedisCache; });
+        services.AddScoped<IDistributedJobCache, DistributedJobCache>();
     }
 }

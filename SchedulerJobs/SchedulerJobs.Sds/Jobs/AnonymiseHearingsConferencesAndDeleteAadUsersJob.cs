@@ -1,3 +1,4 @@
+using SchedulerJobs.Common.Caching;
 using SchedulerJobs.Services;
 
 namespace SchedulerJobs.Sds.Jobs
@@ -8,7 +9,7 @@ namespace SchedulerJobs.Sds.Jobs
         private readonly ILogger<AnonymiseHearingsConferencesAndDeleteAadUsersJob> _logger;
         private readonly IServiceProvider _serviceProvider;
         private bool _jobSucceeded;
-    
+
         public AnonymiseHearingsConferencesAndDeleteAadUsersJob(
             ILogger<AnonymiseHearingsConferencesAndDeleteAadUsersJob> logger,
             IHostApplicationLifetime lifetime,
@@ -23,7 +24,17 @@ namespace SchedulerJobs.Sds.Jobs
             using var scope = _serviceProvider.CreateScope();
             var anonymiseHearingsConferencesDataService = scope.ServiceProvider.GetRequiredService<IAnonymiseHearingsConferencesDataService>();
             var jobHistoryService = scope.ServiceProvider.GetRequiredService<IJobHistoryService>();
-                
+            var distributedJobCache = scope.ServiceProvider.GetRequiredService<IDistributedJobCache>();
+             
+            var keyName = $"jobRunningStatus_{GetType().Name}";
+            var isRunning = await distributedJobCache.IsJobRunning(keyName);
+            if (isRunning)
+            {
+                _logger.LogInformation($"Job {GetType().Name} already running");
+                return;
+            }
+            await distributedJobCache.UpdateJobRunningStatus(true, keyName);
+            
             try
             {
                 await anonymiseHearingsConferencesDataService.AnonymiseHearingsConferencesDataAsync()
