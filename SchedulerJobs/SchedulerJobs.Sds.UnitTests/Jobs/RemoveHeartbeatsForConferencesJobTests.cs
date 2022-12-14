@@ -23,7 +23,7 @@ namespace SchedulerJobs.Sds.UnitTests.Jobs
 
             var serviceProvider = services.BuildServiceProvider();
 
-            _sut = new RemoveHeartbeatsForConferencesJob(Lifetime.Object, Logger, serviceProvider);
+            _sut = new RemoveHeartbeatsForConferencesJob(Lifetime.Object, Logger, serviceProvider, DistributedJobCache.Object);
         }
         
         [Test]

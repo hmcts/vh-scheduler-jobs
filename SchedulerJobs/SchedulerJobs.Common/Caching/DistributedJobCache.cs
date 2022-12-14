@@ -10,7 +10,7 @@ namespace SchedulerJobs.Common.Caching
         {
             CacheEntryOptions = new DistributedCacheEntryOptions
             {
-                SlidingExpiration = TimeSpan.FromSeconds(15) 
+                SlidingExpiration = TimeSpan.FromHours(24) 
             };
         }
 
@@ -23,12 +23,18 @@ namespace SchedulerJobs.Common.Caching
 
         public async Task UpdateJobRunningStatus(bool isRunning, string keyName)
         {
-            await base.WriteToCache(keyName, isRunning);
+            if (isRunning)
+            {
+                await base.WriteToCache(keyName, true);
+                return;
+            }
+
+            await base.RemoveFromCache(keyName);
         }
         
-        public async Task<bool> IsJobRunning(string jobKey)
+        public async Task<bool> IsJobRunning(string keyName)
         {
-            return await base.ReadFromCache(jobKey);
+            return await base.ReadFromCache(keyName);
         }
     }
 }

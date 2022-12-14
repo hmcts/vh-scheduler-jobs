@@ -252,6 +252,6 @@ public static partial class Program
         var connectionStrings = new ConnectionStrings();
         configuration.GetSection("ConnectionStrings").Bind(connectionStrings);
         services.AddStackExchangeRedisCache(options => { options.Configuration = connectionStrings.RedisCache; });
-        services.AddScoped<IDistributedJobCache, DistributedJobCache>();
+        services.AddSingleton<IDistributedJobCache, DistributedJobCache>();
     }
 }

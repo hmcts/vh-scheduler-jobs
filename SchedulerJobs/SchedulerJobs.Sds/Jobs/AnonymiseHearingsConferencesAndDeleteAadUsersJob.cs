@@ -13,7 +13,8 @@ namespace SchedulerJobs.Sds.Jobs
         public AnonymiseHearingsConferencesAndDeleteAadUsersJob(
             ILogger<AnonymiseHearingsConferencesAndDeleteAadUsersJob> logger,
             IHostApplicationLifetime lifetime,
-            IServiceProvider serviceProvider) : base(lifetime, logger)
+            IServiceProvider serviceProvider,
+            IDistributedJobCache distributedJobCache) : base(lifetime, logger, distributedJobCache)
         {
             _logger = logger;
             _serviceProvider = serviceProvider;
@@ -24,23 +25,15 @@ namespace SchedulerJobs.Sds.Jobs
             using var scope = _serviceProvider.CreateScope();
             var anonymiseHearingsConferencesDataService = scope.ServiceProvider.GetRequiredService<IAnonymiseHearingsConferencesDataService>();
             var jobHistoryService = scope.ServiceProvider.GetRequiredService<IJobHistoryService>();
-            var distributedJobCache = scope.ServiceProvider.GetRequiredService<IDistributedJobCache>();
-             
-            var keyName = $"jobRunningStatus_{GetType().Name}";
-            var isRunning = await distributedJobCache.IsJobRunning(keyName);
-            if (isRunning)
-            {
-                _logger.LogInformation($"Job {GetType().Name} already running");
-                return;
-            }
-            await distributedJobCache.UpdateJobRunningStatus(true, keyName);
-            
+
             try
             {
-                await anonymiseHearingsConferencesDataService.AnonymiseHearingsConferencesDataAsync()
-                    .ConfigureAwait(false);
-                _jobSucceeded = true;
-                _logger.LogInformation(LogInformationMessage);
+                Thread.Sleep(30000);
+                
+                // await anonymiseHearingsConferencesDataService.AnonymiseHearingsConferencesDataAsync()
+                //     .ConfigureAwait(false);
+                // _jobSucceeded = true;
+                // _logger.LogInformation(LogInformationMessage);
             }
             catch (Exception)
             {
@@ -49,7 +42,7 @@ namespace SchedulerJobs.Sds.Jobs
             }
             finally
             {
-                await jobHistoryService.UpdateJobHistory(GetType().Name, _jobSucceeded);
+                //await jobHistoryService.UpdateJobHistory(GetType().Name, _jobSucceeded);
             }
         }
     }
