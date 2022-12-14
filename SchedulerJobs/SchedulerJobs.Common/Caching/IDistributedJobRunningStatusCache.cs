@@ -4,7 +4,7 @@ namespace SchedulerJobs.Common.Caching
 {
     public interface IDistributedJobRunningStatusCache
     {
-        Task UpdateJobRunningStatus(bool isRunning, string keyName);
-        Task<bool> IsJobRunning(string keyName);
+        Task UpdateJobRunningStatus(bool isRunning, string jobName);
+        Task<bool> IsJobRunning(string jobName);
     }
 }

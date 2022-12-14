@@ -22,17 +22,16 @@ namespace SchedulerJobs.Sds.Jobs
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             var jobName = GetType().Name;
-            var keyName = $"job_running_status_{jobName}";
-            
+
             try
             {
-                var isRunning = await _distributedJobRunningStatusCache.IsJobRunning(keyName);
+                var isRunning = await _distributedJobRunningStatusCache.IsJobRunning(jobName);
                 if (isRunning)
                 {
                     _logger.LogInformation($"Job {jobName} already running");
                     return;
                 }
-                await _distributedJobRunningStatusCache.UpdateJobRunningStatus(true, keyName);
+                await _distributedJobRunningStatusCache.UpdateJobRunningStatus(true, jobName);
 
                 await DoWorkAsync();
 
@@ -49,7 +48,11 @@ namespace SchedulerJobs.Sds.Jobs
             }
             finally
             {
-                await _distributedJobRunningStatusCache.UpdateJobRunningStatus(false, keyName);
+                var isRunning = await _distributedJobRunningStatusCache.IsJobRunning(jobName);
+                
+                await _distributedJobRunningStatusCache.UpdateJobRunningStatus(false, jobName);
+                
+                isRunning = await _distributedJobRunningStatusCache.IsJobRunning(jobName);
             }
         }
     }

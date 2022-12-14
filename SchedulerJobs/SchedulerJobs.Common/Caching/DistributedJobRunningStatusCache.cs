@@ -6,6 +6,8 @@ namespace SchedulerJobs.Common.Caching
 {
     public class DistributedJobRunningStatusRunningStatusCache : RedisCacheBase<string,bool>, IDistributedJobRunningStatusCache
     {
+        private readonly string _entryPrefix = "job_running_status_";
+        
         public DistributedJobRunningStatusRunningStatusCache(IDistributedCache distributedCache) : base(distributedCache)
         {
             CacheEntryOptions = new DistributedCacheEntryOptions
@@ -21,20 +23,23 @@ namespace SchedulerJobs.Common.Caching
             return key;
         }
 
-        public async Task UpdateJobRunningStatus(bool isRunning, string keyName)
+        public async Task UpdateJobRunningStatus(bool isRunning, string jobName)
         {
+            var key = $"{_entryPrefix}{jobName}";
+            
             if (isRunning)
             {
-                await base.WriteToCache(keyName, true);
+                await base.WriteToCache(key, true);
                 return;
             }
 
-            await base.RemoveFromCache(keyName);
+            await base.RemoveFromCache(key);
         }
         
-        public async Task<bool> IsJobRunning(string keyName)
+        public async Task<bool> IsJobRunning(string jobName)
         {
-            return await base.ReadFromCache(keyName);
+            var key = $"{_entryPrefix}{jobName}";
+            return await base.ReadFromCache(key);
         }
     }
 }
