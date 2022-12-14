@@ -4,11 +4,11 @@ using Microsoft.Extensions.Caching.Distributed;
 
 namespace SchedulerJobs.Common.Caching
 {
-    public class DistributedJobRunningStatusRunningStatusCache : RedisCacheBase<string,bool>, IDistributedJobRunningStatusCache
+    public class DistributedJobRunningStatusCache : RedisCacheBase<string,bool>, IDistributedJobRunningStatusCache
     {
         private readonly string _entryPrefix = "job_running_status_";
         
-        public DistributedJobRunningStatusRunningStatusCache(IDistributedCache distributedCache) : base(distributedCache)
+        public DistributedJobRunningStatusCache(IDistributedCache distributedCache) : base(distributedCache)
         {
             CacheEntryOptions = new DistributedCacheEntryOptions
             {

@@ -13,13 +13,13 @@ namespace SchedulerJobs.UnitTests.Common.Caching
     public class DistributedJobRunningStatusCacheTests
     {
         private Mock<IDistributedCache> _distributedCacheMock;
-        private DistributedJobRunningStatusRunningStatusCache _distributedJobRunningStatusRunningStatusCache;
+        private DistributedJobRunningStatusCache _distributedJobRunningStatusCache;
         
         [SetUp]
         public void Setup()
         {
             _distributedCacheMock = new Mock<IDistributedCache>();
-            _distributedJobRunningStatusRunningStatusCache = new DistributedJobRunningStatusRunningStatusCache(_distributedCacheMock.Object);
+            _distributedJobRunningStatusCache = new DistributedJobRunningStatusCache(_distributedCacheMock.Object);
         }
         
         [Test]
@@ -34,9 +34,9 @@ namespace SchedulerJobs.UnitTests.Common.Caching
             var rawData = Encoding.UTF8.GetBytes(serialized);
             _distributedCacheMock.Setup(x => x.GetAsync(key, CancellationToken.None)).ReturnsAsync(rawData);
 
-            await _distributedJobRunningStatusRunningStatusCache.UpdateJobRunningStatus(expectedIsRunningValue,
+            await _distributedJobRunningStatusCache.UpdateJobRunningStatus(expectedIsRunningValue,
                 jobName);            
-            var result = await _distributedJobRunningStatusRunningStatusCache.IsJobRunning(jobName);
+            var result = await _distributedJobRunningStatusCache.IsJobRunning(jobName);
 
             result.Should().Be(expectedIsRunningValue);
         }
