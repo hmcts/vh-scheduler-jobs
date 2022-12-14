@@ -15,11 +15,12 @@ namespace SchedulerJobs.Sds.Jobs
         /// <param name="logger"></param>
         /// <param name="serviceProvider"></param>
         /// <param name="hearingAllocationService"></param>
+        /// <param name="distributedJobRunningStatusCache"></param>
         public HearingsAllocationJob(
             IHostApplicationLifetime lifetime,
             ILogger<HearingsAllocationJob> logger,
             IServiceProvider serviceProvider,
-            IDistributedJobCache distributedJobCache) : base(lifetime, logger, distributedJobCache)
+            IDistributedJobRunningStatusCache distributedJobRunningStatusCache) : base(lifetime, logger, distributedJobRunningStatusCache)
         {
             _logger = logger;
             _serviceProvider = serviceProvider;

@@ -12,7 +12,7 @@ namespace SchedulerJobs.Sds.Jobs
             IHostApplicationLifetime lifetime,
             ILogger<ReconcileHearingAudioWithStorageJob> logger,
             IServiceProvider serviceProvider,
-            IDistributedJobCache distributedJobCache) : base(lifetime, logger, distributedJobCache)
+            IDistributedJobRunningStatusCache distributedJobRunningStatusCache) : base(lifetime, logger, distributedJobRunningStatusCache)
         {
             _logger = logger;
             _serviceProvider = serviceProvider;

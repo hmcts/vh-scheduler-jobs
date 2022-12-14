@@ -16,7 +16,7 @@ namespace SchedulerJobs.Sds.UnitTests.Jobs
         private AnonymiseHearingsConferencesAndDeleteAadUsersJob _sut;
         private Mock<IAnonymiseHearingsConferencesDataService> _anonymiseHearingsConferencesDataService;
         private Mock<IJobHistoryService> _jobHistoryService;
-        private Mock<IDistributedJobCache> _distributedJobCache;
+        private Mock<IDistributedJobRunningStatusCache> _distributedJobRunningStatusCache;
         
         [SetUp]
         public void Setup()
@@ -24,14 +24,13 @@ namespace SchedulerJobs.Sds.UnitTests.Jobs
             var services = new ServiceCollection();
             _anonymiseHearingsConferencesDataService = new Mock<IAnonymiseHearingsConferencesDataService>();
             _jobHistoryService = new Mock<IJobHistoryService>();
-            _distributedJobCache = new Mock<IDistributedJobCache>();
             services.AddScoped(s => _anonymiseHearingsConferencesDataService.Object);
             services.AddScoped(s => _jobHistoryService.Object);
-            services.AddScoped(s => _distributedJobCache.Object);
+            services.AddScoped(s => _distributedJobRunningStatusCache.Object);
 
             var serviceProvider = services.BuildServiceProvider();
 
-            _sut = new AnonymiseHearingsConferencesAndDeleteAadUsersJob(Logger, Lifetime.Object, serviceProvider, DistributedJobCache.Object);
+            _sut = new AnonymiseHearingsConferencesAndDeleteAadUsersJob(Logger, Lifetime.Object, serviceProvider, DistributedJobRunningStatusCache.Object);
         }
         
         [Test]

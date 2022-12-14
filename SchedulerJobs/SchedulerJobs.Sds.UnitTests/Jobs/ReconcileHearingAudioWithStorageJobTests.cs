@@ -23,7 +23,7 @@ namespace SchedulerJobs.Sds.UnitTests.Jobs
 
             var serviceProvider = services.BuildServiceProvider();
 
-            _sut = new ReconcileHearingAudioWithStorageJob(Lifetime.Object, Logger, serviceProvider, DistributedJobCache.Object);
+            _sut = new ReconcileHearingAudioWithStorageJob(Lifetime.Object, Logger, serviceProvider, DistributedJobRunningStatusCache.Object);
         }
         
         [Test]

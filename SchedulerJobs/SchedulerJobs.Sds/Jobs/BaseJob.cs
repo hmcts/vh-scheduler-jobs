@@ -8,13 +8,13 @@ namespace SchedulerJobs.Sds.Jobs
     {
         private readonly IHostApplicationLifetime _lifetime;
         private readonly ILogger _logger;
-        private readonly IDistributedJobCache _distributedJobCache;
+        private readonly IDistributedJobRunningStatusCache _distributedJobRunningStatusCache;
 
-        protected BaseJob(IHostApplicationLifetime lifetime, ILogger logger, IDistributedJobCache distributedJobCache)
+        protected BaseJob(IHostApplicationLifetime lifetime, ILogger logger, IDistributedJobRunningStatusCache distributedJobRunningStatusCache)
         {
             _lifetime = lifetime;
             _logger = logger;
-            _distributedJobCache = distributedJobCache;
+            _distributedJobRunningStatusCache = distributedJobRunningStatusCache;
         }
         
         public abstract Task DoWorkAsync();
@@ -26,13 +26,13 @@ namespace SchedulerJobs.Sds.Jobs
             
             try
             {
-                var isRunning = await _distributedJobCache.IsJobRunning(keyName);
+                var isRunning = await _distributedJobRunningStatusCache.IsJobRunning(keyName);
                 if (isRunning)
                 {
                     _logger.LogInformation($"Job {jobName} already running");
                     return;
                 }
-                await _distributedJobCache.UpdateJobRunningStatus(true, keyName);
+                await _distributedJobRunningStatusCache.UpdateJobRunningStatus(true, keyName);
 
                 await DoWorkAsync();
 
@@ -49,7 +49,7 @@ namespace SchedulerJobs.Sds.Jobs
             }
             finally
             {
-                await _distributedJobCache.UpdateJobRunningStatus(false, keyName);
+                await _distributedJobRunningStatusCache.UpdateJobRunningStatus(false, keyName);
             }
         }
     }

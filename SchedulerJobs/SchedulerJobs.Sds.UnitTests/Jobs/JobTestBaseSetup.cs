@@ -10,14 +10,14 @@ namespace SchedulerJobs.Sds.UnitTests.Jobs
     {
         protected LoggerFakeGeneric<T> Logger;
         protected Mock<IHostApplicationLifetime> Lifetime;
-        protected Mock<IDistributedJobCache> DistributedJobCache;
+        protected Mock<IDistributedJobRunningStatusCache> DistributedJobRunningStatusCache;
 
         [SetUp]
         protected void MockerSetup()
         {
             Logger = new LoggerFakeGeneric<T>();
             Lifetime = new Mock<IHostApplicationLifetime>();
-            DistributedJobCache = new Mock<IDistributedJobCache>();
+            DistributedJobRunningStatusCache = new Mock<IDistributedJobRunningStatusCache>();
         }
     }
 }
