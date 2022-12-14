@@ -25,16 +25,18 @@ namespace SchedulerJobs.UnitTests.Common.Caching
         [Test]
         public async Task Updates_Cache_Value()
         {
-            var keyName = "KeyName";
+            var entryPrefix = "job_running_status_";
+            var jobName = "TestJob";
+            var key = $"{entryPrefix}{jobName}";
             var expectedIsRunningValue = true;
 
             var serialized = JsonConvert.SerializeObject(expectedIsRunningValue, SerializerSettings);
             var rawData = Encoding.UTF8.GetBytes(serialized);
-            _distributedCacheMock.Setup(x => x.GetAsync(keyName, CancellationToken.None)).ReturnsAsync(rawData);
+            _distributedCacheMock.Setup(x => x.GetAsync(key, CancellationToken.None)).ReturnsAsync(rawData);
 
             await _distributedJobRunningStatusRunningStatusCache.UpdateJobRunningStatus(expectedIsRunningValue,
-                keyName);            
-            var result = await _distributedJobRunningStatusRunningStatusCache.IsJobRunning(keyName);
+                jobName);            
+            var result = await _distributedJobRunningStatusRunningStatusCache.IsJobRunning(jobName);
 
             result.Should().Be(expectedIsRunningValue);
         }
