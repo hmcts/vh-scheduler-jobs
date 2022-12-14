@@ -1,3 +1,4 @@
+using SchedulerJobs.Common.Caching;
 using SchedulerJobs.Services.Interfaces;
 
 namespace SchedulerJobs.Sds.Jobs
@@ -10,7 +11,8 @@ namespace SchedulerJobs.Sds.Jobs
         public SendHearingNotificationsJob(
             IHostApplicationLifetime lifetime,
             ILogger<SendHearingNotificationsJob> logger,
-            IServiceProvider serviceProvider) : base(lifetime, logger)
+            IServiceProvider serviceProvider,
+            IDistributedJobRunningStatusCache distributedJobRunningStatusCache) : base(lifetime, logger, distributedJobRunningStatusCache)
         {
             _logger = logger;
             _serviceProvider = serviceProvider;
