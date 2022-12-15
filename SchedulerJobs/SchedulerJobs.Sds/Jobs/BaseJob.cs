@@ -44,6 +44,7 @@ namespace SchedulerJobs.Sds.Jobs
                 var resource = $"job_running_status_{jobName}";
                 var expiry = TimeSpan.FromHours(24);
 
+                _logger.LogInformation($"Starting job at {DateTime.Now}");
                 await using var redLock = await redLockFactory.CreateLockAsync(resource, expiry);
                 lockAcquired = redLock.IsAcquired;
                 _logger.LogInformation($"Starting job - lock acquired: {lockAcquired} at {DateTime.Now}");
