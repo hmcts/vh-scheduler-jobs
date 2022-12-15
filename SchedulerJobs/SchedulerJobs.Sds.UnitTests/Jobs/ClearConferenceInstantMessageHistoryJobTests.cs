@@ -23,7 +23,7 @@ namespace SchedulerJobs.Sds.UnitTests.Jobs
 
             var serviceProvider = services.BuildServiceProvider();
 
-            _sut = new ClearConferenceInstantMessageHistoryJob(Logger, Lifetime.Object, serviceProvider, DistributedJobRunningStatusCache.Object);
+            _sut = new ClearConferenceInstantMessageHistoryJob(Logger, Lifetime.Object, serviceProvider, DistributedJobRunningStatusCache.Object, ConnectionStrings.Object);
         }
         
         [Test]

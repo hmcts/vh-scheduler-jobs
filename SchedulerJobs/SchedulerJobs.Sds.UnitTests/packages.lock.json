@@ -1041,6 +1041,17 @@
           "System.IO.Pipelines": "5.0.0"
         }
       },
+      "RedLock.net": {
+        "type": "Transitive",
+        "resolved": "2.3.2",
+        "contentHash": "jlrALAArm4dCE292U3EtRoMnVKJ9M6sunbZn/oG5OuzlGtTpusXBfvDrnGWbgGDlWV027f5E9H5CiVnPxiq8+g==",
+        "dependencies": {
+          "Microsoft.Bcl.AsyncInterfaces": "1.1.0",
+          "Microsoft.Extensions.Logging": "2.0.0",
+          "Microsoft.Extensions.Logging.Abstractions": "2.0.0",
+          "StackExchange.Redis": "2.0.513"
+        }
+      },
       "runtime.debian.8-x64.runtime.native.System.Security.Cryptography.OpenSsl": {
         "type": "Transitive",
         "resolved": "4.3.2",
@@ -2301,6 +2312,7 @@
           "Microsoft.Extensions.Http": "6.0.0",
           "Microsoft.Extensions.Logging.ApplicationInsights": "2.21.0",
           "Microsoft.VisualStudio.Azure.Containers.Tools.Targets": "1.16.1",
+          "RedLock.net": "2.3.2",
           "SchedulerJobs.Services": "1.0.0",
           "VH.Core.Configuration": "0.1.13"
         }

@@ -1,4 +1,6 @@
+using Microsoft.Extensions.Options;
 using SchedulerJobs.Common.Caching;
+using SchedulerJobs.Common.Configuration;
 using SchedulerJobs.Services;
 
 namespace SchedulerJobs.Sds.Jobs
@@ -12,7 +14,8 @@ namespace SchedulerJobs.Sds.Jobs
             ILogger<ClearConferenceInstantMessageHistoryJob> logger,
             IHostApplicationLifetime lifetime,
             IServiceProvider serviceProvider,
-            IDistributedJobRunningStatusCache distributedJobRunningStatusCache) : base(lifetime, logger, distributedJobRunningStatusCache)
+            IDistributedJobRunningStatusCache distributedJobRunningStatusCache,
+            IOptions<ConnectionStrings> connectionStrings) : base(lifetime, logger, distributedJobRunningStatusCache, connectionStrings)
         {
             _logger = logger;
             _serviceProvider = serviceProvider;

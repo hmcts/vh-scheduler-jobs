@@ -23,7 +23,7 @@ namespace SchedulerJobs.Sds.UnitTests.Jobs
 
             var serviceProvider = services.BuildServiceProvider();
 
-            _sut = new DeleteAudioRecordingApplicationsJob(Logger, Lifetime.Object, serviceProvider, DistributedJobRunningStatusCache.Object);
+            _sut = new DeleteAudioRecordingApplicationsJob(Logger, Lifetime.Object, serviceProvider, DistributedJobRunningStatusCache.Object, ConnectionStrings.Object);
         }
         
         [Test]
