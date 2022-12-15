@@ -13,10 +13,7 @@ using SchedulerJobs.Services.Configuration;
 using SchedulerJobs.Services.HttpClients;
 using SchedulerJobs.Services.Interfaces;
 using System.Diagnostics.CodeAnalysis;
-using RedLockNet.SERedis;
-using RedLockNet.SERedis.Configuration;
-using SchedulerJobs.Common.Caching;
-using StackExchange.Redis;
+using SchedulerJobs.Common;
 using UserApi.Client;
 using VH.Core.Configuration;
 using VideoApi.Client;
@@ -253,22 +250,7 @@ public static partial class Program
         services.AddSingleton<IFeatureToggles>(featureToggle);
         
         var connectionStrings = new ConnectionStrings();
-        var connectionStringsConfig = configuration.GetSection("ConnectionStrings");
-        connectionStringsConfig.Bind(connectionStrings);
-        services.AddStackExchangeRedisCache(options => { options.Configuration = connectionStrings.RedisCache; });
-        services.AddSingleton<IDistributedJobRunningStatusCache, DistributedJobRunningStatusCache>();
-        
-        services.Configure<ConnectionStrings>(options =>
-        {
-            connectionStringsConfig.Bind(options);
-        });
-        services.AddSingleton<IRedisContextAcccessor>(_ =>
-        {
-            var muxer = ConnectionMultiplexer.Connect(connectionStrings.RedisCache);
-            var connectionMultiplexers = new List<RedLockMultiplexer> { new(muxer) };
-            var redLockFactory = RedLockFactory.Create(connectionMultiplexers);
-
-            return new RedisContextAccessor(redLockFactory);
-        });
+        configuration.GetSection("ConnectionStrings").Bind(connectionStrings);
+        services.AddRedisInfrastructure(connectionStrings.RedisCache);
     }
 }

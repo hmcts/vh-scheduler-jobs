@@ -2292,6 +2292,7 @@
           "LaunchDarkly.ServerSdk": "6.3.2",
           "Microsoft.Extensions.Caching.Abstractions": "6.0.0",
           "Microsoft.Extensions.Caching.Memory": "6.0.1",
+          "Microsoft.Extensions.Caching.StackExchangeRedis": "6.0.12",
           "Microsoft.Extensions.Configuration.Abstractions": "6.0.0",
           "Microsoft.Extensions.Configuration.Binder": "6.0.0",
           "Microsoft.Extensions.Configuration.EnvironmentVariables": "6.0.1",
@@ -2308,7 +2309,6 @@
       "schedulerjobs.sds": {
         "type": "Project",
         "dependencies": {
-          "Microsoft.Extensions.Caching.StackExchangeRedis": "6.0.12",
           "Microsoft.Extensions.Hosting": "6.0.1",
           "Microsoft.Extensions.Http": "6.0.0",
           "Microsoft.Extensions.Logging.ApplicationInsights": "2.21.0",
