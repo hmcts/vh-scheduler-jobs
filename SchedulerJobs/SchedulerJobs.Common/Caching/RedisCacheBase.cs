@@ -39,7 +39,7 @@ namespace SchedulerJobs.Common.Caching
             }
             catch (Exception)
             {
-                return default(TEntry);
+                return default;
             }
         }
 

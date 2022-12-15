@@ -1,12 +1,14 @@
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using Microsoft.Extensions.DependencyInjection;
 using RedLockNet.SERedis;
 using RedLockNet.SERedis.Configuration;
 using SchedulerJobs.Common.Caching;
 using StackExchange.Redis;
 
-namespace SchedulerJobs.Common
+namespace SchedulerJobs.Common.Extensions
 {
+    [ExcludeFromCodeCoverage]
     public static class ServiceCollectionExtensions
     {
         public static IServiceCollection AddRedisInfrastructure(this IServiceCollection serviceCollection,
