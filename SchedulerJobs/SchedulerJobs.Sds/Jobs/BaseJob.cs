@@ -46,6 +46,7 @@ namespace SchedulerJobs.Sds.Jobs
 
                 await using var redLock = await redLockFactory.CreateLockAsync(resource, expiry);
                 lockAcquired = redLock.IsAcquired;
+                _logger.LogInformation($"Starting job - lock acquired: {lockAcquired}");
                 if (!lockAcquired)
                 {
                     _logger.LogInformation($"Job {jobName} already running");
