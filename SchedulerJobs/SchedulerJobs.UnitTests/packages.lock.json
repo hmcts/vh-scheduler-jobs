@@ -2358,64 +2358,64 @@
       "schedulerjobs": {
         "type": "Project",
         "dependencies": {
-          "Azure.Storage.Blobs": "12.13.1",
-          "BookingsApi.Client": "1.39.44",
-          "Microsoft.ApplicationInsights.AspNetCore": "2.21.0",
-          "Microsoft.AspNetCore.Hosting": "2.2.7",
-          "Microsoft.Azure.Functions.Extensions": "1.1.0",
-          "Microsoft.Azure.Services.AppAuthentication": "1.6.2",
-          "Microsoft.Azure.WebJobs": "3.0.25",
-          "Microsoft.Azure.WebJobs.Extensions": "4.0.1",
-          "Microsoft.Extensions.Configuration.Abstractions": "6.0.0",
-          "Microsoft.Extensions.Configuration.UserSecrets": "6.0.1",
-          "Microsoft.Extensions.DependencyInjection": "6.0.0",
-          "Microsoft.Extensions.Http": "6.0.0",
-          "Microsoft.NET.Sdk.Functions": "4.1.1",
-          "Microsoft.VisualStudio.Azure.Containers.Tools.Targets": "1.17.0",
-          "SchedulerJobs.Common": "1.0.0",
-          "SchedulerJobs.Services": "1.0.0",
-          "System.Threading.Tasks.Extensions": "4.5.4",
-          "VH.Core.Configuration": "0.1.13"
+          "Azure.Storage.Blobs": "[12.13.1, )",
+          "BookingsApi.Client": "[1.39.44, )",
+          "Microsoft.ApplicationInsights.AspNetCore": "[2.21.0, )",
+          "Microsoft.AspNetCore.Hosting": "[2.2.7, )",
+          "Microsoft.Azure.Functions.Extensions": "[1.1.0, )",
+          "Microsoft.Azure.Services.AppAuthentication": "[1.6.2, )",
+          "Microsoft.Azure.WebJobs": "[3.0.25, )",
+          "Microsoft.Azure.WebJobs.Extensions": "[4.0.1, )",
+          "Microsoft.Extensions.Configuration.Abstractions": "[6.0.0, )",
+          "Microsoft.Extensions.Configuration.UserSecrets": "[6.0.1, )",
+          "Microsoft.Extensions.DependencyInjection": "[6.0.0, )",
+          "Microsoft.Extensions.Http": "[6.0.0, )",
+          "Microsoft.NET.Sdk.Functions": "[4.1.1, )",
+          "Microsoft.VisualStudio.Azure.Containers.Tools.Targets": "[1.17.0, )",
+          "SchedulerJobs.Common": "[1.0.0, )",
+          "SchedulerJobs.Services": "[1.0.0, )",
+          "System.Threading.Tasks.Extensions": "[4.5.4, )",
+          "VH.Core.Configuration": "[0.1.13, )"
         }
       },
       "schedulerjobs.common": {
         "type": "Project",
         "dependencies": {
-          "LaunchDarkly.ServerSdk": "6.3.2",
-          "Microsoft.Extensions.Caching.Abstractions": "6.0.0",
-          "Microsoft.Extensions.Caching.Memory": "6.0.1",
-          "Microsoft.Extensions.Configuration.Abstractions": "6.0.0",
-          "Microsoft.Extensions.Configuration.Binder": "6.0.0",
-          "Microsoft.Extensions.Configuration.EnvironmentVariables": "6.0.1",
-          "Microsoft.Extensions.Configuration.Json": "6.0.0",
-          "Microsoft.Extensions.Configuration.UserSecrets": "6.0.1",
-          "Microsoft.Extensions.Options": "6.0.0",
-          "Microsoft.IdentityModel.Clients.ActiveDirectory": "5.2.9",
-          "Newtonsoft.Json": "13.0.1",
-          "System.Threading.Tasks.Extensions": "4.5.4",
-          "TimeZoneConverter": "6.0.1"
+          "LaunchDarkly.ServerSdk": "[6.3.2, )",
+          "Microsoft.Extensions.Caching.Abstractions": "[6.0.0, )",
+          "Microsoft.Extensions.Caching.Memory": "[6.0.1, )",
+          "Microsoft.Extensions.Configuration.Abstractions": "[6.0.0, )",
+          "Microsoft.Extensions.Configuration.Binder": "[6.0.0, )",
+          "Microsoft.Extensions.Configuration.EnvironmentVariables": "[6.0.1, )",
+          "Microsoft.Extensions.Configuration.Json": "[6.0.0, )",
+          "Microsoft.Extensions.Configuration.UserSecrets": "[6.0.1, )",
+          "Microsoft.Extensions.Options": "[6.0.0, )",
+          "Microsoft.IdentityModel.Clients.ActiveDirectory": "[5.2.9, )",
+          "Newtonsoft.Json": "[13.0.1, )",
+          "System.Threading.Tasks.Extensions": "[4.5.4, )",
+          "TimeZoneConverter": "[6.0.1, )"
         }
       },
       "schedulerjobs.services": {
         "type": "Project",
         "dependencies": {
-          "Azure.Storage.Blobs": "12.13.1",
-          "BookingsApi.Client": "1.39.44",
-          "Microsoft.Extensions.Logging.Abstractions": "6.0.2",
-          "Newtonsoft.Json": "13.0.1",
-          "NotificationApi.Client": "1.38.5",
-          "SchedulerJobs.Common": "1.0.0",
-          "System.Threading.Tasks.Extensions": "4.5.4",
-          "UserApi.Client": "1.39.3",
-          "VideoApi.Client": "1.38.9"
+          "Azure.Storage.Blobs": "[12.13.1, )",
+          "BookingsApi.Client": "[1.39.44, )",
+          "Microsoft.Extensions.Logging.Abstractions": "[6.0.2, )",
+          "Newtonsoft.Json": "[13.0.1, )",
+          "NotificationApi.Client": "[1.38.5, )",
+          "SchedulerJobs.Common": "[1.0.0, )",
+          "System.Threading.Tasks.Extensions": "[4.5.4, )",
+          "UserApi.Client": "[1.39.3, )",
+          "VideoApi.Client": "[1.38.9, )"
         }
       },
       "testing.common": {
         "type": "Project",
         "dependencies": {
-          "Microsoft.Azure.WebJobs": "3.0.25",
-          "Microsoft.Azure.WebJobs.Extensions": "4.0.1",
-          "Microsoft.Extensions.Logging.Abstractions": "6.0.2"
+          "Microsoft.Azure.WebJobs": "[3.0.25, )",
+          "Microsoft.Azure.WebJobs.Extensions": "[4.0.1, )",
+          "Microsoft.Extensions.Logging.Abstractions": "[6.0.2, )"
         }
       }
     }
