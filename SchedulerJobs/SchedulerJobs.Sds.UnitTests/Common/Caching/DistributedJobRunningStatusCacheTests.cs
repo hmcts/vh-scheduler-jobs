@@ -7,9 +7,9 @@ using Microsoft.Extensions.Caching.Distributed;
 using Moq;
 using Newtonsoft.Json;
 using NUnit.Framework;
-using SchedulerJobs.Common.Caching;
+using SchedulerJobs.Sds.Caching;
 
-namespace SchedulerJobs.UnitTests.Common.Caching
+namespace SchedulerJobs.Sds.UnitTests.Common.Caching
 {
     public class DistributedJobRunningStatusCacheTests
     {

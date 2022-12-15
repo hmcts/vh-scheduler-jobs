@@ -1,10 +1,7 @@
-using System;
 using System.Diagnostics.CodeAnalysis;
-using System.Threading.Tasks;
 using RedLockNet;
 using RedLockNet.SERedis;
-
-namespace SchedulerJobs.Common.Caching
+namespace SchedulerJobs.Sds.Caching
 {
     [ExcludeFromCodeCoverage] // RedLockFactory's interface has no Dispose method to test with
     public class RedisContextAccessor : IRedisContextAcccessor

@@ -1,6 +1,4 @@
-using System.Threading.Tasks;
-
-namespace SchedulerJobs.Common.Caching
+namespace SchedulerJobs.Sds.Caching
 {
     public interface IDistributedJobRunningStatusCache
     {

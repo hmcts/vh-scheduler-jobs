@@ -1,4 +1,4 @@
-using SchedulerJobs.Common.Caching;
+using SchedulerJobs.Sds.Caching;
 using SchedulerJobs.Services;
 
 namespace SchedulerJobs.Sds.Jobs

@@ -1,4 +1,4 @@
-namespace SchedulerJobs.Common.Configuration
+namespace SchedulerJobs.Sds.Configuration
 {
     public class ConnectionStrings
     {

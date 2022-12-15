@@ -1,12 +1,10 @@
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using Microsoft.Extensions.DependencyInjection;
 using RedLockNet.SERedis;
 using RedLockNet.SERedis.Configuration;
-using SchedulerJobs.Common.Caching;
+using SchedulerJobs.Sds.Caching;
 using StackExchange.Redis;
 
-namespace SchedulerJobs.Common.Extensions
+namespace SchedulerJobs.Sds.Extensions
 {
     [ExcludeFromCodeCoverage]
     public static class ServiceCollectionExtensions
