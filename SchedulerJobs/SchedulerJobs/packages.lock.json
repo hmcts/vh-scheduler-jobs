@@ -950,6 +950,26 @@
           "Newtonsoft.Json": "13.0.1"
         }
       },
+      "Pipelines.Sockets.Unofficial": {
+        "type": "Transitive",
+        "resolved": "1.0.7",
+        "contentHash": "n+YKaKVd9ZSa7uVeT0gyOT8eoeCWbiTdpVtnHkjthqmNopVPc4+efRQUReO+WH3WFyVKxgn5QS4BLi2Q+sioqA==",
+        "dependencies": {
+          "System.Buffers": "4.4.0",
+          "System.IO.Pipelines": "4.5.1"
+        }
+      },
+      "RedLock.net": {
+        "type": "Transitive",
+        "resolved": "2.3.2",
+        "contentHash": "jlrALAArm4dCE292U3EtRoMnVKJ9M6sunbZn/oG5OuzlGtTpusXBfvDrnGWbgGDlWV027f5E9H5CiVnPxiq8+g==",
+        "dependencies": {
+          "Microsoft.Bcl.AsyncInterfaces": "1.1.0",
+          "Microsoft.Extensions.Logging": "2.0.0",
+          "Microsoft.Extensions.Logging.Abstractions": "2.0.0",
+          "StackExchange.Redis": "2.0.513"
+        }
+      },
       "runtime.debian.8-x64.runtime.native.System.Security.Cryptography.OpenSsl": {
         "type": "Transitive",
         "resolved": "4.3.2",
@@ -1052,6 +1072,17 @@
         "type": "Transitive",
         "resolved": "8.2.0.14119",
         "contentHash": "uq6tGr6guoDzeGjM/7kQWSTYUqv6RgPCVfzYoJg0jdVhIjNPQvSL0kMcugDziOWFP1OIv89kBD9LubVOMbCvvg=="
+      },
+      "StackExchange.Redis": {
+        "type": "Transitive",
+        "resolved": "2.0.513",
+        "contentHash": "Prh45gWLOE1FYHe40sJj+s7Ray31ZEtcBfoNv8C85a59FTY9zKYOv/kPEeOYRV4CKXIa7MGoc0OUlp9xX8jN5g==",
+        "dependencies": {
+          "Pipelines.Sockets.Unofficial": "1.0.7",
+          "System.Diagnostics.PerformanceCounter": "4.5.0",
+          "System.IO.Pipelines": "4.5.1",
+          "System.Threading.Channels": "4.5.0"
+        }
       },
       "System.Buffers": {
         "type": "Transitive",
@@ -1962,6 +1993,11 @@
           "System.Threading.Tasks": "4.3.0"
         }
       },
+      "System.Threading.Channels": {
+        "type": "Transitive",
+        "resolved": "4.5.0",
+        "contentHash": "MEH06N0rIGmRT4LOKQ2BmUO0IxfvmIY/PaouSq+DFQku72OL8cxfw8W99uGpTCFf2vx2QHLRSh374iSM3asdTA=="
+      },
       "System.Threading.Tasks": {
         "type": "Transitive",
         "resolved": "4.3.0",
@@ -2121,6 +2157,7 @@
           "Microsoft.Extensions.Options": "6.0.0",
           "Microsoft.IdentityModel.Clients.ActiveDirectory": "5.2.9",
           "Newtonsoft.Json": "13.0.1",
+          "RedLock.net": "2.3.2",
           "System.Threading.Tasks.Extensions": "4.5.4",
           "TimeZoneConverter": "6.0.1"
         }

@@ -1,6 +1,4 @@
-using Microsoft.Extensions.Options;
 using SchedulerJobs.Common.Caching;
-using SchedulerJobs.Common.Configuration;
 using SchedulerJobs.Services;
 
 namespace SchedulerJobs.Sds.Jobs
@@ -16,7 +14,7 @@ namespace SchedulerJobs.Sds.Jobs
             ILogger<GetJudiciaryUsersJob> logger,
             IServiceProvider serviceProvider,
             IDistributedJobRunningStatusCache distributedJobRunningStatusCache,
-            IOptions<ConnectionStrings> connectionStrings) : base(lifetime, logger, distributedJobRunningStatusCache, connectionStrings)
+            IRedisContextAcccessor redisContextAccessor) : base(lifetime, logger, distributedJobRunningStatusCache, redisContextAccessor)
         {
             _logger = logger;
             _serviceProvider = serviceProvider;

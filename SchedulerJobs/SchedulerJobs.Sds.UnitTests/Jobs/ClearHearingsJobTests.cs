@@ -23,7 +23,7 @@ namespace SchedulerJobs.Sds.UnitTests.Jobs
 
             var serviceProvider = services.BuildServiceProvider();
 
-            _sut = new ClearHearingsJob(Lifetime.Object, Logger, serviceProvider, DistributedJobRunningStatusCache.Object, ConnectionStrings.Object);
+            _sut = new ClearHearingsJob(Lifetime.Object, Logger, serviceProvider, DistributedJobRunningStatusCache.Object, RedisContextAccessor.Object);
         }
         
         [Test]
