@@ -1,6 +1,5 @@
 using Newtonsoft.Json;
-
-namespace SchedulerJobs.Common.Caching
+namespace SchedulerJobs.Sds.Caching
 {
     public static class CachingHelper
     {

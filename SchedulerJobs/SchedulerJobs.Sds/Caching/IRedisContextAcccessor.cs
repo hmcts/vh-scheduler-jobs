@@ -1,8 +1,5 @@
-using System;
-using System.Threading.Tasks;
 using RedLockNet;
-
-namespace SchedulerJobs.Common.Caching
+namespace SchedulerJobs.Sds.Caching
 {
     public interface IRedisContextAcccessor
     {

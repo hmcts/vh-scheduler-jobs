@@ -1,7 +1,7 @@
 using Microsoft.Extensions.Hosting;
 using Moq;
 using NUnit.Framework;
-using SchedulerJobs.Common.Caching;
+using SchedulerJobs.Sds.Caching;
 using Testing.Common;
 
 namespace SchedulerJobs.Sds.UnitTests.Jobs

@@ -1,5 +1,5 @@
 using System.Diagnostics.CodeAnalysis;
-using SchedulerJobs.Common.Caching;
+using SchedulerJobs.Sds.Caching;
 
 namespace SchedulerJobs.Sds.Jobs
 {

@@ -1,8 +1,5 @@
-using System;
-using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Distributed;
-
-namespace SchedulerJobs.Common.Caching
+namespace SchedulerJobs.Sds.Caching
 {
     public class DistributedJobRunningStatusCache : RedisCacheBase<string,bool>, IDistributedJobRunningStatusCache
     {

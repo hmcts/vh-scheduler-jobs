@@ -1,10 +1,7 @@
-using System;
 using System.Text;
-using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Distributed;
 using Newtonsoft.Json;
-
-namespace SchedulerJobs.Common.Caching
+namespace SchedulerJobs.Sds.Caching
 {
     public abstract class RedisCacheBase<TKey, TEntry>
     {
