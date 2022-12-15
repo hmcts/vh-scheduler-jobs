@@ -5,6 +5,7 @@ using NUnit.Framework;
 using SchedulerJobs.Common.ApiHelper;
 using SchedulerJobs.Common.Configuration;
 using SchedulerJobs.Common.Security;
+
 namespace SchedulerJobs.UnitTests.Common.ApiHelper
 {
     public class NotificationServiceTokenHandlerTests
