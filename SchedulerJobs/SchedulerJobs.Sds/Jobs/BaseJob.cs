@@ -26,6 +26,7 @@ namespace SchedulerJobs.Sds.Jobs
             try
             {
                 var isRunning = await _distributedJobRunningStatusCache.IsJobRunning(jobName);
+                _logger.LogInformation($"Job started, isRunning status: {isRunning}");
                 if (isRunning)
                 {
                     _logger.LogInformation($"Job {jobName} already running");
@@ -49,6 +50,8 @@ namespace SchedulerJobs.Sds.Jobs
             finally
             {
                 await _distributedJobRunningStatusCache.UpdateJobRunningStatus(false, jobName);
+                var isRunning = await _distributedJobRunningStatusCache.IsJobRunning(jobName);
+                _logger.LogInformation($"Job ended, isRunning status: {isRunning}");
             }
         }
     }
