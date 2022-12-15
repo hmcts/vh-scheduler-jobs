@@ -74,6 +74,8 @@ namespace SchedulerJobs.Sds.Jobs
                     await _distributedJobRunningStatusCache.UpdateJobRunningStatus(false, jobName);
                 }
                 redLockFactory.Dispose();
+                
+                _logger.LogInformation($"Job ended at {DateTime.Now}");
             }
         }
     }
