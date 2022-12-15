@@ -13,7 +13,7 @@ using SchedulerJobs.Services.Configuration;
 using SchedulerJobs.Services.HttpClients;
 using SchedulerJobs.Services.Interfaces;
 using System.Diagnostics.CodeAnalysis;
-using SchedulerJobs.Common;
+using SchedulerJobs.Common.Extensions;
 using UserApi.Client;
 using VH.Core.Configuration;
 using VideoApi.Client;

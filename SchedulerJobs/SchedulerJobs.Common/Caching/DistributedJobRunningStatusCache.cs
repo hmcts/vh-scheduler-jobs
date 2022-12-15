@@ -16,6 +16,13 @@ namespace SchedulerJobs.Common.Caching
             };
         }
 
+        public DistributedJobRunningStatusCache(
+            IDistributedCache distributedCache, 
+            DistributedCacheEntryOptions cacheEntryOptions) : base(distributedCache)
+        {
+            CacheEntryOptions = cacheEntryOptions;
+        }
+
         public override DistributedCacheEntryOptions CacheEntryOptions { get; protected set; }
         
         public override string GetKey(string key)
