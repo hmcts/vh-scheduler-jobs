@@ -250,7 +250,12 @@ public static partial class Program
         services.AddSingleton<IFeatureToggles>(featureToggle);
         
         var connectionStrings = new ConnectionStrings();
-        configuration.GetSection("ConnectionStrings").Bind(connectionStrings);
+        var connectionStringsConfig = configuration.GetSection("ConnectionStrings");
+        connectionStringsConfig.Bind(connectionStrings);
+        services.Configure<ConnectionStrings>(options =>
+        {
+            connectionStringsConfig.Bind(options);
+        });
         services.AddStackExchangeRedisCache(options => { options.Configuration = connectionStrings.RedisCache; });
         services.AddSingleton<IDistributedJobRunningStatusCache, DistributedJobRunningStatusCache>();
     }

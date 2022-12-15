@@ -1,5 +1,11 @@
 using System.Diagnostics.CodeAnalysis;
+using System.Net;
+using Microsoft.Extensions.Options;
+using RedLockNet.SERedis;
+using RedLockNet.SERedis.Configuration;
 using SchedulerJobs.Common.Caching;
+using SchedulerJobs.Common.Configuration;
+using StackExchange.Redis;
 
 namespace SchedulerJobs.Sds.Jobs
 {
@@ -9,25 +15,38 @@ namespace SchedulerJobs.Sds.Jobs
         private readonly IHostApplicationLifetime _lifetime;
         private readonly ILogger _logger;
         private readonly IDistributedJobRunningStatusCache _distributedJobRunningStatusCache;
+        private readonly ConnectionStrings _connectionStrings;
 
-        protected BaseJob(IHostApplicationLifetime lifetime, ILogger logger, IDistributedJobRunningStatusCache distributedJobRunningStatusCache)
+        protected BaseJob(IHostApplicationLifetime lifetime, ILogger logger, 
+            IDistributedJobRunningStatusCache distributedJobRunningStatusCache, IOptions<ConnectionStrings> connectionStrings)
         {
             _lifetime = lifetime;
             _logger = logger;
             _distributedJobRunningStatusCache = distributedJobRunningStatusCache;
+            _connectionStrings = connectionStrings.Value;
         }
         
         public abstract Task DoWorkAsync();
         
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
+            // TODO move this to startup and a helper class. See https://github.com/samcook/RedLock.net/issues/84
+            var redisConnectionString = _connectionStrings.RedisCache;
+            var muxer = await ConnectionMultiplexer.ConnectAsync(redisConnectionString);
+            var connectionMultiplexers = new List<RedLockMultiplexer> { new RedLockMultiplexer(muxer) };
+            var redLockFactory = RedLockFactory.Create(connectionMultiplexers);
+
             var jobName = GetType().Name;
+            var lockAcquired = false;
 
             try
             {
-                var isRunning = await _distributedJobRunningStatusCache.IsJobRunning(jobName);
-                _logger.LogInformation($"Job started, isRunning status: {isRunning}");
-                if (isRunning)
+                var resource = $"job_running_status_{jobName}";
+                var expiry = TimeSpan.FromHours(24);
+
+                await using var redLock = await redLockFactory.CreateLockAsync(resource, expiry);
+                lockAcquired = redLock.IsAcquired;
+                if (!lockAcquired)
                 {
                     _logger.LogInformation($"Job {jobName} already running");
                     return;
@@ -49,9 +68,11 @@ namespace SchedulerJobs.Sds.Jobs
             }
             finally
             {
-                await _distributedJobRunningStatusCache.UpdateJobRunningStatus(false, jobName);
-                var isRunning = await _distributedJobRunningStatusCache.IsJobRunning(jobName);
-                _logger.LogInformation($"Job ended, isRunning status: {isRunning}");
+                if (lockAcquired)
+                {
+                    await _distributedJobRunningStatusCache.UpdateJobRunningStatus(false, jobName);
+                }
+                redLockFactory.Dispose();
             }
         }
     }
