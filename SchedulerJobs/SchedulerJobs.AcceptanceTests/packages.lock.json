@@ -871,8 +871,8 @@
       },
       "Microsoft.NETCore.Platforms": {
         "type": "Transitive",
-        "resolved": "2.0.0",
-        "contentHash": "VdLJOCXhZaEMY7Hm2GKiULmn7IEPFE4XC5LPSfBVCUIA8YLZVh846gtfBJalsPQF2PlzdD7ecX7DZEulJ402ZQ=="
+        "resolved": "1.1.1",
+        "contentHash": "TMBuzAHpTenGbGgk0SMTwyEkyijY/Eae4ZGsFNYJvAr/LDn1ku3Etp3FPxChmDp5HHF3kzJuoaa08N0xjqAJfQ=="
       },
       "Microsoft.NETCore.Targets": {
         "type": "Transitive",
@@ -909,11 +909,17 @@
       },
       "Microsoft.Win32.Registry": {
         "type": "Transitive",
-        "resolved": "4.5.0",
-        "contentHash": "+FWlwd//+Tt56316p00hVePBCouXyEzT86Jb3+AuRotTND0IYn0OO3obs1gnQEs/txEnt+rF2JBGLItTG+Be6A==",
+        "resolved": "4.3.0",
+        "contentHash": "Lw1/VwLH1yxz6SfFEjVRCN0pnflLEsWgnV4qsdJ512/HhTwnKXUG+zDQ4yTO3K/EJQemGoNaBHX5InISNKTzUQ==",
         "dependencies": {
-          "System.Security.AccessControl": "4.5.0",
-          "System.Security.Principal.Windows": "4.5.0"
+          "Microsoft.NETCore.Platforms": "1.1.0",
+          "System.Collections": "4.3.0",
+          "System.Globalization": "4.3.0",
+          "System.Resources.ResourceManager": "4.3.0",
+          "System.Runtime": "4.3.0",
+          "System.Runtime.Extensions": "4.3.0",
+          "System.Runtime.Handles": "4.3.0",
+          "System.Runtime.InteropServices": "4.3.0"
         }
       },
       "Microsoft.Win32.SystemEvents": {
@@ -994,15 +1000,6 @@
           "System.Xml.XmlDocument": "4.3.0"
         }
       },
-      "Pipelines.Sockets.Unofficial": {
-        "type": "Transitive",
-        "resolved": "1.0.7",
-        "contentHash": "n+YKaKVd9ZSa7uVeT0gyOT8eoeCWbiTdpVtnHkjthqmNopVPc4+efRQUReO+WH3WFyVKxgn5QS4BLi2Q+sioqA==",
-        "dependencies": {
-          "System.Buffers": "4.4.0",
-          "System.IO.Pipelines": "4.5.1"
-        }
-      },
       "Polly": {
         "type": "Transitive",
         "resolved": "7.2.1",
@@ -1014,17 +1011,6 @@
         "contentHash": "WYawPNeNoRLAYR6seN/w2P/nZnjCHTRfBpSuwWgJv7jY/qqEOrT6uvgw+97TdolPSwtyTbBHwakCSorXaQkIZA==",
         "dependencies": {
           "Selenium.WebDriver": "4.1.0"
-        }
-      },
-      "RedLock.net": {
-        "type": "Transitive",
-        "resolved": "2.3.2",
-        "contentHash": "jlrALAArm4dCE292U3EtRoMnVKJ9M6sunbZn/oG5OuzlGtTpusXBfvDrnGWbgGDlWV027f5E9H5CiVnPxiq8+g==",
-        "dependencies": {
-          "Microsoft.Bcl.AsyncInterfaces": "1.1.0",
-          "Microsoft.Extensions.Logging": "2.0.0",
-          "Microsoft.Extensions.Logging.Abstractions": "2.0.0",
-          "StackExchange.Redis": "2.0.513"
         }
       },
       "RestSharp": {
@@ -1221,17 +1207,6 @@
           "SpecFlow": "[3.9.74]"
         }
       },
-      "StackExchange.Redis": {
-        "type": "Transitive",
-        "resolved": "2.0.513",
-        "contentHash": "Prh45gWLOE1FYHe40sJj+s7Ray31ZEtcBfoNv8C85a59FTY9zKYOv/kPEeOYRV4CKXIa7MGoc0OUlp9xX8jN5g==",
-        "dependencies": {
-          "Pipelines.Sockets.Unofficial": "1.0.7",
-          "System.Diagnostics.PerformanceCounter": "4.5.0",
-          "System.IO.Pipelines": "4.5.1",
-          "System.Threading.Channels": "4.5.0"
-        }
-      },
       "System.AppContext": {
         "type": "Transitive",
         "resolved": "4.1.0",
@@ -1391,17 +1366,6 @@
         "type": "Transitive",
         "resolved": "6.0.0",
         "contentHash": "lcyUiXTsETK2ALsZrX+nWuHSIQeazhqPphLfaRxzdGaG93+0kELqpgEHtwWOlQe7+jSFnKwaCAgL4kjeZCQJnw=="
-      },
-      "System.Diagnostics.PerformanceCounter": {
-        "type": "Transitive",
-        "resolved": "4.5.0",
-        "contentHash": "JUO5/moXgchWZBMBElgmPebZPKCgwW8kY3dFwVJavaNR2ftcc/YjXXGjOaCjly2KBXT7Ld5l/GTkMVzNv41yZA==",
-        "dependencies": {
-          "Microsoft.NETCore.Platforms": "2.0.0",
-          "Microsoft.Win32.Registry": "4.5.0",
-          "System.Configuration.ConfigurationManager": "4.5.0",
-          "System.Security.Principal.Windows": "4.5.0"
-        }
       },
       "System.Diagnostics.Process": {
         "type": "Transitive",
@@ -1932,15 +1896,6 @@
           "System.Runtime": "4.3.0"
         }
       },
-      "System.Security.AccessControl": {
-        "type": "Transitive",
-        "resolved": "4.5.0",
-        "contentHash": "vW8Eoq0TMyz5vAG/6ce483x/CP83fgm4SJe5P8Tb1tZaobcvPrbMEL7rhH1DRdrYbbb6F0vq3OlzmK0Pkwks5A==",
-        "dependencies": {
-          "Microsoft.NETCore.Platforms": "2.0.0",
-          "System.Security.Principal.Windows": "4.5.0"
-        }
-      },
       "System.Security.Cryptography.Algorithms": {
         "type": "Transitive",
         "resolved": "4.3.0",
@@ -2098,14 +2053,6 @@
           "System.Windows.Extensions": "7.0.0"
         }
       },
-      "System.Security.Principal.Windows": {
-        "type": "Transitive",
-        "resolved": "4.5.0",
-        "contentHash": "U77HfRXlZlOeIXd//Yoj6Jnk8AXlbeisf1oq1os+hxOGVnuG+lGSfGqTwTZBoORFF6j/0q7HXIl8cqwQ9aUGqQ==",
-        "dependencies": {
-          "Microsoft.NETCore.Platforms": "2.0.0"
-        }
-      },
       "System.Security.SecureString": {
         "type": "Transitive",
         "resolved": "4.3.0",
@@ -2175,11 +2122,6 @@
           "System.Runtime": "4.3.0",
           "System.Threading.Tasks": "4.3.0"
         }
-      },
-      "System.Threading.Channels": {
-        "type": "Transitive",
-        "resolved": "4.5.0",
-        "contentHash": "MEH06N0rIGmRT4LOKQ2BmUO0IxfvmIY/PaouSq+DFQku72OL8cxfw8W99uGpTCFf2vx2QHLRSh374iSM3asdTA=="
       },
       "System.Threading.Tasks": {
         "type": "Transitive",
@@ -2378,7 +2320,6 @@
           "Microsoft.Extensions.Options": "6.0.0",
           "Microsoft.IdentityModel.Clients.ActiveDirectory": "5.2.9",
           "Newtonsoft.Json": "13.0.1",
-          "RedLock.net": "2.3.2",
           "System.Threading.Tasks.Extensions": "4.5.4",
           "TimeZoneConverter": "6.0.1"
         }
