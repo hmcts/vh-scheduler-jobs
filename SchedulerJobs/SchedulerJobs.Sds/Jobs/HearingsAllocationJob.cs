@@ -1,6 +1,4 @@
-using Microsoft.Extensions.Options;
 using SchedulerJobs.Common.Caching;
-using SchedulerJobs.Common.Configuration;
 using SchedulerJobs.Services;
 
 namespace SchedulerJobs.Sds.Jobs
@@ -18,12 +16,13 @@ namespace SchedulerJobs.Sds.Jobs
         /// <param name="serviceProvider"></param>
         /// <param name="hearingAllocationService"></param>
         /// <param name="distributedJobRunningStatusCache"></param>
+        /// <param name="redisContextAccessor"></param>
         public HearingsAllocationJob(
             IHostApplicationLifetime lifetime,
             ILogger<HearingsAllocationJob> logger,
             IServiceProvider serviceProvider,
             IDistributedJobRunningStatusCache distributedJobRunningStatusCache,
-            IOptions<ConnectionStrings> connectionStrings) : base(lifetime, logger, distributedJobRunningStatusCache, connectionStrings)
+            IRedisContextAcccessor redisContextAccessor) : base(lifetime, logger, distributedJobRunningStatusCache, redisContextAccessor)
         {
             _logger = logger;
             _serviceProvider = serviceProvider;

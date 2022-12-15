@@ -1,11 +1,5 @@
 using System.Diagnostics.CodeAnalysis;
-using System.Net;
-using Microsoft.Extensions.Options;
-using RedLockNet.SERedis;
-using RedLockNet.SERedis.Configuration;
 using SchedulerJobs.Common.Caching;
-using SchedulerJobs.Common.Configuration;
-using StackExchange.Redis;
 
 namespace SchedulerJobs.Sds.Jobs
 {
@@ -15,27 +9,24 @@ namespace SchedulerJobs.Sds.Jobs
         private readonly IHostApplicationLifetime _lifetime;
         private readonly ILogger _logger;
         private readonly IDistributedJobRunningStatusCache _distributedJobRunningStatusCache;
-        private readonly ConnectionStrings _connectionStrings;
+        private readonly IRedisContextAcccessor _redisContextAccessor;
 
-        protected BaseJob(IHostApplicationLifetime lifetime, ILogger logger, 
-            IDistributedJobRunningStatusCache distributedJobRunningStatusCache, IOptions<ConnectionStrings> connectionStrings)
+        protected BaseJob(
+            IHostApplicationLifetime lifetime, 
+            ILogger logger, 
+            IDistributedJobRunningStatusCache distributedJobRunningStatusCache, 
+            IRedisContextAcccessor redisContextAccessor)
         {
             _lifetime = lifetime;
             _logger = logger;
             _distributedJobRunningStatusCache = distributedJobRunningStatusCache;
-            _connectionStrings = connectionStrings.Value;
+            _redisContextAccessor = redisContextAccessor;
         }
         
         public abstract Task DoWorkAsync();
         
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            // TODO move this to startup and a helper class. See https://github.com/samcook/RedLock.net/issues/84
-            var redisConnectionString = _connectionStrings.RedisCache;
-            var muxer = await ConnectionMultiplexer.ConnectAsync(redisConnectionString);
-            var connectionMultiplexers = new List<RedLockMultiplexer> { new RedLockMultiplexer(muxer) };
-            var redLockFactory = RedLockFactory.Create(connectionMultiplexers);
-
             var jobName = GetType().Name;
             var lockAcquired = false;
 
@@ -44,10 +35,8 @@ namespace SchedulerJobs.Sds.Jobs
                 var resource = $"job_running_status_{jobName}";
                 var expiry = TimeSpan.FromHours(24);
 
-                _logger.LogInformation($"Starting job at {DateTime.Now}");
-                await using var redLock = await redLockFactory.CreateLockAsync(resource, expiry);
+                await using var redLock = await _redisContextAccessor.CreateLockAsync(resource, expiry);
                 lockAcquired = redLock.IsAcquired;
-                _logger.LogInformation($"Starting job - lock acquired: {lockAcquired} at {DateTime.Now}");
                 if (!lockAcquired)
                 {
                     _logger.LogInformation($"Job {jobName} already running");
@@ -57,8 +46,8 @@ namespace SchedulerJobs.Sds.Jobs
 
                 await DoWorkAsync();
 
-                // For testing only. Simulates a longer running job so that we can see the effects of the lock
-                Thread.Sleep(TimeSpan.FromSeconds(20));
+                // // For testing only. Simulates a longer running job so that we can see the effects of the lock
+                // Thread.Sleep(TimeSpan.FromSeconds(20));
                 
                 _lifetime.StopApplication();
             }
@@ -77,9 +66,7 @@ namespace SchedulerJobs.Sds.Jobs
                 {
                     await _distributedJobRunningStatusCache.UpdateJobRunningStatus(false, jobName);
                 }
-                redLockFactory.Dispose();
-                
-                _logger.LogInformation($"Job ended at {DateTime.Now}");
+                _redisContextAccessor.DisposeContext();
             }
         }
     }

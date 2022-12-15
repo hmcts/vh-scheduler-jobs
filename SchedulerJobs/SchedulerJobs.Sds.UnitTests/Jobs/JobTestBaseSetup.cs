@@ -1,9 +1,7 @@
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Options;
 using Moq;
 using NUnit.Framework;
 using SchedulerJobs.Common.Caching;
-using SchedulerJobs.Common.Configuration;
 using Testing.Common;
 
 namespace SchedulerJobs.Sds.UnitTests.Jobs
@@ -13,7 +11,7 @@ namespace SchedulerJobs.Sds.UnitTests.Jobs
         protected LoggerFakeGeneric<T> Logger;
         protected Mock<IHostApplicationLifetime> Lifetime;
         protected Mock<IDistributedJobRunningStatusCache> DistributedJobRunningStatusCache;
-        protected Mock<IOptions<ConnectionStrings>> ConnectionStrings;
+        protected Mock<IRedisContextAcccessor> RedisContextAccessor;
 
         [SetUp]
         protected void MockerSetup()
@@ -21,7 +19,7 @@ namespace SchedulerJobs.Sds.UnitTests.Jobs
             Logger = new LoggerFakeGeneric<T>();
             Lifetime = new Mock<IHostApplicationLifetime>();
             DistributedJobRunningStatusCache = new Mock<IDistributedJobRunningStatusCache>();
-            ConnectionStrings = new Mock<IOptions<ConnectionStrings>>();
+            RedisContextAccessor = new Mock<IRedisContextAcccessor>();
         }
     }
 }
