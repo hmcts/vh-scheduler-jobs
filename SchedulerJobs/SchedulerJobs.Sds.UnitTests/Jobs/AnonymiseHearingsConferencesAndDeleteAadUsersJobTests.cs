@@ -27,7 +27,7 @@ namespace SchedulerJobs.Sds.UnitTests.Jobs
 
             var serviceProvider = services.BuildServiceProvider();
 
-            _sut = new AnonymiseHearingsConferencesAndDeleteAadUsersJob(Logger, Lifetime.Object, serviceProvider, DistributedJobRunningStatusCache.Object, RedisContextAccessor.Object);
+            _sut = new AnonymiseHearingsConferencesAndDeleteAadUsersJob(Logger, Lifetime.Object, serviceProvider, DistributedJobRunningStatusCache.Object);
         }
         
         [Test]

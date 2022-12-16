@@ -12,8 +12,7 @@ namespace SchedulerJobs.Sds.Jobs
             IHostApplicationLifetime lifetime,
             ILogger<SendHearingNotificationsJob> logger,
             IServiceProvider serviceProvider,
-            IDistributedJobRunningStatusCache distributedJobRunningStatusCache,
-            IRedisContextAccessor redisContextAccessor) : base(lifetime, logger, distributedJobRunningStatusCache, redisContextAccessor)
+            IDistributedJobRunningStatusCache distributedJobRunningStatusCache) : base(lifetime, logger, distributedJobRunningStatusCache)
         {
             _logger = logger;
             _serviceProvider = serviceProvider;

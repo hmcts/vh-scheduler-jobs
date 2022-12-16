@@ -7,6 +7,7 @@ using Microsoft.Extensions.Caching.Distributed;
 using Moq;
 using Newtonsoft.Json;
 using NUnit.Framework;
+using RedLockNet;
 using SchedulerJobs.Sds.Caching;
 
 namespace SchedulerJobs.Sds.UnitTests.Common.Caching
@@ -15,12 +16,14 @@ namespace SchedulerJobs.Sds.UnitTests.Common.Caching
     {
         private Mock<IDistributedCache> _distributedCacheMock;
         private DistributedJobRunningStatusCache _distributedJobRunningStatusCache;
+        private Mock<IRedisContextAccessor> _redisContextAccessor;
         
         [SetUp]
         public void Setup()
         {
             _distributedCacheMock = new Mock<IDistributedCache>();
-            _distributedJobRunningStatusCache = new DistributedJobRunningStatusCache(_distributedCacheMock.Object);
+            _redisContextAccessor = new Mock<IRedisContextAccessor>();
+            _distributedJobRunningStatusCache = new DistributedJobRunningStatusCache(_distributedCacheMock.Object, _redisContextAccessor.Object);
         }
         
         [Test]
@@ -69,7 +72,8 @@ namespace SchedulerJobs.Sds.UnitTests.Common.Caching
         public void WriteToCache_Throws_Exception_When_CacheEntryOptions_Not_Set()
         {
             // Arrange
-            var cache = new DistributedJobRunningStatusCache(_distributedCacheMock.Object, null);
+            var redisContextAccessor = new Mock<IRedisContextAccessor>();
+            var cache = new DistributedJobRunningStatusCache(_distributedCacheMock.Object, null, redisContextAccessor.Object);
             var entryPrefix = "job_running_status_";
             var jobName = "TestJob";
             var key = $"{entryPrefix}{jobName}";
@@ -91,6 +95,41 @@ namespace SchedulerJobs.Sds.UnitTests.Common.Caching
 
             // Assert
             result.Should().Be(false);
+        }
+
+        [Test]
+        public async Task CreateLock_Creates_Lock()
+        {
+            // Arrange
+            var entryPrefix = "job_running_status_";
+            var jobName = "TestJob";
+            var key = $"{entryPrefix}{jobName}";
+            var expectedIsRunningValue = false;
+            var serialized = JsonConvert.SerializeObject(expectedIsRunningValue, SerializerSettings);
+            var rawData = Encoding.UTF8.GetBytes(serialized);
+            _redisContextAccessor.Setup(x => x.CreateLockAsync(key, It.IsAny<TimeSpan>()))
+                .ReturnsAsync(() => new Mock<IRedLock>().Object);
+            _distributedCacheMock.Setup(x => x.GetAsync(key, CancellationToken.None)).ReturnsAsync(rawData);
+
+            // Act
+            var result = await _distributedJobRunningStatusCache.CreateLockAsync(jobName);
+            
+            // Assert
+            result.Should().NotBeNull();
+        }
+
+        [Test]
+        public async Task DisposeCache_Disposes()
+        {
+            // Arrange
+            var redisContextAccessor = new Mock<IRedisContextAccessor>();
+            var cache = new DistributedJobRunningStatusCache(_distributedCacheMock.Object, redisContextAccessor.Object);
+
+            // Act
+            cache.DisposeCache();
+
+            // Assert
+            redisContextAccessor.Verify(x => x.DisposeContext(), Times.Once);
         }
         
         private static JsonSerializerSettings SerializerSettings => new JsonSerializerSettings
