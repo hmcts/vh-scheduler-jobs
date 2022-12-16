@@ -9,13 +9,13 @@ namespace SchedulerJobs.Sds.Jobs
         private readonly IHostApplicationLifetime _lifetime;
         private readonly ILogger _logger;
         private readonly IDistributedJobRunningStatusCache _distributedJobRunningStatusCache;
-        private readonly IRedisContextAcccessor _redisContextAccessor;
+        private readonly IRedisContextAccessor _redisContextAccessor;
 
         protected BaseJob(
             IHostApplicationLifetime lifetime, 
             ILogger logger, 
             IDistributedJobRunningStatusCache distributedJobRunningStatusCache, 
-            IRedisContextAcccessor redisContextAccessor)
+            IRedisContextAccessor redisContextAccessor)
         {
             _lifetime = lifetime;
             _logger = logger;

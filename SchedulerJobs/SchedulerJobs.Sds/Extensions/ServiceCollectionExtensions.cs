@@ -15,7 +15,7 @@ namespace SchedulerJobs.Sds.Extensions
             serviceCollection.AddStackExchangeRedisCache(options => { options.Configuration = connectionString; });
             serviceCollection.AddSingleton<IDistributedJobRunningStatusCache, DistributedJobRunningStatusCache>();
             
-            serviceCollection.AddSingleton<IRedisContextAcccessor>(_ =>
+            serviceCollection.AddSingleton<IRedisContextAccessor>(_ =>
             {
                 var muxer = ConnectionMultiplexer.Connect(connectionString);
                 var connectionMultiplexers = new List<RedLockMultiplexer> { new(muxer) };
