@@ -40,6 +40,7 @@ namespace SchedulerJobs.Sds.Jobs
                 if (!lockAcquired)
                 {
                     _logger.LogInformation($"Job {jobName} already running");
+                    _lifetime.StopApplication();
                     return;
                 }
                 await _distributedJobRunningStatusCache.UpdateJobRunningStatus(true, jobName);
