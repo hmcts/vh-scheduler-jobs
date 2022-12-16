@@ -12,8 +12,7 @@ namespace SchedulerJobs.Sds.Jobs
             ILogger<DeleteAudioRecordingApplicationsJob> logger,
             IHostApplicationLifetime lifetime,
             IServiceProvider serviceProvider,
-            IDistributedJobRunningStatusCache distributedJobRunningStatusCache,
-            IRedisContextAccessor redisContextAccessor) : base(lifetime, logger, distributedJobRunningStatusCache, redisContextAccessor)
+            IDistributedJobRunningStatusCache distributedJobRunningStatusCache) : base(lifetime, logger, distributedJobRunningStatusCache)
         {
             _logger = logger;
             _serviceProvider = serviceProvider;

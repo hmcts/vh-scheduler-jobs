@@ -9,18 +9,15 @@ namespace SchedulerJobs.Sds.Jobs
         private readonly IHostApplicationLifetime _lifetime;
         private readonly ILogger _logger;
         private readonly IDistributedJobRunningStatusCache _distributedJobRunningStatusCache;
-        private readonly IRedisContextAccessor _redisContextAccessor;
 
         protected BaseJob(
             IHostApplicationLifetime lifetime, 
             ILogger logger, 
-            IDistributedJobRunningStatusCache distributedJobRunningStatusCache, 
-            IRedisContextAccessor redisContextAccessor)
+            IDistributedJobRunningStatusCache distributedJobRunningStatusCache)
         {
             _lifetime = lifetime;
             _logger = logger;
             _distributedJobRunningStatusCache = distributedJobRunningStatusCache;
-            _redisContextAccessor = redisContextAccessor;
         }
         
         public abstract Task DoWorkAsync();
@@ -32,10 +29,7 @@ namespace SchedulerJobs.Sds.Jobs
 
             try
             {
-                var resource = $"job_running_status_{jobName}";
-                var expiry = TimeSpan.FromHours(24);
-
-                await using var redLock = await _redisContextAccessor.CreateLockAsync(resource, expiry);
+                await using var redLock = await _distributedJobRunningStatusCache.CreateLockAsync(jobName);
                 lockAcquired = redLock.IsAcquired;
                 if (!lockAcquired)
                 {
@@ -67,7 +61,7 @@ namespace SchedulerJobs.Sds.Jobs
                 {
                     await _distributedJobRunningStatusCache.UpdateJobRunningStatus(false, jobName);
                 }
-                _redisContextAccessor.DisposeContext();
+                _distributedJobRunningStatusCache.DisposeCache();
             }
         }
     }

@@ -23,7 +23,7 @@ namespace SchedulerJobs.Sds.UnitTests.Jobs
             
             var serviceProvider = services.BuildServiceProvider();
 
-            _sut = new HearingsAllocationJob(Lifetime.Object, Logger, serviceProvider, DistributedJobRunningStatusCache.Object, RedisContextAccessor.Object);
+            _sut = new HearingsAllocationJob(Lifetime.Object, Logger, serviceProvider, DistributedJobRunningStatusCache.Object);
         }
         
         [Test]
