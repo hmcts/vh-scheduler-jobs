@@ -1,4 +1,5 @@
 using Microsoft.Extensions.Caching.Distributed;
+
 namespace SchedulerJobs.Sds.Caching
 {
     public class DistributedJobRunningStatusCache : RedisCacheBase<string,bool>, IDistributedJobRunningStatusCache
@@ -21,8 +22,8 @@ namespace SchedulerJobs.Sds.Caching
         }
 
         public override DistributedCacheEntryOptions CacheEntryOptions { get; protected set; }
-        
-        public override string GetKey(string key)
+
+        protected override string GetKey(string key)
         {
             return key;
         }
