@@ -119,7 +119,7 @@ namespace SchedulerJobs.Sds.UnitTests.Common.Caching
         }
 
         [Test]
-        public async Task DisposeCache_Disposes()
+        public void DisposeCache_Disposes()
         {
             // Arrange
             var redisContextAccessor = new Mock<IRedisContextAccessor>();
