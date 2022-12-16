@@ -1,4 +1,5 @@
 using System.Diagnostics.CodeAnalysis;
+using SchedulerJobs.Sds.Caching;
 
 namespace SchedulerJobs.Sds.Jobs
 {
@@ -7,21 +8,39 @@ namespace SchedulerJobs.Sds.Jobs
     {
         private readonly IHostApplicationLifetime _lifetime;
         private readonly ILogger _logger;
+        private readonly IDistributedJobRunningStatusCache _distributedJobRunningStatusCache;
 
-        protected BaseJob(IHostApplicationLifetime lifetime, ILogger logger)
+        protected BaseJob(
+            IHostApplicationLifetime lifetime, 
+            ILogger logger, 
+            IDistributedJobRunningStatusCache distributedJobRunningStatusCache)
         {
             _lifetime = lifetime;
             _logger = logger;
+            _distributedJobRunningStatusCache = distributedJobRunningStatusCache;
         }
         
         public abstract Task DoWorkAsync();
         
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
+            var jobName = GetType().Name;
+            var lockAcquired = false;
+
             try
             {
+                await using var redLock = await _distributedJobRunningStatusCache.CreateLockAsync(jobName);
+                lockAcquired = redLock.IsAcquired;
+                if (!lockAcquired)
+                {
+                    _logger.LogInformation($"Job {jobName} already running");
+                    _lifetime.StopApplication();
+                    return;
+                }
+                await _distributedJobRunningStatusCache.UpdateJobRunningStatus(true, jobName);
+
                 await DoWorkAsync();
-                
+
                 _lifetime.StopApplication();
             }
             catch (Exception ex)
@@ -30,9 +49,16 @@ namespace SchedulerJobs.Sds.Jobs
                 // Indicates to Kubernetes that the job has failed
                 Environment.ExitCode = 1;
                 
-                var jobName = GetType().Name;
                 _logger.LogError(ex, $"Job failed: {jobName}");
                 throw;
+            }
+            finally
+            {
+                if (lockAcquired)
+                {
+                    await _distributedJobRunningStatusCache.UpdateJobRunningStatus(false, jobName);
+                }
+                _distributedJobRunningStatusCache.DisposeCache();
             }
         }
     }

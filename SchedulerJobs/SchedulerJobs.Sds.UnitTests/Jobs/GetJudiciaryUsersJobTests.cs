@@ -27,7 +27,7 @@ namespace SchedulerJobs.Sds.UnitTests.Jobs
             
             var serviceProvider = services.BuildServiceProvider();
 
-            _sut = new GetJudiciaryUsersJob(Lifetime.Object, Logger, serviceProvider);
+            _sut = new GetJudiciaryUsersJob(Lifetime.Object, Logger, serviceProvider, DistributedJobRunningStatusCache.Object);
         }
         
         [Test]

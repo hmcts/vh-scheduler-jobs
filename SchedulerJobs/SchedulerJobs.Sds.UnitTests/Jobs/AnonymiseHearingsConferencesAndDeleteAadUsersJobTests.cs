@@ -15,7 +15,7 @@ namespace SchedulerJobs.Sds.UnitTests.Jobs
         private AnonymiseHearingsConferencesAndDeleteAadUsersJob _sut;
         private Mock<IAnonymiseHearingsConferencesDataService> _anonymiseHearingsConferencesDataService;
         private Mock<IJobHistoryService> _jobHistoryService;
-        
+
         [SetUp]
         public void Setup()
         {
@@ -27,7 +27,7 @@ namespace SchedulerJobs.Sds.UnitTests.Jobs
 
             var serviceProvider = services.BuildServiceProvider();
 
-            _sut = new AnonymiseHearingsConferencesAndDeleteAadUsersJob(Logger, Lifetime.Object, serviceProvider);
+            _sut = new AnonymiseHearingsConferencesAndDeleteAadUsersJob(Logger, Lifetime.Object, serviceProvider, DistributedJobRunningStatusCache.Object);
         }
         
         [Test]
