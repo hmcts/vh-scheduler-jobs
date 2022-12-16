@@ -41,9 +41,6 @@ namespace SchedulerJobs.Sds.Jobs
 
                 await DoWorkAsync();
 
-                // Temporary so that we can test the locking
-                Thread.Sleep(TimeSpan.FromSeconds(20));
-                
                 _lifetime.StopApplication();
             }
             catch (Exception ex)
