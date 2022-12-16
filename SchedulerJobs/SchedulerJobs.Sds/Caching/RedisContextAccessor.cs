@@ -1,10 +1,11 @@
 using System.Diagnostics.CodeAnalysis;
 using RedLockNet;
 using RedLockNet.SERedis;
+
 namespace SchedulerJobs.Sds.Caching
 {
     [ExcludeFromCodeCoverage] // RedLockFactory's interface has no Dispose method to test with
-    public class RedisContextAccessor : IRedisContextAcccessor
+    public class RedisContextAccessor : IRedisContextAccessor
     {
         private readonly RedLockFactory _lockFactory;
 

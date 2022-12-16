@@ -13,7 +13,7 @@ namespace SchedulerJobs.Sds.Jobs
             ILogger<ReconcileHearingAudioWithStorageJob> logger,
             IServiceProvider serviceProvider,
             IDistributedJobRunningStatusCache distributedJobRunningStatusCache,
-            IRedisContextAcccessor redisContextAccessor) : base(lifetime, logger, distributedJobRunningStatusCache, redisContextAccessor)
+            IRedisContextAccessor redisContextAccessor) : base(lifetime, logger, distributedJobRunningStatusCache, redisContextAccessor)
         {
             _logger = logger;
             _serviceProvider = serviceProvider;

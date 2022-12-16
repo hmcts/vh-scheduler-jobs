@@ -11,7 +11,7 @@ namespace SchedulerJobs.Sds.UnitTests.Jobs
         protected LoggerFakeGeneric<T> Logger;
         protected Mock<IHostApplicationLifetime> Lifetime;
         protected Mock<IDistributedJobRunningStatusCache> DistributedJobRunningStatusCache;
-        protected Mock<IRedisContextAcccessor> RedisContextAccessor;
+        protected Mock<IRedisContextAccessor> RedisContextAccessor;
 
         [SetUp]
         protected void MockerSetup()
@@ -19,7 +19,7 @@ namespace SchedulerJobs.Sds.UnitTests.Jobs
             Logger = new LoggerFakeGeneric<T>();
             Lifetime = new Mock<IHostApplicationLifetime>();
             DistributedJobRunningStatusCache = new Mock<IDistributedJobRunningStatusCache>();
-            RedisContextAccessor = new Mock<IRedisContextAcccessor>();
+            RedisContextAccessor = new Mock<IRedisContextAccessor>();
         }
     }
 }
