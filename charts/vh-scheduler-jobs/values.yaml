@@ -76,6 +76,7 @@ keyVaults:
         alias: AzureConfiguration--StorageEndpoint
       - name: storage-account-container-elinks-name
         alias: AzureConfiguration--StorageContainerName
+      - connectionstrings--rediscache
   vh-scheduler-jobs:
     excludeEnvironmentSuffix: false
     resourceGroup: vh-infra-core-{{ .Values.global.environment }}

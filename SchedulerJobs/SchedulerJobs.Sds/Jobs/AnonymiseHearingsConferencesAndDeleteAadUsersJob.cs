@@ -1,3 +1,4 @@
+using SchedulerJobs.Sds.Caching;
 using SchedulerJobs.Services;
 
 namespace SchedulerJobs.Sds.Jobs
@@ -8,11 +9,12 @@ namespace SchedulerJobs.Sds.Jobs
         private readonly ILogger<AnonymiseHearingsConferencesAndDeleteAadUsersJob> _logger;
         private readonly IServiceProvider _serviceProvider;
         private bool _jobSucceeded;
-    
+
         public AnonymiseHearingsConferencesAndDeleteAadUsersJob(
             ILogger<AnonymiseHearingsConferencesAndDeleteAadUsersJob> logger,
             IHostApplicationLifetime lifetime,
-            IServiceProvider serviceProvider) : base(lifetime, logger)
+            IServiceProvider serviceProvider,
+            IDistributedJobRunningStatusCache distributedJobRunningStatusCache) : base(lifetime, logger, distributedJobRunningStatusCache)
         {
             _logger = logger;
             _serviceProvider = serviceProvider;

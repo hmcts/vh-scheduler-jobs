@@ -1,3 +1,4 @@
+using SchedulerJobs.Sds.Caching;
 using SchedulerJobs.Services.Interfaces;
 
 namespace SchedulerJobs.Sds.Jobs
@@ -10,7 +11,8 @@ namespace SchedulerJobs.Sds.Jobs
         public ReconcileHearingAudioWithStorageJob(
             IHostApplicationLifetime lifetime,
             ILogger<ReconcileHearingAudioWithStorageJob> logger,
-            IServiceProvider serviceProvider) : base(lifetime, logger)
+            IServiceProvider serviceProvider,
+            IDistributedJobRunningStatusCache distributedJobRunningStatusCache) : base(lifetime, logger, distributedJobRunningStatusCache)
         {
             _logger = logger;
             _serviceProvider = serviceProvider;

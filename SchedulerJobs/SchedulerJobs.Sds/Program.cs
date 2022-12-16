@@ -13,6 +13,9 @@ using SchedulerJobs.Services.Configuration;
 using SchedulerJobs.Services.HttpClients;
 using SchedulerJobs.Services.Interfaces;
 using System.Diagnostics.CodeAnalysis;
+using SchedulerJobs.Common.Extensions;
+using SchedulerJobs.Sds.Configuration;
+using SchedulerJobs.Sds.Extensions;
 using UserApi.Client;
 using VH.Core.Configuration;
 using VideoApi.Client;
@@ -247,5 +250,9 @@ public static partial class Program
             });
 
         services.AddSingleton<IFeatureToggles>(featureToggle);
+        
+        var connectionStrings = new ConnectionStrings();
+        configuration.GetSection("ConnectionStrings").Bind(connectionStrings);
+        services.AddRedisInfrastructure(connectionStrings.RedisCache);
     }
 }

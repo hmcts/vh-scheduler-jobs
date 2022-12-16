@@ -1,3 +1,4 @@
+using SchedulerJobs.Sds.Caching;
 using SchedulerJobs.Services;
 
 namespace SchedulerJobs.Sds.Jobs
@@ -14,10 +15,13 @@ namespace SchedulerJobs.Sds.Jobs
         /// <param name="logger"></param>
         /// <param name="serviceProvider"></param>
         /// <param name="hearingAllocationService"></param>
+        /// <param name="distributedJobRunningStatusCache"></param>
+        /// <param name="redisContextAccessor"></param>
         public HearingsAllocationJob(
             IHostApplicationLifetime lifetime,
             ILogger<HearingsAllocationJob> logger,
-            IServiceProvider serviceProvider) : base(lifetime, logger)
+            IServiceProvider serviceProvider,
+            IDistributedJobRunningStatusCache distributedJobRunningStatusCache) : base(lifetime, logger, distributedJobRunningStatusCache)
         {
             _logger = logger;
             _serviceProvider = serviceProvider;
