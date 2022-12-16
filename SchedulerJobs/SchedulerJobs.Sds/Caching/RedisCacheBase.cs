@@ -1,6 +1,7 @@
 using System.Text;
 using Microsoft.Extensions.Caching.Distributed;
 using Newtonsoft.Json;
+
 namespace SchedulerJobs.Sds.Caching
 {
     public abstract class RedisCacheBase<TKey, TEntry>
@@ -23,7 +24,7 @@ namespace SchedulerJobs.Sds.Caching
             await _distributedCache.SetAsync(GetKey(key), data, CacheEntryOptions);
         }
 
-        public virtual async Task<TEntry> ReadFromCache(TKey key)
+        protected virtual async Task<TEntry?> ReadFromCache(TKey key)
         {
             try
             {
@@ -40,11 +41,11 @@ namespace SchedulerJobs.Sds.Caching
             }
         }
 
-        public virtual async Task RemoveFromCache(TKey key)
+        protected virtual async Task RemoveFromCache(TKey key)
         {
             await _distributedCache.RemoveAsync(GetKey(key));
         }
 
-        public abstract string GetKey(TKey key);
+        protected abstract string GetKey(TKey key);
     }
 }
