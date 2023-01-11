@@ -83,7 +83,7 @@ namespace SchedulerJobs.Services
                     results = peoples.Pagination.Results;
                     
                     var peopleResult = peoples.Results
-                        .Where(x => !string.IsNullOrEmpty(x.Id))
+                        .Where(x => !string.IsNullOrEmpty(x.PersonalCode))
                         .ToList();
                     if (peopleResult.Count == 0)
                     {
@@ -96,7 +96,7 @@ namespace SchedulerJobs.Services
                     await _bookingsApiClient.BulkJudiciaryPersonsStagingAsync(
                         peoples.Results.Select(JudiciaryPersonStagingRequestMapper.MapTo));
 
-                    var invalidPersonList = peoples.Results.Where(x => string.IsNullOrEmpty(x.Id)).ToList();
+                    var invalidPersonList = peoples.Results.Where(x => string.IsNullOrEmpty(x.PersonalCode)).ToList();
                     invalidPersonList.ForEach(x => invalidPeoplePersonalCode.Add(x.PersonalCode));
 
                     _logger.LogWarning(
