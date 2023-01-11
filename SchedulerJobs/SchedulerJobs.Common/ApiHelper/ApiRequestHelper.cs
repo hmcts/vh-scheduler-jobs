@@ -18,14 +18,14 @@ namespace SchedulerJobs.Common.ApiHelper
                 Formatting = Formatting.Indented
             });
         }
-        
-        public static string SerialiseRequestToCamelCaseJson(object request)
+
+        public static string SerialiseRequestToSnakeCaseJson(object request)
         {
             return JsonConvert.SerializeObject(request, new JsonSerializerSettings
             {
                 ContractResolver = new DefaultContractResolver
                 {
-                    NamingStrategy = new CamelCaseNamingStrategy()
+                    NamingStrategy = new SnakeCaseNamingStrategy()
                 },
                 Formatting = Formatting.Indented
             });
