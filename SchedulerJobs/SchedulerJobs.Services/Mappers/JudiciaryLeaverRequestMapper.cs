@@ -11,7 +11,8 @@ namespace SchedulerJobs.Services.Mappers
             {
                 Id = source.Id,
                 Leaver = source.Leaver,
-                LeftOn = source.LeftOn
+                LeftOn = source.LeftOn,
+                PersonalCode = source.PersonalCode
             };
         }
     }
