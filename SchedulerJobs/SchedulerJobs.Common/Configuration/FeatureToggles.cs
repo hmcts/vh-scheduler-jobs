@@ -9,6 +9,7 @@ namespace SchedulerJobs.Common.Configuration
         public bool BookAndConfirmToggle();
         public bool StorePeopleIngestion();
         public bool WorkAllocationToggle();
+        public bool ImportAllJudiciaryUsersToggle();
     }
     
     public class FeatureToggles : IFeatureToggles
@@ -19,6 +20,7 @@ namespace SchedulerJobs.Common.Configuration
         private const string BookAndConfirmToggleKey = "Book_and_Confirm";
         private const string StorePeopleIngestionToggleKey = "store-people-ingestion";
         private const string WorkAllocationToggleKey = "vho-work-allocation";
+        private const string ImportAllJudiciaryUsersToggleKey = "import-all-judiciary-users";
         
         public FeatureToggles(string sdkKey)
         {
@@ -31,5 +33,7 @@ namespace SchedulerJobs.Common.Configuration
         public bool StorePeopleIngestion() => _ldClient.BoolVariation(StorePeopleIngestionToggleKey, _user);
 
         public bool WorkAllocationToggle() => _ldClient.BoolVariation(WorkAllocationToggleKey, _user);
+
+        public bool ImportAllJudiciaryUsersToggle() => _ldClient.BoolVariation(ImportAllJudiciaryUsersToggleKey, _user);
     }
 }

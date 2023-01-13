@@ -24,9 +24,8 @@ namespace SchedulerJobs.Sds.Jobs
             using var scope = _serviceProvider.CreateScope();
             var jobHistoryService = scope.ServiceProvider.GetRequiredService<IJobHistoryService>();
             var eLinksService = scope.ServiceProvider.GetRequiredService<IELinksService>();
-            
-            var lastRun = await jobHistoryService.GetMostRecentSuccessfulRunDate(GetType().Name);
-            var updatedSince = lastRun ?? DateTime.UtcNow.AddDays(-1);
+
+            var updatedSince = await eLinksService.GetUpdatedSince();
             _logger.LogInformation("Started GetJudiciaryUsers job at: {Now} - param UpdatedSince: {UpdatedSince}",
                 DateTime.UtcNow, updatedSince.ToString("yyyy-MM-dd"));
 

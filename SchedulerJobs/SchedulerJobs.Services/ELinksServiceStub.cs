@@ -1,10 +1,8 @@
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using BookingsApi.Client;
-using BookingsApi.Contract.Requests;
 using Microsoft.Extensions.Logging;
 using SchedulerJobs.Common.Models;
 using SchedulerJobs.Services.Extensions;
@@ -48,6 +46,8 @@ namespace SchedulerJobs.Services
             _logger.LogInformation("No judiciary persons leaving: using stub");
             return Task.CompletedTask;
         }
+
+        public Task<DateTime> GetUpdatedSince() => Task.FromResult(DateTime.UtcNow.AddDays(-1));
 
         private List<JudiciaryPersonModel> RetrieveManualAccounts()
         {
