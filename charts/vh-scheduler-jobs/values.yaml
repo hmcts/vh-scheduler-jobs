@@ -7,13 +7,13 @@ crons:
   - cronJobName: vh-anonymise-hearings-and-conferences-job
     schedule: "30 5 * * *"
     concurrencyPolicy: Forbid
-    args: 
+    args:
     - AnonymiseHearingsConferencesAndDeleteAadUsersJob
 
   - cronJobName: vh-clear-conference-message-history-job
     schedule: "0 * * * *"
     concurrencyPolicy: Forbid
-    args: 
+    args:
     - ClearConferenceInstantMessageHistoryJob
 
   - cronJobName: vh-clear-hearings-job
@@ -27,7 +27,7 @@ crons:
     concurrencyPolicy: Forbid
     args:
     - DeleteAudioRecordingApplicationsJob
-    
+
   - cronJobName: vh-get-judiciary-users-job
     schedule: "0 2 * * *"
     concurrencyPolicy: Forbid
@@ -37,7 +37,7 @@ crons:
   - cronJobName: vh-reconcile-hearing-audio-with-storage-job
     schedule: "0 22 * * *"
     concurrencyPolicy: Forbid
-    args: 
+    args:
     - ReconcileHearingAudioWithStorageJob
 
   - cronJobName: vh-remove-heartbeats-for-conferences-job
@@ -51,7 +51,7 @@ crons:
     concurrencyPolicy: Forbid
     args:
     - SendHearingNotificationsJob
-      
+
   - cronJobName: vh-hearing-allocations-job
     schedule: "0 3 * * *"
     concurrencyPolicy: Forbid
@@ -98,8 +98,6 @@ keyVaults:
     secrets:
       - name: azuread--identifieruri
         alias: VhServices--BookingsApiResourceId
-      - name: azuread--identifieruri
-        alias: VhServices--BookingsApiUrl
   vh-video-api:
     excludeEnvironmentSuffix: false
     resourceGroup: vh-infra-core-{{ .Values.global.environment }}
@@ -107,8 +105,6 @@ keyVaults:
     secrets:
       - name: azuread--identifieruri
         alias: VhServices--VideoApiResourceId
-      - name: azuread--identifieruri
-        alias: VhServices--VideoApiUrl
   vh-notification-api:
     excludeEnvironmentSuffix: false
     resourceGroup: vh-infra-core-{{ .Values.global.environment }}
@@ -116,8 +112,6 @@ keyVaults:
     secrets:
       - name: azuread--identifieruri
         alias: VhServices--NotificationApiResourceId
-      - name: azuread--identifieruri
-        alias: VhServices--NotificationApiUrl
   vh-user-api:
     excludeEnvironmentSuffix: false
     resourceGroup: vh-infra-core-{{ .Values.global.environment }}
@@ -125,13 +119,15 @@ keyVaults:
     secrets:
       - name: azuread--identifieruri
         alias: VhServices--UserApiResourceId
-      - name: azuread--identifieruri
-        alias: VhServices--UserApiUrl
 environment:
   Logging__LogLevel__Default: debug
   Logging__LogLevel__System: debug
   Logging__LogLevel__Microsoft: debug
-  
+  VHSERVICES__BOOKINGSAPIURL: https://vh-bookings-api.{{ .Values.global.environment }}.platform.hmcts.net/
+  VHSERVICES__NOTIFICATIONAPIURL: https://vh-notification-api.{{ .Values.global.environment }}.platform.hmcts.net/
+  VHSERVICES__USERAPIURL: https://vh-user-api.{{ .Values.global.environment }}.platform.hmcts.net/
+  VHSERVICES__VIDEOAPIURL: https://vh-video-api.{{ .Values.global.environment }}.platform.hmcts.net/
+
 memoryRequests: '512Mi'
 cpuRequests: '25m'
 memoryLimits: '1024Mi'
