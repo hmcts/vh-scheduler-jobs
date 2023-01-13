@@ -29,8 +29,7 @@ namespace SchedulerJobs.Functions
         [FunctionName("GetJudiciaryUsersFunction")]
         public async Task RunAsync([TimerTrigger("0 0 2 * * *", RunOnStartup = true)] TimerInfo myTimer, ILogger log)
         {
-            var lastRun = await _jobHistoryService.GetMostRecentSuccessfulRunDate(GetType().Name);
-            var updatedSince = lastRun ?? DateTime.UtcNow.AddDays(-1);
+            var updatedSince = await _eLinksService.GetUpdatedSince();
             log.LogInformation("Started GetJudiciaryUsersFunction at: {Now} - param UpdatedSince: {UpdatedSince}",
             DateTime.UtcNow, updatedSince.ToString("yyyy-MM-dd"));
 
