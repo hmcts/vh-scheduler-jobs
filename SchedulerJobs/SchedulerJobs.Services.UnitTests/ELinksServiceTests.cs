@@ -26,7 +26,6 @@ namespace SchedulerJobs.Services.UnitTests
         private Mock<ILogger<ELinksService>> _logger;
         private Mock<IAzureStorageService> _service;
         private Mock<IFeatureToggles> _featureToggles;
-        private Mock<IOptions<ServicesConfiguration>> _servicesConfiguration;
         private Mock<IJobHistoryService> _jobHistoryService;
         private ELinksService _eLinksService;
 
@@ -45,11 +44,10 @@ namespace SchedulerJobs.Services.UnitTests
             _logger = new Mock<ILogger<ELinksService>>();
             _service = new Mock<IAzureStorageService>();
             _featureToggles = new Mock<IFeatureToggles>();
-            _servicesConfiguration = new Mock<IOptions<ServicesConfiguration>>();
             _jobHistoryService = new Mock<IJobHistoryService>();
 
             _eLinksService = new ELinksService(_peoplesClient.Object, _leaversClient.Object, _bookingsApiClient.Object,
-                _logger.Object, _service.Object, _featureToggles.Object, _servicesConfiguration.Object, _jobHistoryService.Object);
+                _logger.Object, _service.Object, _featureToggles.Object, _jobHistoryService.Object);
             
         }
 

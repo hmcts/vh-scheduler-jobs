@@ -5,7 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 using BookingsApi.Client;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using SchedulerJobs.Common.ApiHelper;
 using SchedulerJobs.Common.Configuration;
 using SchedulerJobs.Common.Models;
@@ -29,13 +28,11 @@ namespace SchedulerJobs.Services
         private readonly ILogger<ELinksService> _logger;
         private readonly IAzureStorageService _service;
         private readonly IFeatureToggles _featureToggles;
-        private readonly ServicesConfiguration _servicesConfiguration;
         private readonly IJobHistoryService _jobHistoryService;
 
         public ELinksService(IPeoplesClient peoplesClient, ILeaversClient leaversClient,
             IBookingsApiClient bookingsApiClient, ILogger<ELinksService> logger, IAzureStorageService service,
-            IFeatureToggles featureToggles, IOptions<ServicesConfiguration> servicesConfiguration,
-            IJobHistoryService jobHistoryService)
+            IFeatureToggles featureToggles, IJobHistoryService jobHistoryService)
         {
             _peoplesClient = peoplesClient;
             _leaversClient = leaversClient;
@@ -43,7 +40,6 @@ namespace SchedulerJobs.Services
             _logger = logger;
             _service = service;
             _featureToggles = featureToggles;
-            _servicesConfiguration = servicesConfiguration.Value;
             _jobHistoryService = jobHistoryService;
         }
 
@@ -187,12 +183,8 @@ namespace SchedulerJobs.Services
             _logger.LogInformation("ImportAllJudiciaryUsersToggle is {status}", importFlagStatus);
             
             if (_featureToggles.ImportAllJudiciaryUsersToggle())
-            {
-                _logger.LogInformation("ELinksApiGetPeopleUpdatedSinceDays: {days}", _servicesConfiguration?.ELinksApiGetPeopleUpdatedSinceDays);
-
                 return DateTime.Parse("0001-01-01");
-            }
-            
+
             var lastRun = await _jobHistoryService.GetMostRecentSuccessfulRunDate(GetType().Name);
             return lastRun ?? DateTime.UtcNow.AddDays(-1);
         }

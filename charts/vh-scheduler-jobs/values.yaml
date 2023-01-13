@@ -124,7 +124,6 @@ environment:
   Logging__LogLevel__System: debug
   Logging__LogLevel__Microsoft: debug
   VHSERVICES__BOOKINGSAPIURL: https://vh-bookings-api-pr-564.dev.platform.hmcts.net/
-  VHSERVICES__ELINKSAPIGETPEOPLEUPDATEDSINCEDAYS: 8000
   VHSERVICES__NOTIFICATIONAPIURL: https://vh-notification-api.{{ .Values.global.environment }}.platform.hmcts.net/
   VHSERVICES__USERAPIURL: https://vh-user-api.{{ .Values.global.environment }}.platform.hmcts.net/
   VHSERVICES__VIDEOAPIURL: https://vh-video-api.{{ .Values.global.environment }}.platform.hmcts.net/
