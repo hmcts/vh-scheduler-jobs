@@ -183,6 +183,9 @@ namespace SchedulerJobs.Services
         
         public async Task<DateTime> GetUpdatedSince()
         {
+            var importFlagStatus = _featureToggles.ImportAllJudiciaryUsersToggle();
+            _logger.LogInformation("ImportAllJudiciaryUsersToggle is {status}", importFlagStatus);
+            
             if (_featureToggles.ImportAllJudiciaryUsersToggle())
             {
                 var days = Math.Max(_servicesConfiguration?.ELinksApiGetPeopleUpdatedSinceDays ?? 1, 1);
