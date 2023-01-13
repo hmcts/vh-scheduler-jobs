@@ -14,9 +14,9 @@
       },
       "BookingsApi.Client": {
         "type": "Direct",
-        "requested": "[1.39.44, )",
-        "resolved": "1.39.44",
-        "contentHash": "BJC1KMAtmmzxqm3UITNCzuJMmDV+sZvrt9pc3eV09Z5g/kX3BtYJ4ZOkAD8p/pX2dwqcwGTqyy3fUPLlMxRAFA==",
+        "requested": "[1.41.9-pullrequest0564-0003, )",
+        "resolved": "1.41.9-pullrequest0564-0003",
+        "contentHash": "disW5dbcl/gme/doUTJKAHoktzZkMGx5i8RmjMHtxOSJ2Y1AZ8cjey5cGVw4hshbfnOjB+3ZHKVIDzK/vKxioA==",
         "dependencies": {
           "Microsoft.AspNetCore.Mvc.Core": "2.2.5"
         }
@@ -1702,19 +1702,19 @@
       "schedulerjobs.common": {
         "type": "Project",
         "dependencies": {
-          "LaunchDarkly.ServerSdk": "6.3.2",
-          "Microsoft.Extensions.Caching.Abstractions": "6.0.0",
-          "Microsoft.Extensions.Caching.Memory": "6.0.1",
-          "Microsoft.Extensions.Configuration.Abstractions": "6.0.0",
-          "Microsoft.Extensions.Configuration.Binder": "6.0.0",
-          "Microsoft.Extensions.Configuration.EnvironmentVariables": "6.0.1",
-          "Microsoft.Extensions.Configuration.Json": "6.0.0",
-          "Microsoft.Extensions.Configuration.UserSecrets": "6.0.1",
-          "Microsoft.Extensions.Options": "6.0.0",
-          "Microsoft.IdentityModel.Clients.ActiveDirectory": "5.2.9",
-          "Newtonsoft.Json": "13.0.1",
-          "System.Threading.Tasks.Extensions": "4.5.4",
-          "TimeZoneConverter": "6.0.1"
+          "LaunchDarkly.ServerSdk": "[6.3.2, )",
+          "Microsoft.Extensions.Caching.Abstractions": "[6.0.0, )",
+          "Microsoft.Extensions.Caching.Memory": "[6.0.1, )",
+          "Microsoft.Extensions.Configuration.Abstractions": "[6.0.0, )",
+          "Microsoft.Extensions.Configuration.Binder": "[6.0.0, )",
+          "Microsoft.Extensions.Configuration.EnvironmentVariables": "[6.0.1, )",
+          "Microsoft.Extensions.Configuration.Json": "[6.0.0, )",
+          "Microsoft.Extensions.Configuration.UserSecrets": "[6.0.1, )",
+          "Microsoft.Extensions.Options": "[6.0.0, )",
+          "Microsoft.IdentityModel.Clients.ActiveDirectory": "[5.2.9, )",
+          "Newtonsoft.Json": "[13.0.1, )",
+          "System.Threading.Tasks.Extensions": "[4.5.4, )",
+          "TimeZoneConverter": "[6.0.1, )"
         }
       }
     }
