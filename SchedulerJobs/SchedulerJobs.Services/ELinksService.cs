@@ -189,9 +189,8 @@ namespace SchedulerJobs.Services
             if (_featureToggles.ImportAllJudiciaryUsersToggle())
             {
                 _logger.LogInformation("ELinksApiGetPeopleUpdatedSinceDays: {days}", _servicesConfiguration?.ELinksApiGetPeopleUpdatedSinceDays);
-                
-                var days = Math.Max(_servicesConfiguration?.ELinksApiGetPeopleUpdatedSinceDays ?? 1, 1);
-                return DateTime.UtcNow.AddDays(-days);
+
+                return DateTime.Parse("0001-01-01");
             }
             
             var lastRun = await _jobHistoryService.GetMostRecentSuccessfulRunDate(GetType().Name);
