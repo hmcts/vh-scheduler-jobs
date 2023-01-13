@@ -46,6 +46,7 @@ namespace SchedulerJobs.Services.UnitTests
             _service = new Mock<IAzureStorageService>();
             _featureToggles = new Mock<IFeatureToggles>();
             _servicesConfiguration = new Mock<IOptions<ServicesConfiguration>>();
+            _jobHistoryService = new Mock<IJobHistoryService>();
 
             _eLinksService = new ELinksService(_peoplesClient.Object, _leaversClient.Object, _bookingsApiClient.Object,
                 _logger.Object, _service.Object, _featureToggles.Object, _servicesConfiguration.Object, _jobHistoryService.Object);
