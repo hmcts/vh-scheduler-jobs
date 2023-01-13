@@ -362,8 +362,8 @@ namespace SchedulerJobs.Services.UnitTests
 
             var judiciaryLeaverModels = new List<JudiciaryLeaverModel>
             {
-                new JudiciaryLeaverModel {Id = person1.Id.ToString(), Leaver = true},
-                new JudiciaryLeaverModel {Id = person2.Id.ToString(), Leaver = true}
+                new JudiciaryLeaverModel {Id = person1.Id.ToString(), Leaver = true, PersonalCode = person1.PersonalCode},
+                new JudiciaryLeaverModel {Id = person2.Id.ToString(), Leaver = true, PersonalCode = person2.PersonalCode}
             };
 
             var personPage1Response = new
@@ -428,7 +428,8 @@ namespace SchedulerJobs.Services.UnitTests
             _bookingsApiClient.Verify(x => x.BulkJudiciaryLeaversAsync(It.Is<IEnumerable<JudiciaryLeaverRequest>>
             (
                 x =>
-                    x.ElementAt(0).Id == person1.Id.ToString()
+                    x.ElementAt(0).PersonalCode == person1.PersonalCode &&
+                    x.ElementAt(1).PersonalCode == person2.PersonalCode
             )), Times.Exactly(1));
         }
 
@@ -442,7 +443,7 @@ namespace SchedulerJobs.Services.UnitTests
             };
             var judiciaryLeaverModels = new List<JudiciaryLeaverModel>
             {
-                new JudiciaryLeaverModel {Id = person1.Id.ToString(), Leaver = true, LeftOn = new DateTime().ToString()}
+                new JudiciaryLeaverModel {Id = person1.Id.ToString(), Leaver = true, LeftOn = new DateTime().ToString(), PersonalCode = "01"}
             };
             CommonTestSetUp();
             var peopleResponse = new PeopleResponse()
@@ -506,7 +507,7 @@ namespace SchedulerJobs.Services.UnitTests
                     Results = new List<JudiciaryLeaverModel>
                     {
                         new JudiciaryLeaverModel
-                            {Id = person1.Id.ToString(), Leaver = true, LeftOn = new DateTime().ToString()}
+                            {Id = person1.Id.ToString(), Leaver = true, LeftOn = new DateTime().ToString(), PersonalCode = "01"}
                     }
                 });
 
@@ -595,8 +596,8 @@ namespace SchedulerJobs.Services.UnitTests
 
             var judiciaryLeaverModels = new List<JudiciaryLeaverModel>
             {
-                new JudiciaryLeaverModel {Id = person1.Id.ToString(), Leaver = true},
-                new JudiciaryLeaverModel {Id = person2.Id.ToString(), Leaver = true}
+                new JudiciaryLeaverModel {Id = person1.Id.ToString(), Leaver = true, PersonalCode = "01"},
+                new JudiciaryLeaverModel {Id = person2.Id.ToString(), Leaver = true, PersonalCode = "02"}
             };
 
             var personPage1Response = new
@@ -690,7 +691,7 @@ namespace SchedulerJobs.Services.UnitTests
 
             var judiciaryLeaverModels = new List<JudiciaryLeaverModel>
             {
-                new JudiciaryLeaverModel {Id = person1.Id.ToString(), Leaver = true, LeftOn = new DateTime().ToString()}
+                new JudiciaryLeaverModel {Id = person1.Id.ToString(), Leaver = true, LeftOn = new DateTime().ToString(), PersonalCode = "01"}
             };
 
             var expectedPeopleResponse = new
