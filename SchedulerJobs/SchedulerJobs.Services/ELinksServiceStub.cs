@@ -90,7 +90,7 @@ namespace SchedulerJobs.Services
             return accounts;
         }
 
-        private JudiciaryPersonModel InitPersonModel(string prefix, int number, string id)
+        private static JudiciaryPersonModel InitPersonModel(string prefix, int number, string id)
         {
             var ticks = DateTime.UtcNow.Ticks.ToString();
             return new JudiciaryPersonModel
@@ -109,7 +109,7 @@ namespace SchedulerJobs.Services
             };
         }
         
-        private JudiciaryPersonModel InitLeaverPersonModel(string id)
+        private static JudiciaryPersonModel InitLeaverPersonModel(string id)
         {
             return new JudiciaryPersonModel
             {
@@ -120,7 +120,7 @@ namespace SchedulerJobs.Services
             };
         }
 
-        private List<string> GetManualIds()
+        private static List<string> GetManualIds()
         {
             return new List<string>
             {
@@ -138,7 +138,7 @@ namespace SchedulerJobs.Services
             };
         }
         
-        private List<string> GetLeaverIds()
+        private static List<string> GetLeaverIds()
         {
             return new List<string>
             {
@@ -148,7 +148,7 @@ namespace SchedulerJobs.Services
             };
         }
         
-        private List<string> GetAutomationIds()
+        private static List<string> GetAutomationIds()
         {
             return new List<string>
             {
