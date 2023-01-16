@@ -41,5 +41,12 @@ namespace SchedulerJobs.Services.UnitTests
                 .Verify(x=> 
                     x.BulkJudiciaryPersonsAsync(It.IsAny<IEnumerable<JudiciaryPersonRequest>>()), Times.Never);
         }
+
+        [Test]
+        public async Task should_return_default_value_for_updated_since()
+        {
+            var updatedSince = await _sut.GetUpdatedSince();
+            Assert.AreEqual(DateTime.UtcNow.AddDays(-1).Date, updatedSince.Date);
+        }
     }
 }
