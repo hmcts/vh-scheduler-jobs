@@ -53,7 +53,7 @@ namespace SchedulerJobs.Sds.UnitTests.Jobs
             
             var dateRangeStart = mockDate.AddMinutes(-1);
             var dateRangeEnd = mockDate.AddMinutes(1);
-            _jobHistoryService.Setup(x => x.GetMostRecentSuccessfulRunDate(It.IsAny<string>()))
+            _eLinksService.Setup(x => x.GetUpdatedSince())
                 .ReturnsAsync(mockDate);
             
             await _sut.DoWorkAsync();
@@ -67,7 +67,7 @@ namespace SchedulerJobs.Sds.UnitTests.Jobs
             
             var dateRangeStart = mockDate.AddMinutes(-1);
             var dateRangeEnd = mockDate.AddMinutes(1);
-            _jobHistoryService.Setup(x => x.GetMostRecentSuccessfulRunDate(It.IsAny<string>()))
+            _eLinksService.Setup(x => x.GetUpdatedSince())
                 .ReturnsAsync(mockDate);
 
             

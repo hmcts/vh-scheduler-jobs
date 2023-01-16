@@ -56,8 +56,8 @@ namespace SchedulerJobs.UnitTests.Functions
             
             var dateRangeStart = mockDate.AddMinutes(-1);
             var dateRangeEnd = mockDate.AddMinutes(1);
-            _mocker.Mock<IJobHistoryService>().Setup(x => x.GetMostRecentSuccessfulRunDate(It.IsAny<string>()))
-                                              .ReturnsAsync(mockDate);
+            _mocker.Mock<IELinksService>().Setup(x => x.GetUpdatedSince())
+                .ReturnsAsync(mockDate);
             
             await _sut.RunAsync(_timerInfo, _logger);
             _elinksService.Verify(x => x.ImportJudiciaryPeopleAsync(It.IsInRange(dateRangeStart, dateRangeEnd, Moq.Range.Inclusive)), Times.Once);
@@ -70,10 +70,9 @@ namespace SchedulerJobs.UnitTests.Functions
             
             var dateRangeStart = mockDate.AddMinutes(-1);
             var dateRangeEnd = mockDate.AddMinutes(1);
-            _mocker.Mock<IJobHistoryService>().Setup(x => x.GetMostRecentSuccessfulRunDate(It.IsAny<string>()))
+            _mocker.Mock<IELinksService>().Setup(x => x.GetUpdatedSince())
                 .ReturnsAsync(mockDate);
 
-            
             await _sut.RunAsync(_timerInfo, _logger);
             _elinksService.Verify(x => x.ImportLeaversJudiciaryPeopleAsync(It.IsInRange(dateRangeStart, dateRangeEnd, Moq.Range.Inclusive)), Times.Once);
         }
