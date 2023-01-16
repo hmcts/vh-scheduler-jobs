@@ -46,6 +46,7 @@ namespace SchedulerJobs.Services.UnitTests
             _service = new Mock<IAzureStorageService>();
             _featureToggles = new Mock<IFeatureToggles>();
             _servicesConfiguration = new Mock<IOptions<ServicesConfiguration>>();
+            _jobHistoryService = new Mock<IJobHistoryService>();
 
             _eLinksService = new ELinksService(_peoplesClient.Object, _leaversClient.Object, _bookingsApiClient.Object,
                 _logger.Object, _service.Object, _featureToggles.Object, _servicesConfiguration.Object, _jobHistoryService.Object);
@@ -666,6 +667,49 @@ namespace SchedulerJobs.Services.UnitTests
                 Times.Once);
             _bookingsApiClient.Verify(x => x.BulkJudiciaryLeaversAsync(It.IsAny<IEnumerable<JudiciaryLeaverRequest>>()),
                 Times.Once);
+        }
+
+        [Test]
+        public async Task GetUpdatedSince_With_ImportAllJudiciaryUsers_Toggled_On_Returns_Minimum_DateTime()
+        {
+            // Arrange
+            _featureToggles.Setup(x => x.ImportAllJudiciaryUsersToggle()).Returns(true);
+       
+            // Act
+            var updatedSince = await _eLinksService.GetUpdatedSince();
+
+            // Assert
+            Assert.AreEqual(DateTime.Parse("0001-01-01"), updatedSince);
+        }
+
+        [Test]
+        public async Task GetUpdatedSince_With_ImportAllJudiciaryUsers_Toggled_Off_And_Previous_Successful_Run_Returns_Previous_Successful_Run_DateTime()
+        {
+            // Arrange
+            _featureToggles.Setup(x => x.ImportAllJudiciaryUsersToggle()).Returns(false);
+            _jobHistoryService.Setup(x => x.GetMostRecentSuccessfulRunDate(It.IsAny<string>()))
+                .ReturnsAsync(DateTime.Parse("2022-01-01"));
+            
+            // Act
+            var updatedSince = await _eLinksService.GetUpdatedSince();
+            
+            // Assert
+            Assert.AreEqual(DateTime.Parse("2022-01-01"), updatedSince);
+        }
+        
+        [Test]
+        public async Task GetUpdatedSince_With_ImportAllJudiciaryUsers_Toggled_Off_And_Previous_Successful_Run_Returns_Yesterdays_DateTime()
+        {
+            // Arrange
+            _featureToggles.Setup(x => x.ImportAllJudiciaryUsersToggle()).Returns(false);
+            _jobHistoryService.Setup(x => x.GetMostRecentSuccessfulRunDate(It.IsAny<string>()))
+                .ReturnsAsync((DateTime?)null);
+            
+            // Act
+            var updatedSince = await _eLinksService.GetUpdatedSince();
+            
+            // Assert
+            Assert.AreEqual(DateTime.UtcNow.AddDays(-1).Date, updatedSince.Date);
         }
 
         private void CommonTestSetUp()

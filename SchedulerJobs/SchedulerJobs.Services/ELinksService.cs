@@ -184,11 +184,8 @@ namespace SchedulerJobs.Services
         public async Task<DateTime> GetUpdatedSince()
         {
             if (_featureToggles.ImportAllJudiciaryUsersToggle())
-            {
-                var days = Math.Max(_servicesConfiguration?.ELinksApiGetPeopleUpdatedSinceDays ?? 1, 1);
-                return DateTime.UtcNow.AddDays(-days);
-            }
-            
+                return DateTime.MinValue;
+
             var lastRun = await _jobHistoryService.GetMostRecentSuccessfulRunDate(GetType().Name);
             return lastRun ?? DateTime.UtcNow.AddDays(-1);
         }
