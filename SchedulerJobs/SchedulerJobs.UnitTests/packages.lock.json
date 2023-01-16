@@ -2359,7 +2359,7 @@
         "type": "Project",
         "dependencies": {
           "Azure.Storage.Blobs": "[12.13.1, )",
-          "BookingsApi.Client": "[1.41.9-pullrequest0564-0003, )",
+          "BookingsApi.Client": "[1.39.44, )",
           "Microsoft.ApplicationInsights.AspNetCore": "[2.21.0, )",
           "Microsoft.AspNetCore.Hosting": "[2.2.7, )",
           "Microsoft.Azure.Functions.Extensions": "[1.1.0, )",
