@@ -14,9 +14,9 @@
       },
       "BookingsApi.Client": {
         "type": "Direct",
-        "requested": "[1.39.44, )",
-        "resolved": "1.39.44",
-        "contentHash": "BJC1KMAtmmzxqm3UITNCzuJMmDV+sZvrt9pc3eV09Z5g/kX3BtYJ4ZOkAD8p/pX2dwqcwGTqyy3fUPLlMxRAFA==",
+        "requested": "[1.41.9-pullrequest0564-0003, )",
+        "resolved": "1.41.9-pullrequest0564-0003",
+        "contentHash": "disW5dbcl/gme/doUTJKAHoktzZkMGx5i8RmjMHtxOSJ2Y1AZ8cjey5cGVw4hshbfnOjB+3ZHKVIDzK/vKxioA==",
         "dependencies": {
           "Microsoft.AspNetCore.Mvc.Core": "2.2.5"
         }
