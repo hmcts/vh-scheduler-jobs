@@ -98,8 +98,6 @@ keyVaults:
     secrets:
       - name: azuread--identifieruri
         alias: VhServices--BookingsApiResourceId
-      - name: azuread--identifieruri
-        alias: VhServices--BookingsApiUrl
   vh-video-api:
     excludeEnvironmentSuffix: false
     resourceGroup: vh-infra-core-{{ .Values.global.environment }}
@@ -107,8 +105,6 @@ keyVaults:
     secrets:
       - name: azuread--identifieruri
         alias: VhServices--VideoApiResourceId
-      - name: azuread--identifieruri
-        alias: VhServices--VideoApiUrl
   vh-notification-api:
     excludeEnvironmentSuffix: false
     resourceGroup: vh-infra-core-{{ .Values.global.environment }}
@@ -116,8 +112,6 @@ keyVaults:
     secrets:
       - name: azuread--identifieruri
         alias: VhServices--NotificationApiResourceId
-      - name: azuread--identifieruri
-        alias: VhServices--NotificationApiUrl
   vh-user-api:
     excludeEnvironmentSuffix: false
     resourceGroup: vh-infra-core-{{ .Values.global.environment }}
@@ -125,12 +119,14 @@ keyVaults:
     secrets:
       - name: azuread--identifieruri
         alias: VhServices--UserApiResourceId
-      - name: azuread--identifieruri
-        alias: VhServices--UserApiUrl
 environment:
   Logging__LogLevel__Default: debug
   Logging__LogLevel__System: debug
   Logging__LogLevel__Microsoft: debug
+  VHSERVICES__BOOKINGSAPIURL: https://vh-bookings-api.{{ .Values.global.environment }}.platform.hmcts.net/
+  VHSERVICES__NOTIFICATIONAPIURL: https://vh-notification-api.{{ .Values.global.environment }}.platform.hmcts.net/
+  VHSERVICES__USERAPIURL: https://vh-user-api.{{ .Values.global.environment }}.platform.hmcts.net/
+  VHSERVICES__VIDEOAPIURL: https://vh-video-api.{{ .Values.global.environment }}.platform.hmcts.net/
   
 memoryRequests: '512Mi'
 cpuRequests: '25m'
