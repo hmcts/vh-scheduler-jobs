@@ -55,6 +55,3 @@ crons:
     concurrencyPolicy: Forbid
     args:
     - HearingsAllocationJob
-      
-environment: # TODO for testing only, do not merge
-  VHSERVICES__BOOKINGSAPIURL: https://vh-bookings-api-pr-564.dev.platform.hmcts.net
