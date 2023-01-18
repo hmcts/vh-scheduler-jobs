@@ -9,7 +9,7 @@
   </PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="BookingsApi.Client" Version="1.39.44" />
+		<PackageReference Include="BookingsApi.Client" Version="1.41.12" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="6.0.2" />
 		<PackageReference Include="NotificationApi.Client" Version="1.38.5" />
 		<PackageReference Include="System.Threading.Tasks.Extensions" Version="4.5.4" />

@@ -7,7 +7,7 @@ namespace SchedulerJobs.Services.Mappers
     {
         public static JudiciaryPersonRequest MapTo(JudiciaryPersonModel source)
         {
-            if (string.IsNullOrEmpty(source.Id))
+            if (string.IsNullOrEmpty(source.PersonalCode))
             {
                 return null;
             }

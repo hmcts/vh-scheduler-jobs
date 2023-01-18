@@ -9,6 +9,7 @@ using Microsoft.Extensions.Logging;
 using Moq;
 using Newtonsoft.Json;
 using NUnit.Framework;
+using SchedulerJobs.Common.ApiHelper;
 using SchedulerJobs.Common.Configuration;
 using SchedulerJobs.Common.Models;
 using SchedulerJobs.Services.HttpClients;
@@ -26,7 +27,12 @@ namespace SchedulerJobs.Services.UnitTests
         private Mock<IFeatureToggles> _featureToggles;
         private Mock<IJobHistoryService> _jobHistoryService;
         private ELinksService _eLinksService;
-        
+
+        private class ClientPerson
+        {
+            public Guid Id { get; set; }
+            public string PersonalCode { get; set; }
+        }
 
         [SetUp]
         public void Setup()
@@ -56,7 +62,7 @@ namespace SchedulerJobs.Services.UnitTests
                 Results = new List<JudiciaryPersonModel>()
             };
 
-            var clientResponse = JsonConvert.SerializeObject(expectedPeopleResponse);
+            var clientResponse = SerialiseClientResponse(expectedPeopleResponse);
 
             _peoplesClient.Setup(x => x.GetPeopleJsonAsync(It.IsAny<DateTime>(), It.IsAny<int>(), It.IsAny<int>()))
                 .ReturnsAsync(clientResponse);
@@ -81,7 +87,7 @@ namespace SchedulerJobs.Services.UnitTests
                 Results = new List<JudiciaryPersonModel>()
             };
             
-            var clientResponse = JsonConvert.SerializeObject(expectedPeopleResponse);
+            var clientResponse = SerialiseClientResponse(expectedPeopleResponse);
             
 
             _peoplesClient.Setup(x => x.GetPeopleJsonAsync(It.IsAny<DateTime>(), It.IsAny<int>(), It.IsAny<int>()))
@@ -110,7 +116,7 @@ namespace SchedulerJobs.Services.UnitTests
                 Results = new List<JudiciaryPersonModel>()
             };
 
-            var clientResponse = JsonConvert.SerializeObject(expectedPeopleResponse);
+            var clientResponse = SerialiseClientResponse(expectedPeopleResponse);
             _peoplesClient.Setup(x => x.GetPeopleJsonAsync(It.IsAny<DateTime>(), 2, It.IsAny<int>()))
                 .ReturnsAsync(clientResponse);
             
@@ -126,13 +132,13 @@ namespace SchedulerJobs.Services.UnitTests
         [Test]
         public async Task ImportJudiciaryPeopleAsync_Create_Combined_File()
         {
-            var person1 = Guid.NewGuid().ToString();
-            var person2 = Guid.NewGuid().ToString();
+            var person1 = "1234567";
+            var person2 = "2345678";
             var judiciaryPersonModels = new List<JudiciaryPersonModel>
               {
-                  new JudiciaryPersonModel {Id = person1, Email = "one"},
-                  new JudiciaryPersonModel {Id = person2, Email = "two"},
-                  new JudiciaryPersonModel {Id = null, Email = "three"}
+                  new JudiciaryPersonModel {PersonalCode = person1, Email = "one"},
+                  new JudiciaryPersonModel {PersonalCode = person2, Email = "two"},
+                  new JudiciaryPersonModel {PersonalCode = null, Email = "three"}
               };
             var expectedPeopleResponse = new PeopleResponse()
             {
@@ -144,7 +150,7 @@ namespace SchedulerJobs.Services.UnitTests
                 },
                 Results = judiciaryPersonModels
             };
-            var clientResponse = JsonConvert.SerializeObject(expectedPeopleResponse);
+            var clientResponse = SerialiseClientResponse(expectedPeopleResponse);
             
             _peoplesClient.Setup(x => x.GetPeopleJsonAsync(It.IsAny<DateTime>(), It.IsAny<int>(), It.IsAny<int>()))
                 .ReturnsAsync(clientResponse);
@@ -171,7 +177,7 @@ namespace SchedulerJobs.Services.UnitTests
                 },
                 Results = new List<JudiciaryPersonModel>()
             };
-            var clientResponse = JsonConvert.SerializeObject(expectedPeopleResponse);
+            var clientResponse = SerialiseClientResponse(expectedPeopleResponse);
 
             _peoplesClient.Setup(x => x.GetPeopleJsonAsync(It.IsAny<DateTime>(), It.IsAny<int>(), It.IsAny<int>()))
                 .ReturnsAsync(clientResponse);
@@ -192,14 +198,14 @@ namespace SchedulerJobs.Services.UnitTests
         [Test]
         public async Task ImportJudiciaryPeopleAsync_Adds_Invalid_Accounts()
         {
-            var person1 = Guid.NewGuid().ToString();
-            var person2 = Guid.NewGuid().ToString();
+            var person1 = "1234567";
+            var person2 = "2345678";
 
             var judiciaryPersonModels = new List<JudiciaryPersonModel>
             {
-                new JudiciaryPersonModel {Id = person1, Email = "one"},
-                new JudiciaryPersonModel {Id = person2, Email = "two"},
-                new JudiciaryPersonModel {Id = null, Email = "three"}
+                new JudiciaryPersonModel {PersonalCode = person1, Email = "one"},
+                new JudiciaryPersonModel {PersonalCode = person2, Email = "two"},
+                new JudiciaryPersonModel {PersonalCode = null, Email = "three"}
             };
 
 
@@ -219,8 +225,8 @@ namespace SchedulerJobs.Services.UnitTests
                 },
                 Results = new List<JudiciaryPersonModel>()
             };
-            var clientResponse1 = JsonConvert.SerializeObject(personPage1Response);
-            var clientResponse2 = JsonConvert.SerializeObject(personPage2Response);
+            var clientResponse1 = SerialiseClientResponse(personPage1Response);
+            var clientResponse2 = SerialiseClientResponse(personPage2Response);
 
             _peoplesClient.Setup(x => x.GetPeopleJsonAsync(It.IsAny<DateTime>(), 1, It.IsAny<int>()))
                 .ReturnsAsync(clientResponse1);
@@ -233,24 +239,24 @@ namespace SchedulerJobs.Services.UnitTests
                 It.Is<IEnumerable<JudiciaryPersonStagingRequest>>
                 (
                     x =>
-                        x.ElementAt(0).Id == person1 &&
-                        x.ElementAt(1).Id == person2 &&
-                        x.ElementAt(2).Id == null
+                        x.ElementAt(0).PersonalCode == person1 &&
+                        x.ElementAt(1).PersonalCode == person2 &&
+                        x.ElementAt(2).PersonalCode == null
                 )), Times.Exactly(1));
         }
 
         [Test]
         public async Task ImportJudiciaryPeopleAsync_Requests_To_Add_JudiciaryPersonStaging_Records()
         {
-            var person1 = Guid.NewGuid().ToString();
-            var person2 = Guid.NewGuid().ToString();
-            var person3 = Guid.NewGuid().ToString();
+            var person1 = "1234567";
+            var person2 = "2345678";
+            var person3 = "3456789";
 
             var judiciaryPersonModels = new List<JudiciaryPersonModel>
             {
-                new JudiciaryPersonModel {Id = person1, Email = "one"},
-                new JudiciaryPersonModel {Id = person2, Email = "two"},
-                new JudiciaryPersonModel {Id = person3, Email = "three"}
+                new JudiciaryPersonModel {PersonalCode = person1, Email = "one"},
+                new JudiciaryPersonModel {PersonalCode = person2, Email = "two"},
+                new JudiciaryPersonModel {PersonalCode = person3, Email = "three"}
             };
 
 
@@ -270,8 +276,8 @@ namespace SchedulerJobs.Services.UnitTests
                 },
                 Results = new List<JudiciaryPersonModel>()
             };
-            var clientResponse1 = JsonConvert.SerializeObject(personPage1Response);
-            var clientResponse2 = JsonConvert.SerializeObject(personPage2Response);
+            var clientResponse1 = SerialiseClientResponse(personPage1Response);
+            var clientResponse2 = SerialiseClientResponse(personPage2Response);
             
             
             _peoplesClient.Setup(x => x.GetPeopleJsonAsync(It.IsAny<DateTime>(), 1, It.IsAny<int>()))
@@ -285,9 +291,9 @@ namespace SchedulerJobs.Services.UnitTests
                 It.Is<IEnumerable<JudiciaryPersonStagingRequest>>
                 (
                     x =>
-                        x.ElementAt(0).Id == person1 &&
-                        x.ElementAt(1).Id == person2 &&
-                        x.ElementAt(2).Id == person3
+                        x.ElementAt(0).PersonalCode == person1 &&
+                        x.ElementAt(1).PersonalCode == person2 &&
+                        x.ElementAt(2).PersonalCode == person3
                 )), Times.Exactly(1));
         }
 
@@ -311,7 +317,7 @@ namespace SchedulerJobs.Services.UnitTests
                 Results = new List<JudiciaryLeaverModel>()
             };
             
-            var clientResponse = JsonConvert.SerializeObject(expectedPeopleResponse);
+            var clientResponse = SerialiseClientResponse(expectedPeopleResponse);
 
             _leaversClient.Setup(x => x.GetLeaversAsync(It.IsAny<DateTime>(), It.IsAny<int>(), It.IsAny<int>()))
                 .ReturnsAsync(expectedLeaverResponse);
@@ -333,21 +339,33 @@ namespace SchedulerJobs.Services.UnitTests
         [Test]
         public async Task Should_call_booking_api_client_with_one_page_of_results()
         {
-            var person1 = Guid.NewGuid().ToString();
-            var person2 = Guid.NewGuid().ToString();
-            var person3 = Guid.NewGuid().ToString();
+            var person1 = new ClientPerson
+            {
+                Id = Guid.NewGuid(),
+                PersonalCode = "1234567"
+            };
+            var person2 = new ClientPerson
+            {
+                Id = Guid.NewGuid(),
+                PersonalCode = "2345678"
+            };
+            var person3 = new ClientPerson
+            {
+                Id = Guid.NewGuid(),
+                PersonalCode = "3456789"
+            };
 
             var judiciaryPersonModels = new List<JudiciaryPersonModel>
             {
-                new JudiciaryPersonModel {Id = person1, Email = "one"},
-                new JudiciaryPersonModel {Id = person2, Email = "two"},
-                new JudiciaryPersonModel {Id = person3, Email = "three"}
+                new JudiciaryPersonModel {PersonalCode = person1.PersonalCode, Email = "one"},
+                new JudiciaryPersonModel {PersonalCode = person2.PersonalCode, Email = "two"},
+                new JudiciaryPersonModel {PersonalCode = person3.PersonalCode, Email = "three"}
             };
 
             var judiciaryLeaverModels = new List<JudiciaryLeaverModel>
             {
-                new JudiciaryLeaverModel {Id = person1, Leaver = true},
-                new JudiciaryLeaverModel {Id = person2, Leaver = true}
+                new JudiciaryLeaverModel {Id = person1.Id.ToString(), Leaver = true, PersonalCode = person1.PersonalCode},
+                new JudiciaryLeaverModel {Id = person2.Id.ToString(), Leaver = true, PersonalCode = person2.PersonalCode}
             };
 
             var personPage1Response = new
@@ -366,8 +384,8 @@ namespace SchedulerJobs.Services.UnitTests
                 },
                 results = new List<JudiciaryPersonModel>()
             };
-            var personPage1 = JsonConvert.SerializeObject(personPage1Response);
-            var personPage2 = JsonConvert.SerializeObject(personPage2Response);
+            var personPage1 = SerialiseClientResponse(personPage1Response);
+            var personPage2 = SerialiseClientResponse(personPage2Response);
             var leaverPage1Response = new LeaversResponse()
             {
                 Pagination = new Pagination
@@ -405,24 +423,29 @@ namespace SchedulerJobs.Services.UnitTests
             _bookingsApiClient.Verify(x => x.BulkJudiciaryPersonsAsync(It.Is<IEnumerable<JudiciaryPersonRequest>>
             (
                 x =>
-                    x.ElementAt(0).Id == person1 &&
-                    x.ElementAt(1).Id == person2 &&
-                    x.ElementAt(2).Id == person3
+                    x.ElementAt(0).PersonalCode == person1.PersonalCode &&
+                    x.ElementAt(1).PersonalCode == person2.PersonalCode &&
+                    x.ElementAt(2).PersonalCode == person3.PersonalCode
             )), Times.Exactly(1));
             _bookingsApiClient.Verify(x => x.BulkJudiciaryLeaversAsync(It.Is<IEnumerable<JudiciaryLeaverRequest>>
             (
                 x =>
-                    x.ElementAt(0).Id == person1
+                    x.ElementAt(0).PersonalCode == person1.PersonalCode &&
+                    x.ElementAt(1).PersonalCode == person2.PersonalCode
             )), Times.Exactly(1));
         }
 
         [Test]
         public async Task Should_call_booking_api_client_with_many_pages_of_leavers_results()
         {
-            var person1 = Guid.NewGuid().ToString();
+            var person1 = new ClientPerson
+            {
+                Id = Guid.NewGuid(),
+                PersonalCode = "1234567"
+            };
             var judiciaryLeaverModels = new List<JudiciaryLeaverModel>
             {
-                new JudiciaryLeaverModel {Id = person1, Leaver = true, LeftOn = new DateTime().ToString()}
+                new JudiciaryLeaverModel {Id = person1.Id.ToString(), Leaver = true, LeftOn = new DateTime().ToString(), PersonalCode = "01"}
             };
             CommonTestSetUp();
             var peopleResponse = new PeopleResponse()
@@ -433,10 +456,10 @@ namespace SchedulerJobs.Services.UnitTests
                 },
                 Results = new List<JudiciaryPersonModel>()
                 {
-                    new JudiciaryPersonModel {Id = person1, Email = "one"}
+                    new JudiciaryPersonModel {PersonalCode = person1.PersonalCode, Email = "one"}
                 }
             };
-            var clientResponse = JsonConvert.SerializeObject(peopleResponse);
+            var clientResponse = SerialiseClientResponse(peopleResponse);
 
             _leaversClient.Setup(x => x.GetLeaversAsync(It.IsAny<DateTime>(), 5, It.IsAny<int>()))
                 .ReturnsAsync(new LeaversResponse()
@@ -455,7 +478,11 @@ namespace SchedulerJobs.Services.UnitTests
         [Test]
         public async Task Should_call_booking_api_client_with_one_of_many_pages_of_leavers_results_has_exception()
         {
-            var person1 = Guid.NewGuid();
+            var person1 = new ClientPerson
+            {
+                Id = Guid.NewGuid(),
+                PersonalCode = "1234567"
+            };
             CommonTestSetUp();
             var personPage1Response = new PeopleResponse()
             {
@@ -465,10 +492,10 @@ namespace SchedulerJobs.Services.UnitTests
                 },
                 Results = new List<JudiciaryPersonModel>()
                 {
-                    new JudiciaryPersonModel {Id = Guid.NewGuid().ToString(), Email = "one"},
+                    new JudiciaryPersonModel {PersonalCode = person1.PersonalCode, Email = "one"},
                 }
             };
-            var clientResponse = JsonConvert.SerializeObject(personPage1Response);
+            var clientResponse = SerialiseClientResponse(personPage1Response);
             
             _leaversClient.Setup(x => x.GetLeaversAsync(It.IsAny<DateTime>(), 5, It.IsAny<int>())).ThrowsAsync(
                 new JsonSerializationException("Error converting value 1ad85664b - aab9 - 4a8d - 8e76 - 0affdcb5b90f"));
@@ -482,7 +509,7 @@ namespace SchedulerJobs.Services.UnitTests
                     Results = new List<JudiciaryLeaverModel>
                     {
                         new JudiciaryLeaverModel
-                            {Id = person1.ToString(), Leaver = true, LeftOn = new DateTime().ToString()}
+                            {Id = person1.Id.ToString(), Leaver = true, LeftOn = new DateTime().ToString(), PersonalCode = "01"}
                     }
                 });
 
@@ -501,10 +528,10 @@ namespace SchedulerJobs.Services.UnitTests
                 },
                 Results = new List<JudiciaryPersonModel>()
                 {
-                    new JudiciaryPersonModel {Id = Guid.NewGuid().ToString(), Email = "one"},
+                    new JudiciaryPersonModel {PersonalCode = "1234567", Email = "one"},
                 }
             };
-            var clientResponse = JsonConvert.SerializeObject(personPage1Response);
+            var clientResponse = SerialiseClientResponse(personPage1Response);
 
             _leaversClient.Setup(x => x.GetLeaversAsync(It.IsAny<DateTime>(), 5, It.IsAny<int>())).ReturnsAsync(
                 new LeaversResponse()
@@ -544,23 +571,35 @@ namespace SchedulerJobs.Services.UnitTests
         [Test]
         public async Task Should_call_booking_api_client_which_returns_some_error_responses()
         {
-            var person1 = Guid.NewGuid().ToString();
-            var person2 = Guid.NewGuid().ToString();
-            var person3 = Guid.NewGuid().ToString();
+            var person1 = new ClientPerson
+            {
+                Id = Guid.NewGuid(),
+                PersonalCode = "1234567"
+            };
+            var person2 = new
+            {
+                Id = Guid.NewGuid(),
+                PersonalCode = "2345678"
+            };
+            var person3 = new
+            {
+                Id = Guid.NewGuid(),
+                PersonalCode = "3456789"
+            };
 
             var judiciaryPersonModels = new List<JudiciaryPersonModel>
             {
-                new JudiciaryPersonModel {Id = person1, Email = "one"},
-                new JudiciaryPersonModel {Id = person2, Email = "two"},
-                new JudiciaryPersonModel {Id = person3, Email = "three"}
+                new JudiciaryPersonModel {PersonalCode = person1.PersonalCode, Email = "one"},
+                new JudiciaryPersonModel {PersonalCode = person2.PersonalCode, Email = "two"},
+                new JudiciaryPersonModel {PersonalCode = person3.PersonalCode, Email = "three"}
             };
             
             
 
             var judiciaryLeaverModels = new List<JudiciaryLeaverModel>
             {
-                new JudiciaryLeaverModel {Id = person1, Leaver = true},
-                new JudiciaryLeaverModel {Id = person2, Leaver = true}
+                new JudiciaryLeaverModel {Id = person1.Id.ToString(), Leaver = true, PersonalCode = "01"},
+                new JudiciaryLeaverModel {Id = person2.Id.ToString(), Leaver = true, PersonalCode = "02"}
             };
 
             var personPage1Response = new
@@ -580,8 +619,8 @@ namespace SchedulerJobs.Services.UnitTests
                 results = new List<JudiciaryPersonModel>()
             };
             
-            var clientResponse1 = JsonConvert.SerializeObject(personPage1Response);
-            var clientResponse2 = JsonConvert.SerializeObject(personPage2Response);
+            var clientResponse1 = SerialiseClientResponse(personPage1Response);
+            var clientResponse2 = SerialiseClientResponse(personPage2Response);
             var leaverPage1Response = new LeaversResponse()
             {
                 Pagination = new Pagination
@@ -672,20 +711,32 @@ namespace SchedulerJobs.Services.UnitTests
 
         private void CommonTestSetUp()
         {
-            var person1 = Guid.NewGuid().ToString();
-            var person2 = Guid.NewGuid().ToString();
-            var person3 = Guid.NewGuid().ToString();
+            var person1 = new ClientPerson
+            {
+                Id = Guid.NewGuid(),
+                PersonalCode = "1234567"
+            };
+            var person2 = new ClientPerson
+            {
+                Id = Guid.NewGuid(),
+                PersonalCode = "2345678"
+            };
+            var person3 = new ClientPerson
+            {
+                Id = Guid.NewGuid(),
+                PersonalCode = "3456789"
+            };
 
             var judiciaryPersonModels = new List<JudiciaryPersonModel>
             {
-                new JudiciaryPersonModel {Id = person1, Email = "one"},
-                new JudiciaryPersonModel {Id = person2, Email = "two"},
-                new JudiciaryPersonModel {Id = person3, Email = "three"}
+                new JudiciaryPersonModel {PersonalCode = person1.PersonalCode, Email = "one"},
+                new JudiciaryPersonModel {PersonalCode = person2.PersonalCode, Email = "two"},
+                new JudiciaryPersonModel {PersonalCode = person3.PersonalCode, Email = "three"}
             };
 
             var judiciaryLeaverModels = new List<JudiciaryLeaverModel>
             {
-                new JudiciaryLeaverModel {Id = person1, Leaver = true, LeftOn = new DateTime().ToString()}
+                new JudiciaryLeaverModel {Id = person1.Id.ToString(), Leaver = true, LeftOn = new DateTime().ToString(), PersonalCode = "01"}
             };
 
             var expectedPeopleResponse = new
@@ -696,7 +747,7 @@ namespace SchedulerJobs.Services.UnitTests
                 },
                 results = judiciaryPersonModels
             };
-            var clientResponse1 = JsonConvert.SerializeObject(expectedPeopleResponse);
+            var clientResponse1 = SerialiseClientResponse(expectedPeopleResponse);
 
             var clientNoMorePage = new
             {
@@ -707,7 +758,7 @@ namespace SchedulerJobs.Services.UnitTests
                 results = new List<JudiciaryPersonModel>()
             };
             
-            var clientResponse2 = JsonConvert.SerializeObject(clientNoMorePage);
+            var clientResponse2 = SerialiseClientResponse(clientNoMorePage);
             
             var expectedLeaverResponse = new LeaversResponse()
             {
@@ -757,5 +808,7 @@ namespace SchedulerJobs.Services.UnitTests
             _bookingsApiClient.Verify(x => x.BulkJudiciaryLeaversAsync(It.IsAny<IEnumerable<JudiciaryLeaverRequest>>()),
                 Times.Exactly(leaverTimes));
         }
+
+        private static string SerialiseClientResponse(object response) => ApiRequestHelper.SerialiseRequestToSnakeCaseJson(response);
     }
 }
