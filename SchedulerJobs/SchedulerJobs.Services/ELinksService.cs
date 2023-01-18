@@ -131,7 +131,7 @@ namespace SchedulerJobs.Services
             }
             _logger.LogInformation("Number of pagination results: {Results}", results);
             _logger.LogWarning(
-                $"ImportJudiciaryPeople: List of Personal code which are failed to insert '{string.Join(",", invalidPeoplePersonalCode)}'");
+                "ImportJudiciaryPeople: List of Personal code which are failed to insert '{invalidPeople}'", string.Join(",", invalidPeoplePersonalCode));
         }
 
         public async Task ImportLeaversJudiciaryPeopleAsync(DateTime fromDate)
@@ -158,9 +158,9 @@ namespace SchedulerJobs.Services
 
                     var invalidCount = leavers.Results.Count(x => string.IsNullOrEmpty(x.Id));
                     _logger.LogWarning(
-                        $"ImportJudiciaryLeavers: No of leavers who are invalid '{invalidCount}' in page '{currentPage}'.");
+                        "ImportJudiciaryLeavers: No of leavers who are invalid '{invalidCount}' in page '{currentPage}'.", invalidCount, currentPage);
                     _logger.LogInformation(
-                        $"ImportJudiciaryLeavers: Calling bookings API with '{leaversResult.Count}' leavers");
+                        "ImportJudiciaryLeavers: Calling bookings API with '{leaversResultCount}' leavers", leaversResult.Count);
 
                     var response =
                         await _bookingsApiClient.BulkJudiciaryLeaversAsync(
@@ -170,7 +170,7 @@ namespace SchedulerJobs.Services
                 }
                 catch (Exception ex)
                 {
-                    _logger.LogError(ex, $"There was a problem importing judiciary leavers in page: '{currentPage}'");
+                    _logger.LogError(ex, "There was a problem importing judiciary leavers in page: '{currentPage}'", currentPage);
                 }
                 currentPage++;
                 
