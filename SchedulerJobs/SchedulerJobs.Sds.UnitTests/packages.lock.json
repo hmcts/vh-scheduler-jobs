@@ -167,8 +167,8 @@
       },
       "BookingsApi.Client": {
         "type": "Transitive",
-        "resolved": "1.41.12",
-        "contentHash": "rPv6xTozqWMcamplq4D9C0tL93ml+BA/8STPK9MFQMtYtqHfEMMw9nci98Yc3eWkc2XiIdyBWrae0sQSmRs66Q==",
+        "resolved": "1.41.21",
+        "contentHash": "sSB8jkB8Aw88S/qcEDdWphud2PuS83zMoVfHWMfUEZkkASlpF5aZ7+GPjwTwztVpkdG6G3t2WrVrrV+T/hrwsw==",
         "dependencies": {
           "Microsoft.AspNetCore.Mvc.Core": "2.2.5"
         }
@@ -1021,8 +1021,8 @@
       },
       "NotificationApi.Client": {
         "type": "Transitive",
-        "resolved": "1.38.5",
-        "contentHash": "iE8jdjskD9o/Y5ygDGkoCqECPvI2wA1MyhzndMvLLra8EVuw/OIKD4nGK0Xw/nol6yRD5FSoiAWlpeZ0WEe61g==",
+        "resolved": "1.41.9",
+        "contentHash": "O+vKF9438qyEw+KPXUHvjwDj+FpNs85GoyeyaAcdQZYWjWb6nfzg2MzW72BwLKn7MrdOJCK/OpDpXxPJ7UNlrg==",
         "dependencies": {
           "Microsoft.AspNetCore.Mvc.Core": "2.2.5",
           "Newtonsoft.Json": "13.0.1"
@@ -2258,11 +2258,10 @@
       },
       "UserApi.Client": {
         "type": "Transitive",
-        "resolved": "1.39.3",
-        "contentHash": "vxB/0JdVWJMAvdKP3dN0qD8bmzrS20fC0OJPWea+oFbHa5NIoLwC63MX/zd6Lo09Hw4nwUGNYSKKoE56do7s9w==",
+        "resolved": "1.41.8",
+        "contentHash": "06UBmrztqDI8Gtmh0ToEbvCkc13q/rtxj4QiSNTfGLDYqfq30v/t4JbDqG87WAcO/NChOx2gvTrboR/Ww1W46A==",
         "dependencies": {
-          "Microsoft.AspNetCore.Mvc.Core": "2.2.5",
-          "Newtonsoft.Json": "12.0.3"
+          "Microsoft.AspNetCore.Mvc.Core": "2.2.5"
         }
       },
       "VH.Core.Configuration": {
@@ -2279,11 +2278,10 @@
       },
       "VideoApi.Client": {
         "type": "Transitive",
-        "resolved": "1.38.9",
-        "contentHash": "M5LSaF1jRvbZwcKd0fPYpQ1hvuYos6XwGe/M0Cm8pHI7R6ZSkyYGS50HpdWtBiJmvWZrcW6c8/vfMwf+NwnlMQ==",
+        "resolved": "1.41.17",
+        "contentHash": "Kgm8amVoss6RFWeJ++qqf31Hc2st3Z6Pyaz416ub9P1qMlYq+k5ErglFCyVRgMgUV+F/ARFoFxybwpwg2JLE2w==",
         "dependencies": {
-          "Microsoft.AspNetCore.Mvc.Core": "2.2.5",
-          "Newtonsoft.Json": "12.0.3"
+          "Microsoft.AspNetCore.Mvc.Core": "2.2.5"
         }
       },
       "schedulerjobs.common": {
@@ -2321,14 +2319,14 @@
         "type": "Project",
         "dependencies": {
           "Azure.Storage.Blobs": "[12.13.1, )",
-          "BookingsApi.Client": "[1.41.12, )",
+          "BookingsApi.Client": "[1.41.21, )",
           "Microsoft.Extensions.Logging.Abstractions": "[6.0.2, )",
           "Newtonsoft.Json": "[13.0.1, )",
-          "NotificationApi.Client": "[1.38.5, )",
+          "NotificationApi.Client": "[1.41.9, )",
           "SchedulerJobs.Common": "[1.0.0, )",
           "System.Threading.Tasks.Extensions": "[4.5.4, )",
-          "UserApi.Client": "[1.39.3, )",
-          "VideoApi.Client": "[1.38.9, )"
+          "UserApi.Client": "[1.41.8, )",
+          "VideoApi.Client": "[1.41.17, )"
         }
       },
       "testing.common": {
