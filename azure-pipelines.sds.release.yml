@@ -16,8 +16,7 @@ parameters:
 - name: environment
   type: object
   default:
-  - Dev
-  - Staging
+  - Demo
   - Prod
 
 pool: 
@@ -49,8 +48,6 @@ stages:
     variables:
       - ${{ if contains(variables['Build.SourceBranch'], 'refs/heads/release') }}:
         - template: variables/production.yaml
-      - ${{ else }}:
-        - template: variables/staging.yaml
       - template: variables/shared.yaml
     jobs:
       - job: Docker_Build
@@ -91,8 +88,6 @@ stages:
     variables:
       - ${{ if contains(variables['Build.SourceBranch'], 'refs/heads/release') }}:
         - template: variables/production.yaml
-      - ${{ else }}:
-        - template: variables/staging.yaml
         
       - template: variables/shared.yaml
       - group: vh-github-app-credentials
