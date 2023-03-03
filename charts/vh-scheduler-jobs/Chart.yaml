@@ -8,5 +8,8 @@ maintainers:
   - name: VH Devops
 dependencies:
   - name: library
-    version: 1.1.1
+    version: 2.0.9
+    repository: https://hmctspublic.azurecr.io/helm/v1/repo/
+  - name: job
+    version: 0.7.11
     repository: https://hmctspublic.azurecr.io/helm/v1/repo/
