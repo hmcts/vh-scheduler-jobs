@@ -10,6 +10,3 @@ dependencies:
   - name: library
     version: 2.0.9
     repository: https://hmctspublic.azurecr.io/helm/v1/repo/
-  - name: job
-    version: 0.7.11
-    repository: https://hmctspublic.azurecr.io/helm/v1/repo/
