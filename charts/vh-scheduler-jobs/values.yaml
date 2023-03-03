@@ -1,141 +1,142 @@
-aadIdentityName: vh-aad-identity
-backoffLimit: 0
-image: 'sdshmctspublic.azurecr.io/vh/scheduler-jobs-sds:latest'
-kind: CronJob
-releaseNameOverride: vh-scheduler-jobs
-crons:
-  - cronJobName: vh-anonymise-hearings-and-conferences-job
-    schedule: "30 5 * * *"
-    concurrencyPolicy: Forbid
-    args: 
-    - AnonymiseHearingsConferencesAndDeleteAadUsersJob
+job:
+  aadIdentityName: vh-aad-identity
+  backoffLimit: 0
+  image: 'sdshmctspublic.azurecr.io/vh/scheduler-jobs-sds:latest'
+  kind: CronJob
+  releaseNameOverride: vh-scheduler-jobs
+  crons:
+    - cronJobName: vh-anonymise-hearings-and-conferences-job
+      schedule: "30 5 * * *"
+      concurrencyPolicy: Forbid
+      args: 
+      - AnonymiseHearingsConferencesAndDeleteAadUsersJob
 
-  - cronJobName: vh-clear-conference-message-history-job
-    schedule: "0 * * * *"
-    concurrencyPolicy: Forbid
-    args: 
-    - ClearConferenceInstantMessageHistoryJob
+    - cronJobName: vh-clear-conference-message-history-job
+      schedule: "0 * * * *"
+      concurrencyPolicy: Forbid
+      args: 
+      - ClearConferenceInstantMessageHistoryJob
 
-  - cronJobName: vh-clear-hearings-job
-    schedule: "0 23 * * *"
-    concurrencyPolicy: Forbid
-    args:
-    - ClearHearingsJob
+    - cronJobName: vh-clear-hearings-job
+      schedule: "0 23 * * *"
+      concurrencyPolicy: Forbid
+      args:
+      - ClearHearingsJob
 
-  - cronJobName: vh-delete-audio-recording-applications-job
-    schedule: "0 22 * * *"
-    concurrencyPolicy: Forbid
-    args:
-    - DeleteAudioRecordingApplicationsJob
-    
-  - cronJobName: vh-get-judiciary-users-job
-    schedule: "0 2 * * *"
-    concurrencyPolicy: Forbid
-    args:
-    - GetJudiciaryUsersJob
-
-  - cronJobName: vh-reconcile-hearing-audio-with-storage-job
-    schedule: "0 22 * * *"
-    concurrencyPolicy: Forbid
-    args: 
-    - ReconcileHearingAudioWithStorageJob
-
-  - cronJobName: vh-remove-heartbeats-for-conferences-job
-    schedule: "40 5 * * *"
-    concurrencyPolicy: Forbid
-    args:
-    - RemoveHeartbeatsForConferencesJob
-
-  - cronJobName: vh-send-hearing-notifications-job
-    schedule: "0 10 * * *"
-    concurrencyPolicy: Forbid
-    args:
-    - SendHearingNotificationsJob
+    - cronJobName: vh-delete-audio-recording-applications-job
+      schedule: "0 22 * * *"
+      concurrencyPolicy: Forbid
+      args:
+      - DeleteAudioRecordingApplicationsJob
       
-  - cronJobName: vh-hearing-allocations-job
-    schedule: "0 3 * * *"
-    concurrencyPolicy: Forbid
-    args:
-    - HearingsAllocationJob
+    - cronJobName: vh-get-judiciary-users-job
+      schedule: "0 2 * * *"
+      concurrencyPolicy: Forbid
+      args:
+      - GetJudiciaryUsersJob
 
-keyVaults:
-  vh-infra-core:
-    excludeEnvironmentSuffix: false
-    resourceGroup: vh-infra-core-{{ .Values.global.environment }}
-    usePodIdentity: true
-    secrets:
-      - applicationinsights--instrumentationkey
-      - azuread--tenantid
-      - name: azuread--appinsightskey
-        alias: AppInsightsKey
-      - name: storage-account-key
-        alias: AzureConfiguration--StorageAccountKey
-      - name: storage-account-name
-        alias: AzureConfiguration--StorageAccountName
-      - name: storage-account-endpoint
-        alias: AzureConfiguration--StorageEndpoint
-      - name: storage-account-container-elinks-name
-        alias: AzureConfiguration--StorageContainerName
-      - connectionstrings--rediscache
-  vh-scheduler-jobs:
-    excludeEnvironmentSuffix: false
-    resourceGroup: vh-infra-core-{{ .Values.global.environment }}
-    usePodIdentity: true
-    secrets:
-      - azuread--clientsecret
-      - azuread--clientid
-      - azuread--identifieruri
-      - VhServices--ELinksLeaversBaseUrl
-      - VhServices--ELinksPeoplesBaseUrl
-      - VhServices--ELinksApiKey
-      - VhServices--ELinksApiUrl
-      - name: FeatureToggles--SDK-Key
-        alias: FeatureToggles--SdkKey
-  vh-bookings-api:
-    excludeEnvironmentSuffix: false
-    resourceGroup: vh-infra-core-{{ .Values.global.environment }}
-    usePodIdentity: true
-    secrets:
-      - name: azuread--identifieruri
-        alias: VhServices--BookingsApiResourceId
-  vh-video-api:
-    excludeEnvironmentSuffix: false
-    resourceGroup: vh-infra-core-{{ .Values.global.environment }}
-    usePodIdentity: true
-    secrets:
-      - name: azuread--identifieruri
-        alias: VhServices--VideoApiResourceId
-  vh-notification-api:
-    excludeEnvironmentSuffix: false
-    resourceGroup: vh-infra-core-{{ .Values.global.environment }}
-    usePodIdentity: true
-    secrets:
-      - name: azuread--identifieruri
-        alias: VhServices--NotificationApiResourceId
-  vh-user-api:
-    excludeEnvironmentSuffix: false
-    resourceGroup: vh-infra-core-{{ .Values.global.environment }}
-    usePodIdentity: true
-    secrets:
-      - name: azuread--identifieruri
-        alias: VhServices--UserApiResourceId
-environment:
-  Logging__LogLevel__Default: debug
-  Logging__LogLevel__System: debug
-  Logging__LogLevel__Microsoft: debug
-  VHSERVICES__BOOKINGSAPIURL: https://vh-bookings-api.{{ .Values.global.environment }}.platform.hmcts.net/
-  VHSERVICES__NOTIFICATIONAPIURL: https://vh-notification-api.{{ .Values.global.environment }}.platform.hmcts.net/
-  VHSERVICES__USERAPIURL: https://vh-user-api.{{ .Values.global.environment }}.platform.hmcts.net/
-  VHSERVICES__VIDEOAPIURL: https://vh-video-api.{{ .Values.global.environment }}.platform.hmcts.net/
-  
-memoryRequests: '512Mi'
-cpuRequests: '25m'
-memoryLimits: '1024Mi'
-cpuLimits: '2500m'
-devmemoryRequests: '512Mi'
-devcpuRequests: '25m'
-devmemoryLimits: '1024Mi'
-devcpuLimits: '2500m'
-restartPolicy: Never
+    - cronJobName: vh-reconcile-hearing-audio-with-storage-job
+      schedule: "0 22 * * *"
+      concurrencyPolicy: Forbid
+      args: 
+      - ReconcileHearingAudioWithStorageJob
 
-dnsConfig: {} # required due to prevent nil pointer when evaluating expression in chart-library.
+    - cronJobName: vh-remove-heartbeats-for-conferences-job
+      schedule: "40 5 * * *"
+      concurrencyPolicy: Forbid
+      args:
+      - RemoveHeartbeatsForConferencesJob
+
+    - cronJobName: vh-send-hearing-notifications-job
+      schedule: "0 10 * * *"
+      concurrencyPolicy: Forbid
+      args:
+      - SendHearingNotificationsJob
+        
+    - cronJobName: vh-hearing-allocations-job
+      schedule: "0 3 * * *"
+      concurrencyPolicy: Forbid
+      args:
+      - HearingsAllocationJob
+
+  keyVaults:
+    vh-infra-core:
+      excludeEnvironmentSuffix: false
+      resourceGroup: vh-infra-core-{{ .Values.global.environment }}
+      usePodIdentity: true
+      secrets:
+        - applicationinsights--instrumentationkey
+        - azuread--tenantid
+        - name: azuread--appinsightskey
+          alias: AppInsightsKey
+        - name: storage-account-key
+          alias: AzureConfiguration--StorageAccountKey
+        - name: storage-account-name
+          alias: AzureConfiguration--StorageAccountName
+        - name: storage-account-endpoint
+          alias: AzureConfiguration--StorageEndpoint
+        - name: storage-account-container-elinks-name
+          alias: AzureConfiguration--StorageContainerName
+        - connectionstrings--rediscache
+    vh-scheduler-jobs:
+      excludeEnvironmentSuffix: false
+      resourceGroup: vh-infra-core-{{ .Values.global.environment }}
+      usePodIdentity: true
+      secrets:
+        - azuread--clientsecret
+        - azuread--clientid
+        - azuread--identifieruri
+        - VhServices--ELinksLeaversBaseUrl
+        - VhServices--ELinksPeoplesBaseUrl
+        - VhServices--ELinksApiKey
+        - VhServices--ELinksApiUrl
+        - name: FeatureToggles--SDK-Key
+          alias: FeatureToggles--SdkKey
+    vh-bookings-api:
+      excludeEnvironmentSuffix: false
+      resourceGroup: vh-infra-core-{{ .Values.global.environment }}
+      usePodIdentity: true
+      secrets:
+        - name: azuread--identifieruri
+          alias: VhServices--BookingsApiResourceId
+    vh-video-api:
+      excludeEnvironmentSuffix: false
+      resourceGroup: vh-infra-core-{{ .Values.global.environment }}
+      usePodIdentity: true
+      secrets:
+        - name: azuread--identifieruri
+          alias: VhServices--VideoApiResourceId
+    vh-notification-api:
+      excludeEnvironmentSuffix: false
+      resourceGroup: vh-infra-core-{{ .Values.global.environment }}
+      usePodIdentity: true
+      secrets:
+        - name: azuread--identifieruri
+          alias: VhServices--NotificationApiResourceId
+    vh-user-api:
+      excludeEnvironmentSuffix: false
+      resourceGroup: vh-infra-core-{{ .Values.global.environment }}
+      usePodIdentity: true
+      secrets:
+        - name: azuread--identifieruri
+          alias: VhServices--UserApiResourceId
+  environment:
+    Logging__LogLevel__Default: debug
+    Logging__LogLevel__System: debug
+    Logging__LogLevel__Microsoft: debug
+    VHSERVICES__BOOKINGSAPIURL: https://vh-bookings-api.{{ .Values.global.environment }}.platform.hmcts.net/
+    VHSERVICES__NOTIFICATIONAPIURL: https://vh-notification-api.{{ .Values.global.environment }}.platform.hmcts.net/
+    VHSERVICES__USERAPIURL: https://vh-user-api.{{ .Values.global.environment }}.platform.hmcts.net/
+    VHSERVICES__VIDEOAPIURL: https://vh-video-api.{{ .Values.global.environment }}.platform.hmcts.net/
+    
+  memoryRequests: '512Mi'
+  cpuRequests: '25m'
+  memoryLimits: '1024Mi'
+  cpuLimits: '2500m'
+  devmemoryRequests: '512Mi'
+  devcpuRequests: '25m'
+  devmemoryLimits: '1024Mi'
+  devcpuLimits: '2500m'
+  restartPolicy: Never
+
+  dnsConfig: {} # required due to prevent nil pointer when evaluating expression in chart-library.
