@@ -135,8 +135,8 @@ stages:
           - "${{ variables.releaseTagName }}"
           - "latest"
 
-#########################################
-# Push Helm Charts to Repo. #############
+##########################################
+# Push Helm Charts to Repo. ##############
 - stage: Helm_Prod
   displayName: Push Helm Charts
   dependsOn: 
