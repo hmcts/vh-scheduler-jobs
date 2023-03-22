@@ -8,7 +8,7 @@ There are 2 versions of the Scheduler Jobs, each in a different project:
 
 ## SchedulerJobs
 
-#### Run
+#### Runn
 To run Sheduler-jobs function:
 AzureServiceTokenProvider will use the developer's security context to get a token to authenticate to Key Vault. This removes the need to create a service principal, and share it with the development team. It also prevents credentials from being checked in to source code. AzureServiceTokenProvider will use Azure CLI or Active Directory Integrated Authentication to authenticate to Azure AD to get a token. That token will be used to fetch the secret from Azure Key Vault.
 
