@@ -11,7 +11,7 @@ resources:
 trigger: none
 
 pr:
-  - master
+- master
 
 variables:
   - group: vh-github-app-credentials
