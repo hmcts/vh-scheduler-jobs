@@ -62,3 +62,6 @@ variables:
 
   - name: vhKeyVault
     value: vh-infra-core-${{ parameters.env }}
+
+  - name: app_path
+    value: SchedulerJobs
