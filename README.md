@@ -122,3 +122,5 @@ Job failures can also be viewed by using the customDimensions.FormattedMessage:
 exceptions 
 | where customDimensions.FormattedMessage like 'Job failed'
 ```
+
+test
