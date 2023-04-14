@@ -53,6 +53,7 @@ namespace SchedulerJobs.Services
             StringBuilder peopleListString = new StringBuilder();
 
             
+            
             _logger.LogInformation("ImportJudiciaryPeople: Removing all records from JudiciaryPersonsStaging");
             await _bookingsApiClient.RemoveAllJudiciaryPersonsStagingAsync();
             
