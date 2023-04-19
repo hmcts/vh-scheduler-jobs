@@ -24,17 +24,17 @@ variables:
   ${{ if eq(parameters.pr_number, ' ') }}:
     value: $(System.PullRequest.PullRequestNumber)
   ${{ else }}:
-    value: ${{ parameters.pr_number }}
-  - group: vh-github-app-credentials
-  - name: app_path
-    value: 'SchedulerJobs'
-  - group: vh-scheduler-jobs
-  - name: dotnetCoreVersion
-    value: "6.x"
-  - name: nugetPackagePath
-    value: $(Pipeline.Workspace)/.nuget/packages
-  - name: vstsFeedId
-    value: ''
+  value: ${{ parameters.pr_number }}
+- group: vh-github-app-credentials
+- name: app_path
+  value: 'SchedulerJobs'
+- group: vh-scheduler-jobs
+- name: dotnetCoreVersion
+  value: "6.x"
+- name: nugetPackagePath
+  value: $(Pipeline.Workspace)/.nuget/packages
+- name: vstsFeedId
+  value: ''
 
 trigger: none
 
