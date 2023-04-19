@@ -12,6 +12,12 @@ parameters:
 - name: pr_number
   type: string
   default: ' '
+- name: sdsUnitTestsCoverletCoverageExclusions
+  type: object
+  default: ["[*]SchedulerJobs.Common.*", "[*]SchedulerJobs.Sds.UnitTests.*", "[Testing.Common]*"]
+- name: servicesUnitTestsCoverletCoverageExclusions
+  type: object
+  default: [ "[*]SchedulerJobs.Common.*", "[*]SchedulerJobs.Services.UnitTests.*", "[Testing.Common]*" ]
 
 variables: 
 - name: pr_number
@@ -19,13 +25,6 @@ variables:
     value: $(System.PullRequest.PullRequestNumber)
   ${{ else }}:
     value: ${{ parameters.pr_number }}
-
-trigger: none
-
-pr:
-  - master
-
-variables:
   - group: vh-github-app-credentials
   - name: app_path
     value: 'SchedulerJobs'
@@ -37,14 +36,10 @@ variables:
   - name: vstsFeedId
     value: ''
 
-parameters:
-  - name: sdsUnitTestsCoverletCoverageExclusions
-    type: object
-    default: ["[*]SchedulerJobs.Common.*", "[*]SchedulerJobs.Sds.UnitTests.*", "[Testing.Common]*"]
-  - name: servicesUnitTestsCoverletCoverageExclusions
-    type: object
-    default: [ "[*]SchedulerJobs.Common.*", "[*]SchedulerJobs.Services.UnitTests.*", "[Testing.Common]*" ]
+trigger: none
 
+pr:
+  - master
 
 pool: 
   vmImage: ubuntu-22.04
