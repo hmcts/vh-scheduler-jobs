@@ -8,38 +8,38 @@ resources:
       ref: master
       endpoint: hmcts
 
-parameters:
-- name: pr_number
-  type: string
-  default: ' '
-- name: sdsUnitTestsCoverletCoverageExclusions
-  type: object
-  default: ["[*]SchedulerJobs.Common.*", "[*]SchedulerJobs.Sds.UnitTests.*", "[Testing.Common]*"]
-- name: servicesUnitTestsCoverletCoverageExclusions
-  type: object
-  default: [ "[*]SchedulerJobs.Common.*", "[*]SchedulerJobs.Services.UnitTests.*", "[Testing.Common]*" ]
-
-variables: 
-- name: pr_number
-  ${{ if eq(parameters.pr_number, ' ') }}:
-    value: $(System.PullRequest.PullRequestNumber)
-  ${{ else }}:
-  value: ${{ parameters.pr_number }}
-- group: vh-github-app-credentials
-- name: app_path
-  value: 'SchedulerJobs'
-- group: vh-scheduler-jobs
-- name: dotnetCoreVersion
-  value: "6.x"
-- name: nugetPackagePath
-  value: $(Pipeline.Workspace)/.nuget/packages
-- name: vstsFeedId
-  value: ''
-
 trigger: none
 
 pr:
   - master
+
+variables:
+  - group: vh-github-app-credentials
+  - name: app_path
+    value: 'SchedulerJobs'
+  - group: vh-scheduler-jobs
+  - name: dotnetCoreVersion
+    value: "6.x"
+  - name: nugetPackagePath
+    value: $(Pipeline.Workspace)/.nuget/packages
+  - name: vstsFeedId
+    value: ''
+  - name: pr_number
+    ${{ if eq(parameters.pr_number, ' ') }}:
+      value: $(System.PullRequest.PullRequestNumber)
+    ${{ else }}:
+      value: ${{ parameters.pr_number }}
+
+parameters:
+  - name: sdsUnitTestsCoverletCoverageExclusions
+    type: object
+    default: ["[*]SchedulerJobs.Common.*", "[*]SchedulerJobs.Sds.UnitTests.*", "[Testing.Common]*"]
+  - name: servicesUnitTestsCoverletCoverageExclusions
+    type: object
+    default: [ "[*]SchedulerJobs.Common.*", "[*]SchedulerJobs.Services.UnitTests.*", "[Testing.Common]*" ]
+  - name: pr_number
+    type: string
+    default: ' '
 
 pool: 
   vmImage: ubuntu-22.04
