@@ -6,7 +6,7 @@
 {{- $merge := mergeOverwrite $.Values . }}
 {{- $root := mergeOverwrite $ $merge }}
 ---
-apiVersion: batch/v1beta1
+apiVersion: batch/v1
 kind: CronJob
 {{ include "hmcts.metadata.v2" $ }}
 spec:
