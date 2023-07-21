@@ -153,9 +153,7 @@ public static partial class Program
         
         services.AddScoped<IAzureTokenProvider, AzureTokenProvider>();
         
-        services.AddLogging(builder =>
-          builder.AddApplicationInsights(configuration["ApplicationInsights:InstrumentationKey"])
-        );
+        services.AddLogging(builder => builder.AddApplicationInsights());
 
         services.AddScoped<ICloseConferenceService, CloseConferenceService>();
         services.AddScoped<IClearConferenceChatHistoryService, ClearConferenceChatHistoryService>();
