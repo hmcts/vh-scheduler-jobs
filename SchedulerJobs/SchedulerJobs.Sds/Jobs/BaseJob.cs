@@ -9,22 +9,25 @@ namespace SchedulerJobs.Sds.Jobs
         private readonly IHostApplicationLifetime _lifetime;
         private readonly ILogger _logger;
         private readonly IDistributedJobRunningStatusCache _distributedJobRunningStatusCache;
+        private readonly string _cacheEntryNameOverride;
 
         protected BaseJob(
             IHostApplicationLifetime lifetime, 
             ILogger logger, 
-            IDistributedJobRunningStatusCache distributedJobRunningStatusCache)
+            IDistributedJobRunningStatusCache distributedJobRunningStatusCache,
+            string cacheEntryNameOverride = "")
         {
             _lifetime = lifetime;
             _logger = logger;
             _distributedJobRunningStatusCache = distributedJobRunningStatusCache;
+            _cacheEntryNameOverride = cacheEntryNameOverride;
         }
         
         public abstract Task DoWorkAsync();
         
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            var jobName = GetType().Name;
+            var jobName = _cacheEntryNameOverride != "" ? _cacheEntryNameOverride : GetType().Name;
             var lockAcquired = false;
 
             try

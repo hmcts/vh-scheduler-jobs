@@ -8,12 +8,13 @@ namespace SchedulerJobs.Sds.Jobs
         private readonly ILogger<GetJudiciaryUsersJob> _logger;
         private readonly IServiceProvider _serviceProvider;
         private bool _jobSucceeded;
+        private const string CacheEntryNameOverride = "GetJudiciaryUsersJob2";
 
         public GetJudiciaryUsersJob(
             IHostApplicationLifetime lifetime,
             ILogger<GetJudiciaryUsersJob> logger,
             IServiceProvider serviceProvider,
-            IDistributedJobRunningStatusCache distributedJobRunningStatusCache) : base(lifetime, logger, distributedJobRunningStatusCache)
+            IDistributedJobRunningStatusCache distributedJobRunningStatusCache) : base(lifetime, logger, distributedJobRunningStatusCache, CacheEntryNameOverride)
         {
             _logger = logger;
             _serviceProvider = serviceProvider;
