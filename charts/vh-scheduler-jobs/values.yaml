@@ -64,10 +64,9 @@ keyVaults:
     resourceGroup: vh-infra-core-{{ .Values.global.environment }}
     usePodIdentity: true
     secrets:
-      - applicationinsights--instrumentationkey
+      - name: connectionstrings--applicationinsights
+        alias: applicationinsights--connectionstring
       - azuread--tenantid
-      - name: azuread--appinsightskey
-        alias: AppInsightsKey
       - name: storage-account-key
         alias: AzureConfiguration--StorageAccountKey
       - name: storage-account-name
