@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using LaunchDarkly.Sdk;
 using LaunchDarkly.Sdk.Server;
 using LaunchDarkly.Sdk.Server.Interfaces;
@@ -13,6 +14,7 @@ namespace SchedulerJobs.Common.Configuration
         public bool ImportAllJudiciaryUsersToggle();
     }
     
+    [ExcludeFromCodeCoverage]
     public class FeatureToggles : IFeatureToggles
     {
         private readonly ILdClient _ldClient;
