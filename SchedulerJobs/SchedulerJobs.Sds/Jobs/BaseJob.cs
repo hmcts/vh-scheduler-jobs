@@ -34,7 +34,7 @@ namespace SchedulerJobs.Sds.Jobs
                     lockAcquired = redLock.IsAcquired;
                     if (!lockAcquired)
                     {
-                        _logger.LogInformation($"Job {jobName} already running");
+                        _logger.LogInformation("Job {jobName} already running", jobName);
                         _lifetime.StopApplication();
                         return;
                     }
@@ -51,7 +51,7 @@ namespace SchedulerJobs.Sds.Jobs
                 // Indicates to Kubernetes that the job has failed
                 Environment.ExitCode = 1;
                 
-                _logger.LogError(ex, $"Job failed: {jobName}");
+                _logger.LogError(ex, "Job failed: {jobName}", jobName);
                 throw;
             }
             finally
