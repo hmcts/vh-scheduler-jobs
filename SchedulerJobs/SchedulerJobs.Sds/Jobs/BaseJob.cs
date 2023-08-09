@@ -29,11 +29,7 @@ namespace SchedulerJobs.Sds.Jobs
 
             try
             {
-                #if DEBUG
-                    _logger.LogInformation("Program is running in DEBUG mode");
-                #else
-                    _logger.LogInformation("Program is running in RELEASE mode");
-
+                #if !DEBUG
                     await using var redLock = await _distributedJobRunningStatusCache.CreateLockAsync(jobName);
                     lockAcquired = redLock.IsAcquired;
                     if (!lockAcquired)
