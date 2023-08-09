@@ -29,15 +29,21 @@ namespace SchedulerJobs.Sds.Jobs
 
             try
             {
-                await using var redLock = await _distributedJobRunningStatusCache.CreateLockAsync(jobName);
-                lockAcquired = redLock.IsAcquired;
-                if (!lockAcquired)
-                {
-                    _logger.LogInformation($"Job {jobName} already running");
-                    _lifetime.StopApplication();
-                    return;
-                }
-                await _distributedJobRunningStatusCache.UpdateJobRunningStatus(true, jobName);
+                #if DEBUG
+                    _logger.LogInformation("Program is running in DEBUG mode");
+                #else
+                    _logger.LogInformation("Program is running in RELEASE mode");
+
+                    await using var redLock = await _distributedJobRunningStatusCache.CreateLockAsync(jobName);
+                    lockAcquired = redLock.IsAcquired;
+                    if (!lockAcquired)
+                    {
+                        _logger.LogInformation($"Job {jobName} already running");
+                        _lifetime.StopApplication();
+                        return;
+                    }
+                    await _distributedJobRunningStatusCache.UpdateJobRunningStatus(true, jobName);
+                #endif
 
                 await DoWorkAsync();
 
