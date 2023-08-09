@@ -48,9 +48,9 @@ namespace SchedulerJobs.Services
         {
             foreach (var item in hearings)
             {
-                if (!item.Participants.Any(x => _userRoleList.Contains(x.UserRoleName)))
+                if (!item.Participants.Exists(x => _userRoleList.Contains(x.UserRoleName)))
                 {
-                    _logger.LogInformation($"SendNotificationsAsync - Ignored hearing: {item.Id} case:{item.Cases[0].Name} as no participant with role required for notification.");
+                    _logger.LogInformation("SendNotificationsAsync - Ignored hearing: {ItemId} case:{CaseName} as no participant with role required for notification.", item.Id, item.Cases[0].Name);
                     continue;
                 }
 
