@@ -39,14 +39,6 @@ namespace SchedulerJobs.Services.UnitTests
         }
 
         [Test]
-        public async Task should_not_call_bookingapi_GetHearingsForNotificationAsync_when_BookAndConfirm_toggle_is_off()
-        {
-            await _hearingNotificationService.SendNotificationsAsync();
-
-            _bookingApiClient.Verify(x => x.GetHearingsForNotificationAsync(), Times.Never);
-        }
-
-        [Test]
         public async Task should_not_call_notificationApi_when_no_bookings_are_retruned()
         {
             _nohearings = new List<HearingDetailsResponse>();
