@@ -174,7 +174,8 @@ public static partial class Program
             useELinksStub = parsedUseELinksStub;
         }
 
-        var featureToggle = new FeatureToggles(configuration.GetSection("FeatureToggles:SdkKey").Value);
+        var envName = configuration["VhServices:BookingsApiResourceId"]; // any service url will do here since we only care about the env name
+        var featureToggle = new FeatureToggles(configuration.GetSection("FeatureToggles:SdkKey").Value, envName);
         
         if (useELinksStub)
         {

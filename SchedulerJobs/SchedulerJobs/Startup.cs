@@ -127,7 +127,8 @@ namespace SchedulerJobs
 
             bool.TryParse(configuration["UseELinksStub"], out var useELinksStub);
 
-            var featureToggle = new FeatureToggles(configuration.GetSection("FeatureToggles:SdkKey").Value);
+            var envName = configuration["VhServices:BookingsApiResourceId"]; // any service url will do here since we only care about the env name
+            var featureToggle = new FeatureToggles(configuration.GetSection("FeatureToggles:SdkKey").Value, envName);
             
             if (useELinksStub)
             {
