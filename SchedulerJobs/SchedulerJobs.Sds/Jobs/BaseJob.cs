@@ -29,15 +29,17 @@ namespace SchedulerJobs.Sds.Jobs
 
             try
             {
-                await using var redLock = await _distributedJobRunningStatusCache.CreateLockAsync(jobName);
-                lockAcquired = redLock.IsAcquired;
-                if (!lockAcquired)
-                {
-                    _logger.LogInformation($"Job {jobName} already running");
-                    _lifetime.StopApplication();
-                    return;
-                }
-                await _distributedJobRunningStatusCache.UpdateJobRunningStatus(true, jobName);
+                #if !DEBUG
+                    await using var redLock = await _distributedJobRunningStatusCache.CreateLockAsync(jobName);
+                    lockAcquired = redLock.IsAcquired;
+                    if (!lockAcquired)
+                    {
+                        _logger.LogInformation("Job {jobName} already running", jobName);
+                        _lifetime.StopApplication();
+                        return;
+                    }
+                    await _distributedJobRunningStatusCache.UpdateJobRunningStatus(true, jobName);
+                #endif
 
                 await DoWorkAsync();
 
@@ -49,7 +51,7 @@ namespace SchedulerJobs.Sds.Jobs
                 // Indicates to Kubernetes that the job has failed
                 Environment.ExitCode = 1;
                 
-                _logger.LogError(ex, $"Job failed: {jobName}");
+                _logger.LogError(ex, "Job failed: {jobName}", jobName);
                 throw;
             }
             finally

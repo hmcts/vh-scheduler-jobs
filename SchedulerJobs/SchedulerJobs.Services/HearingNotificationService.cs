@@ -18,27 +18,19 @@ namespace SchedulerJobs.Services
 
         private readonly IBookingsApiClient _bookingsApiClient;
         private readonly INotificationApiClient _notificationApiClient;
-        private readonly IFeatureToggles _featureToggles;
         private readonly ILogger<HearingNotificationService> _logger;
         private readonly List<string> _userRoleList = new List<string>() { "Individual", "Representative", "Judicial Office Holder" };
 
-        public HearingNotificationService(IBookingsApiClient bookingsApiClient, IFeatureToggles featureToggles, INotificationApiClient notificationApiClient,  ILogger<HearingNotificationService> logger)
+        public HearingNotificationService(IBookingsApiClient bookingsApiClient, INotificationApiClient notificationApiClient,  ILogger<HearingNotificationService> logger)
         {
             _bookingsApiClient = bookingsApiClient;
             _notificationApiClient = notificationApiClient;
-            _featureToggles = featureToggles;
             _logger = logger;
         }
 
         public async Task SendNotificationsAsync()
         {
             _logger.LogInformation("SendNotificationsAsync - Started");
-
-            if (!_featureToggles.BookAndConfirmToggle())
-            {
-                _logger.LogInformation("SendNotificationsAsync - Feature BookAndConfirm is turned off!");
-                return;
-            }
 
             var hearings = await GetHearings();
 
@@ -56,9 +48,9 @@ namespace SchedulerJobs.Services
         {
             foreach (var item in hearings)
             {
-                if (!item.Participants.Any(x => _userRoleList.Contains(x.UserRoleName)))
+                if (!item.Participants.Exists(x => _userRoleList.Contains(x.UserRoleName)))
                 {
-                    _logger.LogInformation($"SendNotificationsAsync - Ignored hearing: {item.Id} case:{item.Cases[0].Name} as no participant with role required for notification.");
+                    _logger.LogInformation("SendNotificationsAsync - Ignored hearing: {ItemId} case:{CaseName} as no participant with role required for notification.", item.Id, item.Cases[0].Name);
                     continue;
                 }
 

@@ -1,4 +1,6 @@
-﻿using LaunchDarkly.Sdk;
+﻿using System;
+using System.Diagnostics.CodeAnalysis;
+using LaunchDarkly.Sdk;
 using LaunchDarkly.Sdk.Server;
 using LaunchDarkly.Sdk.Server.Interfaces;
 
@@ -6,34 +8,42 @@ namespace SchedulerJobs.Common.Configuration
 {
     public interface IFeatureToggles
     {
-        public bool BookAndConfirmToggle();
         public bool StorePeopleIngestion();
         public bool WorkAllocationToggle();
         public bool ImportAllJudiciaryUsersToggle();
     }
     
+    [ExcludeFromCodeCoverage]
     public class FeatureToggles : IFeatureToggles
     {
         private readonly ILdClient _ldClient;
-        private readonly User _user;
+        private readonly Context _context;
         private const string LdUser = "vh-scheduler-jobs";
-        private const string BookAndConfirmToggleKey = "Book_and_Confirm";
         private const string StorePeopleIngestionToggleKey = "store-people-ingestion";
         private const string WorkAllocationToggleKey = "vho-work-allocation";
         private const string ImportAllJudiciaryUsersToggleKey = "import-all-judiciary-users";
         
-        public FeatureToggles(string sdkKey)
+        public FeatureToggles(string sdkKey, string environmentName)
         {
-            _ldClient = new LdClient(sdkKey);
-            _user = User.WithKey(LdUser);
+            var config = LaunchDarkly.Sdk.Server.Configuration.Builder(sdkKey).Build();
+            
+            _context = Context.Builder(LdUser).Name(environmentName).Build();
+            _ldClient = new LdClient(config);
         }
 
-        public bool BookAndConfirmToggle() => _ldClient.BoolVariation(BookAndConfirmToggleKey, _user);
+        public bool StorePeopleIngestion() => GetBoolToggle(StorePeopleIngestionToggleKey);
+
+        public bool WorkAllocationToggle() => GetBoolToggle(WorkAllocationToggleKey);
+
+        public bool ImportAllJudiciaryUsersToggle() => GetBoolToggle(ImportAllJudiciaryUsersToggleKey);
         
-        public bool StorePeopleIngestion() => _ldClient.BoolVariation(StorePeopleIngestionToggleKey, _user);
-
-        public bool WorkAllocationToggle() => _ldClient.BoolVariation(WorkAllocationToggleKey, _user);
-
-        public bool ImportAllJudiciaryUsersToggle() => _ldClient.BoolVariation(ImportAllJudiciaryUsersToggleKey, _user);
+        private bool GetBoolToggle(string key)
+        {
+            if (!_ldClient.Initialized)
+            {
+                throw new InvalidOperationException("LaunchDarkly client not initialized");
+            }
+            return _ldClient.BoolVariation(key, _context);
+        }
     }
 }
