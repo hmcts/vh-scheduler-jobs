@@ -4,11 +4,9 @@ using SchedulerJobs.Services.Interfaces;
 using System.Threading.Tasks;
 using System.Linq;
 using System.Collections.Generic;
-using SchedulerJobs.Common.Configuration;
-using BookingsApi.Contract.Responses;
 using NotificationApi.Client;
 using SchedulerJobs.Common.Enums;
-using System;
+using BookingsApi.Contract.V1.Responses;
 using SchedulerJobs.Services.Mappers;
 
 namespace SchedulerJobs.Services
@@ -74,8 +72,6 @@ namespace SchedulerJobs.Services
                 case UserRoleNames.Representative:
                 case UserRoleNames.JudicialOfficeHolder:
                     await SendHearingNotification(item, participant);
-                    break;
-                default:
                     break;
             }
         }

@@ -1,7 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using BookingsApi.Contract.Responses;
+using BookingsApi.Contract.V1.Responses;
 using NotificationApi.Contract;
 using NotificationApi.Contract.Requests;
 using SchedulerJobs.Common.Enums;
@@ -87,7 +86,7 @@ namespace SchedulerJobs.Services.Mappers
 
         private static Dictionary<string, string> InitCommonParameters(HearingDetailsResponse hearing)
         {
-            var @case = hearing.Cases.First();
+            var @case = hearing.Cases[0];
 
             return new Dictionary<string, string>
             {
