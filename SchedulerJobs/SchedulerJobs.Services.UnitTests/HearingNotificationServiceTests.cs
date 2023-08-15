@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using BookingsApi.Client;
-using BookingsApi.Contract.Responses;
+using BookingsApi.Contract.V1.Responses;
 using Microsoft.Extensions.Logging;
 using Moq;
 using NotificationApi.Client;
@@ -216,7 +216,7 @@ namespace SchedulerJobs.Services.UnitTests
                 UpdatedDate = DateTime.Today,
                 ConfirmedBy = "",
                 ConfirmedDate = DateTime.Today,
-                Status = BookingsApi.Contract.Enums.BookingStatus.Created,
+                Status = BookingsApi.Contract.V1.Enums.BookingStatus.Created,
                 QuestionnaireNotRequired = false,
                 AudioRecordingRequired = true,
                 CancelReason = "",
@@ -324,7 +324,7 @@ namespace SchedulerJobs.Services.UnitTests
                 UpdatedDate = DateTime.Today,
                 ConfirmedBy = "",
                 ConfirmedDate = DateTime.Today,
-                Status = BookingsApi.Contract.Enums.BookingStatus.Created,
+                Status = BookingsApi.Contract.V1.Enums.BookingStatus.Created,
                 QuestionnaireNotRequired = false,
                 AudioRecordingRequired = true,
                 CancelReason = "",
@@ -377,7 +377,7 @@ namespace SchedulerJobs.Services.UnitTests
                 UpdatedDate = DateTime.Today,
                 ConfirmedBy = "",
                 ConfirmedDate = DateTime.Today,
-                Status = BookingsApi.Contract.Enums.BookingStatus.Created,
+                Status = BookingsApi.Contract.V1.Enums.BookingStatus.Created,
                 QuestionnaireNotRequired = false,
                 AudioRecordingRequired = true,
                 CancelReason = "",

@@ -2,12 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using BookingsApi.Client;
-using BookingsApi.Contract.Responses;
+using BookingsApi.Contract.V1.Responses;
 using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
 using SchedulerJobs.Common.Configuration;
-using SchedulerJobs.Services.Interfaces;
 
 namespace SchedulerJobs.Services.UnitTests
 {

@@ -13,7 +13,7 @@
 	</PropertyGroup>
 	<ItemGroup>
 		<PackageReference Include="Azure.Storage.Blobs" Version="12.13.1" />
-		<PackageReference Include="BookingsApi.Client" Version="1.45.8" />
+		<PackageReference Include="BookingsApi.Client" Version="1.46.3-pr-0691-0055" />
 		<PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.21.0" />
 		<PackageReference Include="Microsoft.AspNetCore.Hosting" Version="2.2.7" />
 		<PackageReference Include="Microsoft.Azure.Functions.Extensions" Version="1.1.0" />

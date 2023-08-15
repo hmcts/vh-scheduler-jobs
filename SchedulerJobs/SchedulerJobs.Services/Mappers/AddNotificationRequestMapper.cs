@@ -1,7 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using BookingsApi.Contract.Responses;
+using BookingsApi.Contract.V1.Responses;
 using NotificationApi.Contract;
 using NotificationApi.Contract.Requests;
 using SchedulerJobs.Common.Enums;
