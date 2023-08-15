@@ -3,7 +3,7 @@ using SchedulerJobs.Common.Models;
 
 namespace SchedulerJobs.Services.Mappers
 {
-    public class JudiciaryPersonStagingRequestMapper
+    public static class JudiciaryPersonStagingRequestMapper
     {
         public static JudiciaryPersonStagingRequest MapTo(JudiciaryPersonModel source)
         {

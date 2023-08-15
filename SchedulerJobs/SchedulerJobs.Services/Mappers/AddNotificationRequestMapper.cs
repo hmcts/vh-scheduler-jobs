@@ -86,7 +86,7 @@ namespace SchedulerJobs.Services.Mappers
 
         private static Dictionary<string, string> InitCommonParameters(HearingDetailsResponse hearing)
         {
-            var @case = hearing.Cases.First();
+            var @case = hearing.Cases[0];
 
             return new Dictionary<string, string>
             {
