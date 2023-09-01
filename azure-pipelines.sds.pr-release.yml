@@ -24,11 +24,6 @@ variables:
     value: $(Pipeline.Workspace)/.nuget/packages
   - name: vstsFeedId
     value: ''
-  - name: pr_number
-    ${{ if eq(parameters.pr_number, ' ') }}:
-      value: $(System.PullRequest.PullRequestNumber)
-    ${{ else }}:
-      value: ${{ parameters.pr_number }}
 
 parameters:
   - name: sdsUnitTestsCoverletCoverageExclusions
@@ -37,9 +32,6 @@ parameters:
   - name: servicesUnitTestsCoverletCoverageExclusions
     type: object
     default: [ "[*]SchedulerJobs.Common.*", "[*]SchedulerJobs.Services.UnitTests.*", "[Testing.Common]*" ]
-  - name: pr_number
-    type: string
-    default: ' '
 
 pool: 
   vmImage: ubuntu-22.04
@@ -176,7 +168,6 @@ stages:
   - template: variables/shared.yaml
     parameters:
       env: ${{ variables.env }}
-      prNumber: ${{ variables.pr_number }}
   - group: vh-github-app-credentials
   jobs:
   - job: Dock
@@ -229,7 +220,6 @@ stages:
   - template: variables/shared.yaml
     parameters:
       env: ${{ variables.env }}
-      prNumber: ${{ variables.pr_number }}
   - name: dnsRecordName
     value: vh-${{ variables.git_repo_name }}-${{ variables.prTagPrefix }}
   jobs:
