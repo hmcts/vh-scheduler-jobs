@@ -56,4 +56,4 @@ crons:
     args:
     - HearingsAllocationJob
 environment:
-  VHSERVICES__BOOKINGSAPIURL: https://vh-video-api-pr-728.dev.platform.hmcts.net/
+  VHSERVICES__BOOKINGSAPIURL: https://vh-bookings-api-pr-728.dev.platform.hmcts.net/
