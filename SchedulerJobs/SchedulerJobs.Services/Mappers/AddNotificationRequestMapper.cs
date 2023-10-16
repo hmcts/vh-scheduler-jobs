@@ -14,7 +14,7 @@ namespace SchedulerJobs.Services.Mappers
         public static AddNotificationRequest MapToHearingReminderNotification(HearingNotificationResponse hearing,
             ParticipantResponse participant, bool featureTogglePost2023 = false)
         {
-            var parameters = InitCommonParameters(hearing.Hearing);
+            var parameters = InitCommonParameters(hearing.Hearing, featureTogglePost2023);
 
             var isMultiDay = hearing.TotalDays > 1;
             if (isMultiDay)
@@ -106,12 +106,11 @@ namespace SchedulerJobs.Services.Mappers
                 {"case name", @case.Name},
                 {"case number", @case.Number},
                 {"time", hearing.ScheduledDateTime.ToEmailTimeGbLocale()},
-                {"Day Month Year", hearing.ScheduledDateTime.ToEmailDateGbLocale()}
+                {"day month year", hearing.ScheduledDateTime.ToEmailDateGbLocale()}
             };
 
             if (featureTogglePost2023)
             {
-                parameters.Add("day month year", hearing.ScheduledDateTime.ToEmailDateGbLocale());
                 parameters.Add("day month year_CY", hearing.ScheduledDateTime.ToEmailDateCyLocale());
                 parameters.Add("start time", hearing.ScheduledDateTime.ToEmailTimeGbLocale());
             }
