@@ -95,7 +95,7 @@ namespace SchedulerJobs.Services
             }
         }
 
-        private bool ShouldRemoveUserFromAd(UserProfile userProfile)
+        private static bool ShouldRemoveUserFromAd(UserProfile userProfile)
         {
             return userProfile.UserRole != AzureAdUserRoles.Judge &&
                    userProfile.UserRole != AzureAdUserRoles.VhOfficer &&
