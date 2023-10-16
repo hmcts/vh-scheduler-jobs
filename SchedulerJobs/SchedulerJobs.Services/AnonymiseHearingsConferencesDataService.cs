@@ -51,8 +51,7 @@ namespace SchedulerJobs.Services
                     new AnonymiseQuickLinkParticipantWithHearingIdsRequest
                         {HearingIds = anonymisationData.HearingIds});
 
-                await _bookingsApiClient.AnonymiseParticipantAndCaseByHearingIdAsync("hearingIds",
-                    anonymisationData.HearingIds);
+                await _bookingsApiClient.AnonymiseParticipantAndCaseByHearingIdAsync(anonymisationData.HearingIds);
             }
 
 

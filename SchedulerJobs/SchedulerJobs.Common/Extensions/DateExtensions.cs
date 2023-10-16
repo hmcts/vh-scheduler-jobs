@@ -8,6 +8,7 @@ namespace SchedulerJobs.Common.Extensions
     {
         private static readonly TimeZoneInfo BritishZone = TZConvert.GetTimeZoneInfo("Europe/London");
         private static readonly CultureInfo CultureInfo = new CultureInfo("en-GB");
+        private static readonly CultureInfo CultureInfoWelsh = new CultureInfo("cy-GB");
         public static string ToEmailDateGbLocale(this DateTime datetime)
         {
             var gmtDate = TimeZoneInfo.ConvertTimeFromUtc(datetime, BritishZone);
@@ -19,6 +20,12 @@ namespace SchedulerJobs.Common.Extensions
             var gmtDate = TimeZoneInfo.ConvertTimeFromUtc(datetime, BritishZone);
             return gmtDate.ToString("h:mm tt", CultureInfo)
                 .ToUpper();
+        }
+        
+        public static string ToEmailDateCyLocale(this DateTime datetime)
+        {
+            var gmtDate = TimeZoneInfo.ConvertTimeFromUtc(datetime, BritishZone);
+            return gmtDate.ToString("d MMMM yyyy", CultureInfoWelsh);
         }
     }
 }

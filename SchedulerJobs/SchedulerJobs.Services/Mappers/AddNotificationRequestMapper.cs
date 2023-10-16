@@ -11,19 +11,25 @@ namespace SchedulerJobs.Services.Mappers
     public static class AddNotificationRequestMapper
     {
         private static readonly string Judiciary = "judiciary";
-        public static AddNotificationRequest MapToHearingReminderNotification(HearingDetailsResponse hearing,
-            ParticipantResponse participant)
+        public static AddNotificationRequest MapToHearingReminderNotification(HearingNotificationResponse hearing,
+            ParticipantResponse participant, bool featureTogglePost2023 = false)
         {
-            var parameters = InitCommonParameters(hearing);
+            var parameters = InitCommonParameters(hearing.Hearing);
 
-            AddParticipantParameters(participant, parameters); 
+            var isMultiDay = hearing.TotalDays > 1;
+            if (isMultiDay)
+            {
+                parameters.Add("number of days", hearing.TotalDays.ToString());
+            }
+
+            AddParticipantParameters(participant, parameters);
 
             return new AddNotificationRequest
             {
-                HearingId = hearing.Id,
+                HearingId = hearing.Hearing.Id,
                 MessageType = MessageType.Email,
                 ContactEmail = participant.ContactEmail,
-                NotificationType = GetNotificationType(participant),
+                NotificationType = GetNotificationType(participant, featureTogglePost2023, isMultiDay),
                 ParticipantId = participant.Id,
                 PhoneNumber = participant.TelephoneNumber,
                 Parameters = parameters
@@ -51,14 +57,21 @@ namespace SchedulerJobs.Services.Mappers
 
         }
 
-        private static NotificationType GetNotificationType(ParticipantResponse participant)
+        private static NotificationType GetNotificationType(ParticipantResponse participant, bool featureTogglePost2023 = false, bool isMultiDay = false)
         {
             NotificationType notificationType;
 
             switch (participant.UserRoleName)
             {
                 case UserRoleNames.Individual:
-                    notificationType = NotificationType.NewHearingReminderLIP;
+                    if (featureTogglePost2023)
+                    {
+                        notificationType = (isMultiDay) ? NotificationType.NewHearingReminderLipMultiDay : NotificationType.NewHearingReminderLipSingleDay;
+                    }
+                    else
+                    {
+                        notificationType = NotificationType.NewHearingReminderLIP;
+                    }
                     break;
                 case UserRoleNames.Representative:
                     notificationType = NotificationType.NewHearingReminderRepresentative;
@@ -84,17 +97,26 @@ namespace SchedulerJobs.Services.Mappers
             return (participant.ContactEmail.ToLower() == participant.Username.ToLower() && participant.Username.ToLower().Contains(Judiciary));
         }
 
-        private static Dictionary<string, string> InitCommonParameters(HearingDetailsResponse hearing)
+        private static Dictionary<string, string> InitCommonParameters(HearingDetailsResponse hearing, bool featureTogglePost2023 = false)
         {
             var @case = hearing.Cases[0];
-
-            return new Dictionary<string, string>
+            
+            var parameters = new Dictionary<string, string>
             {
                 {"case name", @case.Name},
                 {"case number", @case.Number},
                 {"time", hearing.ScheduledDateTime.ToEmailTimeGbLocale()},
                 {"Day Month Year", hearing.ScheduledDateTime.ToEmailDateGbLocale()}
             };
+
+            if (featureTogglePost2023)
+            {
+                parameters.Add("day month year", hearing.ScheduledDateTime.ToEmailDateGbLocale());
+                parameters.Add("day month year_CY", hearing.ScheduledDateTime.ToEmailDateCyLocale());
+                parameters.Add("start time", hearing.ScheduledDateTime.ToEmailTimeGbLocale());
+            }
+
+            return parameters;
         }
 
        
