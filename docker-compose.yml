@@ -1,7 +1,0 @@
-version: '3.4'
-services:
-  schedulerjobs:
-    image: ${DOCKER_REGISTRY-}schedulerjobs:latest
-    build:
-      context: .
-      dockerfile: SchedulerJobs/SchedulerJobs/Dockerfile
