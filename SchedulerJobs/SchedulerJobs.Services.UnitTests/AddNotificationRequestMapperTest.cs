@@ -128,7 +128,7 @@ public class AddNotificationRequestMapperTest
         result.Parameters.Should().BeEquivalentTo(parameters);
     }
     
-    private ParticipantResponse CreateParticipant()
+    private static ParticipantResponse CreateParticipant()
     {
         var participantId = Guid.NewGuid();
         var firstName = "firstname";
@@ -146,7 +146,7 @@ public class AddNotificationRequestMapperTest
             UserRoleName = UserRoleNames.Individual
         };
     }
-    private CaseResponse CreateCaseResponse()
+    private static CaseResponse CreateCaseResponse()
     {
         var caseName = "random case name";
         var caseNumber = "random case number";
@@ -157,7 +157,7 @@ public class AddNotificationRequestMapperTest
             Number = caseNumber
         };
     }
-    private HearingDetailsResponse CreateHearingDetails(ParticipantResponse participant, CaseResponse caseResponse)
+    private static HearingDetailsResponse CreateHearingDetails(ParticipantResponse participant, CaseResponse caseResponse)
     {
         var hearingId = Guid.NewGuid(); 
         var hearingDetails = new HearingDetailsResponse();
