@@ -64,14 +64,7 @@ namespace SchedulerJobs.Services.Mappers
             switch (participant.UserRoleName)
             {
                 case UserRoleNames.Individual:
-                    if (featureTogglePost2023)
-                    {
-                        notificationType = (isMultiDay) ? NotificationType.NewHearingReminderLipMultiDay : NotificationType.NewHearingReminderLipSingleDay;
-                    }
-                    else
-                    {
-                        notificationType = NotificationType.NewHearingReminderLIP;
-                    }
+                    notificationType = GetReminderNotificationTypeForIndividual(isMultiDay, featureTogglePost2023);
                     break;
                 case UserRoleNames.Representative:
                     notificationType = NotificationType.NewHearingReminderRepresentative;
@@ -91,7 +84,7 @@ namespace SchedulerJobs.Services.Mappers
 
             return notificationType;
         }
-
+        
         public static bool IsEjudge(ParticipantResponse participant)
         {
             return (participant.ContactEmail.ToLower() == participant.Username.ToLower() && participant.Username.ToLower().Contains(Judiciary));
@@ -117,7 +110,19 @@ namespace SchedulerJobs.Services.Mappers
 
             return parameters;
         }
+        private static NotificationType GetReminderNotificationTypeForIndividual(bool isMultiDay, bool featureTogglePost2023)
+        {
+            NotificationType notificationType;
+            if (featureTogglePost2023)
+            {
+                notificationType = (isMultiDay) ? NotificationType.NewHearingReminderLipMultiDay : NotificationType.NewHearingReminderLipSingleDay;
+            }
+            else
+            {
+                notificationType = NotificationType.NewHearingReminderLIP;
+            }
 
-       
+            return notificationType;
+        }
     }
 }

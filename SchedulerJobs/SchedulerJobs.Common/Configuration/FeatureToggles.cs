@@ -11,8 +11,8 @@ namespace SchedulerJobs.Common.Configuration
         public bool StorePeopleIngestion();
         public bool WorkAllocationToggle();
         public bool ImportAllJudiciaryUsersToggle();
-        bool UsePostMay2023Template();
-        bool EjudFeatureToggle();
+        public bool UsePostMay2023Template();
+        public bool EjudFeatureToggle();
     }
     
     [ExcludeFromCodeCoverage]
