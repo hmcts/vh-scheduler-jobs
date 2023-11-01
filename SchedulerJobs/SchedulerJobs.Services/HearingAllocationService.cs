@@ -51,6 +51,11 @@ namespace SchedulerJobs.Services
                 }
                 catch (BookingsApiException e)
                 {
+                    if (e.StatusCode == (int) System.Net.HttpStatusCode.BadRequest)
+                    {
+                        _logger.LogWarning(e, "AllocateHearings: Error allocating hearing {hearingId}", hearingId);
+                        continue;
+                    }
                     _logger.LogError(e, "AllocateHearings: Error allocating hearing {hearingId}", hearingId);
                 }
             }
