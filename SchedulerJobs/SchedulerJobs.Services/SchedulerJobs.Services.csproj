@@ -6,10 +6,11 @@
    	<RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
    	<DisableImplicitNuGetFallbackFolder>true</DisableImplicitNuGetFallbackFolder>
    	<LangVersion>latestmajor</LangVersion>
+  	<UserSecretsId>eb01af44-05dd-4541-90b1-6fed69c33e3a</UserSecretsId>
   </PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="BookingsApi.Client" Version="1.49.2" />
+		<PackageReference Include="BookingsApi.Client" Version="1.49.10" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="6.0.2" />
 		<PackageReference Include="NotificationApi.Client" Version="1.47.4" />
 		<PackageReference Include="System.Threading.Tasks.Extensions" Version="4.5.4" />
