@@ -51,8 +51,7 @@ namespace SchedulerJobs.Services
                     new AnonymiseQuickLinkParticipantWithHearingIdsRequest
                         {HearingIds = anonymisationData.HearingIds});
 
-                await _bookingsApiClient.AnonymiseParticipantAndCaseByHearingIdAsync("hearingIds",
-                    anonymisationData.HearingIds);
+                await _bookingsApiClient.AnonymiseParticipantAndCaseByHearingIdAsync(anonymisationData.HearingIds);
             }
 
 
@@ -96,7 +95,7 @@ namespace SchedulerJobs.Services
             }
         }
 
-        private bool ShouldRemoveUserFromAd(UserProfile userProfile)
+        private static bool ShouldRemoveUserFromAd(UserProfile userProfile)
         {
             return userProfile.UserRole != AzureAdUserRoles.Judge &&
                    userProfile.UserRole != AzureAdUserRoles.VhOfficer &&

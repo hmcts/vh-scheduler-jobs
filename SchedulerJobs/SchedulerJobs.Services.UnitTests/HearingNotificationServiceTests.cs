@@ -8,6 +8,7 @@ using Microsoft.Extensions.Logging;
 using Moq;
 using NotificationApi.Client;
 using NUnit.Framework;
+using SchedulerJobs.Common.Configuration;
 using SchedulerJobs.Services.Interfaces;
 using SchedulerJobs.Services.Mappers;
 
@@ -19,29 +20,31 @@ namespace SchedulerJobs.Services.UnitTests
         private Mock<INotificationApiClient> _notificationApiClient;
         private IHearingNotificationService _hearingNotificationService;
         private Mock<ILogger<HearingNotificationService>> _logger;
-        private List<HearingDetailsResponse> _nohearings;
-        private List<HearingDetailsResponse> _hearings;
-        private List<HearingDetailsResponse> _hearingsEjud;
-        private List<HearingDetailsResponse> _hearingsWithNoNotificationUserroles;
-        private List<HearingDetailsResponse> _hearingsMultiple;
+        private Mock<IFeatureToggles> _featureTogglesMock;
+        private List<HearingNotificationResponse> _nohearings;
+        private List<HearingNotificationResponse> _hearings;
+        private List<HearingNotificationResponse> _hearingsEjud;
+        private List<HearingNotificationResponse> _hearingsWithNoNotificationUserroles;
+        private List<HearingNotificationResponse> _hearingsMultiple;
 
         [SetUp]
         public void Setup()
         {
             _bookingApiClient = new Mock<IBookingsApiClient>();
             _notificationApiClient = new Mock<INotificationApiClient>();
+            _featureTogglesMock = new Mock<IFeatureToggles>();
             _logger = new Mock<ILogger<HearingNotificationService>>();
-            _hearingNotificationService = new HearingNotificationService(_bookingApiClient.Object, _notificationApiClient.Object, _logger.Object);
-            _hearings = new List<HearingDetailsResponse>() { CreateHearing() };
-            _hearingsEjud = new List<HearingDetailsResponse>() { CreateHearingWithEjud() };
-            _hearingsMultiple = new List<HearingDetailsResponse>() { CreateHearing(), CreateHearing() };
-            _hearingsWithNoNotificationUserroles = new List<HearingDetailsResponse>() { CreateHearingWithNoRoles() };
+            _hearingNotificationService = new HearingNotificationService(_bookingApiClient.Object, _notificationApiClient.Object, _logger.Object, _featureTogglesMock.Object);
+            _hearings = new List<HearingNotificationResponse>() { CreateHearing() };
+            _hearingsEjud = new List<HearingNotificationResponse>() { CreateHearingWithEjud() };
+            _hearingsMultiple = new List<HearingNotificationResponse>() { CreateHearing(), CreateHearing() };
+            _hearingsWithNoNotificationUserroles = new List<HearingNotificationResponse>() { CreateHearingWithNoRoles() };
         }
 
         [Test]
         public async Task should_not_call_notificationApi_when_no_bookings_are_retruned()
         {
-            _nohearings = new List<HearingDetailsResponse>();
+            _nohearings = new List<HearingNotificationResponse>();
             
             _bookingApiClient.Setup(x => x.GetHearingsForNotificationAsync()).ReturnsAsync(_nohearings);
 
@@ -62,7 +65,7 @@ namespace SchedulerJobs.Services.UnitTests
 
             await _hearingNotificationService.SendNotificationsAsync();
 
-            Assert.AreEqual(false, AddNotificationRequestMapper.IsEjudge(_hearings[0].Participants.First(x => x.UserRoleName == "Judicial Office Holder")));
+            Assert.AreEqual(false, AddNotificationRequestMapper.IsEjudge(_hearings[0].Hearing.Participants.First(x => x.UserRoleName == "Judicial Office Holder")));
 
             _bookingApiClient.Verify(x => x.GetHearingsForNotificationAsync(), Times.Once);
             _notificationApiClient.Verify(x => x.CreateNewNotificationAsync(It.IsAny<NotificationApi.Contract.Requests.AddNotificationRequest>()), Times.Exactly(3));
@@ -79,7 +82,7 @@ namespace SchedulerJobs.Services.UnitTests
 
             await _hearingNotificationService.SendNotificationsAsync();
 
-            Assert.AreEqual(true, AddNotificationRequestMapper.IsEjudge(_hearingsEjud[0].Participants.First(x => x.UserRoleName == "Judicial Office Holder")));
+            Assert.AreEqual(true, AddNotificationRequestMapper.IsEjudge(_hearingsEjud[0].Hearing.Participants.First(x => x.UserRoleName == "Judicial Office Holder")));
 
             _bookingApiClient.Verify(x => x.GetHearingsForNotificationAsync(), Times.Once);
             _notificationApiClient.Verify(x => x.CreateNewNotificationAsync(It.IsAny<NotificationApi.Contract.Requests.AddNotificationRequest>()), Times.Exactly(3));
@@ -106,7 +109,7 @@ namespace SchedulerJobs.Services.UnitTests
         [Test]
         public async Task should_not_call_notificationApi_when_bookings_with_notification_user_roles_doesnot_exists()
         {
-            _nohearings = new List<HearingDetailsResponse>();
+            _nohearings = new List<HearingNotificationResponse>();
             
             _bookingApiClient.Setup(x => x.GetHearingsForNotificationAsync()).ReturnsAsync(_hearingsWithNoNotificationUserroles);
 
@@ -117,11 +120,11 @@ namespace SchedulerJobs.Services.UnitTests
         }
 
 
-        private static HearingDetailsResponse CreateHearing()
+        private static HearingNotificationResponse CreateHearing()
         {
             Guid id = Guid.NewGuid();
 
-            return new HearingDetailsResponse()
+            var hearing =  new HearingDetailsResponse()
             {
                 Id = id,
                 ScheduledDateTime = DateTime.UtcNow.AddDays(2),
@@ -217,19 +220,24 @@ namespace SchedulerJobs.Services.UnitTests
                 ConfirmedBy = "",
                 ConfirmedDate = DateTime.Today,
                 Status = BookingsApi.Contract.V1.Enums.BookingStatus.Created,
-                QuestionnaireNotRequired = false,
                 AudioRecordingRequired = true,
                 CancelReason = "",
                 Endpoints = null,
                 GroupId = id
             };
+
+            var hearingResponse = new HearingNotificationResponse();
+            hearingResponse.Hearing = hearing;
+            hearingResponse.TotalDays = 1;
+
+            return hearingResponse;
         }
 
-        private static HearingDetailsResponse CreateHearingWithEjud()
+        private static HearingNotificationResponse CreateHearingWithEjud()
         {
             Guid id = Guid.NewGuid();
 
-            return new HearingDetailsResponse()
+            var hearing = new HearingDetailsResponse()
             {
                 Id = id,
                 ScheduledDateTime = DateTime.UtcNow.AddDays(2),
@@ -325,18 +333,22 @@ namespace SchedulerJobs.Services.UnitTests
                 ConfirmedBy = "",
                 ConfirmedDate = DateTime.Today,
                 Status = BookingsApi.Contract.V1.Enums.BookingStatus.Created,
-                QuestionnaireNotRequired = false,
                 AudioRecordingRequired = true,
                 CancelReason = "",
                 Endpoints = null,
                 GroupId = id
             };
+            var hearingResponse = new HearingNotificationResponse();
+            hearingResponse.Hearing = hearing;
+            hearingResponse.TotalDays = 1;
+
+            return hearingResponse;
         }
-        private static HearingDetailsResponse CreateHearingWithNoRoles()
+        private static HearingNotificationResponse CreateHearingWithNoRoles()
         {
             Guid id = Guid.NewGuid();
 
-            return new HearingDetailsResponse()
+            var hearing = new HearingDetailsResponse()
             {
                 Id = id,
                 ScheduledDateTime = DateTime.UtcNow.AddDays(2),
@@ -378,12 +390,17 @@ namespace SchedulerJobs.Services.UnitTests
                 ConfirmedBy = "",
                 ConfirmedDate = DateTime.Today,
                 Status = BookingsApi.Contract.V1.Enums.BookingStatus.Created,
-                QuestionnaireNotRequired = false,
                 AudioRecordingRequired = true,
                 CancelReason = "",
                 Endpoints = null,
                 GroupId = id
             };
+            
+            var hearingResponse = new HearingNotificationResponse();
+            hearingResponse.Hearing = hearing;
+            hearingResponse.TotalDays = 1;
+
+            return hearingResponse;
         }
     }
 }

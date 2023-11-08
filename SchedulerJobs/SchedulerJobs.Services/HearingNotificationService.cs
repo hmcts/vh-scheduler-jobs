@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using NotificationApi.Client;
 using SchedulerJobs.Common.Enums;
 using BookingsApi.Contract.V1.Responses;
+using SchedulerJobs.Common.Configuration;
 using SchedulerJobs.Services.Mappers;
 
 namespace SchedulerJobs.Services
@@ -18,12 +19,14 @@ namespace SchedulerJobs.Services
         private readonly INotificationApiClient _notificationApiClient;
         private readonly ILogger<HearingNotificationService> _logger;
         private readonly List<string> _userRoleList = new List<string>() { "Individual", "Representative", "Judicial Office Holder" };
-
-        public HearingNotificationService(IBookingsApiClient bookingsApiClient, INotificationApiClient notificationApiClient,  ILogger<HearingNotificationService> logger)
+        private readonly IFeatureToggles _featureToggles;
+        
+        public HearingNotificationService(IBookingsApiClient bookingsApiClient, INotificationApiClient notificationApiClient,  ILogger<HearingNotificationService> logger, IFeatureToggles featureToggles)
         {
             _bookingsApiClient = bookingsApiClient;
             _notificationApiClient = notificationApiClient;
             _logger = logger;
+            _featureToggles = featureToggles;
         }
 
         public async Task SendNotificationsAsync()
@@ -42,17 +45,17 @@ namespace SchedulerJobs.Services
 
         }
 
-        private async Task ProcessHearings(List<HearingDetailsResponse> hearings)
+        private async Task ProcessHearings(List<HearingNotificationResponse> hearings)
         {
             foreach (var item in hearings)
             {
-                if (!item.Participants.Exists(x => _userRoleList.Contains(x.UserRoleName)))
+                if (!item.Hearing.Participants.Exists(x => _userRoleList.Contains(x.UserRoleName)))
                 {
-                    _logger.LogInformation("SendNotificationsAsync - Ignored hearing: {ItemId} case:{CaseName} as no participant with role required for notification.", item.Id, item.Cases[0].Name);
+                    _logger.LogInformation("SendNotificationsAsync - Ignored hearing: {ItemId} case:{CaseName} as no participant with role required for notification.", item.Hearing.Id, item.Hearing.Cases[0].Name);
                     continue;
                 }
 
-                foreach (var participant in item.Participants)
+                foreach (var participant in item.Hearing.Participants)
                 {
                     if (!_userRoleList.Contains(participant.UserRoleName))
                     {
@@ -64,7 +67,7 @@ namespace SchedulerJobs.Services
             }
         }
 
-        private async Task ProcessParticipantForNotification(HearingDetailsResponse item, ParticipantResponse participant)
+        private async Task ProcessParticipantForNotification(HearingNotificationResponse item, ParticipantResponse participant)
         {
             switch (participant.UserRoleName)
             {
@@ -76,13 +79,13 @@ namespace SchedulerJobs.Services
             }
         }
 
-        private async Task SendHearingNotification(HearingDetailsResponse item, ParticipantResponse participant)
+        private async Task SendHearingNotification(HearingNotificationResponse item, ParticipantResponse participant)
         {
-            var request = AddNotificationRequestMapper.MapToHearingReminderNotification(item, participant);
+            var request = AddNotificationRequestMapper.MapToHearingReminderNotification(item, participant, _featureToggles.UsePostMay2023Template());
             await _notificationApiClient.CreateNewNotificationAsync(request);
         }
 
-        private async Task<List<HearingDetailsResponse>> GetHearings()
+        private async Task<List<HearingNotificationResponse>> GetHearings()
         {
             var response = await _bookingsApiClient.GetHearingsForNotificationAsync();
 

@@ -80,7 +80,7 @@ namespace SchedulerJobs.Services.UnitTests
             _videoApiClient.Verify(
                 videoApi => videoApi.AnonymiseQuickLinkParticipantWithHearingIdsAsync(It.Is<AnonymiseQuickLinkParticipantWithHearingIdsRequest>(request => request.HearingIds == _anonymisationDataResponse.HearingIds)), Times.Once);
 
-            _bookingApiClient.Verify(bookingsApi => bookingsApi.AnonymiseParticipantAndCaseByHearingIdAsync(It.IsAny<string>(), It.Is<List<Guid>>(body => body == _anonymisationDataResponse.HearingIds)), Times.Once);
+            _bookingApiClient.Verify(bookingsApi => bookingsApi.AnonymiseParticipantAndCaseByHearingIdAsync(It.Is<List<Guid>>(body => body == _anonymisationDataResponse.HearingIds)), Times.Once);
         }
 
         [Test]
@@ -95,7 +95,7 @@ namespace SchedulerJobs.Services.UnitTests
             _videoApiClient.Verify(videoApi => videoApi.AnonymiseConferenceWithHearingIdsAsync(It.IsAny<AnonymiseConferenceWithHearingIdsRequest>()), Times.Never);
             _videoApiClient.Verify(videoApi => videoApi.AnonymiseQuickLinkParticipantWithHearingIdsAsync(It.IsAny<AnonymiseQuickLinkParticipantWithHearingIdsRequest>()), Times.Never);
 
-            _bookingApiClient.Verify(bookingsApi => bookingsApi.AnonymiseParticipantAndCaseByHearingIdAsync(It.IsAny<string>(), It.IsAny<List<Guid>>()), Times.Never);
+            _bookingApiClient.Verify(bookingsApi => bookingsApi.AnonymiseParticipantAndCaseByHearingIdAsync(It.IsAny<List<Guid>>()), Times.Never);
         }
 
         [Test]
