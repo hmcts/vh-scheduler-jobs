@@ -14,9 +14,9 @@
       },
       "BookingsApi.Client": {
         "type": "Direct",
-        "requested": "[1.49.2, )",
-        "resolved": "1.49.2",
-        "contentHash": "Pldl3h7W+u3n4NbTL03993w8jc3eX52OXcslrm/4bLqwF9k4KjFAjOUeFlahUVZm14MrW1WoLJg6MbpSgET0zg==",
+        "requested": "[1.49.7, )",
+        "resolved": "1.49.7",
+        "contentHash": "uc+ToxAOUEniDLwrAiII3HoNnicxu5iooXcnO/5ysZP8aCpCVuLTJoLVOZHkL9j+9DvAkndlBwIpV0XM0EyVMw==",
         "dependencies": {
           "Microsoft.AspNetCore.Mvc.Core": "2.2.5"
         }
@@ -51,18 +51,18 @@
       },
       "UserApi.Client": {
         "type": "Direct",
-        "requested": "[1.44.1, )",
-        "resolved": "1.44.1",
-        "contentHash": "oUtEvLAM9q7jeyXsHmgFoaO+tE48ozd42d1g21niMiqeE4A7ELTpMcOs44kV6BluPDVJFIHqV+Wk2ShZNxv4cA==",
+        "requested": "[1.48.1, )",
+        "resolved": "1.48.1",
+        "contentHash": "pa/4ZfxRtVRvQ49ENA12MtmDFz/5K4BcmmwGAs4Rc8VkCXOxaaXMrDxiAonAITeB6MdjFwRNY9TdMiIi4pwAqg==",
         "dependencies": {
           "Microsoft.AspNetCore.Mvc.Core": "2.2.5"
         }
       },
       "VideoApi.Client": {
         "type": "Direct",
-        "requested": "[1.44.2, )",
-        "resolved": "1.44.2",
-        "contentHash": "V5A3SazBr7G7lvw5R5iFNwB+4MdM1pCBfdtbXw5r+L/4TDdaXPpr9HWmDbf9kbJ0Rbd8taEyOTbUnGAllqS+lg==",
+        "requested": "[1.49.3, )",
+        "resolved": "1.49.3",
+        "contentHash": "30vn/PQMTzQBrWqYTmmI0JFG52DAKGtrBOkkW9P0uN3aKp9xEj2Xv1TfZ4ufnCZPben4eO8IpuP0tJn1tFHSPw==",
         "dependencies": {
           "Microsoft.AspNetCore.Mvc.Core": "2.2.5"
         }
