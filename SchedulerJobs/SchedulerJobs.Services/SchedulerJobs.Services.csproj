@@ -11,7 +11,7 @@
 	<ItemGroup>
 		<PackageReference Include="BookingsApi.Client" Version="1.49.2" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="6.0.2" />
-		<PackageReference Include="NotificationApi.Client" Version="1.47.4" />
+		<PackageReference Include="NotificationApi.Client" Version="1.49.2-pr-0147-0002" />
 		<PackageReference Include="System.Threading.Tasks.Extensions" Version="4.5.4" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
 		<PackageReference Include="UserApi.Client" Version="1.44.1" />

@@ -35,9 +35,9 @@
       },
       "NotificationApi.Client": {
         "type": "Direct",
-        "requested": "[1.47.4, )",
-        "resolved": "1.47.4",
-        "contentHash": "mWplJbfVfL5FpYXQjQk6WRQkVzFF15LH86WqGLPqR/z9INYdMOXgqdeFSnMiYxmeaEnjkZWSwZtTCHAdVrr7XQ==",
+        "requested": "[1.49.2-pr-0147-0002, )",
+        "resolved": "1.49.2-pr-0147-0002",
+        "contentHash": "dETBsauhgc3Uc/hC67DvhJttqoeXGW/8xfNYsn2V0jP/ky8eGNL8TxTfxpIjHm1rhFu4JQpEWCbpkkazJvc4HA==",
         "dependencies": {
           "Microsoft.AspNetCore.Mvc.Core": "2.2.5",
           "Newtonsoft.Json": "13.0.1"
@@ -53,7 +53,7 @@
         "type": "Direct",
         "requested": "[1.44.1, )",
         "resolved": "1.44.1",
-        "contentHash": "nmt5ZsHwxUbSL46uihtSGJTP4tTrSsyZNVhqIbaEL4zdaL+ybUAhE9we+Ye/DWyiKfMLddUg14bnUosQdyUQAA==",
+        "contentHash": "oUtEvLAM9q7jeyXsHmgFoaO+tE48ozd42d1g21niMiqeE4A7ELTpMcOs44kV6BluPDVJFIHqV+Wk2ShZNxv4cA==",
         "dependencies": {
           "Microsoft.AspNetCore.Mvc.Core": "2.2.5"
         }
@@ -62,7 +62,7 @@
         "type": "Direct",
         "requested": "[1.44.2, )",
         "resolved": "1.44.2",
-        "contentHash": "0qEFVEAkUtVe2clT/gKgN/emQ069LkSlohZl47u5DtJw6Lb1ce44pfU/Rwlbdo3WPI75UX3+7kkwLfl1N2wfFw==",
+        "contentHash": "V5A3SazBr7G7lvw5R5iFNwB+4MdM1pCBfdtbXw5r+L/4TDdaXPpr9HWmDbf9kbJ0Rbd8taEyOTbUnGAllqS+lg==",
         "dependencies": {
           "Microsoft.AspNetCore.Mvc.Core": "2.2.5"
         }
