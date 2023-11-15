@@ -957,8 +957,8 @@
       },
       "NotificationApi.Client": {
         "type": "Transitive",
-        "resolved": "1.47.4",
-        "contentHash": "mWplJbfVfL5FpYXQjQk6WRQkVzFF15LH86WqGLPqR/z9INYdMOXgqdeFSnMiYxmeaEnjkZWSwZtTCHAdVrr7XQ==",
+        "resolved": "1.49.2",
+        "contentHash": "R68J5+28nu5NZ/CUiImXuTAaxgy/ZzVYptNXH+z5trDJpFWCkek8JLANnQmuYqegm+WTq5VjHBcpIe0sC6taJg==",
         "dependencies": {
           "Microsoft.AspNetCore.Mvc.Core": "2.2.5",
           "Newtonsoft.Json": "13.0.1"
@@ -2283,16 +2283,16 @@
       },
       "UserApi.Client": {
         "type": "Transitive",
-        "resolved": "1.44.1",
-        "contentHash": "oUtEvLAM9q7jeyXsHmgFoaO+tE48ozd42d1g21niMiqeE4A7ELTpMcOs44kV6BluPDVJFIHqV+Wk2ShZNxv4cA==",
+        "resolved": "1.48.1",
+        "contentHash": "pa/4ZfxRtVRvQ49ENA12MtmDFz/5K4BcmmwGAs4Rc8VkCXOxaaXMrDxiAonAITeB6MdjFwRNY9TdMiIi4pwAqg==",
         "dependencies": {
           "Microsoft.AspNetCore.Mvc.Core": "2.2.5"
         }
       },
       "VideoApi.Client": {
         "type": "Transitive",
-        "resolved": "1.44.2",
-        "contentHash": "V5A3SazBr7G7lvw5R5iFNwB+4MdM1pCBfdtbXw5r+L/4TDdaXPpr9HWmDbf9kbJ0Rbd8taEyOTbUnGAllqS+lg==",
+        "resolved": "1.49.3",
+        "contentHash": "30vn/PQMTzQBrWqYTmmI0JFG52DAKGtrBOkkW9P0uN3aKp9xEj2Xv1TfZ4ufnCZPben4eO8IpuP0tJn1tFHSPw==",
         "dependencies": {
           "Microsoft.AspNetCore.Mvc.Core": "2.2.5"
         }
@@ -2322,11 +2322,11 @@
           "BookingsApi.Client": "[1.49.10, )",
           "Microsoft.Extensions.Logging.Abstractions": "[6.0.2, )",
           "Newtonsoft.Json": "[13.0.1, )",
-          "NotificationApi.Client": "[1.47.4, )",
+          "NotificationApi.Client": "[1.49.2, )",
           "SchedulerJobs.Common": "[1.0.0, )",
           "System.Threading.Tasks.Extensions": "[4.5.4, )",
-          "UserApi.Client": "[1.44.1, )",
-          "VideoApi.Client": "[1.44.2, )"
+          "UserApi.Client": "[1.48.1, )",
+          "VideoApi.Client": "[1.49.3, )"
         }
       },
       "testing.common": {
