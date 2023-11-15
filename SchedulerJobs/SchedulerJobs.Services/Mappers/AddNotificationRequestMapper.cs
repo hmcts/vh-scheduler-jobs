@@ -72,7 +72,7 @@ namespace SchedulerJobs.Services.Mappers
                 default:       //JudicialOfficeHolder
                     if (IsEjudge(participant))
                     {
-                        notificationType = NotificationType.NewHearingReminderEJUD;
+                        notificationType = NotificationType.NewHearingReminderEJudJoh;
                     }
                     else
                     {

@@ -11,6 +11,7 @@ namespace SchedulerJobs.Services.Mappers
             {
                 Id = source.Id,
                 Email = source.Email,
+                WorkPhone = source.WorkPhone,
                 Fullname = source.Fullname,
                 Surname = source.Surname,
                 Title = source.Title,
