@@ -1,16 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using BookingsApi.Client;
+using BookingsApi.Contract.V1.Enums;
 using BookingsApi.Contract.V1.Responses;
 using Microsoft.Extensions.Logging;
 using Moq;
 using NotificationApi.Client;
+using NotificationApi.Contract.Requests;
 using NUnit.Framework;
-using SchedulerJobs.Common.Configuration;
 using SchedulerJobs.Services.Interfaces;
-using SchedulerJobs.Services.Mappers;
 
 namespace SchedulerJobs.Services.UnitTests
 {
@@ -20,11 +19,10 @@ namespace SchedulerJobs.Services.UnitTests
         private Mock<INotificationApiClient> _notificationApiClient;
         private IHearingNotificationService _hearingNotificationService;
         private Mock<ILogger<HearingNotificationService>> _logger;
-        private Mock<IFeatureToggles> _featureTogglesMock;
         private List<HearingNotificationResponse> _nohearings;
         private List<HearingNotificationResponse> _hearings;
         private List<HearingNotificationResponse> _hearingsEjud;
-        private List<HearingNotificationResponse> _hearingsWithNoNotificationUserroles;
+        private List<HearingNotificationResponse> _hearingsWithNoNotificationUserRoles;
         private List<HearingNotificationResponse> _hearingsMultiple;
 
         [SetUp]
@@ -32,13 +30,12 @@ namespace SchedulerJobs.Services.UnitTests
         {
             _bookingApiClient = new Mock<IBookingsApiClient>();
             _notificationApiClient = new Mock<INotificationApiClient>();
-            _featureTogglesMock = new Mock<IFeatureToggles>();
             _logger = new Mock<ILogger<HearingNotificationService>>();
-            _hearingNotificationService = new HearingNotificationService(_bookingApiClient.Object, _notificationApiClient.Object, _logger.Object, _featureTogglesMock.Object);
-            _hearings = new List<HearingNotificationResponse>() { CreateHearing() };
-            _hearingsEjud = new List<HearingNotificationResponse>() { CreateHearingWithEjud() };
-            _hearingsMultiple = new List<HearingNotificationResponse>() { CreateHearing(), CreateHearing() };
-            _hearingsWithNoNotificationUserroles = new List<HearingNotificationResponse>() { CreateHearingWithNoRoles() };
+            _hearingNotificationService = new HearingNotificationService(_bookingApiClient.Object, _notificationApiClient.Object, _logger.Object);
+            _hearings = new List<HearingNotificationResponse> { CreateHearing() };
+            _hearingsEjud = new List<HearingNotificationResponse> { CreateHearingWithEjud() };
+            _hearingsMultiple = new List<HearingNotificationResponse> { CreateHearing(), CreateHearing() };
+            _hearingsWithNoNotificationUserRoles = new List<HearingNotificationResponse> { CreateHearingWithNoRoles() };
         }
 
         [Test]
@@ -51,48 +48,44 @@ namespace SchedulerJobs.Services.UnitTests
             await _hearingNotificationService.SendNotificationsAsync();
 
             _bookingApiClient.Verify(x => x.GetHearingsForNotificationAsync(), Times.Once);
-            _notificationApiClient.Verify(x => x.CreateNewNotificationAsync(new NotificationApi.Contract.Requests.AddNotificationRequest()), Times.Never);
+            _notificationApiClient.Verify(x => x.SendSingleDayHearingReminderEmailAsync(new SingleDayHearingReminderRequest()), Times.Never);
         }
 
         [Test]
         public async Task should__call_notificationApi_when_bookings_are_retruned()
         {
             _bookingApiClient.Setup(x => x.GetHearingsForNotificationAsync()).ReturnsAsync(_hearings);
-            _notificationApiClient.SetupSequence(x => x.CreateNewNotificationAsync(It.IsAny<NotificationApi.Contract.Requests.AddNotificationRequest>()))
+            _notificationApiClient.SetupSequence(x => x.SendSingleDayHearingReminderEmailAsync(It.IsAny<SingleDayHearingReminderRequest>()))
                 .Returns(Task.CompletedTask)
                 .Returns(Task.CompletedTask)
                 .Returns(Task.CompletedTask) ;
 
             await _hearingNotificationService.SendNotificationsAsync();
 
-            Assert.AreEqual(false, AddNotificationRequestMapper.IsEjudge(_hearings[0].Hearing.Participants.First(x => x.UserRoleName == "Judicial Office Holder")));
-
             _bookingApiClient.Verify(x => x.GetHearingsForNotificationAsync(), Times.Once);
-            _notificationApiClient.Verify(x => x.CreateNewNotificationAsync(It.IsAny<NotificationApi.Contract.Requests.AddNotificationRequest>()), Times.Exactly(3));
+            _notificationApiClient.Verify(x => x.SendSingleDayHearingReminderEmailAsync(It.IsAny<SingleDayHearingReminderRequest>()), Times.Exactly(3));
         }
 
         [Test]
         public async Task should__call_notificationApi_when_Ejud_bookings_are_retruned()
         {
             _bookingApiClient.Setup(x => x.GetHearingsForNotificationAsync()).ReturnsAsync(_hearingsEjud);
-            _notificationApiClient.SetupSequence(x => x.CreateNewNotificationAsync(It.IsAny<NotificationApi.Contract.Requests.AddNotificationRequest>()))
+            _notificationApiClient.SetupSequence(x => x.SendSingleDayHearingReminderEmailAsync(It.IsAny<SingleDayHearingReminderRequest>()))
                 .Returns(Task.CompletedTask)
                 .Returns(Task.CompletedTask)
                 .Returns(Task.CompletedTask);
 
             await _hearingNotificationService.SendNotificationsAsync();
 
-            Assert.AreEqual(true, AddNotificationRequestMapper.IsEjudge(_hearingsEjud[0].Hearing.Participants.First(x => x.UserRoleName == "Judicial Office Holder")));
-
             _bookingApiClient.Verify(x => x.GetHearingsForNotificationAsync(), Times.Once);
-            _notificationApiClient.Verify(x => x.CreateNewNotificationAsync(It.IsAny<NotificationApi.Contract.Requests.AddNotificationRequest>()), Times.Exactly(3));
+            _notificationApiClient.Verify(x => x.SendSingleDayHearingReminderEmailAsync(It.IsAny<SingleDayHearingReminderRequest>()), Times.Exactly(3));
         }
 
         [Test]
         public async Task should__call_notificationApi_when_multiple_bookings_are_retruned()
         {
             _bookingApiClient.Setup(x => x.GetHearingsForNotificationAsync()).ReturnsAsync(_hearingsMultiple);
-            _notificationApiClient.SetupSequence(x => x.CreateNewNotificationAsync(It.IsAny<NotificationApi.Contract.Requests.AddNotificationRequest>()))
+            _notificationApiClient.SetupSequence(x => x.SendSingleDayHearingReminderEmailAsync(It.IsAny<SingleDayHearingReminderRequest>()))
                 .Returns(Task.CompletedTask)
                 .Returns(Task.CompletedTask)
                 .Returns(Task.CompletedTask)
@@ -103,7 +96,7 @@ namespace SchedulerJobs.Services.UnitTests
             await _hearingNotificationService.SendNotificationsAsync();
 
             _bookingApiClient.Verify(x => x.GetHearingsForNotificationAsync(), Times.Once);
-            _notificationApiClient.Verify(x => x.CreateNewNotificationAsync(It.IsAny<NotificationApi.Contract.Requests.AddNotificationRequest>()), Times.Exactly(6));
+            _notificationApiClient.Verify(x => x.SendSingleDayHearingReminderEmailAsync(It.IsAny<SingleDayHearingReminderRequest>()), Times.Exactly(6));
         }
 
         [Test]
@@ -111,12 +104,12 @@ namespace SchedulerJobs.Services.UnitTests
         {
             _nohearings = new List<HearingNotificationResponse>();
             
-            _bookingApiClient.Setup(x => x.GetHearingsForNotificationAsync()).ReturnsAsync(_hearingsWithNoNotificationUserroles);
+            _bookingApiClient.Setup(x => x.GetHearingsForNotificationAsync()).ReturnsAsync(_hearingsWithNoNotificationUserRoles);
 
             await _hearingNotificationService.SendNotificationsAsync();
 
             _bookingApiClient.Verify(x => x.GetHearingsForNotificationAsync(), Times.Once);
-            _notificationApiClient.Verify(x => x.CreateNewNotificationAsync(new NotificationApi.Contract.Requests.AddNotificationRequest()), Times.Never);
+            _notificationApiClient.Verify(x => x.CreateNewNotificationAsync(new AddNotificationRequest()), Times.Never);
         }
 
 
@@ -124,7 +117,7 @@ namespace SchedulerJobs.Services.UnitTests
         {
             Guid id = Guid.NewGuid();
 
-            var hearing =  new HearingDetailsResponse()
+            var hearing =  new HearingDetailsResponse
             {
                 Id = id,
                 ScheduledDateTime = DateTime.UtcNow.AddDays(2),
@@ -132,12 +125,13 @@ namespace SchedulerJobs.Services.UnitTests
                 HearingVenueName = "Basingstoke County Court and Family Court",
                 CaseTypeName = "Asylum Support",
                 HearingTypeName = "Case Management Review Hearing",
-                Cases = new List<CaseResponse>() {
-                    new CaseResponse(){ Number = "CASE1-Test1", IsLeadCase = false, Name = "CASE1-Test1"}
-                },
-                Participants = new List<ParticipantResponse>()
+                Cases = new List<CaseResponse>
                 {
-                    new ParticipantResponse()
+                    new CaseResponse { Number = "CASE1-Test1", IsLeadCase = false, Name = "CASE1-Test1"}
+                },
+                Participants = new List<ParticipantResponse>
+                {
+                    new ParticipantResponse
                     {
                         Id = Guid.NewGuid(),
                         DisplayName ="observer",
@@ -155,7 +149,7 @@ namespace SchedulerJobs.Services.UnitTests
                         Representee = "",
                         LinkedParticipants = null
                     },
-                    new ParticipantResponse()
+                    new ParticipantResponse
                     {
                         Id = Guid.NewGuid(),
                         DisplayName ="Representative",
@@ -173,7 +167,7 @@ namespace SchedulerJobs.Services.UnitTests
                         Representee = "",
                         LinkedParticipants = null
                     },
-                    new ParticipantResponse()
+                    new ParticipantResponse
                     {
                         Id = Guid.NewGuid(),
                         DisplayName ="Manual Judge_01",
@@ -191,7 +185,7 @@ namespace SchedulerJobs.Services.UnitTests
                         Representee = "",
                         LinkedParticipants = null
                     },
-                    new ParticipantResponse()
+                    new ParticipantResponse
                     {
                         Id = Guid.NewGuid(),
                         DisplayName ="Secreatary of state",
@@ -219,7 +213,7 @@ namespace SchedulerJobs.Services.UnitTests
                 UpdatedDate = DateTime.Today,
                 ConfirmedBy = "",
                 ConfirmedDate = DateTime.Today,
-                Status = BookingsApi.Contract.V1.Enums.BookingStatus.Created,
+                Status = BookingStatus.Created,
                 AudioRecordingRequired = true,
                 CancelReason = "",
                 Endpoints = null,
@@ -237,7 +231,7 @@ namespace SchedulerJobs.Services.UnitTests
         {
             Guid id = Guid.NewGuid();
 
-            var hearing = new HearingDetailsResponse()
+            var hearing = new HearingDetailsResponse
             {
                 Id = id,
                 ScheduledDateTime = DateTime.UtcNow.AddDays(2),
@@ -245,12 +239,13 @@ namespace SchedulerJobs.Services.UnitTests
                 HearingVenueName = "Basingstoke County Court and Family Court",
                 CaseTypeName = "Asylum Support",
                 HearingTypeName = "Case Management Review Hearing",
-                Cases = new List<CaseResponse>() {
-                    new CaseResponse(){ Number = "CASE1-Test1", IsLeadCase = false, Name = "CASE1-Test1"}
-                },
-                Participants = new List<ParticipantResponse>()
+                Cases = new List<CaseResponse>
                 {
-                    new ParticipantResponse()
+                    new CaseResponse { Number = "CASE1-Test1", IsLeadCase = false, Name = "CASE1-Test1"}
+                },
+                Participants = new List<ParticipantResponse>
+                {
+                    new ParticipantResponse
                     {
                         Id = Guid.NewGuid(),
                         DisplayName ="observer",
@@ -268,7 +263,7 @@ namespace SchedulerJobs.Services.UnitTests
                         Representee = "",
                         LinkedParticipants = null
                     },
-                    new ParticipantResponse()
+                    new ParticipantResponse
                     {
                         Id = Guid.NewGuid(),
                         DisplayName ="Representative",
@@ -286,7 +281,7 @@ namespace SchedulerJobs.Services.UnitTests
                         Representee = "",
                         LinkedParticipants = null
                     },
-                    new ParticipantResponse()
+                    new ParticipantResponse
                     {
                         Id = Guid.NewGuid(),
                         DisplayName ="Manual Judge_01",
@@ -304,7 +299,7 @@ namespace SchedulerJobs.Services.UnitTests
                         Representee = "",
                         LinkedParticipants = null
                     },
-                    new ParticipantResponse()
+                    new ParticipantResponse
                     {
                         Id = Guid.NewGuid(),
                         DisplayName ="Secreatary of state",
@@ -332,7 +327,7 @@ namespace SchedulerJobs.Services.UnitTests
                 UpdatedDate = DateTime.Today,
                 ConfirmedBy = "",
                 ConfirmedDate = DateTime.Today,
-                Status = BookingsApi.Contract.V1.Enums.BookingStatus.Created,
+                Status = BookingStatus.Created,
                 AudioRecordingRequired = true,
                 CancelReason = "",
                 Endpoints = null,
@@ -348,7 +343,7 @@ namespace SchedulerJobs.Services.UnitTests
         {
             Guid id = Guid.NewGuid();
 
-            var hearing = new HearingDetailsResponse()
+            var hearing = new HearingDetailsResponse
             {
                 Id = id,
                 ScheduledDateTime = DateTime.UtcNow.AddDays(2),
@@ -356,12 +351,13 @@ namespace SchedulerJobs.Services.UnitTests
                 HearingVenueName = "Basingstoke County Court and Family Court",
                 CaseTypeName = "Asylum Support",
                 HearingTypeName = "Case Management Review Hearing",
-                Cases = new List<CaseResponse>() {
-                    new CaseResponse(){ Number = "CASE1-Test1", IsLeadCase = false, Name = "CASE1-Test1"}
-                },
-                Participants = new List<ParticipantResponse>()
+                Cases = new List<CaseResponse>
                 {
-                    new ParticipantResponse()
+                    new CaseResponse { Number = "CASE1-Test1", IsLeadCase = false, Name = "CASE1-Test1"}
+                },
+                Participants = new List<ParticipantResponse>
+                {
+                    new ParticipantResponse
                     {
                         Id = Guid.NewGuid(),
                         DisplayName ="Manual Judge_01",
@@ -389,7 +385,7 @@ namespace SchedulerJobs.Services.UnitTests
                 UpdatedDate = DateTime.Today,
                 ConfirmedBy = "",
                 ConfirmedDate = DateTime.Today,
-                Status = BookingsApi.Contract.V1.Enums.BookingStatus.Created,
+                Status = BookingStatus.Created,
                 AudioRecordingRequired = true,
                 CancelReason = "",
                 Endpoints = null,
