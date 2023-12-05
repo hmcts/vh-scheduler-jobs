@@ -2332,6 +2332,7 @@
       "testing.common": {
         "type": "Project",
         "dependencies": {
+          "Faker.NETCore": "[1.0.2, )",
           "Microsoft.Azure.WebJobs": "[3.0.25, )",
           "Microsoft.Azure.WebJobs.Extensions": "[4.0.1, )",
           "Microsoft.Extensions.Logging.Abstractions": "[6.0.2, )"

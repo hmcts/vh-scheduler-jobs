@@ -116,7 +116,7 @@ namespace SchedulerJobs.Services
         
         private async Task ProcessSubsequentDayOfMultiDayHearing(HearingNotificationResponse item, ParticipantResponse participant)
         {
-            if (!item.SourceHearing.Participants.Exists(x => x.Id == participant.Id))
+            if (!item.SourceHearing.Participants.Exists(x => x.ContactEmail == participant.ContactEmail))
             {
                 if (_rolesSupportingSingleDayReminders.Contains(participant.UserRoleName))
                 {
