@@ -109,7 +109,8 @@ namespace SchedulerJobs.Services
                     HearingId = item.Hearing.Id,
                     CaseName = item.Hearing.Cases[0].Name,
                     CaseNumber = item.Hearing.Cases[0].Number,
-                    RoleName = participant.UserRoleName
+                    RoleName = participant.UserRoleName,
+                    Representee = participant.Representee
                 });
         }
         
