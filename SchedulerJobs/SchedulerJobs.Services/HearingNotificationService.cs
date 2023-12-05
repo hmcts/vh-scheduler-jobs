@@ -58,6 +58,12 @@ namespace SchedulerJobs.Services
         {
             foreach (var participant in item.Hearing.Participants)
             {
+                if (IsSubsequentDayOfMultiDayHearing(item))
+                {
+                    await ProcessSubsequentDayOfMultiDayHearing(item, participant);
+                    continue;
+                }
+         
                 switch (item.TotalDays)
                 {
                     case > 1 when _rolesSupportingMultiDayReminders.Contains(participant.UserRoleName):
@@ -67,9 +73,7 @@ namespace SchedulerJobs.Services
                         await ProcessSingleDayHearing(item, participant);
                         break;
                     default:
-                        _logger.LogInformation(
-                            "SendNotificationsAsync - Ignored Participant: {ParticipantId} has role {RoleName} which is not supported for notification in the hearing {HearingId}",
-                            participant.Id, participant.UserRoleName, item.Hearing.Id);
+                        LogUnsupportedParticipantForNotification(item, participant);
                         continue;
                 }
             }
@@ -108,6 +112,21 @@ namespace SchedulerJobs.Services
                     RoleName = participant.UserRoleName
                 });
         }
+        
+        private async Task ProcessSubsequentDayOfMultiDayHearing(HearingNotificationResponse item, ParticipantResponse participant)
+        {
+            if (!item.SourceHearing.Participants.Exists(x => x.Id == participant.Id))
+            {
+                if (_rolesSupportingSingleDayReminders.Contains(participant.UserRoleName))
+                {
+                    await ProcessSingleDayHearing(item, participant);
+                }
+                else
+                {
+                    LogUnsupportedParticipantForNotification(item, participant);
+                }
+            }
+        }
 
         private async Task<List<HearingNotificationResponse>> GetHearings()
         {
@@ -115,6 +134,16 @@ namespace SchedulerJobs.Services
 
             var hearings = response.ToList();
             return hearings;
+        }
+
+        private bool IsSubsequentDayOfMultiDayHearing(HearingNotificationResponse item) => 
+            item.TotalDays > 1 && item.Hearing.Id != item.SourceHearing.Id;
+
+        private void LogUnsupportedParticipantForNotification(HearingNotificationResponse item, ParticipantResponse participant)
+        {
+            _logger.LogInformation(
+                "SendNotificationsAsync - Ignored Participant: {ParticipantId} has role {RoleName} which is not supported for notification in the hearing {HearingId}",
+                participant.Id, participant.UserRoleName, item.Hearing.Id);
         }
     }
 }

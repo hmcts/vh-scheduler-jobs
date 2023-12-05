@@ -204,7 +204,6 @@ namespace SchedulerJobs.Services.UnitTests
                         LinkedParticipants = null
                     }
                 },
-                TelephoneParticipants = null,
                 HearingRoomName = "",
                 OtherInformation = "",
                 CreatedDate = DateTime.Today,
@@ -318,7 +317,6 @@ namespace SchedulerJobs.Services.UnitTests
                         LinkedParticipants = null
                     }
                 },
-                TelephoneParticipants = null,
                 HearingRoomName = "",
                 OtherInformation = "",
                 CreatedDate = DateTime.Today,
@@ -376,7 +374,6 @@ namespace SchedulerJobs.Services.UnitTests
                         LinkedParticipants = null
                     }
                 },
-                TelephoneParticipants = null,
                 HearingRoomName = "",
                 OtherInformation = "",
                 CreatedDate = DateTime.Today,
