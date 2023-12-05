@@ -136,7 +136,7 @@ namespace SchedulerJobs.Services
             return hearings;
         }
 
-        private bool IsSubsequentDayOfMultiDayHearing(HearingNotificationResponse item) => 
+        private static bool IsSubsequentDayOfMultiDayHearing(HearingNotificationResponse item) => 
             item.TotalDays > 1 && item.Hearing.Id != item.SourceHearing.Id;
 
         private void LogUnsupportedParticipantForNotification(HearingNotificationResponse item, ParticipantResponse participant)
