@@ -146,7 +146,7 @@ namespace SchedulerJobs.Services.UnitTests
         
         
         [Test]
-        public async Task AllocateHearingsAsync_Should_Continue_To_Process_Other_Hearings_And_Log_Warning_When_Bad_Request_Returned()
+        public async Task AllocateHearingsAsync_Should_Continue_To_Process_Other_Hearings_And_Log_Trace_When_Bad_Request_Returned()
         {
             // Arrange
             var hearing1 = new HearingDetailsResponse { Id = Guid.NewGuid() };
@@ -191,7 +191,7 @@ namespace SchedulerJobs.Services.UnitTests
             
             // Assert
             _bookingsApiClient.Verify(x => x.AllocateHearingAutomaticallyAsync(It.IsAny<Guid>()), Times.Exactly(unallocatedHearings.Count));
-            AssertWarningLogged(unknownException);
+            AssertTraceLogged(unknownException);
             AssertMessageLogged("AllocateHearings: Completed allocation of hearings, 2 of 3 hearings allocated", LogLevel.Information);
         }
 
@@ -215,10 +215,10 @@ namespace SchedulerJobs.Services.UnitTests
                 (Func<It.IsAnyType, Exception, string>)It.IsAny<object>()), Times.Once);
         }
         
-        private void AssertWarningLogged(Exception exception)
+        private void AssertTraceLogged(Exception exception)
         {
             _logger.Verify(x => x.Log(
-                It.Is<LogLevel>(log => log == LogLevel.Warning),
+                It.Is<LogLevel>(log => log == LogLevel.Trace),
                 It.IsAny<EventId>(),
                 It.IsAny<It.IsAnyType>(),
                 It.Is<Exception>(x => x == exception),
