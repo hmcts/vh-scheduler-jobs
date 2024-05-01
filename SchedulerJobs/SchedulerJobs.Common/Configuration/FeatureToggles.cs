@@ -13,6 +13,7 @@ namespace SchedulerJobs.Common.Configuration
         public bool ImportAllJudiciaryUsersToggle();
         public bool UsePostMay2023Template();
         public bool EjudFeatureToggle();
+        public bool ELinksV2Api();
     }
     
     [ExcludeFromCodeCoverage]
@@ -43,6 +44,11 @@ namespace SchedulerJobs.Common.Configuration
         public bool UsePostMay2023Template() => GetBoolToggle(NewNotifyTemplatesToggleKey);
         
         public bool EjudFeatureToggle() => GetBoolToggle(EjudFeatureToggleKey);
+        public bool ELinksV2Api()
+        {
+            // TODO: create a new toggle in LaunchDarkly and return the value here
+            return false;
+        }
 
         private bool GetBoolToggle(string key)
         {

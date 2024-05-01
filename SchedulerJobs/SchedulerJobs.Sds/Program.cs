@@ -184,26 +184,7 @@ public static partial class Program
         {
             services.AddScoped<IELinksService, ELinksService>();
             services.AddTransient<ELinksApiDelegatingHandler>();
-            services.AddHttpClient<IPeoplesClient, PeoplesClient>()
-                .AddHttpMessageHandler<ELinksApiDelegatingHandler>()
-                .AddTypedClient(httpClient =>
-                {
-                    var peoplesClient = new PeoplesClient(httpClient)
-                    {
-                        BaseUrl = serviceConfiguration.ELinksPeoplesBaseUrl
-                    };
-                    return (IPeoplesClient)peoplesClient;
-                });
-            services.AddHttpClient<ILeaversClient, LeaversClient>()
-                .AddHttpMessageHandler<ELinksApiDelegatingHandler>()
-                .AddTypedClient(httpClient =>
-                {
-                    var leaversClient = new LeaversClient(httpClient)
-                    {
-                        BaseUrl = serviceConfiguration.ELinksLeaversBaseUrl
-                    };
-                    return (ILeaversClient)leaversClient;
-                });
+            RegisterELinksApiClients(services, featureToggle, serviceConfiguration);
         }
 
         services.AddTransient<VideoServiceTokenHandler>();
@@ -256,5 +237,58 @@ public static partial class Program
         var connectionStrings = new ConnectionStrings();
         configuration.GetSection("ConnectionStrings").Bind(connectionStrings);
         services.AddRedisInfrastructure(connectionStrings.RedisCache);
+    }
+
+    private static void RegisterELinksApiClients(IServiceCollection services, FeatureToggles featureToggle,
+        ServicesConfiguration serviceConfiguration)
+    {
+        if (featureToggle.ELinksV2Api())
+        {
+            services.AddHttpClient<IPeoplesClient, PeoplesClient>()
+                .AddHttpMessageHandler<ELinksApiV2DelegatingHandler>()
+                .AddTypedClient(httpClient =>
+                {
+                    var peoplesClient = new PeoplesClient(httpClient)
+                    {
+                        BaseUrl = serviceConfiguration.ELinksPeoplesBaseUrlV2
+                    };
+                    return (IPeoplesClient)peoplesClient;
+                });
+                
+            services.AddHttpClient<ILeaversClient, LeaversClient>()
+                .AddHttpMessageHandler<ELinksApiV2DelegatingHandler>()
+                .AddTypedClient(httpClient =>
+                {
+                    var leaversClient = new LeaversClient(httpClient)
+                    {
+                        BaseUrl = serviceConfiguration.ELinksLeaversBaseUrlV2
+                    };
+                    return (ILeaversClient)leaversClient;
+                });
+        }
+        else
+        {
+            services.AddHttpClient<IPeoplesClient, PeoplesClient>()
+                .AddHttpMessageHandler<ELinksApiDelegatingHandler>()
+                .AddTypedClient(httpClient =>
+                {
+                    var peoplesClient = new PeoplesClient(httpClient)
+                    {
+                        BaseUrl = serviceConfiguration.ELinksPeoplesBaseUrl
+                    };
+                    return (IPeoplesClient)peoplesClient;
+                });
+                
+            services.AddHttpClient<ILeaversClient, LeaversClient>()
+                .AddHttpMessageHandler<ELinksApiDelegatingHandler>()
+                .AddTypedClient(httpClient =>
+                {
+                    var leaversClient = new LeaversClient(httpClient)
+                    {
+                        BaseUrl = serviceConfiguration.ELinksLeaversBaseUrl
+                    };
+                    return (ILeaversClient)leaversClient;
+                });
+        }
     }
 }
