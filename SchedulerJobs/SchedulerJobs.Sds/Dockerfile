@@ -1,7 +1,7 @@
-﻿FROM mcr.microsoft.com/dotnet/runtime:6.0 AS base
+﻿FROM mcr.microsoft.com/dotnet/runtime:8.0 AS base
 WORKDIR /app
 
-FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
 COPY ["SchedulerJobs/SchedulerJobs.Sds/SchedulerJobs.Sds.csproj", "SchedulerJobs.Sds/"]
 COPY ["SchedulerJobs/SchedulerJobs.Services/SchedulerJobs.Services.csproj", "SchedulerJobs.Services/"]

@@ -5,7 +5,7 @@ resources:
     - repository: azTemplates
       type: github
       name: hmcts/azure-devops-templates
-      ref: master
+      ref: fix-vh-templates-for-dotnet-8
       endpoint: hmcts
 
 trigger: none
@@ -19,7 +19,7 @@ variables:
     value: 'SchedulerJobs'
   - group: vh-scheduler-jobs
   - name: dotnetCoreVersion
-    value: "6.x"
+    value: "8.x"
   - name: nugetPackagePath
     value: $(Pipeline.Workspace)/.nuget/packages
   - name: vstsFeedId
