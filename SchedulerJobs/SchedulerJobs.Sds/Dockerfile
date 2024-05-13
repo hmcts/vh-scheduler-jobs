@@ -1,18 +1,11 @@
 ﻿FROM mcr.microsoft.com/dotnet/runtime:8.0 AS base
 WORKDIR /app
 
-FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS publish
 WORKDIR /src
-COPY ["SchedulerJobs/SchedulerJobs.Sds/SchedulerJobs.Sds.csproj", "SchedulerJobs.Sds/"]
-COPY ["SchedulerJobs/SchedulerJobs.Services/SchedulerJobs.Services.csproj", "SchedulerJobs.Services/"]
-COPY ["SchedulerJobs/SchedulerJobs.Common/SchedulerJobs.Common.csproj", "SchedulerJobs.Common/"]
-COPY ["SchedulerJobs/nuget.config", "SchedulerJobs/"]
-RUN dotnet restore "SchedulerJobs.Sds/SchedulerJobs.Sds.csproj" --configfile SchedulerJobs/nuget.config
 COPY SchedulerJobs .
+RUN dotnet restore --configfile nuget.config "SchedulerJobs.Sds/SchedulerJobs.Sds.csproj"
 WORKDIR "/src/SchedulerJobs.Sds"
-RUN dotnet build "SchedulerJobs.Sds.csproj" -c Production -o /app/build --configfile ../SchedulerJobs/nuget.config
-
-FROM build AS publish
 RUN dotnet publish "SchedulerJobs.Sds.csproj" -c Production -o /app/publish
 
 FROM base AS final
