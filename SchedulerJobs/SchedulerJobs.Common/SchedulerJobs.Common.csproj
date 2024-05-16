@@ -1,33 +1,31 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>net6.0</TargetFramework>
 		<IsPackable>false</IsPackable>
 		<RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
 		<DisableImplicitNuGetFallbackFolder>true</DisableImplicitNuGetFallbackFolder>
-		<LangVersion>latestmajor</LangVersion>
 	</PropertyGroup>
 
 
 
 	<ItemGroup>
-		<PackageReference Include="LaunchDarkly.ServerSdk" Version="7.0.3" />
-		<PackageReference Include="Microsoft.Extensions.Caching.Abstractions" Version="6.0.0" />
-		<PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="6.0.1" />
-		<PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="6.0.0" />
-		<PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="6.0.0" />
-		<PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="6.0.1" />
-		<PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="6.0.0" />
-		<PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="6.0.1" />
-		<PackageReference Include="Microsoft.Extensions.Options" Version="6.0.0" />
+		<PackageReference Include="LaunchDarkly.ServerSdk" Version="8.4.0" />
+		<PackageReference Include="Microsoft.Extensions.Caching.Abstractions" Version="8.0.0" />
+		<PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="8.0.0" />
+		<PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="8.0.0" />
+		<PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="8.0.1" />
+		<PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="8.0.0" />
+		<PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="8.0.0" />
+		<PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="8.0.0" />
+		<PackageReference Include="Microsoft.Extensions.Options" Version="8.0.2" />
 		<PackageReference Include="Microsoft.IdentityModel.Clients.ActiveDirectory" Version="5.2.9" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-		<PackageReference Include="SonarAnalyzer.CSharp" Version="8.46.0.54807">
+		<PackageReference Include="SonarAnalyzer.CSharp" Version="9.25.0.90414">
 		  <PrivateAssets>all</PrivateAssets>
 		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
 		<PackageReference Include="System.Threading.Tasks.Extensions" Version="4.5.4" />
-		<PackageReference Include="TimeZoneConverter" Version="6.0.1" />
+		<PackageReference Include="TimeZoneConverter" Version="6.1.0" />
 	</ItemGroup>
 
 </Project>
