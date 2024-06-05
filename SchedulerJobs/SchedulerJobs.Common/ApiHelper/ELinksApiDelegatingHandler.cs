@@ -17,7 +17,7 @@ namespace SchedulerJobs.Common.ApiHelper
 
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
-            request.Headers.Add("Authorization", $"Bearer {_servicesConfiguration.ELinksApiKey}");
+            request.Headers.Add("Authorization", $"Token {_servicesConfiguration.ELinksApiKey}");
             return await base.SendAsync(request, cancellationToken);
         }
     }
