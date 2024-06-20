@@ -177,13 +177,9 @@ namespace SchedulerJobs.Services
             } while (morePages);
         }
         
-        public async Task<DateTime> GetUpdatedSince()
+        public Task<DateTime> GetUpdatedSince()
         {
-            if (_featureToggles.ImportAllJudiciaryUsersToggle())
-                return DateTime.MinValue;
-
-            var lastRun = await _jobHistoryService.GetMostRecentSuccessfulRunDate(GetType().Name);
-            return lastRun ?? DateTime.UtcNow.AddDays(-1);
+            return Task.FromResult(DateTime.MinValue);
         }
     }
 }
