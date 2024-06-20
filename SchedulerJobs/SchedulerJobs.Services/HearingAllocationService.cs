@@ -14,26 +14,17 @@ namespace SchedulerJobs.Services
     public class HearingAllocationService : IHearingAllocationService
     {
         private readonly IBookingsApiClient _bookingsApiClient;
-        private readonly IFeatureToggles _featureToggles;
         private readonly ILogger<HearingAllocationService> _logger;
         
-        public HearingAllocationService(IBookingsApiClient bookingsApiClient, 
-            IFeatureToggles featureToggles, 
+        public HearingAllocationService(IBookingsApiClient bookingsApiClient,
             ILogger<HearingAllocationService> logger)
         {
             _bookingsApiClient = bookingsApiClient;
-            _featureToggles = featureToggles;
             _logger = logger;
         }
         
         public async Task AllocateHearingsAsync()
         {
-            if (!_featureToggles.WorkAllocationToggle())
-            {
-                _logger.LogInformation("AllocateHearings: Feature WorkAllocation is turned off!");
-                return;
-            }
-            
             _logger.LogInformation("AllocateHearings: Starting to allocate hearings");
             
             var hearings = await _bookingsApiClient.GetUnallocatedHearingsAsync();
