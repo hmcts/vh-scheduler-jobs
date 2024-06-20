@@ -29,6 +29,7 @@ namespace SchedulerJobs.Common.Configuration
         public FeatureToggles(string sdkKey, string environmentName)
         {
             var config = LaunchDarkly.Sdk.Server.Configuration.Builder(sdkKey).Build();
+            
             _context = Context.Builder(LdUser).Name(environmentName).Build();
             _ldClient = new LdClient(config);
         }
