@@ -28,11 +28,10 @@ namespace SchedulerJobs.Services
         private readonly ILogger<ELinksService> _logger;
         private readonly IAzureStorageService _service;
         private readonly IFeatureToggles _featureToggles;
-        private readonly IJobHistoryService _jobHistoryService;
 
         public ELinksService(IPeoplesClient peoplesClient, ILeaversClient leaversClient,
             IBookingsApiClient bookingsApiClient, ILogger<ELinksService> logger, IAzureStorageService service,
-            IFeatureToggles featureToggles, IJobHistoryService jobHistoryService)
+            IFeatureToggles featureToggles)
         {
             _peoplesClient = peoplesClient;
             _leaversClient = leaversClient;
@@ -40,7 +39,6 @@ namespace SchedulerJobs.Services
             _logger = logger;
             _service = service;
             _featureToggles = featureToggles;
-            _jobHistoryService = jobHistoryService;
         }
 
         public async Task ImportJudiciaryPeopleAsync(DateTime fromDate)
@@ -177,13 +175,9 @@ namespace SchedulerJobs.Services
             } while (morePages);
         }
         
-        public async Task<DateTime> GetUpdatedSince()
+        public Task<DateTime> GetUpdatedSince()
         {
-            if (_featureToggles.ImportAllJudiciaryUsersToggle())
-                return DateTime.MinValue;
-
-            var lastRun = await _jobHistoryService.GetMostRecentSuccessfulRunDate(GetType().Name);
-            return lastRun ?? DateTime.UtcNow.AddDays(-1);
+            return Task.FromResult(DateTime.MinValue);
         }
     }
 }

@@ -14,33 +14,15 @@ namespace SchedulerJobs.Services.UnitTests
     {
         private IHearingAllocationService _service;
         private Mock<IBookingsApiClient> _bookingsApiClient;
-        private Mock<IFeatureToggles> _featureToggles;
         private Mock<ILogger<HearingAllocationService>> _logger;
         
         [SetUp]
         public void Setup()
         {
             _bookingsApiClient = new Mock<IBookingsApiClient>();
-            _featureToggles = new Mock<IFeatureToggles>();
-            _featureToggles.Setup(x => x.WorkAllocationToggle()).Returns(true);
             _logger = new Mock<ILogger<HearingAllocationService>>();
             _service = new HearingAllocationService(_bookingsApiClient.Object, 
-                _featureToggles.Object, 
                 _logger.Object);
-        }
-
-        [Test]
-        public async Task AllocateHearingsAsync_Should_Not_Call_Bookings_Api_When_Work_Allocation_Toggle_Is_Off()
-        {
-            // Arrange
-            _featureToggles.Setup(x => x.WorkAllocationToggle()).Returns(false);
-
-            // Act
-            await _service.AllocateHearingsAsync();
-
-            // Assert
-            _bookingsApiClient.Verify(x => x.GetUnallocatedHearingsAsync(), Times.Never);
-            AssertMessageLogged("AllocateHearings: Feature WorkAllocation is turned off!", LogLevel.Information);
         }
 
         [Test]
