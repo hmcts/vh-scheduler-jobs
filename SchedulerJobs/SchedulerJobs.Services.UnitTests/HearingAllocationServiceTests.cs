@@ -6,13 +6,12 @@ using BookingsApi.Contract.V1.Responses;
 using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
-using SchedulerJobs.Common.Configuration;
 
 namespace SchedulerJobs.Services.UnitTests
 {
     public class HearingAllocationServiceTests
     {
-        private IHearingAllocationService _service;
+        private HearingAllocationService _service;
         private Mock<IBookingsApiClient> _bookingsApiClient;
         private Mock<ILogger<HearingAllocationService>> _logger;
         

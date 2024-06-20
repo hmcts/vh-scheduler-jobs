@@ -2,7 +2,6 @@
 using System.Diagnostics.CodeAnalysis;
 using LaunchDarkly.Sdk;
 using LaunchDarkly.Sdk.Server;
-using LaunchDarkly.Sdk.Server.Interfaces;
 
 namespace SchedulerJobs.Common.Configuration
 {
@@ -14,7 +13,7 @@ namespace SchedulerJobs.Common.Configuration
     [ExcludeFromCodeCoverage]
     public class FeatureToggles : IFeatureToggles
     {
-        private readonly ILdClient _ldClient;
+        private readonly LdClient _ldClient;
         private readonly Context _context;
         private const string LdUser = "vh-scheduler-jobs";
         private const string StorePeopleIngestionToggleKey = "store-people-ingestion";
