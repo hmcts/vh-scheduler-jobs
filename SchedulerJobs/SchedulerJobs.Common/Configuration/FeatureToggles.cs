@@ -8,6 +8,7 @@ namespace SchedulerJobs.Common.Configuration
     public interface IFeatureToggles
     {
         public bool StorePeopleIngestion();
+        public bool ImportAllJudiciaryUsersToggle();
     }
     
     [ExcludeFromCodeCoverage]
@@ -17,6 +18,7 @@ namespace SchedulerJobs.Common.Configuration
         private readonly Context _context;
         private const string LdUser = "vh-scheduler-jobs";
         private const string StorePeopleIngestionToggleKey = "store-people-ingestion";
+        private const string ImportAllJudiciaryUsersToggleKey = "import-all-judiciary-users";
         public FeatureToggles(string sdkKey, string environmentName)
         {
             var config = LaunchDarkly.Sdk.Server.Configuration.Builder(sdkKey).Build();
@@ -26,6 +28,7 @@ namespace SchedulerJobs.Common.Configuration
         }
 
         public bool StorePeopleIngestion() => GetBoolToggle(StorePeopleIngestionToggleKey);
+        public bool ImportAllJudiciaryUsersToggle() => GetBoolToggle(ImportAllJudiciaryUsersToggleKey);
 
         private bool GetBoolToggle(string key)
         {
