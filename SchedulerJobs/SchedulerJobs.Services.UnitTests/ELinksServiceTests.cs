@@ -25,9 +25,8 @@ namespace SchedulerJobs.Services.UnitTests
         private Mock<ILogger<ELinksService>> _logger;
         private Mock<IAzureStorageService> _service;
         private Mock<IFeatureToggles> _featureToggles;
-        private Mock<IJobHistoryService> _jobHistoryService;
         private ELinksService _eLinksService;
-
+        private Mock<IJobHistoryService> _jobHistoryService;
         private class ClientPerson
         {
             public Guid Id { get; set; }
@@ -44,7 +43,6 @@ namespace SchedulerJobs.Services.UnitTests
             _service = new Mock<IAzureStorageService>();
             _featureToggles = new Mock<IFeatureToggles>();
             _jobHistoryService = new Mock<IJobHistoryService>();
-
             _eLinksService = new ELinksService(_peoplesClient.Object, _leaversClient.Object, _bookingsApiClient.Object,
                 _logger.Object, _service.Object, _featureToggles.Object, _jobHistoryService.Object);
             
@@ -666,19 +664,20 @@ namespace SchedulerJobs.Services.UnitTests
                 Times.Once);
         }
 
+        
         [Test]
         public async Task GetUpdatedSince_With_ImportAllJudiciaryUsers_Toggled_On_Returns_Minimum_DateTime()
         {
             // Arrange
             _featureToggles.Setup(x => x.ImportAllJudiciaryUsersToggle()).Returns(true);
-       
+            
             // Act
             var updatedSince = await _eLinksService.GetUpdatedSince();
 
             // Assert
             Assert.AreEqual(DateTime.Parse("0001-01-01"), updatedSince);
         }
-
+        
         [Test]
         public async Task GetUpdatedSince_With_ImportAllJudiciaryUsers_Toggled_Off_And_Previous_Successful_Run_Returns_Previous_Successful_Run_DateTime()
         {

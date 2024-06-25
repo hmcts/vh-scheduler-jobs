@@ -95,16 +95,8 @@ namespace SchedulerJobs.Services
                         break;
                     }
 
-                    _logger.LogInformation("ImportJudiciaryPeople: Adding raw data to JudiciaryPersonStaging from page: {CurrentPage}, total records: {Records}", currentPage, peoples.Results.Count());
-                    await _bookingsApiClient.BulkJudiciaryPersonsStagingAsync(
-                        peoples.Results.Select(JudiciaryPersonStagingRequestMapper.MapTo));
-
-                    var invalidPersonList = peoples.Results.Where(x => string.IsNullOrEmpty(x.PersonalCode)).ToList();
-                    invalidPersonList.ForEach(x => invalidPeoplePersonalCode.Add(x.PersonalCode));
-
-                    _logger.LogWarning(
-                        "ImportJudiciaryPeople: No of people who are invalid '{Count}' in page '{CurrentPage}'. Pages: {Pages}", 
-                        invalidPersonList.Count, currentPage, pages);
+                    await BulkJudiciaryPersonStaging(peoples, invalidPeoplePersonalCode, currentPage, pages);
+                    
                     _logger.LogInformation(
                         "ImportJudiciaryPeople: Calling bookings API with '{Count}' people", peopleResult.Count);
                     var response =
@@ -132,6 +124,18 @@ namespace SchedulerJobs.Services
             _logger.LogInformation("Number of pagination results: {Results}", results);
             _logger.LogWarning(
                 "ImportJudiciaryPeople: List of Personal code which are failed to insert '{invalidPeople}'", string.Join(",", invalidPeoplePersonalCode));
+        }
+        private async Task BulkJudiciaryPersonStaging(PeopleResponse peoples, List<string> invalidPeoplePersonalCode, int currentPage, int pages)
+        {
+            _logger.LogInformation("ImportJudiciaryPeople: Adding raw data to JudiciaryPersonStaging from page: {CurrentPage}, total records: {Records}", currentPage, peoples.Results.Count());
+            await _bookingsApiClient.BulkJudiciaryPersonsStagingAsync(
+                peoples.Results.Select(JudiciaryPersonStagingRequestMapper.MapTo));
+
+            var invalidPersonList = peoples.Results.Where(x => string.IsNullOrEmpty(x.PersonalCode)).ToList();
+            invalidPersonList.ForEach(x => invalidPeoplePersonalCode.Add(x.PersonalCode));
+            _logger.LogWarning(
+                "ImportJudiciaryPeople: No of people who are invalid '{Count}' in page '{CurrentPage}'. Pages: {Pages}", 
+                invalidPersonList.Count, currentPage, pages);
         }
 
         public async Task ImportLeaversJudiciaryPeopleAsync(DateTime fromDate)
