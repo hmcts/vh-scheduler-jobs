@@ -19,7 +19,8 @@ namespace SchedulerJobs.Services.Mappers
                 PersonalCode = source.PersonalCode,
                 PostNominals = source.PostNominals,
                 Leaver = source.Leaver.ToString(),
-                LeftOn = source.LeftOn
+                LeftOn = source.LeftOn,
+                Deleted = source.Deleted
             };
         }
     }
