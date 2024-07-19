@@ -25,7 +25,8 @@ namespace SchedulerJobs.Services.UnitTests.Mappers
                 HasLeft = true,
                 Leaver = true,
                 LeftOn = "2023-01-01",
-                Deleted = true
+                Deleted = true,
+                DeletedOn = "2023-01-01"
             };
             
             // Act
@@ -45,6 +46,7 @@ namespace SchedulerJobs.Services.UnitTests.Mappers
             result.Leaver.Should().Be(model.Leaver);
             result.LeftOn.Should().Be(model.LeftOn);
             result.Deleted.Should().Be(model.Deleted);
+            result.DeletedOn.Should().Be(model.DeletedOn);
         }
     }
 }

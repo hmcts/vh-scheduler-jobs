@@ -20,7 +20,8 @@ namespace SchedulerJobs.Services.Mappers
                 PostNominals = source.PostNominals,
                 Leaver = source.Leaver.ToString(),
                 LeftOn = source.LeftOn,
-                Deleted = source.Deleted
+                Deleted = source.Deleted,
+                DeletedOn = source.DeletedOn
             };
         }
     }

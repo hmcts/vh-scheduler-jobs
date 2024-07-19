@@ -26,7 +26,8 @@ namespace SchedulerJobs.Services.Mappers
                 HasLeft = source.HasLeft,
                 Leaver = source.Leaver,
                 LeftOn = source.LeftOn,
-                Deleted = source.Deleted
+                Deleted = source.Deleted,
+                DeletedOn = source.DeletedOn
             };
         }
     }

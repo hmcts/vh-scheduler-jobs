@@ -17,5 +17,6 @@ namespace SchedulerJobs.Common.Models
         public bool Leaver { get; set; }
         public string LeftOn { get; set; }
         public bool Deleted { get; set; }
+        public string DeletedOn { get; set; }
     }
 }
