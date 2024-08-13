@@ -11,11 +11,11 @@
 	<ItemGroup>
 		<PackageReference Include="BookingsApi.Client" Version="2.0.3-beta0006" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="6.0.2" />
-		<PackageReference Include="NotificationApi.Client" Version="1.49.2" />
+		<PackageReference Include="NotificationApi.Client" Version="1.52.1-beta0003" />
 		<PackageReference Include="System.Threading.Tasks.Extensions" Version="4.5.4" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-		<PackageReference Include="UserApi.Client" Version="1.48.1" />
-		<PackageReference Include="VideoApi.Client" Version="1.49.3" />
+		<PackageReference Include="UserApi.Client" Version="1.49.1-beta0002" />
+		<PackageReference Include="VideoApi.Client" Version="1.51.2-beta0002" />
         <PackageReference Include="Azure.Storage.Blobs" Version="12.13.1" />
 	</ItemGroup>
 
