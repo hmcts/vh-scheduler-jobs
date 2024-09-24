@@ -13,10 +13,11 @@ using SchedulerJobs.Services.Configuration;
 using SchedulerJobs.Services.HttpClients;
 using SchedulerJobs.Services.Interfaces;
 using System.Diagnostics.CodeAnalysis;
+using Microsoft.Extensions.Configuration.KeyPerFile;
+using Microsoft.Extensions.FileProviders;
 using SchedulerJobs.Sds.Configuration;
 using SchedulerJobs.Sds.Extensions;
 using UserApi.Client;
-using VH.Core.Configuration;
 using VideoApi.Client;
 
 var hostBuilder = Host.CreateDefaultBuilder(args);
@@ -63,8 +64,23 @@ public static partial class Program
         
         foreach (var keyVault in keyVaults)
         {
-            builder.AddAksKeyVaultSecretProvider($"/mnt/secrets/{keyVault}");
+            var filePath = $"/mnt/secrets/{keyVault}";
+            if (Directory.Exists(filePath))
+            {
+                builder.Add(GetKeyPerFileSource(filePath));    
+            }
         }
+    }
+    
+    private static KeyPerFileConfigurationSource GetKeyPerFileSource(string filePath)
+    {
+        return new KeyPerFileConfigurationSource
+        {
+            FileProvider = new PhysicalFileProvider(filePath),
+            Optional = true,
+            ReloadOnChange = true,
+            SectionDelimiter = "--" // Set your custom delimiter here
+        };
     }
 
     private static void RegisterJobs(IServiceCollection services, IEnumerable<string> args)

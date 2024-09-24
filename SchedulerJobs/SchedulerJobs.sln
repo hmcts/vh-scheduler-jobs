@@ -19,6 +19,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SchedulerJobs.Sds.UnitTests
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SchedulerJobs.Services.UnitTests", "SchedulerJobs.Services.UnitTests\SchedulerJobs.Services.UnitTests.csproj", "{D098B8AF-1802-4C8D-ACC6-0C424AFA85C6}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "RepoStuff", "RepoStuff", "{56841390-9E9E-46EC-B435-2820D976BFC6}"
+	ProjectSection(SolutionItems) = preProject
+		..\docker-compose.yml = ..\docker-compose.yml
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
