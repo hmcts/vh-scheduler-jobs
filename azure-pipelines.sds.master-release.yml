@@ -101,7 +101,7 @@ stages:
         command: test
         projects: |
           ${{ variables.app_path }}/${{ variables.app_path }}.Sds.UnitTests/*.csproj
-        arguments: ${{ format('--configuration Release /p:CollectCoverage=true /p:CoverletOutputFormat="\"opencover,cobertura,json,lcov\"" /p:Exclude="\"{0}\"" /p:CoverletOutput=$(Common.TestResultsDirectory)/Coverage/ /p:MergeWith=$(Common.TestResultsDirectory)/Coverage/coverage.json', join(',', parameters.sdsUnitTestsCoverletCoverageExclusions)) }}
+        arguments: ${{ format('--configuration Release /p:CollectCoverage=true /p:CoverletOutputFormat="\"opencover,cobertura,json,lcov\"" /p:Exclude="\"{0}\"" /p:CoverletOutput=$(Common.TestResultsDirectory)/Coverage/ /p:MergeWith=$(Common.TestResultsDirectory)/Coverage/coverage.json', join(',', parameters['sdsUnitTestsCoverletCoverageExclusions'])) }}
 
     # Services Unit Tests
 
@@ -133,7 +133,7 @@ stages:
         command: test
         projects: |
           ${{ variables.app_path }}/${{ variables.app_path }}.Services.UnitTests/*.csproj
-        arguments: ${{ format('--configuration Release /p:CollectCoverage=true /p:CoverletOutputFormat="\"opencover,cobertura,json,lcov\"" /p:Exclude="\"{0}\"" /p:CoverletOutput=$(Common.TestResultsDirectory)/Coverage/ /p:MergeWith=$(Common.TestResultsDirectory)/Coverage/coverage.json', join(',', parameters.servicesUnitTestsCoverletCoverageExclusions)) }}
+        arguments: ${{ format('--configuration Release /p:CollectCoverage=true /p:CoverletOutputFormat="\"opencover,cobertura,json,lcov\"" /p:Exclude="\"{0}\"" /p:CoverletOutput=$(Common.TestResultsDirectory)/Coverage/ /p:MergeWith=$(Common.TestResultsDirectory)/Coverage/coverage.json', join(',', parameters['servicesUnitTestsCoverletCoverageExclusions'])) }}
 
     ## Common
 
