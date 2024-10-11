@@ -28,6 +28,13 @@ parameters:
     requireApproval: true
     buildPushImage: true
     pushHelmChart: false
+    
+  - name: sdsUnitTestsCoverletCoverageExclusions
+    type: object
+    default: ["[*]SchedulerJobs.Common.*", "[*]SchedulerJobs.Sds.UnitTests.*", "[Testing.Common]*"]
+  - name: servicesUnitTestsCoverletCoverageExclusions
+    type: object
+    default: [ "[*]SchedulerJobs.Common.*", "[*]SchedulerJobs.Services.UnitTests.*", "[Testing.Common]*" ]
 
 pool: 
   vmImage: ubuntu-22.04
