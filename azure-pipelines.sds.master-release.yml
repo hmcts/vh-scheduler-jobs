@@ -28,7 +28,6 @@ parameters:
     requireApproval: true
     buildPushImage: true
     pushHelmChart: false
-    
   - name: sdsUnitTestsCoverletCoverageExclusions
     type: object
     default: ["[*]SchedulerJobs.Common.*", "[*]SchedulerJobs.Sds.UnitTests.*", "[Testing.Common]*"]
