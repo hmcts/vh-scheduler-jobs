@@ -13,7 +13,7 @@
 		<PackageReference Include="System.Threading.Tasks.Extensions" Version="4.5.4" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
 		<PackageReference Include="UserApi.Client" Version="1.49.2" />
-		<PackageReference Include="VideoApi.Client" Version="3.0.2-pr-0691-0002" />
+		<PackageReference Include="VideoApi.Client" Version="3.0.2" />
         <PackageReference Include="Azure.Storage.Blobs" Version="12.19.1" />
 	</ItemGroup>
 
