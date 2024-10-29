@@ -8,8 +8,6 @@ namespace SchedulerJobs.Services
     public interface ICloseConferenceService
     {
         Task<int> CloseConferencesAsync();
-
-        Task<int> DeleteAudiorecordingApplicationsAsync();
     }
 
     public class CloseConferenceService : ICloseConferenceService
@@ -35,29 +33,6 @@ namespace SchedulerJobs.Services
             }
 
             return conferenceCount;
-        }
-
-        public async Task<int> DeleteAudiorecordingApplicationsAsync()
-        {
-            var conferences = await _videoApiClient.GetExpiredAudiorecordingConferencesAsync();
-            var conferencesCount = 0;
-            if (conferences != null && conferences.Any())
-            {
-                conferencesCount = conferences.Count;
-                foreach (var conference in conferences)
-                {
-                    try
-                    {
-                        await _videoApiClient.DeleteAudioApplicationAsync(conference.HearingId);
-                    }
-                    catch (Exception)
-                    {
-                        conferencesCount--;
-                    }
-                }
-            }
-
-            return conferencesCount;
         }
     }
 }
