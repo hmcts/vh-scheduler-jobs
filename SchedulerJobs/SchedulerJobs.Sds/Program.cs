@@ -100,11 +100,6 @@ public static partial class Program
             services.AddHostedService<ClearHearingsJob>();
         }
 
-        if (args.Contains(nameof(DeleteAudioRecordingApplicationsJob)))
-        {
-            services.AddHostedService<DeleteAudioRecordingApplicationsJob>();
-        }
-
         if (args.Contains(nameof(GetJudiciaryUsersJob)))
         {
             services.AddHostedService<GetJudiciaryUsersJob>();   

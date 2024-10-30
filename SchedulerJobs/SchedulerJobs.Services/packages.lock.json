@@ -63,12 +63,12 @@
       },
       "VideoApi.Client": {
         "type": "Direct",
-        "requested": "[2.2.5, )",
-        "resolved": "2.2.5",
-        "contentHash": "0eHMkKBH0M7EZ93VpxK35FbiaDpZkmnlL0VGLtf+VsKaKMxGHBCEhYB4xNZfekEGET67CAu9itpJmk+33iQhaA==",
+        "requested": "[3.0.2, )",
+        "resolved": "3.0.2",
+        "contentHash": "519qw2K4Ny4cv98WxoIRx2M9GeCKR79R9vPHcoXtZyF4HhhlQrdgQ0hGC/Gg6OaQH2zMvl5115eRykXwNJ8uYQ==",
         "dependencies": {
           "Microsoft.AspNetCore.Mvc.Core": "2.2.5",
-          "Newtonsoft.Json": "13.0.3"
+          "System.Text.Json": "8.0.4"
         }
       },
       "Azure.Core": {
@@ -1561,8 +1561,8 @@
       },
       "System.Text.Json": {
         "type": "Transitive",
-        "resolved": "8.0.0",
-        "contentHash": "OdrZO2WjkiEG6ajEFRABTRCi/wuXQPxeV6g8xvUJqdxMvvuCCEk86zPla8UiIQJz3durtUEbNyY/3lIhS0yZvQ==",
+        "resolved": "8.0.4",
+        "contentHash": "bAkhgDJ88XTsqczoxEMliSrpijKZHhbJQldhAmObj/RbrN3sU5dcokuXmWJWsdQAhiMJ9bTayWsL1C9fbbCRhw==",
         "dependencies": {
           "System.Text.Encodings.Web": "8.0.0"
         }
