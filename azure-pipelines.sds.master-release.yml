@@ -34,6 +34,67 @@ pool:
 
 stages:
 #####################################################
+# CI Build Checks. ##################################
+
+- stage: CI_Build
+  displayName: CI Build
+  variables: 
+  - template: variables/shared.yaml
+  jobs:
+  - job: CI_Helm
+    displayName: "Helm CI"
+    steps:
+    - checkout: self
+
+    - template: templates\Containerisation\helm\helm-lint.yaml@azTemplates
+      parameters:
+        chartPath: ${{ variables.chartPath }}
+        chartValuesPath: ${{ variables.chartPath }}
+        additionalHelmArgs: "--set global.enableKeyVaults=true --set global.environment=ci"
+
+  - job: UnitTests
+    displayName: "Unit Tests"
+    steps:
+    - checkout: self
+
+    - template: templates/sonarCloud/prepare.yml@azTemplates
+      parameters:
+        ExtraProperties: |
+          sonar.cs.opencover.reportsPaths=$(Common.TestResultsDirectory)/Coverage/coverage.opencover.xml
+          sonar.coverage.exclusions=**/VideoApiService.cs, **/Startup.cs, **/Testing.Common/**, **/SchedulerJobs.Common/ApiHelper/**, **/SchedulerJobs.Common/Helper/Configuration/**, **/SchedulerJobs.Common/Helper/Security/**
+
+    # Scheduler Jobs Sds Unit Tests
+    - task: DotNetCoreCLI@2
+      displayName: Scheduler Jobs Unit Tests - Run dotnet Tests
+      inputs:
+        testRunTitle: dotnet Tests
+        command: test
+        projects: |
+          ${{ variables.app_path }}/${{ variables.app_path }}.Sds.UnitTests/*.csproj
+        arguments: ${{ format('--configuration Release /p:CollectCoverage=true /p:CoverletOutputFormat="\"opencover,cobertura,json,lcov\"" /p:Exclude="\"{0}\"" /p:CoverletOutput=$(Common.TestResultsDirectory)/Coverage/ /p:MergeWith=$(Common.TestResultsDirectory)/Coverage/coverage.json', join(',', parameters.sdsUnitTestsCoverletCoverageExclusions)) }}
+
+    # Services Unit Tests
+    - task: DotNetCoreCLI@2
+      displayName: Services Unit Tests - Run dotnet Tests
+      inputs:
+        testRunTitle: dotnet Tests
+        command: test
+        projects: |
+          ${{ variables.app_path }}/${{ variables.app_path }}.Services.UnitTests/*.csproj
+        arguments: ${{ format('--configuration Release /p:CollectCoverage=true /p:CoverletOutputFormat="\"opencover,cobertura,json,lcov\"" /p:Exclude="\"{0}\"" /p:CoverletOutput=$(Common.TestResultsDirectory)/Coverage/ /p:MergeWith=$(Common.TestResultsDirectory)/Coverage/coverage.json', join(',', parameters.servicesUnitTestsCoverletCoverageExclusions)) }}
+
+    - task: PublishCodeCoverageResults@1
+      displayName: Publish Code Coverage
+      inputs:
+        codeCoverageTool: Cobertura
+        summaryFileLocation: $(Common.TestResultsDirectory)/Coverage/coverage.cobertura.xml
+        reportDirectory: $(Common.TestResultsDirectory)/Coverage
+        failIfCoverageEmpty: true
+      condition: always()
+
+    - template: templates/sonarCloud/runAnalysis.yml@azTemplates
+
+#####################################################
 # Manual Approval ###################################
 - ${{ each stage in parameters.stages }}:
   - stage: Manual_Approval_${{ stage.env }}
