@@ -30,10 +30,10 @@ namespace SchedulerJobs.Sds.UnitTests.Common.Caching
         public async Task UpdateJobRunningStatus_Updates_Cache_Value_When_Job_Is_Running()
         {
             // Arrange
-            var entryPrefix = "job_running_status_";
-            var jobName = "TestJob";
-            var key = $"{entryPrefix}{jobName}";
-            var expectedIsRunningValue = true;
+            const string entryPrefix = "job_running_status_";
+            const string jobName = "TestJob";
+            const string key = $"{entryPrefix}{jobName}";
+            const bool expectedIsRunningValue = true;
             var serialized = JsonConvert.SerializeObject(expectedIsRunningValue, SerializerSettings);
             var rawData = Encoding.UTF8.GetBytes(serialized);
             _distributedCacheMock.Setup(x => x.GetAsync(key, CancellationToken.None)).ReturnsAsync(rawData);
@@ -51,10 +51,10 @@ namespace SchedulerJobs.Sds.UnitTests.Common.Caching
         public async Task UpdateJobRunningStatus_Removes_Cache_Value_When_Job_Is_No_Longer_Running()
         {
             // Arrange
-            var entryPrefix = "job_running_status_";
-            var jobName = "TestJob";
-            var key = $"{entryPrefix}{jobName}";
-            var expectedIsRunningValue = false;
+            const string entryPrefix = "job_running_status_";
+            const string jobName = "TestJob";
+            const string key = $"{entryPrefix}{jobName}";
+            const bool expectedIsRunningValue = false;
             var serialized = JsonConvert.SerializeObject(expectedIsRunningValue, SerializerSettings);
             var rawData = Encoding.UTF8.GetBytes(serialized);
             _distributedCacheMock.Setup(x => x.GetAsync(key, CancellationToken.None)).ReturnsAsync(rawData);
@@ -73,10 +73,10 @@ namespace SchedulerJobs.Sds.UnitTests.Common.Caching
         {
             // Arrange
             var redisContextAccessor = new Mock<IRedisContextAccessor>();
-            var cache = new DistributedJobRunningStatusCache(_distributedCacheMock.Object, null, redisContextAccessor.Object);
-            var entryPrefix = "job_running_status_";
-            var jobName = "TestJob";
-            var key = $"{entryPrefix}{jobName}";
+            var cache = new DistributedJobRunningStatusCache(_distributedCacheMock.Object, null!, redisContextAccessor.Object);
+            const string entryPrefix = "job_running_status_";
+            const string jobName = "TestJob";
+            const string key = $"{entryPrefix}{jobName}";
 
             // Act & Assert
             Assert.ThrowsAsync<InvalidOperationException>(async () => await cache.WriteToCache(key, It.IsAny<bool>()));
@@ -86,8 +86,8 @@ namespace SchedulerJobs.Sds.UnitTests.Common.Caching
         public async Task ReadFromCache_Returns_False_When_Exception_Thrown()
         {
             // Arrange
-            var jobName = "TestJob";
-            _distributedCacheMock.Setup(x => x.GetAsync(jobName, default))
+            const string jobName = "TestJob";
+            _distributedCacheMock.Setup(x => x.GetAsync(It.IsAny<string>(), default))
                 .Throws<Exception>();
 
             // Act
@@ -98,13 +98,28 @@ namespace SchedulerJobs.Sds.UnitTests.Common.Caching
         }
 
         [Test]
+        public async Task ReadFromCache_Returns_False_When_Key_Not_Found()
+        {
+            // Arrange
+            const string jobName = "TestJob";
+            _distributedCacheMock.Setup(x => x.GetAsync(It.IsAny<string>(), default))
+                .Returns(Task.FromResult<byte[]>(null));
+            
+            // Act
+            var result = await _distributedJobRunningStatusCache.IsJobRunning(jobName);
+            
+            // Assert
+            result.Should().Be(false);
+        }
+
+        [Test]
         public async Task CreateLock_Creates_Lock()
         {
             // Arrange
-            var entryPrefix = "job_running_status_";
-            var jobName = "TestJob";
-            var key = $"{entryPrefix}{jobName}";
-            var expectedIsRunningValue = false;
+            const string entryPrefix = "job_running_status_";
+            const string jobName = "TestJob";
+            const string key = $"{entryPrefix}{jobName}";
+            const bool expectedIsRunningValue = false;
             var serialized = JsonConvert.SerializeObject(expectedIsRunningValue, SerializerSettings);
             var rawData = Encoding.UTF8.GetBytes(serialized);
             _redisContextAccessor.Setup(x => x.CreateLockAsync(key, It.IsAny<TimeSpan>()))
@@ -132,7 +147,7 @@ namespace SchedulerJobs.Sds.UnitTests.Common.Caching
             redisContextAccessor.Verify(x => x.DisposeContext(), Times.Once);
         }
         
-        private static JsonSerializerSettings SerializerSettings => new JsonSerializerSettings
+        private static JsonSerializerSettings SerializerSettings => new()
         {
             TypeNameHandling = TypeNameHandling.Objects, Formatting = Formatting.None
         };

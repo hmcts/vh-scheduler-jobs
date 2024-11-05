@@ -28,9 +28,10 @@ namespace SchedulerJobs.Sds.Caching
         {
             try
             {
+                var foundKey = GetKey(key);
                 var data = await _distributedCache.GetAsync(GetKey(key));
-                if (data == null)
-                    throw new InvalidOperationException($"Key {key} not found in cache");
+                if (data == null || data.Length == 0)
+                    return default;
                 var profileSerialised = Encoding.UTF8.GetString(data);
                 var layout =
                     JsonConvert.DeserializeObject<TEntry>(profileSerialised,
