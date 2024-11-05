@@ -69,7 +69,42 @@ stages:
           sonar.cs.opencover.reportsPaths=$(Common.TestResultsDirectory)/Coverage/coverage.opencover.xml
           sonar.coverage.exclusions=**/VideoApiService.cs, **/Startup.cs, **/Testing.Common/**, **/SchedulerJobs.Common/ApiHelper/**, **/SchedulerJobs.Common/Helper/Configuration/**, **/SchedulerJobs.Common/Helper/Security/**
 
+    - task: UseDotNet@2
+      displayName: 'Install .NET Core SDK ${{ variables.dotnetCoreVersion }}'
+      inputs:
+        packageType: sdk
+        version: ${{ variables.dotnetCoreVersion }}
+        installationPath: $(Agent.ToolsDirectory)/dotnet
+
+    - powershell: |
+        $dotNetLocation = (dotnet nuget locals global-packages -l).replace('global-packages: ', '')
+        Write-Host "##vso[task.setvariable variable=cacheLocation;isOutput=true]$dotNetLocation"
+      displayName: 'Find NuGet Cache'
+      name: findCache
+
     # Scheduler Jobs Sds Unit Tests
+
+    - task: Cache@2
+      displayName: Scheduler Jobs Unit Tests - Cache NuGet Packages
+      inputs:
+        key: 'nuget | "$(Agent.OS)" | ${{ variables.app_path }}/${{ variables.app_path }}.Sds.UnitTests/packages.lock.json'
+        path: $(findCache.cacheLocation)
+        cacheHitVar: NUGET_CACHE_RESTORED
+      
+    - task: DotNetCoreCLI@2
+      displayName: Scheduler Jobs Unit Tests - Restore Unit Test Project
+      inputs:
+        command: restore
+        projects: ${{ variables.app_path }}/${{ variables.app_path }}.Sds.UnitTests/*.csproj
+        restoreArguments: --force-evaluate
+        ${{ if ne(variables.app_path, '') }}:
+          feedsToUse: config
+          nugetConfigPath: ${{ variables.app_path }}/nuget.config
+        ${{ if ne(variables.vstsFeedId, '') }}:
+          vstsFeed: ''
+          includeNuGetOrg: true
+        condition: ne(variables.NUGET_CACHE_RESTORED, 'true')
+
     - task: DotNetCoreCLI@2
       displayName: Scheduler Jobs Unit Tests - Run dotnet Tests
       inputs:
@@ -80,6 +115,28 @@ stages:
         arguments: ${{ format('--configuration Release /p:CollectCoverage=true /p:CoverletOutputFormat="\"opencover,cobertura,json,lcov\"" /p:Exclude="\"{0}\"" /p:CoverletOutput=$(Common.TestResultsDirectory)/Coverage/ /p:MergeWith=$(Common.TestResultsDirectory)/Coverage/coverage.json', join(',', parameters.sdsUnitTestsCoverletCoverageExclusions)) }}
 
     # Services Unit Tests
+
+    - task: Cache@2
+      displayName: Services Unit Tests - Cache NuGet Packages
+      inputs:
+        key: 'nuget | "$(Agent.OS)" | ${{ variables.app_path }}/${{ variables.app_path }}.Services.UnitTests/packages.lock.json'
+        path: $(findCache.cacheLocation)
+        cacheHitVar: NUGET_CACHE_RESTORED
+
+    - task: DotNetCoreCLI@2
+      displayName: Services Unit Tests - Restore Unit Test Project
+      inputs:
+        command: restore
+        projects: ${{ variables.app_path }}/${{ variables.app_path }}.Services.UnitTests/*.csproj
+        restoreArguments: --force-evaluate
+        ${{ if ne(variables.app_path, '') }}:
+          feedsToUse: config
+          nugetConfigPath: ${{ variables.app_path }}/nuget.config
+        ${{ if ne(variables.vstsFeedId, '') }}:
+          vstsFeed: ''
+          includeNuGetOrg: true
+        condition: ne(variables.NUGET_CACHE_RESTORED, 'true')
+
     - task: DotNetCoreCLI@2
       displayName: Services Unit Tests - Run dotnet Tests
       inputs:
