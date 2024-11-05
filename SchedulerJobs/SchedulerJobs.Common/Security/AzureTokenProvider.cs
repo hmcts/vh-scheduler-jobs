@@ -31,7 +31,7 @@ namespace SchedulerJobs.Common.Security
             AuthenticationResult result;
             var credential = new ClientCredential(clientId, clientSecret);
             var authContext =
-                new AuthenticationContext($"{_azureAdConfiguration.Authority}{_azureAdConfiguration.TenantId}");
+                new AuthenticationContext($"{AzureAdConfiguration.Authority}{_azureAdConfiguration.TenantId}");
 
             try
             {

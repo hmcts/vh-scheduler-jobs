@@ -35,10 +35,9 @@ namespace SchedulerJobs.Sds.Jobs
                 await eLinksService.ImportLeaversJudiciaryPeopleAsync(updatedSince);
                 _jobSucceeded = true;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 _jobSucceeded = false;
-                _logger.LogError(ex, ex.Message);
                 throw;
             }
             finally

@@ -12,7 +12,7 @@ namespace SchedulerJobs.Services
     }
     public class JobHistoryService : IJobHistoryService 
     {
-        private IBookingsApiClient _bookingsApiClient;
+        private readonly IBookingsApiClient _bookingsApiClient;
 
         public JobHistoryService(IBookingsApiClient bookingsApiClient)
         {

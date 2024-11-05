@@ -14,7 +14,7 @@ namespace SchedulerJobs.Sds.Caching
             _distributedCache = distributedCache;
         }
 
-        public virtual async Task WriteToCache(TKey key, TEntry toWrite)
+        public async Task WriteToCache(TKey key, TEntry toWrite)
         {
             if (CacheEntryOptions == null)
                 throw new InvalidOperationException($"Cannot write to cache without setting the {nameof(CacheEntryOptions)}");
@@ -24,11 +24,13 @@ namespace SchedulerJobs.Sds.Caching
             await _distributedCache.SetAsync(GetKey(key), data, CacheEntryOptions);
         }
 
-        protected virtual async Task<TEntry?> ReadFromCache(TKey key)
+        protected async Task<TEntry?> ReadFromCache(TKey key)
         {
             try
             {
                 var data = await _distributedCache.GetAsync(GetKey(key));
+                if (data == null)
+                    throw new InvalidOperationException($"Key {key} not found in cache");
                 var profileSerialised = Encoding.UTF8.GetString(data);
                 var layout =
                     JsonConvert.DeserializeObject<TEntry>(profileSerialised,

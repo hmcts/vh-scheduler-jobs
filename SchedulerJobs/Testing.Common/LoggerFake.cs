@@ -6,7 +6,7 @@ namespace Testing.Common
 {
     public class LoggerFake: ILogger
     {
-        private readonly IList<string> _logs;
+        private readonly List<string> _logs;
 
         /// <summary>
         /// Points to the static instance on the NullScope class to allow the test to function

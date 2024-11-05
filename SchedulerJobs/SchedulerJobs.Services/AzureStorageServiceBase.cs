@@ -94,19 +94,20 @@ namespace SchedulerJobs.Services
             return GetAllBlobNamesByFileExtension(allBlobsAsync);
         }
 
-        private async Task<IEnumerable<string>> GetAllBlobNamesByFileExtension(IAsyncEnumerable<BlobClient> allBlobs,
+        private static async Task<IEnumerable<string>> GetAllBlobNamesByFileExtension(IAsyncEnumerable<BlobClient> allBlobs,
             string fileExtension = ".json")
         {
-            var blobFullNames = new List<string>();
+            var blobList = new List<BlobClient>();
+
             await foreach (var blob in allBlobs)
             {
-                if (blob.Name.ToLower().EndsWith(fileExtension.ToLower()))
-                {
-                    blobFullNames.Add(blob.Name);
-                }
+                blobList.Add(blob);
             }
 
-            return blobFullNames;
+            return blobList
+                .Where(blob => blob.Name.ToLower().EndsWith(fileExtension.ToLower()))
+                .Select(blob => blob.Name)
+                .ToList();
         }
 
         public Task<IEnumerable<string>> GetAllEmptyBlobsByFilePathPrefix(string filePathPrefix)
@@ -118,16 +119,20 @@ namespace SchedulerJobs.Services
         private async Task<IEnumerable<string>> GetAllEmptyBlobs(IAsyncEnumerable<BlobClient> allBlobs,
             string fileExtension = ".json")
         {
-            var blobFullNames = new List<string>();
+            var blobList = new List<BlobClient>();
 
             await foreach (var blob in allBlobs)
             {
-                if (blob.Name.ToLower().EndsWith(fileExtension.ToLower()))
-                {
-                    var properties = await _blobClientExtension.GetPropertiesAsync(blob);
+                blobList.Add(blob);
+            }
 
-                    if (properties.ContentLength <= 0) blobFullNames.Add(blob.Name);
-                }
+            var blobFullNames = new List<string>();
+
+            foreach (var blob in blobList.Where(blob => blob.Name.ToLower().EndsWith(fileExtension.ToLower())))
+            {
+                var properties = await _blobClientExtension.GetPropertiesAsync(blob);
+
+                if (properties.ContentLength <= 0) blobFullNames.Add(blob.Name);
             }
 
             return blobFullNames;

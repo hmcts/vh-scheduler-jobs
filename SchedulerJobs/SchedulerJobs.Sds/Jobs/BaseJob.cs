@@ -1,4 +1,5 @@
 using System.Diagnostics.CodeAnalysis;
+using SchedulerJobs.Common.Exceptions;
 using SchedulerJobs.Sds.Caching;
 
 namespace SchedulerJobs.Sds.Jobs
@@ -52,7 +53,7 @@ namespace SchedulerJobs.Sds.Jobs
                 Environment.ExitCode = 1;
                 
                 _logger.LogError(ex, "Job failed: {jobName}", jobName);
-                throw;
+                throw new JobFailedException($"Job '{jobName}' failed.", ex);
             }
             finally
             {

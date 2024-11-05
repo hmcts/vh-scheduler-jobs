@@ -41,11 +41,8 @@ public static partial class Program
 {
     private static void ConfigureAppConfiguration(HostBuilderContext context, IConfigurationBuilder builder)
     {
-        if (builder == null)
-        {
-            throw new ArgumentNullException(nameof(builder));
-        }
-        
+        ArgumentNullException.ThrowIfNull(builder);
+
         var keyVaults=new List<string> (){
             "vh-infra-core",
             "vh-scheduler-jobs",
@@ -152,7 +149,7 @@ public static partial class Program
         configuration.GetSection("AzureConfiguration").Bind(azureConfiguration);
         
         Console.WriteLine("VH Scheduler jobs: RegisterServices : resolving dependency for azure config with singleton middleware");
-        services.AddSingleton(configuration.GetSection("AzureConfiguration").Get<AzureConfiguration>());
+        services.AddSingleton(azureConfiguration);
         
         var vhBlobServiceClient = new BlobServiceClient(new Uri(azureConfiguration.StorageEndpoint),
             new StorageSharedKeyCredential(azureConfiguration.StorageAccountName, azureConfiguration.StorageAccountKey));
