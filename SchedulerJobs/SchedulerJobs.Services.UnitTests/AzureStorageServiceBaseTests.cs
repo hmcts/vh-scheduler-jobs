@@ -19,6 +19,7 @@ public class AzureStorageServiceBaseTests
     private Mock<BlobServiceClient> _serviceClientMock;
     private Mock<IBlobStorageConfiguration> _blobStorageConfigurationMock;
     private Mock<IBlobClientExtension> _blobClientExtensionMock;
+    private Mock<BlobContainerClient> _containerClientMock;
     private AzureStorageServiceBase _azureStorageServiceBase;
     private const string ContainerName = "test-container";
     private const string Endpoint = "https://test.com/";
@@ -30,6 +31,9 @@ public class AzureStorageServiceBaseTests
         _serviceClientMock = new Mock<BlobServiceClient>();
         _blobStorageConfigurationMock = new Mock<IBlobStorageConfiguration>();
         _blobClientExtensionMock = new Mock<IBlobClientExtension>();
+        _containerClientMock = new Mock<BlobContainerClient>();
+        
+        _serviceClientMock.Setup(s => s.GetBlobContainerClient(It.IsAny<string>())).Returns(_containerClientMock.Object);
 
         _blobStorageConfigurationMock.SetupGet(c => c.StorageContainerName).Returns(ContainerName);
         _blobStorageConfigurationMock.SetupGet(c => c.StorageEndpoint).Returns(Endpoint);
@@ -49,11 +53,9 @@ public class AzureStorageServiceBaseTests
         // Arrange
         const string fileName = "test.json";
         var fileContent = new byte[] { 1, 2, 3 };
-        var containerClientMock = new Mock<BlobContainerClient>();
         var blobClientMock = new Mock<BlobClient>();
-
-        _serviceClientMock.Setup(s => s.GetBlobContainerClient(It.IsAny<string>())).Returns(containerClientMock.Object);
-        containerClientMock.Setup(c => c.GetBlobClient(It.IsAny<string>())).Returns(blobClientMock.Object);
+        
+        _containerClientMock.Setup(c => c.GetBlobClient(It.IsAny<string>())).Returns(blobClientMock.Object);
 
         // Act
         await _azureStorageServiceBase.UploadFile(fileName, fileContent);
@@ -66,20 +68,17 @@ public class AzureStorageServiceBaseTests
     public async Task ClearBlobs_DeletesAllBlobs()
     {
         // Arrange
-        var containerClientMock = new Mock<BlobContainerClient>();
         var blobClientMock = new Mock<BlobClient>();
         var blobs = new List<BlobItem> { BlobsModelFactory.BlobItem("blob1"), BlobsModelFactory.BlobItem("blob2") };
 
-        _serviceClientMock.Setup(s => s.GetBlobContainerClient(It.IsAny<string>())).Returns(containerClientMock.Object);
-        
         var mockPageable = new Mock<Pageable<BlobItem>>();
         mockPageable.Setup(pageable => pageable.GetEnumerator())
             .Returns(() => blobs.GetEnumerator());
-        containerClientMock
+        _containerClientMock
             .Setup(c => c.GetBlobs(It.IsAny<BlobTraits>(), It.IsAny<BlobStates>(), It.IsAny<string>(), default))
             .Returns(mockPageable.Object);
         
-        containerClientMock.Setup(c => c.GetBlobClient(It.IsAny<string>())).Returns(blobClientMock.Object);
+        _containerClientMock.Setup(c => c.GetBlobClient(It.IsAny<string>())).Returns(blobClientMock.Object);
 
         // Act
         await _azureStorageServiceBase.ClearBlobs();
@@ -93,11 +92,9 @@ public class AzureStorageServiceBaseTests
     {
         // Arrange
         const string filePath = "test.json";
-        var containerClientMock = new Mock<BlobContainerClient>();
         var blobClientMock = new Mock<BlobClient>();
-
-        _serviceClientMock.Setup(s => s.GetBlobContainerClient(It.IsAny<string>())).Returns(containerClientMock.Object);
-        containerClientMock.Setup(c => c.GetBlobClient(It.IsAny<string>())).Returns(blobClientMock.Object);
+        
+        _containerClientMock.Setup(c => c.GetBlobClient(It.IsAny<string>())).Returns(blobClientMock.Object);
         blobClientMock.Setup(b => b.ExistsAsync(default)).ReturnsAsync(Response.FromValue(true, null!));
 
         // Act
@@ -113,28 +110,8 @@ public class AzureStorageServiceBaseTests
         // Arrange
         const string fileNamePrefix = "json";
         const string blobName = $"blob1.{fileNamePrefix}";
-        var blobs = new List<BlobItem>
-        {
-            BlobsModelFactory.BlobItem(name: blobName)
-        };
 
-        var containerClientMock = new Mock<BlobContainerClient>();
-        var blobClientMock = new Mock<BlobClient>();
-
-        _serviceClientMock.Setup(s => s.GetBlobContainerClient(It.IsAny<string>())).Returns(containerClientMock.Object);
-        containerClientMock.Setup(c => c.GetBlobClient(blobName)).Returns(blobClientMock.Object);
-
-        var blobProperties = BlobsModelFactory.BlobProperties(contentLength: 100);
-        var emptyBlobPropertiesResponse = Response.FromValue(blobProperties, new Mock<Response>().Object);
-        _blobClientExtensionMock.Setup(e => e.GetPropertiesAsync(blobClientMock.Object))
-            .ReturnsAsync(emptyBlobPropertiesResponse);
-        
-        blobClientMock.SetupGet(b => b.Name).Returns(blobName);
-
-        var asyncPageable = AsyncPageable<BlobItem>.FromPages(new[] { Page<BlobItem>.FromValues(blobs, null, new Mock<Response>().Object) });
-        containerClientMock
-            .Setup(c => c.GetBlobsAsync(default, default, It.IsAny<string>(), default))
-            .Returns(asyncPageable);
+        SetUpBlobs([blobName]);
         
         // Act
         const int expectedCount = 1;
@@ -156,29 +133,8 @@ public class AzureStorageServiceBaseTests
             BlobsModelFactory.BlobItem(name: blob1Name),
             BlobsModelFactory.BlobItem(name: blob2Name)
         };
-
-        var containerClientMock = new Mock<BlobContainerClient>();
-        var blobClientMock1 = new Mock<BlobClient>();
-        var blobClientMock2 = new Mock<BlobClient>();
-
-        _serviceClientMock.Setup(s => s.GetBlobContainerClient(It.IsAny<string>())).Returns(containerClientMock.Object);
-        containerClientMock.Setup(c => c.GetBlobClient(blob1Name)).Returns(blobClientMock1.Object);
-        containerClientMock.Setup(c => c.GetBlobClient(blob2Name)).Returns(blobClientMock2.Object);
-
-        var blobProperties = BlobsModelFactory.BlobProperties(contentLength: 100);
-        var blobPropertiesResponse = Response.FromValue(blobProperties, new Mock<Response>().Object);
-        _blobClientExtensionMock.Setup(e => e.GetPropertiesAsync(blobClientMock1.Object))
-            .ReturnsAsync(blobPropertiesResponse);
-        _blobClientExtensionMock.Setup(e => e.GetPropertiesAsync(blobClientMock2.Object))
-            .ReturnsAsync(blobPropertiesResponse);
         
-        blobClientMock1.SetupGet(b => b.Name).Returns(blob1Name);
-        blobClientMock2.SetupGet(b => b.Name).Returns(blob2Name);
-
-        var asyncPageable = AsyncPageable<BlobItem>.FromPages(new[] { Page<BlobItem>.FromValues(blobs, null, new Mock<Response>().Object) });
-        containerClientMock
-            .Setup(c => c.GetBlobsAsync(default, default, It.IsAny<string>(), default))
-            .Returns(asyncPageable);
+        SetUpBlobs([blob1Name, blob2Name]);
 
         // Act & Assert
         const int expectedCount = 5;
@@ -198,24 +154,8 @@ public class AzureStorageServiceBaseTests
         {
             BlobsModelFactory.BlobItem(name: blobName)
         };
-
-        var containerClientMock = new Mock<BlobContainerClient>();
-        var blobClientMock = new Mock<BlobClient>();
-
-        _serviceClientMock.Setup(s => s.GetBlobContainerClient(It.IsAny<string>())).Returns(containerClientMock.Object);
-        containerClientMock.Setup(c => c.GetBlobClient(blobName)).Returns(blobClientMock.Object);
-
-        var emptyBlobProperties = BlobsModelFactory.BlobProperties(contentLength: 0);
-        var emptyBlobPropertiesResponse = Response.FromValue(emptyBlobProperties, new Mock<Response>().Object);
-        _blobClientExtensionMock.Setup(e => e.GetPropertiesAsync(blobClientMock.Object))
-            .ReturnsAsync(emptyBlobPropertiesResponse);
         
-        blobClientMock.SetupGet(b => b.Name).Returns(blobName);
-
-        var asyncPageable = AsyncPageable<BlobItem>.FromPages(new[] { Page<BlobItem>.FromValues(blobs, null, new Mock<Response>().Object) });
-        containerClientMock
-            .Setup(c => c.GetBlobsAsync(default, default, It.IsAny<string>(), default))
-            .Returns(asyncPageable);
+        SetUpBlobs([blobName], contentLength: 0);
         
         // Act & Assert
         const int expectedCount = 1;
@@ -253,5 +193,30 @@ public class AzureStorageServiceBaseTests
         // Assert
         const string expectedSignature = $"{Endpoint}{ContainerName}/{filePath}?";
         Assert.That(result.Contains(expectedSignature));
+    }
+
+    private void SetUpBlobs(List<string> names, int contentLength = 100)
+    {
+        var blobs = new List<BlobItem>();
+        
+        foreach (var name in names)
+        {
+            var blobClientMock = new Mock<BlobClient>();
+            _containerClientMock.Setup(c => c.GetBlobClient(name)).Returns(blobClientMock.Object);
+            
+            var blobProperties = BlobsModelFactory.BlobProperties(contentLength: contentLength);
+            var blobPropertiesResponse = Response.FromValue(blobProperties, new Mock<Response>().Object);
+            _blobClientExtensionMock.Setup(e => e.GetPropertiesAsync(blobClientMock.Object))
+                .ReturnsAsync(blobPropertiesResponse);
+        
+            blobClientMock.SetupGet(b => b.Name).Returns(name);
+            
+            blobs.Add(BlobsModelFactory.BlobItem(name: name));
+        }
+
+        var asyncPageable = AsyncPageable<BlobItem>.FromPages(new[] { Page<BlobItem>.FromValues(blobs, null, new Mock<Response>().Object) });
+        _containerClientMock
+            .Setup(c => c.GetBlobsAsync(default, default, It.IsAny<string>(), default))
+            .Returns(asyncPageable);
     }
 }
