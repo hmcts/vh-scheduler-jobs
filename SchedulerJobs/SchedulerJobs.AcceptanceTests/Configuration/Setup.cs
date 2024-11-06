@@ -27,7 +27,7 @@ namespace SchedulerJobs.AcceptanceTests.Configuration
         {
             var azureOptions = Options.Create(_configRoot.GetSection("AzureAd").Get<AzureAdConfiguration>());
             _context.Config.AzureAdConfiguration = azureOptions.Value;
-            _context.Config.AzureAdConfiguration.Authority.Should().NotBeNullOrWhiteSpace();
+            AzureAdConfiguration.Authority.Should().NotBeNullOrWhiteSpace();
             _context.Config.AzureAdConfiguration.ClientId.Should().NotBeNullOrWhiteSpace();
             _context.Config.AzureAdConfiguration.ClientSecret.Should().NotBeNullOrWhiteSpace();
             _context.Config.AzureAdConfiguration.TenantId.Should().NotBeNullOrWhiteSpace();

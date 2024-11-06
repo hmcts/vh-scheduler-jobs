@@ -11,7 +11,7 @@ namespace SchedulerJobs.Services.UnitTests
 {
     public class JobHistoryServiceTests
     {
-        private IJobHistoryService _jobHistoryService;
+        private JobHistoryService _jobHistoryService;
         private Mock<IBookingsApiClient> _bookingApiClient;
         private const string JobName = "testJobName";
         [SetUp]

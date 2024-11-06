@@ -21,7 +21,7 @@ namespace SchedulerJobs.Services.UnitTests
         private Mock<IVideoApiClient> _videoApiClient;
         private Mock<IBookingsApiClient> _bookingApiClient;
         private Mock<IUserApiClient> _userApiClient;
-        private IAnonymiseHearingsConferencesDataService _anonymiseHearingsConferencesDataService;
+        private AnonymiseHearingsConferencesDataService _anonymiseHearingsConferencesDataService;
         private Mock<ILogger<AnonymiseHearingsConferencesDataService>> _logger;
         private AnonymisationDataResponse _anonymisationDataResponse;
 

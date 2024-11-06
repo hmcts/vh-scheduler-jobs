@@ -21,12 +21,6 @@ crons:
     concurrencyPolicy: Forbid
     args:
     - ClearHearingsJob
-
-  - cronJobName: vh-delete-audio-recording-applications-job
-    schedule: "0 22 * * *"
-    concurrencyPolicy: Forbid
-    args:
-    - DeleteAudioRecordingApplicationsJob
     
   - cronJobName: vh-get-judiciary-users-job
     schedule: "0 2 * * *"

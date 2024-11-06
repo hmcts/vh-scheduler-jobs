@@ -23,7 +23,7 @@ namespace SchedulerJobs.Services
 
         public async Task ImportJudiciaryPeopleAsync(DateTime fromDate)
         {
-            _logger.LogInformation("ImportJudiciaryPeople: using stub");
+            _logger.LogDebug("ImportJudiciaryPeople: using stub");
             _logger.LogInformation("ImportJudiciaryPeople: Removing all records from JudiciaryPersonsStaging");
             await _bookingsApiClient.RemoveAllJudiciaryPersonsStagingAsync();
             var peopleResult = RetrieveManualAccounts().Concat(RetrieveAutomationAccounts()).ToList();
