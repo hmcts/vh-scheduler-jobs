@@ -25,7 +25,7 @@ namespace SchedulerJobs.Services
         private readonly IBlobClientExtension _blobClientExtension;
 
 
-        protected AzureStorageServiceBase(BlobServiceClient serviceClient,
+        public AzureStorageServiceBase(BlobServiceClient serviceClient,
             IBlobStorageConfiguration blobStorageConfiguration, IBlobClientExtension blobClientExtension,
             bool useUserDelegation)
         {
@@ -195,14 +195,14 @@ namespace SchedulerJobs.Services
             if (allBlobs.Count() < count || !allBlobs.Any())
             {
                 var msg = $"ReconcileFilesInStorage - File name prefix :" + fileNamePrefix + "  Expected: " + count +
-                          " Actual:" + allBlobs.Count().ToString();
+                          " Actual: " + allBlobs.Count().ToString();
                 throw new AudioPlatformFileNotFoundException(msg, HttpStatusCode.NotFound);
             }
 
             if (emptyBlobs.Any())
             {
                 StringBuilder msg = new StringBuilder($"ReconcileFilesInStorage - File name prefix :" + fileNamePrefix +
-                                                      "  Expected: " + count + " Actual:" +
+                                                      "  Expected: " + count + " Actual: " +
                                                       allBlobs.Count().ToString());
 
                 foreach (var item in emptyBlobs)
