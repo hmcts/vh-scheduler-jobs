@@ -66,7 +66,7 @@ stages:
       parameters:
         ExtraProperties: |
           sonar.cs.opencover.reportsPaths=$(Common.TestResultsDirectory)/Coverage/coverage.opencover.xml
-          sonar.coverage.exclusions=**/VideoApiService.cs, **/Startup.cs, **/Testing.Common/**, **/SchedulerJobs.Common/ApiHelper/**, **/SchedulerJobs.Common/Helper/Configuration/**, **/SchedulerJobs.Common/Helper/Security/**
+          sonar.coverage.exclusions=**/VideoApiService.cs, **/Startup.cs, **/Testing.Common/**, **/SchedulerJobs.Common/ApiHelper/**, **/SchedulerJobs.Common/Helper/Configuration/**, **/SchedulerJobs.Common/Security/**, **/SchedulerJobs.Common.Exceptions/**, **/SchedulerJobs.Sds.Configuration/**, **/SchedulerJobs.Services.Configuration/**
 
     - task: UseDotNet@2
       displayName: 'Install .NET Core SDK ${{ variables.dotnetCoreVersion }}'

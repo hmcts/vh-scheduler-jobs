@@ -1,9 +1,7 @@
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 
 namespace SchedulerJobs.Services.Configuration
 {
-    [ExcludeFromCodeCoverage]
     public class AzureConfiguration : IBlobStorageConfiguration
     {
         public IEnumerable<string> RestApiEndpoints { get; set; }
