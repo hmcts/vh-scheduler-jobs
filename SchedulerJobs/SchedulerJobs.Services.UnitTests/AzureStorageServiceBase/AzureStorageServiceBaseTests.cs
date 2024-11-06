@@ -61,7 +61,10 @@ public abstract class AzureStorageServiceBaseTests
             blobs.Add(BlobsModelFactory.BlobItem(name: name));
         }
 
-        var asyncPageable = AsyncPageable<BlobItem>.FromPages(new[] { Page<BlobItem>.FromValues(blobs, null, new Mock<Response>().Object) });
+        var asyncPageable = AsyncPageable<BlobItem>.FromPages(new[]
+        {
+            Page<BlobItem>.FromValues(blobs, null, new Mock<Response>().Object) 
+        });
         ContainerClientMock
             .Setup(c => c.GetBlobsAsync(default, default, It.IsAny<string>(), default))
             .Returns(asyncPageable);
