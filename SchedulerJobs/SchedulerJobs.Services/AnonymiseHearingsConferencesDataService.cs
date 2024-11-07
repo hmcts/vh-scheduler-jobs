@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using BookingsApi.Client;
 using Microsoft.Extensions.Logging;
 using SchedulerJobs.Common.Constants;
@@ -39,9 +38,9 @@ namespace SchedulerJobs.Services
         {
             var anonymisationData = await _bookingsApiClient.GetAnonymisationDataAsync();
 
-            if (anonymisationData.HearingIds.Any())
+            if (anonymisationData.HearingIds.Count != 0)
             {
-                _logger.LogInformation("Hearing ids being processed: {hearingids}", anonymisationData.HearingIds);
+                _logger.LogInformation("Hearing ids being processed: {HearingIds}", anonymisationData.HearingIds);
 
                 await _videoApiClient.AnonymiseConferenceWithHearingIdsAsync(
                     new AnonymiseConferenceWithHearingIdsRequest
@@ -55,7 +54,7 @@ namespace SchedulerJobs.Services
             }
 
 
-            if (!anonymisationData.Usernames.Any()) return;
+            if (anonymisationData.Usernames.Count == 0) return;
 
             foreach (var username in anonymisationData.Usernames)
             {

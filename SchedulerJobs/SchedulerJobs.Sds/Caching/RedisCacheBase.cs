@@ -4,31 +4,27 @@ using Newtonsoft.Json;
 
 namespace SchedulerJobs.Sds.Caching
 {
-    public abstract class RedisCacheBase<TKey, TEntry>
+    public abstract class RedisCacheBase<TKey, TEntry>(IDistributedCache distributedCache)
     {
-        private readonly IDistributedCache _distributedCache;
         public abstract DistributedCacheEntryOptions CacheEntryOptions { get; protected set; }
 
-        protected RedisCacheBase(IDistributedCache distributedCache)
-        {
-            _distributedCache = distributedCache;
-        }
-
-        public virtual async Task WriteToCache(TKey key, TEntry toWrite)
+        public async Task WriteToCache(TKey key, TEntry toWrite)
         {
             if (CacheEntryOptions == null)
                 throw new InvalidOperationException($"Cannot write to cache without setting the {nameof(CacheEntryOptions)}");
 
             var serialisedLayout = JsonConvert.SerializeObject(toWrite, CachingHelper.SerializerSettings);
             var data = Encoding.UTF8.GetBytes(serialisedLayout);
-            await _distributedCache.SetAsync(GetKey(key), data, CacheEntryOptions);
+            await distributedCache.SetAsync(GetKey(key), data, CacheEntryOptions);
         }
 
-        protected virtual async Task<TEntry?> ReadFromCache(TKey key)
+        protected async Task<TEntry?> ReadFromCache(TKey key)
         {
             try
             {
-                var data = await _distributedCache.GetAsync(GetKey(key));
+                var data = await distributedCache.GetAsync(GetKey(key));
+                if (data == null || data.Length == 0)
+                    return default;
                 var profileSerialised = Encoding.UTF8.GetString(data);
                 var layout =
                     JsonConvert.DeserializeObject<TEntry>(profileSerialised,
@@ -41,9 +37,9 @@ namespace SchedulerJobs.Sds.Caching
             }
         }
 
-        protected virtual async Task RemoveFromCache(TKey key)
+        protected async Task RemoveFromCache(TKey key)
         {
-            await _distributedCache.RemoveAsync(GetKey(key));
+            await distributedCache.RemoveAsync(GetKey(key));
         }
 
         protected abstract string GetKey(TKey key);

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
 using VideoApi.Client;
@@ -11,7 +12,7 @@ namespace SchedulerJobs.Services.UnitTests
     public class CloseConferenceServiceTest
     {
         private Mock<IVideoApiClient> _videoApiClient;
-        private ICloseConferenceService _closeConferenceService;
+        private CloseConferenceService _closeConferenceService;
 
         [SetUp]
         public void Setup()
@@ -21,7 +22,7 @@ namespace SchedulerJobs.Services.UnitTests
         }
 
         [Test]
-        public void Empty_list_of_conferences_and_nothing_done()
+        public async Task Empty_list_of_conferences_and_nothing_done()
         {
             _videoApiClient = new Mock<IVideoApiClient>();
             _closeConferenceService = new CloseConferenceService(_videoApiClient.Object);
@@ -29,7 +30,7 @@ namespace SchedulerJobs.Services.UnitTests
             var conferences = new List<ExpiredConferencesResponse>();
             _videoApiClient.Setup(x => x.GetExpiredOpenConferencesAsync()).ReturnsAsync(conferences);
 
-            _closeConferenceService.CloseConferencesAsync();
+            await _closeConferenceService.CloseConferencesAsync();
             _videoApiClient.Verify(x => x.CloseConferenceAsync(It.IsAny<Guid>()), Times.Never);
         }
 

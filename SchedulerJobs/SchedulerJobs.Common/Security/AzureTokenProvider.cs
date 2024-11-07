@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Clients.ActiveDirectory;
 using SchedulerJobs.Common.Configuration;
@@ -11,6 +12,7 @@ namespace SchedulerJobs.Common.Security
         AuthenticationResult GetAuthorisationResult(string clientId, string clientSecret, string clientResource);
     }
 
+    [ExcludeFromCodeCoverage]
     public class AzureTokenProvider : IAzureTokenProvider
     {
         private readonly AzureAdConfiguration _azureAdConfiguration;
@@ -31,7 +33,7 @@ namespace SchedulerJobs.Common.Security
             AuthenticationResult result;
             var credential = new ClientCredential(clientId, clientSecret);
             var authContext =
-                new AuthenticationContext($"{_azureAdConfiguration.Authority}{_azureAdConfiguration.TenantId}");
+                new AuthenticationContext($"{AzureAdConfiguration.Authority}{_azureAdConfiguration.TenantId}");
 
             try
             {

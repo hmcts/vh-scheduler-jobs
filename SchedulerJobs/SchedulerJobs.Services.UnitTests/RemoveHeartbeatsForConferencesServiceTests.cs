@@ -1,4 +1,5 @@
-﻿using Moq;
+﻿using System.Threading.Tasks;
+using Moq;
 using NUnit.Framework;
 using VideoApi.Client;
 
@@ -8,7 +9,7 @@ namespace SchedulerJobs.Services.UnitTests
     public class RemoveHeartbeatsForConferencesServiceTests
     {
         private Mock<IVideoApiClient> _videoApiClient;
-        private IRemoveHeartbeatsForConferencesService _removeHeartbeatsForConferencesService;
+        private RemoveHeartbeatsForConferencesService _removeHeartbeatsForConferencesService;
 
         [SetUp]
         public void Setup()
@@ -18,9 +19,9 @@ namespace SchedulerJobs.Services.UnitTests
         }
 
         [Test]
-        public void Should_remove_heartbeats_for_old_conferences()
+        public async Task Should_remove_heartbeats_for_old_conferences()
         {
-            _removeHeartbeatsForConferencesService.RemoveHeartbeatsForConferencesAsync();
+            await _removeHeartbeatsForConferencesService.RemoveHeartbeatsForConferencesAsync();
             _videoApiClient.Verify(x => x.RemoveHeartbeatsForConferencesAsync(), Times.Once);
         }
     }

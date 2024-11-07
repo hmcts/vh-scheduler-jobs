@@ -24,7 +24,7 @@ namespace SchedulerJobs.Sds.Jobs
             var closeConferenceService = scope.ServiceProvider.GetRequiredService<ICloseConferenceService>();
 
             var conferencesCount = await closeConferenceService.CloseConferencesAsync();
-            _logger.LogInformation($"Close hearings job executed and  {conferencesCount} hearings closed");
+            _logger.LogInformation("Close hearings job executed and  {ConferencesCount} hearings closed", conferencesCount);
         }
     }   
 }

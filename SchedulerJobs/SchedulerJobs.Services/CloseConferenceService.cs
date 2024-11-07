@@ -1,6 +1,4 @@
-﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using VideoApi.Client;
 
 namespace SchedulerJobs.Services
@@ -23,7 +21,7 @@ namespace SchedulerJobs.Services
         {
             var conferences = await _videoApiClient.GetExpiredOpenConferencesAsync();
             var conferenceCount = 0;
-            if (conferences != null && conferences.Any())
+            if (conferences != null && conferences.Count != 0)
             {
                 conferenceCount = conferences.Count;
                 foreach (var conference in conferences)

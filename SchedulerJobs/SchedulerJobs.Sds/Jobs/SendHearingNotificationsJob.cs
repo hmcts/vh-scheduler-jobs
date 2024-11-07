@@ -25,7 +25,7 @@ namespace SchedulerJobs.Sds.Jobs
             
             await hearingNotificationService.SendNotificationsAsync();
 
-            _logger.LogInformation($"Send hearing notifications - Completed at:{DateTime.Now} ");
+            _logger.LogInformation("Send hearing notifications - Completed at: {DateTime}", DateTime.UtcNow);
         }
     }
 }
