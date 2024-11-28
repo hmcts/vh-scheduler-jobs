@@ -6,11 +6,13 @@ using Autofac.Extras.Moq;
 using BookingsApi.Client;
 using BookingsApi.Contract.V1.Responses;
 using FizzWare.NBuilder;
+using Microsoft.Extensions.Logging;
 using Moq;
 using NotificationApi.Client;
 using NotificationApi.Contract;
 using NotificationApi.Contract.Requests;
 using NUnit.Framework;
+using Palmmedia.ReportGenerator.Core.Logging;
 
 namespace SchedulerJobs.Services.UnitTests;
 
@@ -77,12 +79,58 @@ public class HearingNotificationServiceProcessMultiDaysTests
         _mocker.Mock<INotificationApiClient>()
             .Verify(
                 x => x.SendMultiDayHearingReminderEmailAsync(
-                    It.Is<MultiDayHearingReminderRequest>(y => y.ParticipantId == judicialOfficeHolder.Id)), Times.Never);
+                    It.Is<MultiDayHearingReminderRequest>(y => y.ParticipantId == judicialOfficeHolder.Id)), Times.Once);
         
         _mocker.Mock<INotificationApiClient>()
             .Verify(
                 x => x.SendMultiDayHearingReminderEmailAsync(
-                    It.Is<MultiDayHearingReminderRequest>(y => y.ParticipantId == judge.Id)), Times.Never);
+                    It.Is<MultiDayHearingReminderRequest>(y => y.ParticipantId == judge.Id)), Times.Once);
+    }
+
+    [Test]
+    public async Task should_log_error_for_when_multiday_reminders_request_to_notification_api_fails()
+    {
+        // arrange
+        var participants = Builder<ParticipantResponse>.CreateListOfSize(4)
+            .All().With(x => x.Id = Guid.NewGuid())
+            .TheFirst(1).With(x => x.UserRoleName = RoleNames.Judge)
+            .TheNext(1).With(x => x.UserRoleName = RoleNames.Individual)
+            .TheNext(1).With(x => x.UserRoleName = RoleNames.Representative)
+            .TheNext(1).With(x => x.UserRoleName = RoleNames.JudicialOfficeHolder)
+            .Build().ToList();
+        
+        var hearing = Builder<HearingDetailsResponse>.CreateNew()
+            .With(x => x.Id = Guid.NewGuid())
+            .With(x => x.Cases = Builder<CaseResponse>.CreateListOfSize(1).Build().ToList())
+            .With(x => x.Participants = participants).Build();
+
+        var hearingsForNotification = new List<HearingNotificationResponse>
+        {
+            new()
+            {
+                TotalDays = 2,
+                Hearing = hearing,
+                SourceHearing = hearing
+            }
+        };
+        _mocker.Mock<IBookingsApiClient>().Setup(x => x.GetHearingsForNotificationAsync())
+            .ReturnsAsync(hearingsForNotification);
+        
+        
+        var notificationApiException = new NotificationApiException("Error", 400, "Template not found for user", null, null);
+        _mocker.Mock<INotificationApiClient>().Setup(x => x.SendMultiDayHearingReminderEmailAsync(It.IsAny<MultiDayHearingReminderRequest>()))
+            .ThrowsAsync(notificationApiException);
+        
+        await _sut.SendNotificationsAsync();
+        
+        _mocker.Mock<ILogger<HearingNotificationService>>().Verify(
+            x => x.Log(
+                LogLevel.Error,
+                It.IsAny<EventId>(),
+                It.Is<It.IsAnyType>((v, t) => v.ToString().Contains("Error sending multi day hearing reminder email")),
+                notificationApiException,
+                It.IsAny<Func<It.IsAnyType, Exception, string>>()), Times.Exactly(participants.Count));
+        
     }
     
     [Test]
@@ -178,7 +226,7 @@ public class HearingNotificationServiceProcessMultiDaysTests
         _mocker.Mock<INotificationApiClient>()
             .Verify(
                 x => x.SendSingleDayHearingReminderEmailAsync(
-                    It.Is<SingleDayHearingReminderRequest>(y => y.ContactEmail == newJudge.ContactEmail)), Times.Never);
+                    It.Is<SingleDayHearingReminderRequest>(y => y.ContactEmail == newJudge.ContactEmail)), Times.Once);
         
         // Should not notify the existing participants
         
@@ -258,6 +306,6 @@ public class HearingNotificationServiceProcessMultiDaysTests
         _mocker.Mock<INotificationApiClient>()
             .Verify(
                 x => x.SendSingleDayHearingReminderEmailAsync(
-                    It.Is<SingleDayHearingReminderRequest>(y => y.ParticipantId == judge.Id)), Times.Never);
+                    It.Is<SingleDayHearingReminderRequest>(y => y.ParticipantId == judge.Id)), Times.Once);
     }
 }
