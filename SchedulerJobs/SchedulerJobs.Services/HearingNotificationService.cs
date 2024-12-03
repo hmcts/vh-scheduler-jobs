@@ -10,30 +10,21 @@ using NotificationApi.Contract.Requests;
 
 namespace SchedulerJobs.Services
 {
-    public class HearingNotificationService : IHearingNotificationService
+    public class HearingNotificationService(
+        IBookingsApiClient bookingsApiClient,
+        INotificationApiClient notificationApiClient,
+        ILogger<HearingNotificationService> logger)
+        : IHearingNotificationService
     {
-        private readonly IBookingsApiClient _bookingsApiClient;
-        private readonly INotificationApiClient _notificationApiClient;
-        private readonly ILogger<HearingNotificationService> _logger;
-        private readonly List<string> _rolesSupportingSingleDayReminders = new() { RoleNames.Individual, RoleNames.Representative, RoleNames.JudicialOfficeHolder };
-        private readonly List<string> _rolesSupportingMultiDayReminders = new() { RoleNames.Individual, RoleNames.Representative };
-        
-        public HearingNotificationService(IBookingsApiClient bookingsApiClient, INotificationApiClient notificationApiClient,  ILogger<HearingNotificationService> logger)
-        {
-            _bookingsApiClient = bookingsApiClient;
-            _notificationApiClient = notificationApiClient;
-            _logger = logger;
-        }
-
         public async Task SendNotificationsAsync()
         {
-            _logger.LogInformation("SendNotificationsAsync - Started");
+            logger.LogInformation("SendNotificationsAsync - Started");
 
             var hearings = await GetHearings();
 
             if (hearings.Count < 1)
             {
-                _logger.LogInformation("SendNotificationsAsync - No hearings to send notifications");
+                logger.LogInformation("SendNotificationsAsync - No hearings to send notifications");
                 return;
             }
 
@@ -44,12 +35,6 @@ namespace SchedulerJobs.Services
         {
             foreach (var item in hearings)
             {
-                if (!item.Hearing.Participants.Exists(x => _rolesSupportingSingleDayReminders.Contains(x.UserRoleName)))
-                {
-                    _logger.LogInformation("SendNotificationsAsync - Ignored hearing: {ItemId} case:{CaseName} as no participant with role required for notification", item.Hearing.Id, item.Hearing.Cases[0].Name);
-                    continue;
-                }
-
                 await SendNotificationsForParticipantsInHearing(item);
             }
         }
@@ -66,10 +51,10 @@ namespace SchedulerJobs.Services
          
                 switch (item.TotalDays)
                 {
-                    case > 1 when _rolesSupportingMultiDayReminders.Contains(participant.UserRoleName):
+                    case > 1:
                         await ProcessMultiDayHearing(item, participant);
                         break;
-                    case 1 when _rolesSupportingSingleDayReminders.Contains(participant.UserRoleName):
+                    case 1:
                         await ProcessSingleDayHearing(item, participant);
                         break;
                     default:
@@ -81,26 +66,11 @@ namespace SchedulerJobs.Services
 
         private async Task ProcessMultiDayHearing(HearingNotificationResponse item, ParticipantResponse participant)
         {
-            await _notificationApiClient.SendMultiDayHearingReminderEmailAsync(new MultiDayHearingReminderRequest()
+            try
             {
-                TotalDays = item.TotalDays,
-                ScheduledDateTime = item.Hearing.ScheduledDateTime,
-                ContactEmail = participant.ContactEmail,
-                Name = $"{participant.FirstName} {participant.LastName}",
-                Username = participant.Username,
-                ParticipantId = participant.Id,
-                HearingId = item.Hearing.Id,
-                CaseName = item.Hearing.Cases[0].Name,
-                CaseNumber = item.Hearing.Cases[0].Number,
-                RoleName = participant.UserRoleName
-            });
-        }
-
-        private async Task ProcessSingleDayHearing(HearingNotificationResponse item, ParticipantResponse participant)
-        {
-            await _notificationApiClient.SendSingleDayHearingReminderEmailAsync(
-                new SingleDayHearingReminderRequest()
+                await notificationApiClient.SendMultiDayHearingReminderEmailAsync(new MultiDayHearingReminderRequest()
                 {
+                    TotalDays = item.TotalDays,
                     ScheduledDateTime = item.Hearing.ScheduledDateTime,
                     ContactEmail = participant.ContactEmail,
                     Name = $"{participant.FirstName} {participant.LastName}",
@@ -109,29 +79,55 @@ namespace SchedulerJobs.Services
                     HearingId = item.Hearing.Id,
                     CaseName = item.Hearing.Cases[0].Name,
                     CaseNumber = item.Hearing.Cases[0].Number,
-                    RoleName = participant.UserRoleName,
-                    Representee = participant.Representee
+                    RoleName = participant.UserRoleName
                 });
+            }
+            catch (NotificationApiException ex)
+            {
+                logger.LogError(ex,
+                    "Error sending multi day hearing reminder email for hearing {HearingId} and case number {CaseNumber} to participant {ParticipantId}",
+                    item.Hearing.Id, item.Hearing.Cases[0].Number, participant.Id);
+            }
         }
-        
+
+        private async Task ProcessSingleDayHearing(HearingNotificationResponse item, ParticipantResponse participant)
+        {
+            try
+            {
+                await notificationApiClient.SendSingleDayHearingReminderEmailAsync(
+                    new SingleDayHearingReminderRequest()
+                    {
+                        ScheduledDateTime = item.Hearing.ScheduledDateTime,
+                        ContactEmail = participant.ContactEmail,
+                        Name = $"{participant.FirstName} {participant.LastName}",
+                        Username = participant.Username,
+                        ParticipantId = participant.Id,
+                        HearingId = item.Hearing.Id,
+                        CaseName = item.Hearing.Cases[0].Name,
+                        CaseNumber = item.Hearing.Cases[0].Number,
+                        RoleName = participant.UserRoleName,
+                        Representee = participant.Representee
+                    });
+            }
+            catch (NotificationApiException ex)
+            {
+                logger.LogError(ex,
+                    "Error sending single day hearing reminder email for hearing {HearingId} and case number {CaseNumber} to participant {ParticipantId}",
+                    item.Hearing.Id, item.Hearing.Cases[0].Number, participant.Id);
+            }
+        }
+
         private async Task ProcessSubsequentDayOfMultiDayHearing(HearingNotificationResponse item, ParticipantResponse participant)
         {
             if (!item.SourceHearing.Participants.Exists(x => x.ContactEmail == participant.ContactEmail))
             {
-                if (_rolesSupportingSingleDayReminders.Contains(participant.UserRoleName))
-                {
-                    await ProcessSingleDayHearing(item, participant);
-                }
-                else
-                {
-                    LogUnsupportedParticipantForNotification(item, participant);
-                }
+                await ProcessSingleDayHearing(item, participant);
             }
         }
 
         private async Task<List<HearingNotificationResponse>> GetHearings()
         {
-            var response = await _bookingsApiClient.GetHearingsForNotificationAsync();
+            var response = await bookingsApiClient.GetHearingsForNotificationAsync();
 
             var hearings = response.ToList();
             return hearings;
@@ -142,7 +138,7 @@ namespace SchedulerJobs.Services
 
         private void LogUnsupportedParticipantForNotification(HearingNotificationResponse item, ParticipantResponse participant)
         {
-            _logger.LogInformation(
+            logger.LogInformation(
                 "SendNotificationsAsync - Ignored Participant: {ParticipantId} has role {RoleName} which is not supported for notification in the hearing {HearingId}",
                 participant.Id, participant.UserRoleName, item.Hearing.Id);
         }

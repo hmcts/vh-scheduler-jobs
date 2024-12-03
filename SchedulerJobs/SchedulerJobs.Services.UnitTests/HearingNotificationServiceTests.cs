@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using BookingsApi.Client;
 using BookingsApi.Contract.V1.Enums;
@@ -21,7 +22,6 @@ namespace SchedulerJobs.Services.UnitTests
         private List<HearingNotificationResponse> _noHearings;
         private List<HearingNotificationResponse> _hearings;
         private List<HearingNotificationResponse> _hearingsEjud;
-        private List<HearingNotificationResponse> _hearingsWithNoNotificationUserRoles;
         private List<HearingNotificationResponse> _hearingsMultiple;
 
         [SetUp]
@@ -34,7 +34,6 @@ namespace SchedulerJobs.Services.UnitTests
             _hearings = [CreateHearing()];
             _hearingsEjud = [CreateHearingWithEjud()];
             _hearingsMultiple = [CreateHearing(), CreateHearing()];
-            _hearingsWithNoNotificationUserRoles = [CreateHearingWithNoRoles()];
         }
 
         [Test]
@@ -53,64 +52,68 @@ namespace SchedulerJobs.Services.UnitTests
         [Test]
         public async Task should__call_notificationApi_when_bookings_are_returned()
         {
+            var expectedCount = _hearings.SelectMany(x => x.Hearing.Participants).Count();
             _bookingApiClient.Setup(x => x.GetHearingsForNotificationAsync()).ReturnsAsync(_hearings);
-            _notificationApiClient.SetupSequence(x => x.SendSingleDayHearingReminderEmailAsync(It.IsAny<SingleDayHearingReminderRequest>()))
-                .Returns(Task.CompletedTask)
-                .Returns(Task.CompletedTask)
-                .Returns(Task.CompletedTask) ;
+            _notificationApiClient
+                .Setup(x => x.SendSingleDayHearingReminderEmailAsync(It.IsAny<SingleDayHearingReminderRequest>()))
+                .Returns(Task.CompletedTask);
 
             await _hearingNotificationService.SendNotificationsAsync();
 
             _bookingApiClient.Verify(x => x.GetHearingsForNotificationAsync(), Times.Once);
-            _notificationApiClient.Verify(x => x.SendSingleDayHearingReminderEmailAsync(It.IsAny<SingleDayHearingReminderRequest>()), Times.Exactly(3));
+            _notificationApiClient.Verify(x => x.SendSingleDayHearingReminderEmailAsync(It.IsAny<SingleDayHearingReminderRequest>()), Times.Exactly(expectedCount));
         }
 
         [Test]
         public async Task should__call_notificationApi_when_Ejud_bookings_are_returned()
         {
+            var expectedCount = _hearings.SelectMany(x => x.Hearing.Participants).Count();
             _bookingApiClient.Setup(x => x.GetHearingsForNotificationAsync()).ReturnsAsync(_hearingsEjud);
-            _notificationApiClient.SetupSequence(x => x.SendSingleDayHearingReminderEmailAsync(It.IsAny<SingleDayHearingReminderRequest>()))
-                .Returns(Task.CompletedTask)
-                .Returns(Task.CompletedTask)
+            _notificationApiClient.Setup(x => x.SendSingleDayHearingReminderEmailAsync(It.IsAny<SingleDayHearingReminderRequest>()))
                 .Returns(Task.CompletedTask);
 
             await _hearingNotificationService.SendNotificationsAsync();
 
             _bookingApiClient.Verify(x => x.GetHearingsForNotificationAsync(), Times.Once);
-            _notificationApiClient.Verify(x => x.SendSingleDayHearingReminderEmailAsync(It.IsAny<SingleDayHearingReminderRequest>()), Times.Exactly(3));
+            _notificationApiClient.Verify(x => x.SendSingleDayHearingReminderEmailAsync(It.IsAny<SingleDayHearingReminderRequest>()), Times.Exactly(expectedCount));
         }
 
         [Test]
         public async Task should__call_notificationApi_when_multiple_bookings_are_returned()
         {
+            var expectedCount = _hearingsMultiple.SelectMany(x => x.Hearing.Participants).Count();
             _bookingApiClient.Setup(x => x.GetHearingsForNotificationAsync()).ReturnsAsync(_hearingsMultiple);
-            _notificationApiClient.SetupSequence(x => x.SendSingleDayHearingReminderEmailAsync(It.IsAny<SingleDayHearingReminderRequest>()))
-                .Returns(Task.CompletedTask)
-                .Returns(Task.CompletedTask)
-                .Returns(Task.CompletedTask)
-                .Returns(Task.CompletedTask)
-                .Returns(Task.CompletedTask)
+            _notificationApiClient.Setup(x => x.SendSingleDayHearingReminderEmailAsync(It.IsAny<SingleDayHearingReminderRequest>()))
                 .Returns(Task.CompletedTask);
 
             await _hearingNotificationService.SendNotificationsAsync();
 
             _bookingApiClient.Verify(x => x.GetHearingsForNotificationAsync(), Times.Once);
-            _notificationApiClient.Verify(x => x.SendSingleDayHearingReminderEmailAsync(It.IsAny<SingleDayHearingReminderRequest>()), Times.Exactly(6));
+            _notificationApiClient.Verify(x => x.SendSingleDayHearingReminderEmailAsync(It.IsAny<SingleDayHearingReminderRequest>()), Times.Exactly(expectedCount));
         }
-
+        
         [Test]
-        public async Task should_not_call_notificationApi_when_bookings_with_notification_user_roles_does_not_exists()
+        public async Task should__log_error_and_continue_when_notificationApi_throws_exception()
         {
-            _noHearings = [];
-            
-            _bookingApiClient.Setup(x => x.GetHearingsForNotificationAsync()).ReturnsAsync(_hearingsWithNoNotificationUserRoles);
+            var notificationApiException = new NotificationApiException("Error", 400, "failed somewhere", null, null);
+            var expectedCount = _hearings.SelectMany(x => x.Hearing.Participants).Count();
+            _bookingApiClient.Setup(x => x.GetHearingsForNotificationAsync()).ReturnsAsync(_hearings);
+            _notificationApiClient.Setup(x => x.SendSingleDayHearingReminderEmailAsync(It.IsAny<SingleDayHearingReminderRequest>()))
+                .ThrowsAsync(notificationApiException);
 
             await _hearingNotificationService.SendNotificationsAsync();
 
             _bookingApiClient.Verify(x => x.GetHearingsForNotificationAsync(), Times.Once);
-            _notificationApiClient.Verify(x => x.SendSingleDayHearingReminderEmailAsync(It.IsAny<SingleDayHearingReminderRequest>()), Times.Never);
+            _notificationApiClient.Verify(x => x.SendSingleDayHearingReminderEmailAsync(It.IsAny<SingleDayHearingReminderRequest>()), Times.Exactly(expectedCount));
+            
+            _logger.Verify(
+                x => x.Log(
+                    LogLevel.Error,
+                    It.IsAny<EventId>(),
+                    It.Is<It.IsAnyType>((v, t) => v.ToString().Contains("Error sending single day hearing reminder email")),
+                    notificationApiException,
+                    It.IsAny<Func<It.IsAnyType, Exception, string>>()), Times.Exactly(expectedCount));
         }
-
 
         private static HearingNotificationResponse CreateHearing()
         {
