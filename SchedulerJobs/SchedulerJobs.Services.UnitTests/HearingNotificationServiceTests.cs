@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using BookingsApi.Client;
-using BookingsApi.Contract.V1.Enums;
-using BookingsApi.Contract.V1.Responses;
+using BookingsApi.Contract.V2.Enums;
+using BookingsApi.Contract.V2.Responses;
 using Microsoft.Extensions.Logging;
 using Moq;
 using NotificationApi.Client;
@@ -19,10 +19,10 @@ namespace SchedulerJobs.Services.UnitTests
         private Mock<INotificationApiClient> _notificationApiClient;
         private HearingNotificationService _hearingNotificationService;
         private Mock<ILogger<HearingNotificationService>> _logger;
-        private List<HearingNotificationResponse> _noHearings;
-        private List<HearingNotificationResponse> _hearings;
-        private List<HearingNotificationResponse> _hearingsEjud;
-        private List<HearingNotificationResponse> _hearingsMultiple;
+        private List<HearingNotificationResponseV2> _noHearings;
+        private List<HearingNotificationResponseV2> _hearings;
+        private List<HearingNotificationResponseV2> _hearingsEjud;
+        private List<HearingNotificationResponseV2> _hearingsMultiple;
 
         [SetUp]
         public void Setup()
@@ -115,29 +115,27 @@ namespace SchedulerJobs.Services.UnitTests
                     It.IsAny<Func<It.IsAnyType, Exception, string>>()), Times.Exactly(expectedCount));
         }
 
-        private static HearingNotificationResponse CreateHearing()
+        private static HearingNotificationResponseV2 CreateHearing()
         {
             Guid id = Guid.NewGuid();
 
-            var hearing =  new HearingDetailsResponse
+            var hearing =  new HearingDetailsResponseV2
             {
                 Id = id,
                 ScheduledDateTime = DateTime.UtcNow.AddDays(2),
                 ScheduledDuration = 60,
                 HearingVenueName = "Basingstoke County Court and Family Court",
-                CaseTypeName = "Asylum Support",
-                HearingTypeName = "Case Management Review Hearing",
-                Cases = new List<CaseResponse>
+                ServiceId = "123456789",
+                Cases = new List<CaseResponseV2>
                 {
-                    new CaseResponse { Number = "CASE1-Test1", IsLeadCase = false, Name = "CASE1-Test1"}
+                    new CaseResponseV2 { Number = "CASE1-Test1", IsLeadCase = false, Name = "CASE1-Test1"}
                 },
-                Participants = new List<ParticipantResponse>
+                Participants = new List<ParticipantResponseV2>
                 {
-                    new ParticipantResponse
+                    new ParticipantResponseV2
                     {
                         Id = Guid.NewGuid(),
                         DisplayName ="observer",
-                        CaseRoleName = "Observer",
                         HearingRoleName ="Observer",
                         UserRoleName= "Individual",
                         Title = "Mr",
@@ -151,11 +149,10 @@ namespace SchedulerJobs.Services.UnitTests
                         Representee = "",
                         LinkedParticipants = null
                     },
-                    new ParticipantResponse
+                    new ParticipantResponseV2
                     {
                         Id = Guid.NewGuid(),
                         DisplayName ="Representative",
-                        CaseRoleName = "Panel Member",
                         HearingRoleName ="Panel Member",
                         UserRoleName= "Judicial Office Holder",
                         Title = "Mr",
@@ -169,29 +166,10 @@ namespace SchedulerJobs.Services.UnitTests
                         Representee = "",
                         LinkedParticipants = null
                     },
-                    new ParticipantResponse
-                    {
-                        Id = Guid.NewGuid(),
-                        DisplayName ="Manual Judge_01",
-                        CaseRoleName = "Judge",
-                        HearingRoleName ="Judge",
-                        UserRoleName= "Judge",
-                        Title = "Mr",
-                        FirstName = "Manual",
-                        MiddleNames = "",
-                        LastName = "Judge_01",
-                        ContactEmail = "manual.judge_01@hearings.reform.hmcts.net",
-                        TelephoneNumber =  " +44(0)71234567891",
-                        Username = "manual.judge_01@hearings.reform.hmcts.net",
-                        Organisation = "xyz",
-                        Representee = "",
-                        LinkedParticipants = null
-                    },
-                    new ParticipantResponse
+                    new ParticipantResponseV2
                     {
                         Id = Guid.NewGuid(),
                         DisplayName ="Secreatary of state",
-                        CaseRoleName = "Secretary of State",
                         HearingRoleName ="Representative",
                         UserRoleName= "Representative",
                         Title = "Mr",
@@ -214,43 +192,41 @@ namespace SchedulerJobs.Services.UnitTests
                 UpdatedDate = DateTime.Today,
                 ConfirmedBy = "",
                 ConfirmedDate = DateTime.Today,
-                Status = BookingStatus.Created,
+                Status = BookingStatusV2.Created,
                 AudioRecordingRequired = true,
                 CancelReason = "",
                 Endpoints = null,
                 GroupId = id
             };
 
-            var hearingResponse = new HearingNotificationResponse();
+            var hearingResponse = new HearingNotificationResponseV2();
             hearingResponse.Hearing = hearing;
             hearingResponse.TotalDays = 1;
 
             return hearingResponse;
         }
 
-        private static HearingNotificationResponse CreateHearingWithEjud()
+        private static HearingNotificationResponseV2 CreateHearingWithEjud()
         {
             Guid id = Guid.NewGuid();
 
-            var hearing = new HearingDetailsResponse
+            var hearing = new HearingDetailsResponseV2
             {
                 Id = id,
                 ScheduledDateTime = DateTime.UtcNow.AddDays(2),
                 ScheduledDuration = 60,
                 HearingVenueName = "Basingstoke County Court and Family Court",
-                CaseTypeName = "Asylum Support",
-                HearingTypeName = "Case Management Review Hearing",
-                Cases = new List<CaseResponse>
+                ServiceId = "123456789",
+                Cases = new List<CaseResponseV2>
                 {
-                    new CaseResponse { Number = "CASE1-Test1", IsLeadCase = false, Name = "CASE1-Test1"}
+                    new CaseResponseV2 { Number = "CASE1-Test1", IsLeadCase = false, Name = "CASE1-Test1"}
                 },
-                Participants = new List<ParticipantResponse>
+                Participants = new List<ParticipantResponseV2>
                 {
-                    new ParticipantResponse
+                    new ParticipantResponseV2
                     {
                         Id = Guid.NewGuid(),
                         DisplayName ="observer",
-                        CaseRoleName = "Observer",
                         HearingRoleName ="Observer",
                         UserRoleName= "Individual",
                         Title = "Mr",
@@ -264,11 +240,10 @@ namespace SchedulerJobs.Services.UnitTests
                         Representee = "",
                         LinkedParticipants = null
                     },
-                    new ParticipantResponse
+                    new ParticipantResponseV2
                     {
                         Id = Guid.NewGuid(),
                         DisplayName ="Representative",
-                        CaseRoleName = "Panel Member",
                         HearingRoleName ="Panel Member",
                         UserRoleName= "Judicial Office Holder",
                         Title = "Mr",
@@ -282,29 +257,10 @@ namespace SchedulerJobs.Services.UnitTests
                         Representee = "",
                         LinkedParticipants = null
                     },
-                    new ParticipantResponse
-                    {
-                        Id = Guid.NewGuid(),
-                        DisplayName ="Manual Judge_01",
-                        CaseRoleName = "Judge",
-                        HearingRoleName ="Judge",
-                        UserRoleName= "Judge",
-                        Title = "Mr",
-                        FirstName = "Manual",
-                        MiddleNames = "",
-                        LastName = "Judge_01",
-                        ContactEmail = "manual.judge_01@hearings.reform.hmcts.net",
-                        TelephoneNumber =  " +44(0)71234567891",
-                        Username = "manual.judge_01@hearings.reform.hmcts.net",
-                        Organisation = "xyz",
-                        Representee = "",
-                        LinkedParticipants = null
-                    },
-                    new ParticipantResponse
+                    new ParticipantResponseV2
                     {
                         Id = Guid.NewGuid(),
                         DisplayName ="Secreatary of state",
-                        CaseRoleName = "Secretary of State",
                         HearingRoleName ="Representative",
                         UserRoleName= "Representative",
                         Title = "Mr",
@@ -327,50 +283,48 @@ namespace SchedulerJobs.Services.UnitTests
                 UpdatedDate = DateTime.Today,
                 ConfirmedBy = "",
                 ConfirmedDate = DateTime.Today,
-                Status = BookingStatus.Created,
+                Status = BookingStatusV2.Created,
                 AudioRecordingRequired = true,
                 CancelReason = "",
                 Endpoints = null,
                 GroupId = id
             };
-            var hearingResponse = new HearingNotificationResponse();
+            var hearingResponse = new HearingNotificationResponseV2();
             hearingResponse.Hearing = hearing;
             hearingResponse.TotalDays = 1;
 
             return hearingResponse;
         }
-        private static HearingNotificationResponse CreateHearingWithNoRoles()
+        private static HearingNotificationResponseV2 CreateHearingWithNoRoles()
         {
             Guid id = Guid.NewGuid();
 
-            var hearing = new HearingDetailsResponse
+            var hearing = new HearingDetailsResponseV2
             {
                 Id = id,
                 ScheduledDateTime = DateTime.UtcNow.AddDays(2),
                 ScheduledDuration = 60,
                 HearingVenueName = "Basingstoke County Court and Family Court",
-                CaseTypeName = "Asylum Support",
-                HearingTypeName = "Case Management Review Hearing",
-                Cases = new List<CaseResponse>
+                ServiceId = "123456789",
+                Cases = new List<CaseResponseV2>
                 {
-                    new CaseResponse { Number = "CASE1-Test1", IsLeadCase = false, Name = "CASE1-Test1"}
+                    new CaseResponseV2 { Number = "CASE1-Test1", IsLeadCase = false, Name = "CASE1-Test1"}
                 },
-                Participants = new List<ParticipantResponse>
+                Participants = new List<ParticipantResponseV2>
                 {
-                    new ParticipantResponse
+                    new ParticipantResponseV2
                     {
                         Id = Guid.NewGuid(),
-                        DisplayName ="Manual Judge_01",
-                        CaseRoleName = "Judge",
-                        HearingRoleName ="Judge",
-                        UserRoleName= "Judge",
+                        DisplayName ="John Doe",
+                        HearingRoleName ="Witness",
+                        UserRoleName= "MadeUp",
                         Title = "Mr",
-                        FirstName = "Manual",
+                        FirstName = "John",
                         MiddleNames = "",
-                        LastName = "Judge_01",
-                        ContactEmail = "manual.judge_01@hearings.reform.hmcts.net",
+                        LastName = "Doe",
+                        ContactEmail = "john@doe.com",
                         TelephoneNumber =  " +44(0)71234567891",
-                        Username = "manual.judge_01@hearings.reform.hmcts.net",
+                        Username = "johnnn.doe@hearings.reform.hmcts.net",
                         Organisation = "xyz",
                         Representee = "",
                         LinkedParticipants = null
@@ -384,14 +338,14 @@ namespace SchedulerJobs.Services.UnitTests
                 UpdatedDate = DateTime.Today,
                 ConfirmedBy = "",
                 ConfirmedDate = DateTime.Today,
-                Status = BookingStatus.Created,
+                Status = BookingStatusV2.Created,
                 AudioRecordingRequired = true,
                 CancelReason = "",
                 Endpoints = null,
                 GroupId = id
             };
             
-            var hearingResponse = new HearingNotificationResponse();
+            var hearingResponse = new HearingNotificationResponseV2();
             hearingResponse.Hearing = hearing;
             hearingResponse.TotalDays = 1;
 

@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using System.Linq;
 using System.Collections.Generic;
 using NotificationApi.Client;
-using BookingsApi.Contract.V1.Responses;
+using BookingsApi.Contract.V2.Responses;
 using NotificationApi.Contract.Requests;
 
 namespace SchedulerJobs.Services
@@ -31,7 +31,7 @@ namespace SchedulerJobs.Services
             await ProcessHearings(hearings);
         }
 
-        private async Task ProcessHearings(List<HearingNotificationResponse> hearings)
+        private async Task ProcessHearings(List<HearingNotificationResponseV2> hearings)
         {
             foreach (var item in hearings)
             {
@@ -39,7 +39,7 @@ namespace SchedulerJobs.Services
             }
         }
 
-        private async Task SendNotificationsForParticipantsInHearing(HearingNotificationResponse item)
+        private async Task SendNotificationsForParticipantsInHearing(HearingNotificationResponseV2 item)
         {
             foreach (var participant in item.Hearing.Participants)
             {
@@ -64,7 +64,7 @@ namespace SchedulerJobs.Services
             }
         }
 
-        private async Task ProcessMultiDayHearing(HearingNotificationResponse item, ParticipantResponse participant)
+        private async Task ProcessMultiDayHearing(HearingNotificationResponseV2 item, ParticipantResponseV2 participant)
         {
             try
             {
@@ -90,7 +90,7 @@ namespace SchedulerJobs.Services
             }
         }
 
-        private async Task ProcessSingleDayHearing(HearingNotificationResponse item, ParticipantResponse participant)
+        private async Task ProcessSingleDayHearing(HearingNotificationResponseV2 item, ParticipantResponseV2 participant)
         {
             try
             {
@@ -117,7 +117,7 @@ namespace SchedulerJobs.Services
             }
         }
 
-        private async Task ProcessSubsequentDayOfMultiDayHearing(HearingNotificationResponse item, ParticipantResponse participant)
+        private async Task ProcessSubsequentDayOfMultiDayHearing(HearingNotificationResponseV2 item, ParticipantResponseV2 participant)
         {
             if (!item.SourceHearing.Participants.Exists(x => x.ContactEmail == participant.ContactEmail))
             {
@@ -125,7 +125,7 @@ namespace SchedulerJobs.Services
             }
         }
 
-        private async Task<List<HearingNotificationResponse>> GetHearings()
+        private async Task<List<HearingNotificationResponseV2>> GetHearings()
         {
             var response = await bookingsApiClient.GetHearingsForNotificationAsync();
 
@@ -133,10 +133,10 @@ namespace SchedulerJobs.Services
             return hearings;
         }
 
-        private static bool IsSubsequentDayOfMultiDayHearing(HearingNotificationResponse item) => 
+        private static bool IsSubsequentDayOfMultiDayHearing(HearingNotificationResponseV2 item) => 
             item.TotalDays > 1 && item.Hearing.Id != item.SourceHearing.Id;
 
-        private void LogUnsupportedParticipantForNotification(HearingNotificationResponse item, ParticipantResponse participant)
+        private void LogUnsupportedParticipantForNotification(HearingNotificationResponseV2 item, ParticipantResponseV2 participant)
         {
             logger.LogInformation(
                 "SendNotificationsAsync - Ignored Participant: {ParticipantId} has role {RoleName} which is not supported for notification in the hearing {HearingId}",

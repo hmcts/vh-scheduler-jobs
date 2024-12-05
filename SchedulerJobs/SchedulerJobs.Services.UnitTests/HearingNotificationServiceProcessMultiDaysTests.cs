@@ -4,15 +4,13 @@ using System.Linq;
 using System.Threading.Tasks;
 using Autofac.Extras.Moq;
 using BookingsApi.Client;
-using BookingsApi.Contract.V1.Responses;
+using BookingsApi.Contract.V2.Responses;
 using FizzWare.NBuilder;
 using Microsoft.Extensions.Logging;
 using Moq;
 using NotificationApi.Client;
-using NotificationApi.Contract;
 using NotificationApi.Contract.Requests;
 using NUnit.Framework;
-using Palmmedia.ReportGenerator.Core.Logging;
 
 namespace SchedulerJobs.Services.UnitTests;
 
@@ -32,7 +30,7 @@ public class HearingNotificationServiceProcessMultiDaysTests
     public async Task should_send_multi_day_reminder_request_for_first_day_of_multi_day_hearing_for_supported_roles()
     {
         // arrange
-        var participants = Builder<ParticipantResponse>.CreateListOfSize(4)
+        var participants = Builder<ParticipantResponseV2>.CreateListOfSize(4)
             .All().With(x => x.Id = Guid.NewGuid())
             .TheFirst(1).With(x => x.UserRoleName = RoleNames.Judge)
             .TheNext(1).With(x => x.UserRoleName = RoleNames.Individual)
@@ -45,12 +43,12 @@ public class HearingNotificationServiceProcessMultiDaysTests
         var representative = participants.Find(x => x.UserRoleName == RoleNames.Representative);
         var judicialOfficeHolder = participants.Find(x => x.UserRoleName == RoleNames.JudicialOfficeHolder);
         
-        var hearing = Builder<HearingDetailsResponse>.CreateNew()
+        var hearing = Builder<HearingDetailsResponseV2>.CreateNew()
             .With(x => x.Id = Guid.NewGuid())
-            .With(x => x.Cases = Builder<CaseResponse>.CreateListOfSize(1).Build().ToList())
+            .With(x => x.Cases = Builder<CaseResponseV2>.CreateListOfSize(1).Build().ToList())
             .With(x => x.Participants = participants).Build();
 
-        var hearingsForNotification = new List<HearingNotificationResponse>
+        var hearingsForNotification = new List<HearingNotificationResponseV2>
         {
             new()
             {
@@ -91,7 +89,7 @@ public class HearingNotificationServiceProcessMultiDaysTests
     public async Task should_log_error_for_when_multiday_reminders_request_to_notification_api_fails()
     {
         // arrange
-        var participants = Builder<ParticipantResponse>.CreateListOfSize(4)
+        var participants = Builder<ParticipantResponseV2>.CreateListOfSize(4)
             .All().With(x => x.Id = Guid.NewGuid())
             .TheFirst(1).With(x => x.UserRoleName = RoleNames.Judge)
             .TheNext(1).With(x => x.UserRoleName = RoleNames.Individual)
@@ -99,12 +97,12 @@ public class HearingNotificationServiceProcessMultiDaysTests
             .TheNext(1).With(x => x.UserRoleName = RoleNames.JudicialOfficeHolder)
             .Build().ToList();
         
-        var hearing = Builder<HearingDetailsResponse>.CreateNew()
+        var hearing = Builder<HearingDetailsResponseV2>.CreateNew()
             .With(x => x.Id = Guid.NewGuid())
-            .With(x => x.Cases = Builder<CaseResponse>.CreateListOfSize(1).Build().ToList())
+            .With(x => x.Cases = Builder<CaseResponseV2>.CreateListOfSize(1).Build().ToList())
             .With(x => x.Participants = participants).Build();
 
-        var hearingsForNotification = new List<HearingNotificationResponse>
+        var hearingsForNotification = new List<HearingNotificationResponseV2>
         {
             new()
             {
@@ -141,7 +139,7 @@ public class HearingNotificationServiceProcessMultiDaysTests
         // arrange
         
         // participants for the first day/source hearing
-        var sourceHearingParticipants = Builder<ParticipantResponse>.CreateListOfSize(4)
+        var sourceHearingParticipants = Builder<ParticipantResponseV2>.CreateListOfSize(4)
             .All().With(x => x.Id = Guid.NewGuid())
             .All().With(x => x.ContactEmail = Faker.Internet.Email())
             .TheFirst(1).With(x => x.UserRoleName = RoleNames.Judge)
@@ -155,9 +153,9 @@ public class HearingNotificationServiceProcessMultiDaysTests
         var representative = sourceHearingParticipants.Find(x => x.UserRoleName == RoleNames.Representative);
         var judicialOfficeHolder = sourceHearingParticipants.Find(x => x.UserRoleName == RoleNames.JudicialOfficeHolder);
         
-        var sourceHearing = Builder<HearingDetailsResponse>.CreateNew()
+        var sourceHearing = Builder<HearingDetailsResponseV2>.CreateNew()
             .With(x => x.Id = Guid.NewGuid())
-            .With(x => x.Cases = Builder<CaseResponse>.CreateListOfSize(1).Build().ToList())
+            .With(x => x.Cases = Builder<CaseResponseV2>.CreateListOfSize(1).Build().ToList())
             .With(x => x.Participants = sourceHearingParticipants).Build();
         
         // participants for the second day hearing
@@ -168,7 +166,7 @@ public class HearingNotificationServiceProcessMultiDaysTests
             existingParticipant.Id = Guid.NewGuid();
         }
         
-        var newParticipants = Builder<ParticipantResponse>.CreateListOfSize(4)
+        var newParticipants = Builder<ParticipantResponseV2>.CreateListOfSize(4)
             .All().With(x => x.Id = Guid.NewGuid())
             .All().With(x => x.ContactEmail = Faker.Internet.Email())
             .Build().ToList();
@@ -185,14 +183,14 @@ public class HearingNotificationServiceProcessMultiDaysTests
         var newRepresentative = newParticipants.Find(x => x.UserRoleName == RoleNames.Representative);
         var newJudicialOfficeHolder = newParticipants.Find(x => x.UserRoleName == RoleNames.JudicialOfficeHolder);
 
-        var hearing = Builder<HearingDetailsResponse>.CreateNew()
+        var hearing = Builder<HearingDetailsResponseV2>.CreateNew()
             .With(x => x.Id = Guid.NewGuid())
-            .With(x => x.Cases = Builder<CaseResponse>.CreateListOfSize(1).Build().ToList())
+            .With(x => x.Cases = Builder<CaseResponseV2>.CreateListOfSize(1).Build().ToList())
             .With(x => x.Participants = participants).Build();
 
         hearing.ScheduledDateTime = sourceHearing.ScheduledDateTime.AddDays(1);
         
-        var hearingsForNotification = new List<HearingNotificationResponse>
+        var hearingsForNotification = new List<HearingNotificationResponseV2>
         {
             new()
             {
@@ -255,7 +253,7 @@ public class HearingNotificationServiceProcessMultiDaysTests
     public async Task should_send_single_day_reminder_request_for_supported_roles()
     {
         // arrange
-        var participants = Builder<ParticipantResponse>.CreateListOfSize(4)
+        var participants = Builder<ParticipantResponseV2>.CreateListOfSize(4)
             .All().With(x => x.Id = Guid.NewGuid())
             .TheFirst(1).With(x => x.UserRoleName = RoleNames.Judge)
             .TheNext(1).With(x => x.UserRoleName = RoleNames.Individual)
@@ -268,12 +266,12 @@ public class HearingNotificationServiceProcessMultiDaysTests
         var representative = participants.Find(x => x.UserRoleName == RoleNames.Representative);
         var judicialOfficeHolder = participants.Find(x => x.UserRoleName == RoleNames.JudicialOfficeHolder);
         
-        var hearing = Builder<HearingDetailsResponse>.CreateNew()
+        var hearing = Builder<HearingDetailsResponseV2>.CreateNew()
             .With(x => x.Id = Guid.NewGuid())
-            .With(x => x.Cases = Builder<CaseResponse>.CreateListOfSize(1).Build().ToList())
+            .With(x => x.Cases = Builder<CaseResponseV2>.CreateListOfSize(1).Build().ToList())
             .With(x => x.Participants = participants).Build();
 
-        var hearingsForNotification = new List<HearingNotificationResponse>
+        var hearingsForNotification = new List<HearingNotificationResponseV2>
         {
             new()
             {

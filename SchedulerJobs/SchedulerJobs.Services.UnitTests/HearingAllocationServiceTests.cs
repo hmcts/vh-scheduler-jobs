@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using BookingsApi.Client;
 using BookingsApi.Contract.V1.Responses;
+using BookingsApi.Contract.V2.Responses;
 using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
@@ -28,21 +29,21 @@ namespace SchedulerJobs.Services.UnitTests
         public async Task AllocateHearingsAsync_Should_Call_Bookings_Api_For_Each_Unallocated_Hearing()
         {
             // Arrange
-            var hearing1 = new HearingDetailsResponse { Id = Guid.NewGuid() };
-            var hearing2 = new HearingDetailsResponse { Id = Guid.NewGuid() };
-            var hearing3 = new HearingDetailsResponse { Id = Guid.NewGuid() };
-            var unallocatedHearings = new List<HearingDetailsResponse>
+            var hearing1 = new HearingDetailsResponseV2 { Id = Guid.NewGuid() };
+            var hearing2 = new HearingDetailsResponseV2 { Id = Guid.NewGuid() };
+            var hearing3 = new HearingDetailsResponseV2 { Id = Guid.NewGuid() };
+            var unallocatedHearings = new List<HearingDetailsResponseV2>
             {
                 hearing1,
                 hearing2,
                 hearing3
             };
-            _bookingsApiClient.Setup(x => x.GetUnallocatedHearingsAsync()).ReturnsAsync(unallocatedHearings);
+            _bookingsApiClient.Setup(x => x.GetUnallocatedHearingsV2Async()).ReturnsAsync(unallocatedHearings);
 
             var allocatedUser1 = new JusticeUserResponse { Username = "user1@email.com" };
             var allocatedUser2 = new JusticeUserResponse { Username = "user2@email.com" };
             var allocatedUser3 = new JusticeUserResponse { Username = "user3@email.com" };
-            var allocationMappings = new Dictionary<HearingDetailsResponse, JusticeUserResponse>
+            var allocationMappings = new Dictionary<HearingDetailsResponseV2, JusticeUserResponse>
             {
                 {
                     hearing1, allocatedUser1
@@ -65,7 +66,7 @@ namespace SchedulerJobs.Services.UnitTests
             await _service.AllocateHearingsAsync();
 
             // Assert
-            _bookingsApiClient.Verify(x => x.GetUnallocatedHearingsAsync(), Times.Once);
+            _bookingsApiClient.Verify(x => x.GetUnallocatedHearingsV2Async(), Times.Once);
             _bookingsApiClient.Verify(x => x.AllocateHearingAutomaticallyAsync(It.IsAny<Guid>()), Times.Exactly(unallocatedHearings.Count));
             foreach (var mapping in allocationMappings)
             {
@@ -79,20 +80,20 @@ namespace SchedulerJobs.Services.UnitTests
         public async Task AllocateHearingsAsync_Should_Continue_To_Process_Other_Hearings_When_Exception_Thrown_Allocating_A_Hearing()
         {
             // Arrange
-            var hearing1 = new HearingDetailsResponse { Id = Guid.NewGuid() };
-            var hearing2 = new HearingDetailsResponse { Id = Guid.NewGuid() };
-            var hearing3 = new HearingDetailsResponse { Id = Guid.NewGuid() };
-            var unallocatedHearings = new List<HearingDetailsResponse>
+            var hearing1 = new HearingDetailsResponseV2 { Id = Guid.NewGuid() };
+            var hearing2 = new HearingDetailsResponseV2 { Id = Guid.NewGuid() };
+            var hearing3 = new HearingDetailsResponseV2 { Id = Guid.NewGuid() };
+            var unallocatedHearings = new List<HearingDetailsResponseV2>
             {
                 hearing1,
                 hearing2,
                 hearing3
             };
-            _bookingsApiClient.Setup(x => x.GetUnallocatedHearingsAsync()).ReturnsAsync(unallocatedHearings);
+            _bookingsApiClient.Setup(x => x.GetUnallocatedHearingsV2Async()).ReturnsAsync(unallocatedHearings);
 
             var allocatedUser1 = new JusticeUserResponse { Username = "user1@email.com" };
             var allocatedUser2 = new JusticeUserResponse { Username = "user2@email.com" };
-            var allocationMappings = new Dictionary<HearingDetailsResponse, JusticeUserResponse>
+            var allocationMappings = new Dictionary<HearingDetailsResponseV2, JusticeUserResponse>
             {
                 {
                     hearing1, allocatedUser1
@@ -112,7 +113,7 @@ namespace SchedulerJobs.Services.UnitTests
             }
             var hearingIdToThrowException = hearing2.Id;
             var unknownException = new BookingsApiException("", 500, "", null, null);
-            _bookingsApiClient.Setup(x => x.GetUnallocatedHearingsAsync()).ReturnsAsync(unallocatedHearings);
+            _bookingsApiClient.Setup(x => x.GetUnallocatedHearingsV2Async()).ReturnsAsync(unallocatedHearings);
             _bookingsApiClient.Setup(x => x.AllocateHearingAutomaticallyAsync(It.Is<Guid>(hearingId => hearingId == hearingIdToThrowException)))
                 .ThrowsAsync(unknownException);
    
@@ -130,20 +131,20 @@ namespace SchedulerJobs.Services.UnitTests
         public async Task AllocateHearingsAsync_Should_Continue_To_Process_Other_Hearings_And_Log_Warning_When_Bad_Request_Returned()
         {
             // Arrange
-            var hearing1 = new HearingDetailsResponse { Id = Guid.NewGuid() };
-            var hearing2 = new HearingDetailsResponse { Id = Guid.NewGuid() };
-            var hearing3 = new HearingDetailsResponse { Id = Guid.NewGuid() };
-            var unallocatedHearings = new List<HearingDetailsResponse>
+            var hearing1 = new HearingDetailsResponseV2 { Id = Guid.NewGuid() };
+            var hearing2 = new HearingDetailsResponseV2 { Id = Guid.NewGuid() };
+            var hearing3 = new HearingDetailsResponseV2 { Id = Guid.NewGuid() };
+            var unallocatedHearings = new List<HearingDetailsResponseV2>
             {
                 hearing1,
                 hearing2,
                 hearing3
             };
-            _bookingsApiClient.Setup(x => x.GetUnallocatedHearingsAsync()).ReturnsAsync(unallocatedHearings);
+            _bookingsApiClient.Setup(x => x.GetUnallocatedHearingsV2Async()).ReturnsAsync(unallocatedHearings);
 
             var allocatedUser1 = new JusticeUserResponse { Username = "user1@email.com" };
             var allocatedUser2 = new JusticeUserResponse { Username = "user2@email.com" };
-            var allocationMappings = new Dictionary<HearingDetailsResponse, JusticeUserResponse>
+            var allocationMappings = new Dictionary<HearingDetailsResponseV2, JusticeUserResponse>
             {
                 {
                     hearing1, allocatedUser1
@@ -163,7 +164,7 @@ namespace SchedulerJobs.Services.UnitTests
             }
             var hearingIdToThrowException = hearing2.Id;
             var unknownException = new BookingsApiException("", 400, "", null, null);
-            _bookingsApiClient.Setup(x => x.GetUnallocatedHearingsAsync()).ReturnsAsync(unallocatedHearings);
+            _bookingsApiClient.Setup(x => x.GetUnallocatedHearingsV2Async()).ReturnsAsync(unallocatedHearings);
             _bookingsApiClient.Setup(x => x.AllocateHearingAutomaticallyAsync(It.Is<Guid>(hearingId => hearingId == hearingIdToThrowException)))
                 .ThrowsAsync(unknownException);
    
