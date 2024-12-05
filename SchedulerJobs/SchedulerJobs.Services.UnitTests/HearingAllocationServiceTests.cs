@@ -38,7 +38,7 @@ namespace SchedulerJobs.Services.UnitTests
                 hearing2,
                 hearing3
             };
-            _bookingsApiClient.Setup(x => x.GetUnallocatedHearingsAsync()).ReturnsAsync(unallocatedHearings);
+            _bookingsApiClient.Setup(x => x.GetUnallocatedHearingsV2Async()).ReturnsAsync(unallocatedHearings);
 
             var allocatedUser1 = new JusticeUserResponse { Username = "user1@email.com" };
             var allocatedUser2 = new JusticeUserResponse { Username = "user2@email.com" };
@@ -66,7 +66,7 @@ namespace SchedulerJobs.Services.UnitTests
             await _service.AllocateHearingsAsync();
 
             // Assert
-            _bookingsApiClient.Verify(x => x.GetUnallocatedHearingsAsync(), Times.Once);
+            _bookingsApiClient.Verify(x => x.GetUnallocatedHearingsV2Async(), Times.Once);
             _bookingsApiClient.Verify(x => x.AllocateHearingAutomaticallyAsync(It.IsAny<Guid>()), Times.Exactly(unallocatedHearings.Count));
             foreach (var mapping in allocationMappings)
             {
@@ -89,7 +89,7 @@ namespace SchedulerJobs.Services.UnitTests
                 hearing2,
                 hearing3
             };
-            _bookingsApiClient.Setup(x => x.GetUnallocatedHearingsAsync()).ReturnsAsync(unallocatedHearings);
+            _bookingsApiClient.Setup(x => x.GetUnallocatedHearingsV2Async()).ReturnsAsync(unallocatedHearings);
 
             var allocatedUser1 = new JusticeUserResponse { Username = "user1@email.com" };
             var allocatedUser2 = new JusticeUserResponse { Username = "user2@email.com" };
@@ -113,7 +113,7 @@ namespace SchedulerJobs.Services.UnitTests
             }
             var hearingIdToThrowException = hearing2.Id;
             var unknownException = new BookingsApiException("", 500, "", null, null);
-            _bookingsApiClient.Setup(x => x.GetUnallocatedHearingsAsync()).ReturnsAsync(unallocatedHearings);
+            _bookingsApiClient.Setup(x => x.GetUnallocatedHearingsV2Async()).ReturnsAsync(unallocatedHearings);
             _bookingsApiClient.Setup(x => x.AllocateHearingAutomaticallyAsync(It.Is<Guid>(hearingId => hearingId == hearingIdToThrowException)))
                 .ThrowsAsync(unknownException);
    
@@ -140,7 +140,7 @@ namespace SchedulerJobs.Services.UnitTests
                 hearing2,
                 hearing3
             };
-            _bookingsApiClient.Setup(x => x.GetUnallocatedHearingsAsync()).ReturnsAsync(unallocatedHearings);
+            _bookingsApiClient.Setup(x => x.GetUnallocatedHearingsV2Async()).ReturnsAsync(unallocatedHearings);
 
             var allocatedUser1 = new JusticeUserResponse { Username = "user1@email.com" };
             var allocatedUser2 = new JusticeUserResponse { Username = "user2@email.com" };
@@ -164,7 +164,7 @@ namespace SchedulerJobs.Services.UnitTests
             }
             var hearingIdToThrowException = hearing2.Id;
             var unknownException = new BookingsApiException("", 400, "", null, null);
-            _bookingsApiClient.Setup(x => x.GetUnallocatedHearingsAsync()).ReturnsAsync(unallocatedHearings);
+            _bookingsApiClient.Setup(x => x.GetUnallocatedHearingsV2Async()).ReturnsAsync(unallocatedHearings);
             _bookingsApiClient.Setup(x => x.AllocateHearingAutomaticallyAsync(It.Is<Guid>(hearingId => hearingId == hearingIdToThrowException)))
                 .ThrowsAsync(unknownException);
    

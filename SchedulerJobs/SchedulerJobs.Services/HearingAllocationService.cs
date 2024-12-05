@@ -2,7 +2,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using BookingsApi.Client;
 using Microsoft.Extensions.Logging;
-using SchedulerJobs.Common.Configuration;
 
 namespace SchedulerJobs.Services
 {
@@ -27,7 +26,7 @@ namespace SchedulerJobs.Services
         {
             _logger.LogInformation("AllocateHearings: Starting to allocate hearings");
             
-            var hearings = await _bookingsApiClient.GetUnallocatedHearingsAsync();
+            var hearings = await _bookingsApiClient.GetUnallocatedHearingsV2Async();
 
             var hearingsAllocated = 0;
             foreach (var hearingId in hearings.Select(h => h.Id).ToList())
