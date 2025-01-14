@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Autofac.Extras.Moq;
+using Bogus;
 using BookingsApi.Client;
 using BookingsApi.Contract.V2.Responses;
 using FizzWare.NBuilder;
@@ -18,6 +19,7 @@ public class HearingNotificationServiceProcessMultiDaysTests
 {
     private AutoMock _mocker;
     private HearingNotificationService _sut;
+    private static readonly Faker Faker = new();
         
     [SetUp]
     public void Setup()
