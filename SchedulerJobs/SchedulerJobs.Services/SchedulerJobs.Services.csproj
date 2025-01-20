@@ -7,13 +7,13 @@
   </PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="BookingsApi.Client" Version="3.1.9" />
+		<PackageReference Include="BookingsApi.Client" Version="3.1.18" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="8.0.2" />
-		<PackageReference Include="NotificationApi.Client" Version="3.0.5" />
+		<PackageReference Include="NotificationApi.Client" Version="3.0.8" />
 		<PackageReference Include="System.Threading.Tasks.Extensions" Version="4.5.4" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-		<PackageReference Include="UserApi.Client" Version="2.1.1" />
-		<PackageReference Include="VideoApi.Client" Version="3.1.7" />
+		<PackageReference Include="UserApi.Client" Version="3.1.8" />
+		<PackageReference Include="VideoApi.Client" Version="3.1.18" />
         <PackageReference Include="Azure.Storage.Blobs" Version="12.19.1" />
 	</ItemGroup>
 
