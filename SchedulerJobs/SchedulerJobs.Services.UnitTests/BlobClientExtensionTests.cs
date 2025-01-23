@@ -34,6 +34,6 @@ public class BlobClientExtensionTests
         var result = await _blobClientExtension.GetPropertiesAsync(_blobClientMock.Object);
 
         // Assert
-        Assert.AreEqual(expectedProperties, result);
+        Assert.That(result, Is.EqualTo(expectedProperties));
     }
 }

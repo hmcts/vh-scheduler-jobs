@@ -37,8 +37,8 @@ public class VhAzureStorageServiceTests
             _blobClientExtensionMock.Object);
 
         // Assert
-        Assert.IsNotNull(service);
-        Assert.AreEqual(AzureStorageServiceType.Vh, service.AzureStorageServiceType);
+        Assert.That(service, Is.Not.Null);
+        Assert.That(service.AzureStorageServiceType, Is.EqualTo(AzureStorageServiceType.Vh));
     }
 
     [Test]
@@ -48,6 +48,6 @@ public class VhAzureStorageServiceTests
         var result = _vhAzureStorageService.AzureStorageServiceType;
 
         // Assert
-        Assert.AreEqual(AzureStorageServiceType.Vh, result);
+        Assert.That(result, Is.EqualTo(AzureStorageServiceType.Vh));
     }
 }

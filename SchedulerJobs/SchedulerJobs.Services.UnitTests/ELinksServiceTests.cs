@@ -675,7 +675,7 @@ namespace SchedulerJobs.Services.UnitTests
             var updatedSince = await _eLinksService.GetUpdatedSince();
 
             // Assert
-            Assert.AreEqual(DateTime.Parse("0001-01-01"), updatedSince);
+            Assert.That(updatedSince, Is.EqualTo(DateTime.Parse("0001-01-01")));
         }
         
         [Test]
@@ -690,7 +690,7 @@ namespace SchedulerJobs.Services.UnitTests
             var updatedSince = await _eLinksService.GetUpdatedSince();
             
             // Assert
-            Assert.AreEqual(DateTime.Parse("2022-01-01"), updatedSince);
+            Assert.That(updatedSince, Is.EqualTo(DateTime.Parse("2022-01-01")));
         }
         
         [Test]
@@ -705,7 +705,7 @@ namespace SchedulerJobs.Services.UnitTests
             var updatedSince = await _eLinksService.GetUpdatedSince();
             
             // Assert
-            Assert.AreEqual(DateTime.UtcNow.AddDays(-1).Date, updatedSince.Date);
+            Assert.That(updatedSince.Date, Is.EqualTo(DateTime.UtcNow.AddDays(-1).Date));
         }
 
         private void CommonTestSetUp()
