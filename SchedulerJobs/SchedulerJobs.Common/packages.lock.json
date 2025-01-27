@@ -4,9 +4,9 @@
     "net8.0": {
       "LaunchDarkly.ServerSdk": {
         "type": "Direct",
-        "requested": "[8.4.0, )",
-        "resolved": "8.4.0",
-        "contentHash": "LfPLtmL3iyrWp6RJN3un0xFtJGpZggc/F5JRM+4WgrsGa+VwomgCn4gHYfrRf7f1KgUOKt6fqe4Qrxi8m+noTA==",
+        "requested": "[8.6.0, )",
+        "resolved": "8.6.0",
+        "contentHash": "so8MeBtYTDKp1stek1hVLiFAr5qeo0WticvzP8VxN1oOb/o2vRf8+DGrw+3xNf0cKbRvio73wrGKlpZ2WdHdpA==",
         "dependencies": {
           "LaunchDarkly.Cache": "1.0.2",
           "LaunchDarkly.CommonSdk": "7.0.0",

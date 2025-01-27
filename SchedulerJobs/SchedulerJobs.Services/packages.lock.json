@@ -14,11 +14,11 @@
       },
       "BookingsApi.Client": {
         "type": "Direct",
-        "requested": "[3.1.18, )",
-        "resolved": "3.1.18",
-        "contentHash": "yZHztvLtbAKmrL6dzk2G69sQnJhnt+mUkvDOUMqf+zvvZchGyJP8wmL0zYBvSlqjfURiRBsC+oKA1ktv5DMbTg==",
+        "requested": "[3.1.19, )",
+        "resolved": "3.1.19",
+        "contentHash": "Gsk9cP1Jwc8e/RMcU2YBPzKDpSrNcP2JSwsxo6490NOY5U4Pfe/mp27OPCDOQwZVndmG5TSo+2h/vBuFSFWR2Q==",
         "dependencies": {
-          "BookingsApi.Common.DotNet6": "3.1.18",
+          "BookingsApi.Common.DotNet6": "3.1.19",
           "System.Text.Json": "8.0.5"
         }
       },
@@ -39,9 +39,9 @@
       },
       "NotificationApi.Client": {
         "type": "Direct",
-        "requested": "[3.0.8, )",
-        "resolved": "3.0.8",
-        "contentHash": "L90NspHtLhtJeK8upMGIZ92yzQ1YyarCb6zKnPXq5Y0YArzOw2azvnZl4dxwDINNDa3KVAhRCAyIzA8uzCbQRQ==",
+        "requested": "[3.0.9, )",
+        "resolved": "3.0.9",
+        "contentHash": "UMyKGf21h7h1W5eHr53zgi7WIoFHKivBi3o2ei7CXRzAudnWuGahNv74d78EawmzmUnS6m3IqNtXr9c00+GZzA==",
         "dependencies": {
           "System.Text.Json": "8.0.5"
         }
@@ -95,8 +95,8 @@
       },
       "BookingsApi.Common.DotNet6": {
         "type": "Transitive",
-        "resolved": "3.1.18",
-        "contentHash": "d/JHB4vc3QLOuEXukJqOAmo3iYU3A+4HK3u/BP2xqqNP57GbkcPm7eJcDEylYtJHkIV/QUuyWWNKUAKdrsN02g==",
+        "resolved": "3.1.19",
+        "contentHash": "YYah9kxy5BWGF7rbBs2dHUuD0+EXlQiATizhq6MZksHQ5/TAS1+7+CH4u34sJE+gmXQbD0y5qO4qoGwyxl42/A==",
         "dependencies": {
           "System.Text.Json": "8.0.5"
         }
@@ -143,8 +143,8 @@
       },
       "LaunchDarkly.ServerSdk": {
         "type": "Transitive",
-        "resolved": "8.4.0",
-        "contentHash": "LfPLtmL3iyrWp6RJN3un0xFtJGpZggc/F5JRM+4WgrsGa+VwomgCn4gHYfrRf7f1KgUOKt6fqe4Qrxi8m+noTA==",
+        "resolved": "8.6.0",
+        "contentHash": "so8MeBtYTDKp1stek1hVLiFAr5qeo0WticvzP8VxN1oOb/o2vRf8+DGrw+3xNf0cKbRvio73wrGKlpZ2WdHdpA==",
         "dependencies": {
           "LaunchDarkly.Cache": "1.0.2",
           "LaunchDarkly.CommonSdk": "7.0.0",
@@ -359,7 +359,7 @@
       "schedulerjobs.common": {
         "type": "Project",
         "dependencies": {
-          "LaunchDarkly.ServerSdk": "[8.4.0, )",
+          "LaunchDarkly.ServerSdk": "[8.6.0, )",
           "Microsoft.Extensions.Caching.Abstractions": "[8.0.0, )",
           "Microsoft.Extensions.Caching.Memory": "[8.0.1, )",
           "Microsoft.Extensions.Configuration.Abstractions": "[8.0.0, )",

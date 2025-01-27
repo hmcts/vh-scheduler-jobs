@@ -7,9 +7,9 @@
   </PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="BookingsApi.Client" Version="3.1.18" />
+		<PackageReference Include="BookingsApi.Client" Version="3.1.19" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="8.0.2" />
-		<PackageReference Include="NotificationApi.Client" Version="3.0.8" />
+		<PackageReference Include="NotificationApi.Client" Version="3.0.9" />
 		<PackageReference Include="System.Threading.Tasks.Extensions" Version="4.5.4" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
 		<PackageReference Include="UserApi.Client" Version="3.1.8" />

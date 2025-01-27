@@ -15,9 +15,9 @@
       },
       "coverlet.msbuild": {
         "type": "Direct",
-        "requested": "[6.0.2, )",
-        "resolved": "6.0.2",
-        "contentHash": "8b4jBNH7mcQy1otyQErjjIUuGD74XxKZ1wvDufbY7jhWwckl7wIa+icjwdPYeI0aYMS4Tp63LIZvyMFjWwOMDw=="
+        "requested": "[6.0.4, )",
+        "resolved": "6.0.4",
+        "contentHash": "Qa7Hg+wrOMDKpXVn2dw4Wlun490bIWsFW0fdNJQFJLZnbU27MCP0HJ2mPgS+3EQBQUb0zKlkwiQzP+j38Hc3Iw=="
       },
       "dotnet-reportgenerator-cli": {
         "type": "Direct",
@@ -30,11 +30,11 @@
       },
       "FluentAssertions": {
         "type": "Direct",
-        "requested": "[6.12.0, )",
-        "resolved": "6.12.0",
-        "contentHash": "ZXhHT2YwP9lajrwSKbLlFqsmCCvFJMoRSK9t7sImfnCyd0OB3MhgxdoMcVqxbq1iyxD6mD2fiackWmBb7ayiXQ==",
+        "requested": "[7.1.0, )",
+        "resolved": "7.1.0",
+        "contentHash": "98Dt8m2ZYAjxAzoVGnv+yYh441lhM/SLIxWXp9aZU1rF0mRtA8W49GzTPhwQcclqAiRnjeM0VydVkM1OwKF4NQ==",
         "dependencies": {
-          "System.Configuration.ConfigurationManager": "4.4.0"
+          "System.Configuration.ConfigurationManager": "6.0.0"
         }
       },
       "Microsoft.NET.Test.Sdk": {
@@ -79,18 +79,15 @@
       },
       "NUnit": {
         "type": "Direct",
-        "requested": "[3.12.0, )",
-        "resolved": "3.12.0",
-        "contentHash": "3oJTrcUcT9wmweBUwgUf0f1XIYy6RZq2ziV+RM95HMKAJGsHPN2i3MKK1dAPvDPMRLz799Llj4eyu/STB9Q7OA==",
-        "dependencies": {
-          "NETStandard.Library": "2.0.0"
-        }
+        "requested": "[4.3.2, )",
+        "resolved": "4.3.2",
+        "contentHash": "puVXayXNmEu7MFQSUswGmUjOy3M3baprMbkLl5PAutpeDoGTr+jPv33qAYsqxywi2wJCq8l/O3EhHoLulPE1iQ=="
       },
       "NUnit3TestAdapter": {
         "type": "Direct",
-        "requested": "[4.5.0, )",
-        "resolved": "4.5.0",
-        "contentHash": "s8JpqTe9bI2f49Pfr3dFRfoVSuFQyraTj68c3XXjIS/MRGvvkLnrg6RLqnTjdShX+AdFUCCU/4Xex58AdUfs6A=="
+        "requested": "[4.6.0, )",
+        "resolved": "4.6.0",
+        "contentHash": "R7e1+a4vuV/YS+ItfL7f//rG+JBvVeVLX4mHzFEZo4W1qEKl8Zz27AqvQSAqo+BtIzUCo4aAJMYa56VXS4hudw=="
       },
       "Autofac": {
         "type": "Transitive",
@@ -139,17 +136,17 @@
       },
       "BookingsApi.Client": {
         "type": "Transitive",
-        "resolved": "3.1.18",
-        "contentHash": "yZHztvLtbAKmrL6dzk2G69sQnJhnt+mUkvDOUMqf+zvvZchGyJP8wmL0zYBvSlqjfURiRBsC+oKA1ktv5DMbTg==",
+        "resolved": "3.1.19",
+        "contentHash": "Gsk9cP1Jwc8e/RMcU2YBPzKDpSrNcP2JSwsxo6490NOY5U4Pfe/mp27OPCDOQwZVndmG5TSo+2h/vBuFSFWR2Q==",
         "dependencies": {
-          "BookingsApi.Common.DotNet6": "3.1.18",
+          "BookingsApi.Common.DotNet6": "3.1.19",
           "System.Text.Json": "8.0.5"
         }
       },
       "BookingsApi.Common.DotNet6": {
         "type": "Transitive",
-        "resolved": "3.1.18",
-        "contentHash": "d/JHB4vc3QLOuEXukJqOAmo3iYU3A+4HK3u/BP2xqqNP57GbkcPm7eJcDEylYtJHkIV/QUuyWWNKUAKdrsN02g==",
+        "resolved": "3.1.19",
+        "contentHash": "YYah9kxy5BWGF7rbBs2dHUuD0+EXlQiATizhq6MZksHQ5/TAS1+7+CH4u34sJE+gmXQbD0y5qO4qoGwyxl42/A==",
         "dependencies": {
           "System.Text.Json": "8.0.5"
         }
@@ -204,8 +201,8 @@
       },
       "LaunchDarkly.ServerSdk": {
         "type": "Transitive",
-        "resolved": "8.4.0",
-        "contentHash": "LfPLtmL3iyrWp6RJN3un0xFtJGpZggc/F5JRM+4WgrsGa+VwomgCn4gHYfrRf7f1KgUOKt6fqe4Qrxi8m+noTA==",
+        "resolved": "8.6.0",
+        "contentHash": "so8MeBtYTDKp1stek1hVLiFAr5qeo0WticvzP8VxN1oOb/o2vRf8+DGrw+3xNf0cKbRvio73wrGKlpZ2WdHdpA==",
         "dependencies": {
           "LaunchDarkly.Cache": "1.0.2",
           "LaunchDarkly.CommonSdk": "7.0.0",
@@ -217,10 +214,10 @@
       },
       "Microsoft.Azure.WebJobs": {
         "type": "Transitive",
-        "resolved": "3.0.39",
-        "contentHash": "H/Al/2UOXef8Qqwvsm3Dur9JStz1xvV/UXb0GDys5YPx+qpWDS/U203b/+EUPLeZeuvGTnmcOFtnZzvxMuDamQ==",
+        "resolved": "3.0.41",
+        "contentHash": "EOigHt+kjrpbg53s8SYn4dlTpZG9IgWPNrdmcdSG8c7U8qKZvcF4BwZtF7ETy3KGir2NtIpJaIc7dUm2+k9/GA==",
         "dependencies": {
-          "Microsoft.Azure.WebJobs.Core": "3.0.39",
+          "Microsoft.Azure.WebJobs.Core": "3.0.41",
           "Microsoft.Extensions.Configuration": "2.1.1",
           "Microsoft.Extensions.Configuration.Abstractions": "2.1.1",
           "Microsoft.Extensions.Configuration.EnvironmentVariables": "2.1.0",
@@ -236,8 +233,8 @@
       },
       "Microsoft.Azure.WebJobs.Core": {
         "type": "Transitive",
-        "resolved": "3.0.39",
-        "contentHash": "O1RDMe2mBGZI4q4IUns+mxsfCjaMej4FzicMLqvnN5Ti5E3mSo+/kqDbEZzXA/RqnuLIOk+DhvFg/rwKhqEaow==",
+        "resolved": "3.0.41",
+        "contentHash": "nNW4I8m5GEhOxxD/NVZGjT6ZARGSy7wi8q+ihvKDin4IY4zYLpTy/GakZeGgbi7vPxcPHL5Z65n9DAV+goasqA==",
         "dependencies": {
           "System.ComponentModel.Annotations": "4.4.0",
           "System.Diagnostics.TraceSource": "4.3.0",
@@ -537,6 +534,11 @@
           "Newtonsoft.Json": "13.0.1"
         }
       },
+      "Microsoft.Win32.SystemEvents": {
+        "type": "Transitive",
+        "resolved": "6.0.0",
+        "contentHash": "hqTM5628jSsQiv+HGpiq3WKBl2c8v1KZfby2J6Pr7pEPlK9waPdgEO6b8A/+/xn/yZ9ulv8HuqK71ONy2tg67A=="
+      },
       "NCrontab.Signed": {
         "type": "Transitive",
         "resolved": "3.3.2",
@@ -552,8 +554,8 @@
       },
       "NotificationApi.Client": {
         "type": "Transitive",
-        "resolved": "3.0.8",
-        "contentHash": "L90NspHtLhtJeK8upMGIZ92yzQ1YyarCb6zKnPXq5Y0YArzOw2azvnZl4dxwDINNDa3KVAhRCAyIzA8uzCbQRQ==",
+        "resolved": "3.0.9",
+        "contentHash": "UMyKGf21h7h1W5eHr53zgi7WIoFHKivBi3o2ei7CXRzAudnWuGahNv74d78EawmzmUnS6m3IqNtXr9c00+GZzA==",
         "dependencies": {
           "System.Text.Json": "8.0.5"
         }
@@ -656,10 +658,11 @@
       },
       "System.Configuration.ConfigurationManager": {
         "type": "Transitive",
-        "resolved": "4.4.0",
-        "contentHash": "gWwQv/Ug1qWJmHCmN17nAbxJYmQBM/E94QxKLksvUiiKB1Ld3Sc/eK1lgmbSjDFxkQhVuayI/cGFZhpBSodLrg==",
+        "resolved": "6.0.0",
+        "contentHash": "7T+m0kDSlIPTHIkPMIu6m6tV6qsMqJpvQWW2jIc2qi7sn40qxFo0q+7mEQAhMPXZHMKnWrnv47ntGlM/ejvw3g==",
         "dependencies": {
-          "System.Security.Cryptography.ProtectedData": "4.4.0"
+          "System.Security.Cryptography.ProtectedData": "6.0.0",
+          "System.Security.Permissions": "6.0.0"
         }
       },
       "System.Diagnostics.Debug": {
@@ -699,6 +702,14 @@
           "System.Runtime.Extensions": "4.3.0",
           "System.Threading": "4.3.0",
           "runtime.native.System": "4.3.0"
+        }
+      },
+      "System.Drawing.Common": {
+        "type": "Transitive",
+        "resolved": "6.0.0",
+        "contentHash": "NfuoKUiP2nUWwKZN6twGqXioIe1zVD0RIj2t976A+czLHr2nY454RwwXs6JU9Htc6mwqL6Dn/nEL3dpVf2jOhg==",
+        "dependencies": {
+          "Microsoft.Win32.SystemEvents": "6.0.0"
         }
       },
       "System.Globalization": {
@@ -873,10 +884,24 @@
           "System.Runtime.Handles": "4.3.0"
         }
       },
+      "System.Security.AccessControl": {
+        "type": "Transitive",
+        "resolved": "6.0.0",
+        "contentHash": "AUADIc0LIEQe7MzC+I0cl0rAT8RrTAKFHl53yHjEUzNVIaUlhFY11vc2ebiVJzVBuOzun6F7FBA+8KAbGTTedQ=="
+      },
       "System.Security.Cryptography.ProtectedData": {
         "type": "Transitive",
-        "resolved": "4.4.0",
-        "contentHash": "cJV7ScGW7EhatRsjehfvvYVBvtiSMKgN8bOVI0bQhnF5bU7vnHVIsH49Kva7i7GWaWYvmEzkYVk1TC+gZYBEog=="
+        "resolved": "6.0.0",
+        "contentHash": "rp1gMNEZpvx9vP0JW0oHLxlf8oSiQgtno77Y4PLUBjSiDYoD77Y8uXHr1Ea5XG4/pIKhqAdxZ8v8OTUtqo9PeQ=="
+      },
+      "System.Security.Permissions": {
+        "type": "Transitive",
+        "resolved": "6.0.0",
+        "contentHash": "T/uuc7AklkDoxmcJ7LGkyX1CcSviZuLCa4jg3PekfJ7SU0niF0IVTXwUiNVP9DSpzou2PpxJ+eNY2IfDM90ZCg==",
+        "dependencies": {
+          "System.Security.AccessControl": "6.0.0",
+          "System.Windows.Extensions": "6.0.0"
+        }
       },
       "System.Text.Encoding": {
         "type": "Transitive",
@@ -927,6 +952,14 @@
         "resolved": "4.5.4",
         "contentHash": "zteT+G8xuGu6mS+mzDzYXbzS7rd3K6Fjb9RiZlYlJPam2/hU7JCBZBVEcywNuR+oZ1ncTvc/cq0faRr3P01OVg=="
       },
+      "System.Windows.Extensions": {
+        "type": "Transitive",
+        "resolved": "6.0.0",
+        "contentHash": "IXoJOXIqc39AIe+CIR7koBtRGMiCt/LPM3lI+PELtDIy9XdyeSrwXFdWV9dzJ2Awl0paLWUaknLxFQ5HpHZUog==",
+        "dependencies": {
+          "System.Drawing.Common": "6.0.0"
+        }
+      },
       "TimeZoneConverter": {
         "type": "Transitive",
         "resolved": "6.1.0",
@@ -951,7 +984,7 @@
       "schedulerjobs.common": {
         "type": "Project",
         "dependencies": {
-          "LaunchDarkly.ServerSdk": "[8.4.0, )",
+          "LaunchDarkly.ServerSdk": "[8.6.0, )",
           "Microsoft.Extensions.Caching.Abstractions": "[8.0.0, )",
           "Microsoft.Extensions.Caching.Memory": "[8.0.1, )",
           "Microsoft.Extensions.Configuration.Abstractions": "[8.0.0, )",
@@ -970,10 +1003,10 @@
         "type": "Project",
         "dependencies": {
           "Azure.Storage.Blobs": "[12.19.1, )",
-          "BookingsApi.Client": "[3.1.18, )",
+          "BookingsApi.Client": "[3.1.19, )",
           "Microsoft.Extensions.Logging.Abstractions": "[8.0.2, )",
           "Newtonsoft.Json": "[13.0.3, )",
-          "NotificationApi.Client": "[3.0.8, )",
+          "NotificationApi.Client": "[3.0.9, )",
           "SchedulerJobs.Common": "[1.0.0, )",
           "System.Threading.Tasks.Extensions": "[4.5.4, )",
           "UserApi.Client": "[3.1.8, )",
@@ -984,7 +1017,7 @@
         "type": "Project",
         "dependencies": {
           "Bogus": "[35.6.1, )",
-          "Microsoft.Azure.WebJobs": "[3.0.39, )",
+          "Microsoft.Azure.WebJobs": "[3.0.41, )",
           "Microsoft.Azure.WebJobs.Extensions": "[5.0.0, )",
           "Microsoft.Extensions.Logging.Abstractions": "[8.0.2, )"
         }

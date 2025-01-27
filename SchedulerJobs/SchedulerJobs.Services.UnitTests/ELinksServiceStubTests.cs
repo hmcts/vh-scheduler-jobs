@@ -46,7 +46,7 @@ namespace SchedulerJobs.Services.UnitTests
         public async Task should_return_default_value_for_updated_since()
         {
             var updatedSince = await _sut.GetUpdatedSince();
-            Assert.AreEqual(DateTime.UtcNow.AddDays(-1).Date, updatedSince.Date);
+            Assert.That(updatedSince.Date, Is.EqualTo(DateTime.UtcNow.AddDays(-1).Date));
         }
     }
 }

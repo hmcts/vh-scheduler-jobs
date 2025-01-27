@@ -1,3 +1,4 @@
+using System.Threading;
 using System.Threading.Tasks;
 using Azure;
 using Azure.Storage.Blobs;
@@ -16,12 +17,12 @@ public class FileExistsTests : AzureStorageServiceBaseTests
         var blobClientMock = new Mock<BlobClient>();
         
         ContainerClientMock.Setup(c => c.GetBlobClient(It.IsAny<string>())).Returns(blobClientMock.Object);
-        blobClientMock.Setup(b => b.ExistsAsync(default)).ReturnsAsync(Response.FromValue(true, null!));
+        blobClientMock.Setup(b => b.ExistsAsync(CancellationToken.None)).ReturnsAsync(Response.FromValue(true, null!));
 
         // Act
         var result = await AzureStorageServiceBase.FileExistsAsync(filePath);
 
         // Assert
-        Assert.IsTrue(result);
+        Assert.That(result, Is.True);
     }
 }
