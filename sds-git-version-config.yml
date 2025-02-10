@@ -6,9 +6,10 @@ major-version-bump-message: '\+semver:\s?(breaking|major)'
 minor-version-bump-message: '\+semver:\s?(feature|minor)'
 patch-version-bump-message: '\+semver:\s?(fix|patch)'
 commit-message-incrementing: Enabled
+update-build-number: true
 branches:
   main:
-    regex: ^origin/master$
+    regex: ^master$
     mode: ContinuousDelivery
     tag: staging
     increment: Patch
@@ -17,14 +18,14 @@ branches:
     is-mainline: true
     pre-release-weight: 55000
   release:
-    regex: ^origin/releases?[/-]
+    regex: ^releases?[/-]
     mode: ContinuousDelivery
     tag: ''
     increment: None
     source-branches: [ 'main', 'hotfix', 'release' ]
     is-release-branch: true
   feature:
-    regex: ^origin/features?[/-]$
+    regex: ^features?[/-]$
     mode: ContinuousDelivery
     tag: useBranchName
     increment: Patch
@@ -37,7 +38,7 @@ branches:
     tag-number-pattern: '[/-](?<number>\d+)[-/]'
     source-branches: [ 'main', 'release', 'feature', 'hotfix' ]
   hotfix:
-    regex: ^origin/hotfix(es)?[/-]
+    regex: ^hotfix(es)?[/-]
     mode: ContinuousDelivery
     tag: hotfix
     increment: Patch
