@@ -46,6 +46,7 @@ stages:
           inputs:
             useConfigFile: true
             configFilePath: ${{ variables.git_version_config_path }}
+            verbosity: debug
 
 - stage: CI_Build
   displayName: CI Build
