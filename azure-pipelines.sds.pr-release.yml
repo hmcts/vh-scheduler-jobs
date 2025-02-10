@@ -35,18 +35,18 @@ stages:
       displayName: "GitVersion"
       steps:
         - checkout: self
+          fetchTags: true
       
-        - task: gitversion/setup@3.0.3
+        - task: gitversion/setup@0
           displayName: Install GitVersion
           inputs:
-            versionSpec: '6.0.x'
+            versionSpec: '5.11.1'
 
-        - task: gitversion/execute@3.0.3
+        - task: gitversion/execute@0
           displayName: Determine Version
           inputs:
             useConfigFile: true
             configFilePath: ${{ variables.git_version_config_path }}
-            verbosity: debug
 
 - stage: CI_Build
   displayName: CI Build
