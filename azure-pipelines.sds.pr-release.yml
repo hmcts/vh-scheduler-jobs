@@ -26,6 +26,26 @@ stages:
 
 #####################################################
 # CI Build Checks. ##################################
+- stage: Pre_Release_Tasks
+  displayName: Pre-Release Tasks
+  variables:
+    - template: variables/shared.yaml
+  jobs:
+    - job: GitVersion
+      displayName: "GitVersion"
+      steps:
+        - checkout: self
+      
+        - task: gitversion/setup@3.0.3
+          displayName: Install GitVersion
+          inputs:
+            versionSpec: '6.0.x'
+
+        - task: gitversion/execute@3.0.3
+          displayName: Determine Version
+          inputs:
+            useConfigFile: true
+            configFilePath: ${{ variables.git_version_config_path }}
 
 - stage: CI_Build
   displayName: CI Build
