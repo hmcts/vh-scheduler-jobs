@@ -11,4 +11,4 @@ services:
       - ./TestResults:/TestResults:rw
       - ./Coverage:/Coverage:rw
       - ./:/app:rw
-    command: tail -f /dev/null
+    entrypoint: "/run-tests.sh"
