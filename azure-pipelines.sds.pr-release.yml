@@ -37,12 +37,12 @@ stages:
         - checkout: self
           fetchTags: true
       
-        - task: gitversion/setup@0
+        - task: gitversion/setup@3.0.3
           displayName: Install GitVersion
           inputs:
-            versionSpec: '5.11.1'
+            versionSpec: '6.0.x'
 
-        - task: gitversion/execute@0
+        - task: gitversion/execute@3.0.3
           displayName: Determine Version
           inputs:
             useConfigFile: true
