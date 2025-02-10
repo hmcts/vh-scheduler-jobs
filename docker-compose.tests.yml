@@ -1,0 +1,14 @@
+services:
+
+  vh-scheduler-jobs-tests:
+    image: scheduler-jobs-tests
+    build:
+      context: ./
+      dockerfile: tests/Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    volumes:
+      - ./TestResults:/TestResults:rw
+      - ./Coverage:/Coverage:rw
+      - ./:/app:rw
+    command: tail -f /dev/null
