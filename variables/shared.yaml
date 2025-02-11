@@ -7,11 +7,11 @@ parameters:
     default: ''
 
 variables:
+  - name: appName
+    value: SchedulerJobs
 
   - name: git_repo_name
     value: 'scheduler-jobs'
-  - name: sonar_exclusion
-    value: '**/SchedulerJobs.Contract/**,**/SchedulerJobs/Program.cs, **/SchedulerJobs/Startup.cs, **/SchedulerJobs/Extensions/**, **/SchedulerJobs/Swagger/**, **/SchedulerJobs/ConfigureServicesExtensions.cs, **/Testing.Common/**, **/SchedulerJobs.Common/**, **/SchedulerJobs.DAL/Mappings/**, **/SchedulerJobs.DAL/SeedData/**, **/SchedulerJobs.DAL/SchedulerJobsDbContext.cs, **/SchedulerJobs.DAL/**/DesignTimeHearingsContextFactory.cs, SchedulerJobs.DAL/Migrations/**, **/SchedulerJobs.Domain/Ddd/**, **/SchedulerJobs.DAL/Commands/Core/**, **/SchedulerJobs.DAL/Queries/Core/**, **/Testing.Common/**, **/SchedulerJobs.DAL/Migrations/*, **/SchedulerJobs.DAL/Migrations/**, **/Migrations/*'
 
   - name: prNumber
     ${{ if eq(parameters.prNumber, '')}}:
@@ -65,3 +65,12 @@ variables:
 
   - name: app_path
     value: SchedulerJobs
+
+  - name: git_version_config_path
+    value: $(Build.SourcesDirectory)/sds-git-version-config.yml
+  - name: dotnetVersion
+    value: '8.x'
+  - name: nuget_org_name
+    value: "Video Hearings/vh-packages"
+  - name: nuget_feed_name
+    value: "vh-packages"
