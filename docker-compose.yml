@@ -1,4 +1,3 @@
-version: '3.4'
 services:
   schedulerjobs:
     image: ${DOCKER_REGISTRY-}schedulerjobs-sds:latest
