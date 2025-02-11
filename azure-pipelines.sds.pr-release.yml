@@ -40,7 +40,7 @@ stages:
         - task: gitversion/setup@3.0.3
           displayName: Install GitVersion
           inputs:
-            versionSpec: '6.0.x'
+            versionSpec: '5.11.1'
 
         - task: gitversion/execute@3.0.3
           displayName: Determine Version
