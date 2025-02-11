@@ -28,20 +28,36 @@ parameters:
     requireApproval: true
     buildPushImage: true
     pushHelmChart: false
-- name: sdsUnitTestsCoverletCoverageExclusions
-  type: object
-  default: ["[*]SchedulerJobs.Common.*", "[*]SchedulerJobs.Sds.UnitTests.*", "[Testing.Common]*"]
-- name: servicesUnitTestsCoverletCoverageExclusions
-  type: object
-  default: [ "[*]SchedulerJobs.Common.*", "[*]SchedulerJobs.Services.UnitTests.*", "[Testing.Common]*" ]
 
 pool: 
   vmImage: ubuntu-22.04
 
 stages:
 #####################################################
-# CI Build Checks. ##################################
+# Pre-Release Tasks. ################################
+- stage: Pre_Release_Tasks
+  displayName: Pre-Release Tasks
+  variables:
+    - template: variables/shared.yaml
+  jobs:
+    - job: GitVersion
+      displayName: "GitVersion"
+      steps:
+        - checkout: self
+          fetchTags: true
+      
+        - task: gitversion/setup@3.0.3
+          displayName: Install GitVersion
+          inputs:
+            versionSpec: '6.0.x'
 
+        - task: gitversion/execute@3.0.3
+          displayName: Determine Version
+          inputs:
+            useConfigFile: true
+            configFilePath: ${{ variables.git_version_config_path }}
+#####################################################
+# CI Build Checks. ##################################
 - stage: CI_Build
   displayName: CI Build
   variables: 
@@ -61,101 +77,17 @@ stages:
   - job: UnitTests
     displayName: "Unit Tests"
     steps:
-    - checkout: self
+      - checkout: self
 
-    - template: templates/sonarCloud/prepare.yml@azTemplates
-      parameters:
-        ExtraProperties: |
-          sonar.cs.opencover.reportsPaths=$(Common.TestResultsDirectory)/Coverage/coverage.opencover.xml
-          sonar.coverage.exclusions=**/VideoApiService.cs, **/Startup.cs, **/Testing.Common/**, **/SchedulerJobs.Common/ApiHelper/**, **/SchedulerJobs.Common/Helper/Configuration/**, **/SchedulerJobs.Common/Security/**, **/SchedulerJobs.Common.Exceptions/**, **/SchedulerJobs.Sds.Configuration/**, **/SchedulerJobs.Services.Configuration/**
-
-    - task: UseDotNet@2
-      displayName: 'Install .NET Core SDK ${{ variables.dotnetCoreVersion }}'
-      inputs:
-        packageType: sdk
-        version: ${{ variables.dotnetCoreVersion }}
-        installationPath: $(Agent.ToolsDirectory)/dotnet
-
-    - powershell: |
-        $dotNetLocation = (dotnet nuget locals global-packages -l).replace('global-packages: ', '')
-        Write-Host "##vso[task.setvariable variable=cacheLocation;isOutput=true]$dotNetLocation"
-      displayName: 'Find NuGet Cache'
-      name: findCache
-
-    # Scheduler Jobs Sds Unit Tests
-
-    - task: Cache@2
-      displayName: Scheduler Jobs Unit Tests - Cache NuGet Packages
-      inputs:
-        key: 'nuget | "$(Agent.OS)" | ${{ variables.app_path }}/${{ variables.app_path }}.Sds.UnitTests/packages.lock.json'
-        path: $(findCache.cacheLocation)
-        cacheHitVar: NUGET_CACHE_RESTORED
-      
-    - task: DotNetCoreCLI@2
-      displayName: Scheduler Jobs Unit Tests - Restore Unit Test Project
-      inputs:
-        command: restore
-        projects: ${{ variables.app_path }}/${{ variables.app_path }}.Sds.UnitTests/*.csproj
-        restoreArguments: --force-evaluate
-        ${{ if ne(variables.app_path, '') }}:
-          feedsToUse: config
-          nugetConfigPath: ${{ variables.app_path }}/nuget.config
-        ${{ if ne(variables.vstsFeedId, '') }}:
-          vstsFeed: ''
-          includeNuGetOrg: true
-        condition: ne(variables.NUGET_CACHE_RESTORED, 'true')
-
-    - task: DotNetCoreCLI@2
-      displayName: Scheduler Jobs Unit Tests - Run dotnet Tests
-      inputs:
-        testRunTitle: dotnet Tests
-        command: test
-        projects: |
-          ${{ variables.app_path }}/${{ variables.app_path }}.Sds.UnitTests/*.csproj
-        arguments: ${{ format('--configuration Release /p:CollectCoverage=true /p:CoverletOutputFormat="\"opencover,cobertura,json,lcov\"" /p:Exclude="\"{0}\"" /p:CoverletOutput=$(Common.TestResultsDirectory)/Coverage/ /p:MergeWith=$(Common.TestResultsDirectory)/Coverage/coverage.json', join(',', parameters.sdsUnitTestsCoverletCoverageExclusions)) }}
-
-    # Services Unit Tests
-
-    - task: Cache@2
-      displayName: Services Unit Tests - Cache NuGet Packages
-      inputs:
-        key: 'nuget | "$(Agent.OS)" | ${{ variables.app_path }}/${{ variables.app_path }}.Services.UnitTests/packages.lock.json'
-        path: $(findCache.cacheLocation)
-        cacheHitVar: NUGET_CACHE_RESTORED
-
-    - task: DotNetCoreCLI@2
-      displayName: Services Unit Tests - Restore Unit Test Project
-      inputs:
-        command: restore
-        projects: ${{ variables.app_path }}/${{ variables.app_path }}.Services.UnitTests/*.csproj
-        restoreArguments: --force-evaluate
-        ${{ if ne(variables.app_path, '') }}:
-          feedsToUse: config
-          nugetConfigPath: ${{ variables.app_path }}/nuget.config
-        ${{ if ne(variables.vstsFeedId, '') }}:
-          vstsFeed: ''
-          includeNuGetOrg: true
-        condition: ne(variables.NUGET_CACHE_RESTORED, 'true')
-
-    - task: DotNetCoreCLI@2
-      displayName: Services Unit Tests - Run dotnet Tests
-      inputs:
-        testRunTitle: dotnet Tests
-        command: test
-        projects: |
-          ${{ variables.app_path }}/${{ variables.app_path }}.Services.UnitTests/*.csproj
-        arguments: ${{ format('--configuration Release /p:CollectCoverage=true /p:CoverletOutputFormat="\"opencover,cobertura,json,lcov\"" /p:Exclude="\"{0}\"" /p:CoverletOutput=$(Common.TestResultsDirectory)/Coverage/ /p:MergeWith=$(Common.TestResultsDirectory)/Coverage/coverage.json', join(',', parameters.servicesUnitTestsCoverletCoverageExclusions)) }}
-
-    - task: PublishCodeCoverageResults@1
-      displayName: Publish Code Coverage
-      inputs:
-        codeCoverageTool: Cobertura
-        summaryFileLocation: $(Common.TestResultsDirectory)/Coverage/coverage.cobertura.xml
-        reportDirectory: $(Common.TestResultsDirectory)/Coverage
-        failIfCoverageEmpty: true
-      condition: always()
-
-    - template: templates/sonarCloud/runAnalysis.yml@azTemplates
+      - template: templates/dotnet/build-test-analyse.yml@azTemplates
+        parameters:
+          dotnetVersion: ${{ variables.dotnetVersion }}
+          nugetConfigPath: nuget.config
+          appName: ${{ variables.appName }}
+          dockerComposeTestFile: docker-compose.tests.yml
+          sonarExtraProperties: |
+            sonar.cs.opencover.reportsPaths=$(Common.TestResultsDirectory)/Coverage/coverage.opencover.xml
+            sonar.coverage.exclusions=**/VideoApiService.cs, **/Startup.cs, **/Testing.Common/**, **/SchedulerJobs.Common/ApiHelper/**, **/SchedulerJobs.Common/Helper/Configuration/**, **/SchedulerJobs.Common/Security/**, **/SchedulerJobs.Common.Exceptions/**, **/SchedulerJobs.Sds.Configuration/**, **/SchedulerJobs.Services.Configuration/**
 
 #####################################################
 # Manual Approval ###################################
