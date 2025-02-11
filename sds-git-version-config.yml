@@ -13,7 +13,7 @@ branches:
     label: staging
     increment: Patch
     source-branches: ['feature', 'release', 'hotfix']
-    is-mainline: true
+    is-main-branch: true
     pre-release-weight: 55000
   release:
     regex: ^releases?[/-]
