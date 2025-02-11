@@ -3,49 +3,49 @@ image: '${IMAGE_NAME}'
 releaseNameOverride: ${RELEASE_NAME}
 crons:
   - cronJobName: vh-anonymise-hearings-and-conferences-job-pr-${PR_NUMBER}
-    schedule: "30 5 * * *"
+    schedule: "5 8 * * *"
     concurrencyPolicy: Forbid
     args: 
     - AnonymiseHearingsConferencesAndDeleteAadUsersJob
 
   - cronJobName: vh-clear-conference-message-history-job-pr-${PR_NUMBER}
-    schedule: "0 * * * *"
+    schedule: "5 8 * * *"
     concurrencyPolicy: Forbid
     args: 
     - ClearConferenceInstantMessageHistoryJob
 
   - cronJobName: vh-clear-hearings-job-pr-${PR_NUMBER}
-    schedule: "0 23 * * *"
+    schedule: "5 8 * * *"
     concurrencyPolicy: Forbid
     args:
     - ClearHearingsJob
     
   - cronJobName: vh-get-judiciary-users-job-pr-${PR_NUMBER}
-    schedule: "0 2 * * *"
+    schedule: "5 8 * * *"
     concurrencyPolicy: Forbid
     args:
     - GetJudiciaryUsersJob
 
   - cronJobName: vh-reconcile-hearing-audio-with-storage-job-pr-${PR_NUMBER}
-    schedule: "0 22 * * *"
+    schedule: "5 8 * * *"
     concurrencyPolicy: Forbid
     args: 
     - ReconcileHearingAudioWithStorageJob
 
   - cronJobName: vh-remove-heartbeats-for-conferences-job-pr-${PR_NUMBER}
-    schedule: "40 5 * * *"
+    schedule: "5 8 * * *"
     concurrencyPolicy: Forbid
     args:
     - RemoveHeartbeatsForConferencesJob
 
   - cronJobName: vh-send-hearing-notifications-job-pr-${PR_NUMBER}
-    schedule: "0 10 * * *"
+    schedule: "5 8 * * *"
     concurrencyPolicy: Forbid
     args:
     - SendHearingNotificationsJob
       
   - cronJobName: vh-hearing-allocations-job-pr-${PR_NUMBER}
-    schedule: "0 3 * * *"
+    schedule: "5 8 * * *"
     concurrencyPolicy: Forbid
     args:
     - HearingsAllocationJob
