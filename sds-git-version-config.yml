@@ -8,36 +8,38 @@ patch-version-bump-message: '\+semver:\s?(fix|patch)'
 commit-message-incrementing: Enabled
 branches:
   main:
-    regex: ^master$
+    regex: ^origin/master$
     mode: ContinuousDelivery
-    label: staging
+    tag: staging
     increment: Patch
-    source-branches: ['feature', 'release', 'hotfix']
-    is-main-branch: true
+    source-branches: [ 'feature', 'release', 'hotfix' ]
+    prevent-increment-of-merged-branch-version: true
+    is-mainline: true
     pre-release-weight: 55000
   release:
-    regex: ^releases?[/-]
+    regex: ^origin/releases?[/-]
     mode: ContinuousDelivery
-    label: ''
+    tag: ''
     increment: None
-    source-branches: ['main', 'hotfix', 'release']
+    source-branches: [ 'main', 'hotfix', 'release' ]
     is-release-branch: true
   feature:
     regex: ^features?[/-]$
     mode: ContinuousDelivery
-    label: useBranchName
+    tag: useBranchName
     increment: Patch
-    source-branches: ['pull-request', 'main', 'release', 'feature', 'hotfix']
+    source-branches: [ 'pull-request', 'main', 'release', 'feature', 'hotfix' ]
   pull-request:
     regex: ^(pull|pull\-requests|pr)[/-]
     mode: ContinuousDelivery
-    label: pr-
+    tag: pr-
     increment: Patch
-    label-number-pattern: '[/-](?<number>\d+)[-/]'
-    source-branches: ['main', 'release', 'feature', 'hotfix']
+    tag-number-pattern: '[/-](?<number>\d+)[-/]'
+    source-branches: [ 'main', 'release', 'feature', 'hotfix' ]
   hotfix:
     regex: ^hotfix(es)?[/-]
     mode: ContinuousDelivery
-    label: hotfix
+    tag: hotfix
     increment: Patch
-    source-branches: ['pull-request', 'main', 'release']
+    track-merge-target: false
+    source-branches: [ 'pull-request', 'main', 'release' ]
