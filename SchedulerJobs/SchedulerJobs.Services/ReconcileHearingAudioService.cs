@@ -28,7 +28,7 @@ namespace SchedulerJobs.Services
 
            _logger.LogInformation("ReconcileAudiorecordingsWithConferencesAsync - Conferences count {ConferenceCount}", + conferences.Count);
 
-           var audioConferenceItems = conferences.Select(x => x.HearingId).GroupBy(x => x).Select( g => new { Name = g.Key, Count = g.Count()});
+           var audioConferenceItems = conferences.Select(x => x.FileNamePrefix).GroupBy(x => x).Select( g => new { Name = g.Key, Count = g.Count()});
 
            foreach (var item in audioConferenceItems)
            {
