@@ -46,8 +46,11 @@ namespace SchedulerJobs.Services.UnitTests
         {
             var conferenceRoomHearingResponses1 = new List<ConferenceHearingRoomsResponse>();
 
-            conferenceRoomHearingResponses1.Add(new ConferenceHearingRoomsResponse() { HearingId = Guid.NewGuid().ToString(), FileNamePrefix = string.Empty, Label = string.Empty });
-            conferenceRoomHearingResponses1.Add(new ConferenceHearingRoomsResponse() { HearingId = Guid.NewGuid().ToString(), FileNamePrefix = string.Empty, Label = string.Empty });
+            var hearing1Id = Guid.NewGuid();
+            var hearing2Id = Guid.NewGuid();
+            
+            conferenceRoomHearingResponses1.Add(new ConferenceHearingRoomsResponse { HearingId = hearing1Id.ToString(), FileNamePrefix = $"ABA4-Hearing1-{hearing1Id}", Label = string.Empty });
+            conferenceRoomHearingResponses1.Add(new ConferenceHearingRoomsResponse { HearingId = hearing2Id.ToString(), FileNamePrefix = $"BCA1-Hearing2-{hearing2Id}", Label = string.Empty });
 
             _videoApiClient.Setup(x => x.GetConferencesHearingRoomsAsync(It.IsAny<string>())).ReturnsAsync(conferenceRoomHearingResponses1);
             _videoApiClient.SetupSequence(x => x.ReconcileAudioFilesInStorageAsync(It.IsAny<string>(), It.IsAny<int>())).ReturnsAsync(true).ReturnsAsync(true);
