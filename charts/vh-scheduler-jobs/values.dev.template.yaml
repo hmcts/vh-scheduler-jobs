@@ -1,8 +1,6 @@
 ---
 image: '${IMAGE_NAME}'
 releaseNameOverride: ${RELEASE_NAME}
-environment:
-  VHSERVICES__VIDEOAPIURL: https://vh-video-api-pr-718.dev.platform.hmcts.net/
 crons:
   - cronJobName: vh-anonymise-hearings-and-conferences-job-pr-${PR_NUMBER}
     schedule: "5 8 * * *"
