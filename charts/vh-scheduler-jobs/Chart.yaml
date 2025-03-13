@@ -8,5 +8,5 @@ maintainers:
   - name: VH Devops
 dependencies:
   - name: library
-    version: 2.0.9
-    repository: https://hmctspublic.azurecr.io/helm/v1/repo/
+    version: 2.2.2
+    repository: oci://hmctspublic.azurecr.io/helm
