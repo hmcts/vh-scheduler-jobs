@@ -19,6 +19,9 @@ using SchedulerJobs.Sds.Configuration;
 using SchedulerJobs.Sds.Extensions;
 using UserApi.Client;
 using VideoApi.Client;
+using OpenTelemetry.Trace;
+using OpenTelemetry.Resources;
+using Azure.Monitor.OpenTelemetry.Exporter;
 
 var hostBuilder = Host.CreateDefaultBuilder(args);
 
@@ -159,13 +162,36 @@ public static partial class Program
         services.AddSingleton<IAzureStorageService>(x => azureStorage);
         
         services.AddScoped<IAzureTokenProvider, AzureTokenProvider>();
-        
-        services.AddLogging(builder =>
-            builder.AddApplicationInsights(
-                configureTelemetryConfiguration: config => config.ConnectionString = configuration["ApplicationInsights:ConnectionString"],
-                configureApplicationInsightsLoggerOptions: _ => {}
-            ));
 
+        var instrumentationKey = configuration["ApplicationInsights:ConnectionString"];
+        
+        if(String.IsNullOrEmpty(instrumentationKey))
+           Console.WriteLine("Application Insights Instrumentation Key not found");
+        else
+        {
+            services.ConfigureOpenTelemetryTracerProvider(builder =>
+            {
+                builder.SetResourceBuilder(ResourceBuilder.CreateDefault()
+                        .AddService("vh-scheduler-jobs") 
+                        .AddTelemetrySdk()
+                        .AddAttributes(new Dictionary<string, object>
+                            { ["service.instance.id"] = Environment.MachineName }))
+                    .AddHttpClientInstrumentation(options => options.RecordException = true) 
+                    .AddAzureMonitorTraceExporter(options =>
+                    {
+                        options.ConnectionString = instrumentationKey;
+                    });
+            });
+            services.AddLogging(logging =>
+            {
+                logging.AddOpenTelemetry(options =>
+                {
+                    options.AddAzureMonitorLogExporter(e => e.ConnectionString = instrumentationKey); 
+                });
+            });
+        }
+
+        
         services.AddScoped<ICloseConferenceService, CloseConferenceService>();
         services.AddScoped<IClearConferenceChatHistoryService, ClearConferenceChatHistoryService>();
         services.AddScoped<IAnonymiseHearingsConferencesDataService, AnonymiseHearingsConferencesDataService>();
