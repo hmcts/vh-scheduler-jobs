@@ -2,6 +2,8 @@ backoffLimit: 0
 image: 'sdshmctspublic.azurecr.io/vh/scheduler-jobs-sds:latest'
 kind: CronJob
 releaseNameOverride: vh-scheduler-jobs
+spotInstances:
+  enabled: false
 crons:
   - cronJobName: vh-anonymise-hearings-and-conferences-job
     schedule: "5 8 * * *"
