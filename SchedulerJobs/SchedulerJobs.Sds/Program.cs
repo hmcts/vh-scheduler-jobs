@@ -176,7 +176,6 @@ public static partial class Program
                         .AddTelemetrySdk()
                         .AddAttributes(new Dictionary<string, object>
                             { ["service.instance.id"] = Environment.MachineName }))
-                    .AddHttpClientInstrumentation(options => options.RecordException = true) 
                     .AddAzureMonitorTraceExporter(options =>
                     {
                         options.ConnectionString = instrumentationKey;
@@ -186,6 +185,8 @@ public static partial class Program
             {
                 logging.AddOpenTelemetry(options =>
                 {
+                    options.IncludeScopes = true;
+                    options.IncludeFormattedMessage = true;
                     options.AddAzureMonitorLogExporter(e => e.ConnectionString = instrumentationKey); 
                 });
             });
