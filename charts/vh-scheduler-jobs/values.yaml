@@ -1,9 +1,8 @@
+aadIdentityName: vh-aad-identity
 backoffLimit: 0
 image: 'sdshmctspublic.azurecr.io/vh/scheduler-jobs-sds:latest'
 kind: CronJob
 releaseNameOverride: vh-scheduler-jobs
-spotInstances:
-  enabled: false
 crons:
   - cronJobName: vh-anonymise-hearings-and-conferences-job
     schedule: "5 8 * * *"
@@ -57,6 +56,7 @@ keyVaults:
   vh-infra-core:
     excludeEnvironmentSuffix: false
     resourceGroup: vh-infra-core-{{ .Values.global.environment }}
+    usePodIdentity: true
     secrets:
       - name: connectionstrings--applicationinsights
         alias: applicationinsights--connectionstring
@@ -73,6 +73,7 @@ keyVaults:
   vh-scheduler-jobs:
     excludeEnvironmentSuffix: false
     resourceGroup: vh-infra-core-{{ .Values.global.environment }}
+    usePodIdentity: true
     secrets:
       - azuread--clientsecret
       - azuread--clientid
@@ -86,24 +87,28 @@ keyVaults:
   vh-bookings-api:
     excludeEnvironmentSuffix: false
     resourceGroup: vh-infra-core-{{ .Values.global.environment }}
+    usePodIdentity: true
     secrets:
       - name: azuread--identifieruri
         alias: VhServices--BookingsApiResourceId
   vh-video-api:
     excludeEnvironmentSuffix: false
     resourceGroup: vh-infra-core-{{ .Values.global.environment }}
+    usePodIdentity: true
     secrets:
       - name: azuread--identifieruri
         alias: VhServices--VideoApiResourceId
   vh-notification-api:
     excludeEnvironmentSuffix: false
     resourceGroup: vh-infra-core-{{ .Values.global.environment }}
+    usePodIdentity: true
     secrets:
       - name: azuread--identifieruri
         alias: VhServices--NotificationApiResourceId
   vh-user-api:
     excludeEnvironmentSuffix: false
     resourceGroup: vh-infra-core-{{ .Values.global.environment }}
+    usePodIdentity: true
     secrets:
       - name: azuread--identifieruri
         alias: VhServices--UserApiResourceId
