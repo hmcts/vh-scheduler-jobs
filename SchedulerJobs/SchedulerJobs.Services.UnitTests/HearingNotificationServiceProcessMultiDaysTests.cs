@@ -20,12 +20,20 @@ public class HearingNotificationServiceProcessMultiDaysTests
     private AutoMock _mocker;
     private HearingNotificationService _sut;
     private static readonly Faker Faker = new();
+    private Mock<ILogger<HearingNotificationService>> _logger;
+    private Mock<IBookingsApiClient> _bookingsApiClient;
+    private Mock<INotificationApiClient> _notificationApiClient;
         
     [SetUp]
     public void Setup()
     {
-        _mocker = AutoMock.GetLoose();
-        _sut = _mocker.Create<HearingNotificationService>();
+        _logger = new Mock<ILogger<HearingNotificationService>>();
+        _bookingsApiClient = new Mock<IBookingsApiClient>();
+        _notificationApiClient = new Mock<INotificationApiClient>();
+        _sut = new HearingNotificationService(
+                _bookingsApiClient.Object,
+                _notificationApiClient.Object,
+                _logger.Object);
     }
 
     [Test]
@@ -59,29 +67,29 @@ public class HearingNotificationServiceProcessMultiDaysTests
                 SourceHearing = hearing
             }
         };
-        _mocker.Mock<IBookingsApiClient>().Setup(x => x.GetHearingsForNotificationAsync())
+        _bookingsApiClient.Setup(x => x.GetHearingsForNotificationAsync())
             .ReturnsAsync(hearingsForNotification);
             
         // act
         await _sut.SendNotificationsAsync();
             
         // assert
-        _mocker.Mock<INotificationApiClient>()
+        _notificationApiClient
             .Verify(
                 x => x.SendMultiDayHearingReminderEmailAsync(
                     It.Is<MultiDayHearingReminderRequest>(y => y.ParticipantId == individual.Id)), Times.Once);
         
-        _mocker.Mock<INotificationApiClient>()
+        _notificationApiClient
             .Verify(
                 x => x.SendMultiDayHearingReminderEmailAsync(
                     It.Is<MultiDayHearingReminderRequest>(y => y.ParticipantId == representative.Id)), Times.Once);
         
-        _mocker.Mock<INotificationApiClient>()
+        _notificationApiClient
             .Verify(
                 x => x.SendMultiDayHearingReminderEmailAsync(
                     It.Is<MultiDayHearingReminderRequest>(y => y.ParticipantId == judicialOfficeHolder.Id)), Times.Once);
         
-        _mocker.Mock<INotificationApiClient>()
+        _notificationApiClient
             .Verify(
                 x => x.SendMultiDayHearingReminderEmailAsync(
                     It.Is<MultiDayHearingReminderRequest>(y => y.ParticipantId == judge.Id)), Times.Once);
@@ -91,6 +99,8 @@ public class HearingNotificationServiceProcessMultiDaysTests
     public async Task should_log_error_for_when_multiday_reminders_request_to_notification_api_fails()
     {
         // arrange
+        _logger.Setup(x=> x.IsEnabled(LogLevel.Error)).Returns(true);
+        _logger.Setup(x=> x.IsEnabled(LogLevel.Information)).Returns(true);
         var participants = Builder<ParticipantResponseV2>.CreateListOfSize(4)
             .All().With(x => x.Id = Guid.NewGuid())
             .TheFirst(1).With(x => x.UserRoleName = RoleNames.Judge)
@@ -113,17 +123,17 @@ public class HearingNotificationServiceProcessMultiDaysTests
                 SourceHearing = hearing
             }
         };
-        _mocker.Mock<IBookingsApiClient>().Setup(x => x.GetHearingsForNotificationAsync())
+        _bookingsApiClient.Setup(x => x.GetHearingsForNotificationAsync())
             .ReturnsAsync(hearingsForNotification);
         
         
         var notificationApiException = new NotificationApiException("Error", 400, "Template not found for user", null, null);
-        _mocker.Mock<INotificationApiClient>().Setup(x => x.SendMultiDayHearingReminderEmailAsync(It.IsAny<MultiDayHearingReminderRequest>()))
+        _notificationApiClient.Setup(x => x.SendMultiDayHearingReminderEmailAsync(It.IsAny<MultiDayHearingReminderRequest>()))
             .ThrowsAsync(notificationApiException);
         
         await _sut.SendNotificationsAsync();
         
-        _mocker.Mock<ILogger<HearingNotificationService>>().Verify(
+        _logger.Verify(
             x => x.Log(
                 LogLevel.Error,
                 It.IsAny<EventId>(),
@@ -201,51 +211,51 @@ public class HearingNotificationServiceProcessMultiDaysTests
                 SourceHearing = sourceHearing
             }
         };
-        _mocker.Mock<IBookingsApiClient>().Setup(x => x.GetHearingsForNotificationAsync())
+        _bookingsApiClient.Setup(x => x.GetHearingsForNotificationAsync())
             .ReturnsAsync(hearingsForNotification);
             
         // act
         await _sut.SendNotificationsAsync();
             
         // assert
-        _mocker.Mock<INotificationApiClient>()
+        _notificationApiClient
             .Verify(
                 x => x.SendSingleDayHearingReminderEmailAsync(
                     It.Is<SingleDayHearingReminderRequest>(y => y.ContactEmail == newIndividual.ContactEmail)), Times.Once);
         
-        _mocker.Mock<INotificationApiClient>()
+        _notificationApiClient
             .Verify(
                 x => x.SendSingleDayHearingReminderEmailAsync(
                     It.Is<SingleDayHearingReminderRequest>(y => y.ContactEmail == newRepresentative.ContactEmail)), Times.Once);
         
-        _mocker.Mock<INotificationApiClient>()
+        _notificationApiClient
             .Verify(
                 x => x.SendSingleDayHearingReminderEmailAsync(
                     It.Is<SingleDayHearingReminderRequest>(y => y.ContactEmail == newJudicialOfficeHolder.ContactEmail)), Times.Once);
         
-        _mocker.Mock<INotificationApiClient>()
+        _notificationApiClient
             .Verify(
                 x => x.SendSingleDayHearingReminderEmailAsync(
                     It.Is<SingleDayHearingReminderRequest>(y => y.ContactEmail == newJudge.ContactEmail)), Times.Once);
         
         // Should not notify the existing participants
         
-        _mocker.Mock<INotificationApiClient>()
+        _notificationApiClient
             .Verify(
                 x => x.SendSingleDayHearingReminderEmailAsync(
                     It.Is<SingleDayHearingReminderRequest>(y => y.ContactEmail == individual.ContactEmail)), Times.Never);
         
-        _mocker.Mock<INotificationApiClient>()
+        _notificationApiClient
             .Verify(
                 x => x.SendSingleDayHearingReminderEmailAsync(
                     It.Is<SingleDayHearingReminderRequest>(y => y.ContactEmail == representative.ContactEmail)), Times.Never);
         
-        _mocker.Mock<INotificationApiClient>()
+        _notificationApiClient
             .Verify(
                 x => x.SendSingleDayHearingReminderEmailAsync(
                     It.Is<SingleDayHearingReminderRequest>(y => y.ContactEmail == judicialOfficeHolder.ContactEmail)), Times.Never);
         
-        _mocker.Mock<INotificationApiClient>()
+        _notificationApiClient
             .Verify(
                 x => x.SendSingleDayHearingReminderEmailAsync(
                     It.Is<SingleDayHearingReminderRequest>(y => y.ContactEmail == judge.ContactEmail)), Times.Never);
@@ -281,29 +291,29 @@ public class HearingNotificationServiceProcessMultiDaysTests
                 Hearing = hearing
             }
         };
-        _mocker.Mock<IBookingsApiClient>().Setup(x => x.GetHearingsForNotificationAsync())
+        _bookingsApiClient.Setup(x => x.GetHearingsForNotificationAsync())
             .ReturnsAsync(hearingsForNotification);
             
         // act
         await _sut.SendNotificationsAsync();
             
         // assert
-        _mocker.Mock<INotificationApiClient>()
+        _notificationApiClient
             .Verify(
                 x => x.SendSingleDayHearingReminderEmailAsync(
                     It.Is<SingleDayHearingReminderRequest>(y => y.ParticipantId == individual.Id)), Times.Once);
         
-        _mocker.Mock<INotificationApiClient>()
+        _notificationApiClient
             .Verify(
                 x => x.SendSingleDayHearingReminderEmailAsync(
                     It.Is<SingleDayHearingReminderRequest>(y => y.ParticipantId == representative.Id)), Times.Once);
         
-        _mocker.Mock<INotificationApiClient>()
+        _notificationApiClient
             .Verify(
                 x => x.SendSingleDayHearingReminderEmailAsync(
                     It.Is<SingleDayHearingReminderRequest>(y => y.ParticipantId == judicialOfficeHolder.Id)), Times.Once);
         
-        _mocker.Mock<INotificationApiClient>()
+        _notificationApiClient
             .Verify(
                 x => x.SendSingleDayHearingReminderEmailAsync(
                     It.Is<SingleDayHearingReminderRequest>(y => y.ParticipantId == judge.Id)), Times.Once);

@@ -1,5 +1,6 @@
 using SchedulerJobs.Sds.Caching;
 using SchedulerJobs.Services;
+using SchedulerJobs.Common.Logging;
 
 namespace SchedulerJobs.Sds.Jobs
 {
@@ -31,7 +32,7 @@ namespace SchedulerJobs.Sds.Jobs
                 await anonymiseHearingsConferencesDataService.AnonymiseHearingsConferencesDataAsync()
                     .ConfigureAwait(false);
                 _jobSucceeded = true;
-                _logger.LogInformation(LogInformationMessage);
+                _logger.LogInformationDataAnonymisedForHearingsOlder3Months();
             }
             catch (Exception)
             {

@@ -1,5 +1,6 @@
 using SchedulerJobs.Sds.Caching;
 using SchedulerJobs.Services;
+using SchedulerJobs.Common.Logging;
 
 namespace SchedulerJobs.Sds.Jobs
 {
@@ -24,7 +25,7 @@ namespace SchedulerJobs.Sds.Jobs
             var removeHeartbeatsForConferencesService = scope.ServiceProvider.GetRequiredService<IRemoveHeartbeatsForConferencesService>();
             
             await removeHeartbeatsForConferencesService.RemoveHeartbeatsForConferencesAsync().ConfigureAwait(false);
-            _logger.LogInformation("Removed heartbeats for conferences older than 14 days.");
+            _logger.LogInformationRemovedHeartbeatsForConferencesOlderThan14Days();
         }
     }
 }

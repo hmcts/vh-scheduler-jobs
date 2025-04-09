@@ -2,6 +2,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using BookingsApi.Client;
 using Microsoft.Extensions.Logging;
+using SchedulerJobs.Common.Logging;
 
 namespace SchedulerJobs.Services
 {
@@ -24,7 +25,7 @@ namespace SchedulerJobs.Services
         
         public async Task AllocateHearingsAsync()
         {
-            _logger.LogInformation("AllocateHearings: Starting to allocate hearings");
+            _logger.LogInformationAllocateHearingsStartToAllocate();
             
             var hearings = await _bookingsApiClient.GetUnallocatedHearingsV2Async();
 
@@ -34,25 +35,21 @@ namespace SchedulerJobs.Services
                 try
                 {
                     var allocatedUser = await _bookingsApiClient.AllocateHearingAutomaticallyAsync(hearingId);
-                    _logger.LogInformation("AllocateHearings: Allocated user {allocatedUsername} to hearing {hearingId}", 
-                        allocatedUser.Username, 
-                        hearingId);
+                    _logger.LogInformationAllocateHearingsUserAndHearing(allocatedUser.Username, hearingId);
                     hearingsAllocated++;
                 }
                 catch (BookingsApiException e)
                 {
                     if (e.StatusCode == (int) System.Net.HttpStatusCode.BadRequest)
                     {
-                        _logger.LogWarning(e, "AllocateHearings: Error allocating hearing {hearingId}", hearingId);
+                        _logger.LogWarningAllocateHearings(e, hearingId);
                         continue;
                     }
-                    _logger.LogError(e, "AllocateHearings: Error allocating hearing {hearingId}", hearingId);
+                    _logger.LogErrorAllocateHearings(e, hearingId);
                 }
             }
             
-            _logger.LogInformation("AllocateHearings: Completed allocation of hearings, {hearingsAllocated} of {hearingsToAllocate} hearings allocated",
-                hearingsAllocated,
-                hearings.Count);
+            _logger.LogInformationAllocateHearingCompleteAllocation(hearingsAllocated, hearings.Count);
         }
     }
 }

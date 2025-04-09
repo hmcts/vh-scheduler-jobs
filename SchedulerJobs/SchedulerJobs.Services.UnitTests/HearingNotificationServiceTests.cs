@@ -95,6 +95,7 @@ namespace SchedulerJobs.Services.UnitTests
         [Test]
         public async Task should__log_error_and_continue_when_notificationApi_throws_exception()
         {
+            _logger.Setup(x=> x.IsEnabled(LogLevel.Error)).Returns(true);
             var notificationApiException = new NotificationApiException("Error", 400, "failed somewhere", null, null);
             var expectedCount = _hearings.SelectMany(x => x.Hearing.Participants).Count();
             _bookingApiClient.Setup(x => x.GetHearingsForNotificationAsync()).ReturnsAsync(_hearings);

@@ -33,6 +33,9 @@ namespace SchedulerJobs.Sds.UnitTests.Jobs
         [Test]
         public async Task Timer_should_log_message_all_older_conferences_were_updated_and_update_job_history()
         {
+            // Arrange
+            Logger.IsEnabled(Microsoft.Extensions.Logging.LogLevel.Information);
+
             // Act
             await _sut.DoWorkAsync();
 
@@ -50,7 +53,7 @@ namespace SchedulerJobs.Sds.UnitTests.Jobs
                 .Setup(e => e.AnonymiseHearingsConferencesDataAsync()).Throws<Exception>();
             try
             {
-                // Act
+                // Act 
                 await _sut.DoWorkAsync();
             }
             catch(Exception)

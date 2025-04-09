@@ -1,5 +1,6 @@
 using SchedulerJobs.Sds.Caching;
 using SchedulerJobs.Services;
+using SchedulerJobs.Common.Logging;
 
 namespace SchedulerJobs.Sds.Jobs
 {
@@ -24,7 +25,7 @@ namespace SchedulerJobs.Sds.Jobs
             var clearConferenceChatHistoryService = scope.ServiceProvider.GetRequiredService<IClearConferenceChatHistoryService>();
 
             await clearConferenceChatHistoryService.ClearChatHistoryForClosedConferences();
-            _logger.LogInformation("Cleared chat history for closed conferences");
+            _logger.LogInformationClearedChatHistoryForClosedConferences();
         }
     }
 }

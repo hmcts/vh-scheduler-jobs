@@ -33,6 +33,9 @@ namespace SchedulerJobs.Sds.UnitTests.Jobs
         [Test]
         public async Task Timer_should_log_message_all_audio_app_were_deleted()
         {
+            // Arrange
+            Logger.IsEnabled(Microsoft.Extensions.Logging.LogLevel.Information);
+
             await _sut.DoWorkAsync();
 
             Logger.GetLoggedMessages().Last().Should().StartWith("Finished GetJudiciaryUsers job at");

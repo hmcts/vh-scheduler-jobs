@@ -2,6 +2,7 @@
 using BookingsApi.Client;
 using Microsoft.Extensions.Logging;
 using SchedulerJobs.Common.Constants;
+using SchedulerJobs.Common.Logging;
 using UserApi.Client;
 using UserApi.Contract.Responses;
 using VideoApi.Client;
@@ -40,7 +41,7 @@ namespace SchedulerJobs.Services
 
             if (anonymisationData.HearingIds.Count != 0)
             {
-                _logger.LogInformation("Hearing ids being processed: {HearingIds}", anonymisationData.HearingIds);
+                _logger.LogInformationHearingIds(anonymisationData.HearingIds);
 
                 await _videoApiClient.AnonymiseConferenceWithHearingIdsAsync(
                     new AnonymiseConferenceWithHearingIdsRequest
@@ -69,7 +70,7 @@ namespace SchedulerJobs.Services
                 }
                 catch (UserApiException exception)
                 {
-                    _logger.LogError(exception, ProcessingUsernameExceptionMessage,
+                    _logger.LogErrorUnknownExceptionForUser(exception,
                         username);
                 }
 
@@ -79,7 +80,7 @@ namespace SchedulerJobs.Services
                 }
                 catch (VideoApiException exception)
                 {
-                    _logger.LogError(exception, ProcessingUsernameExceptionMessage,
+                    _logger.LogErrorUnknownExceptionForUser(exception,
                         username);
                 }
 
@@ -89,7 +90,7 @@ namespace SchedulerJobs.Services
                 }
                 catch (BookingsApiException exception)
                 {
-                    _logger.LogError(exception, ProcessingUsernameExceptionMessage, username);
+                    _logger.LogErrorUnknownExceptionForUser(exception, username);
                 }
             }
         }

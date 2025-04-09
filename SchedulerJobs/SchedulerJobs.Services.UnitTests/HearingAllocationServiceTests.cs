@@ -29,6 +29,7 @@ namespace SchedulerJobs.Services.UnitTests
         public async Task AllocateHearingsAsync_Should_Call_Bookings_Api_For_Each_Unallocated_Hearing()
         {
             // Arrange
+            _logger.Setup(x=> x.IsEnabled(LogLevel.Information)).Returns(true);
             var hearing1 = new HearingDetailsResponseV2 { Id = Guid.NewGuid() };
             var hearing2 = new HearingDetailsResponseV2 { Id = Guid.NewGuid() };
             var hearing3 = new HearingDetailsResponseV2 { Id = Guid.NewGuid() };
@@ -80,6 +81,8 @@ namespace SchedulerJobs.Services.UnitTests
         public async Task AllocateHearingsAsync_Should_Continue_To_Process_Other_Hearings_When_Exception_Thrown_Allocating_A_Hearing()
         {
             // Arrange
+            _logger.Setup(x=> x.IsEnabled(LogLevel.Error)).Returns(true);
+            _logger.Setup(x=> x.IsEnabled(LogLevel.Information)).Returns(true);
             var hearing1 = new HearingDetailsResponseV2 { Id = Guid.NewGuid() };
             var hearing2 = new HearingDetailsResponseV2 { Id = Guid.NewGuid() };
             var hearing3 = new HearingDetailsResponseV2 { Id = Guid.NewGuid() };
@@ -131,6 +134,8 @@ namespace SchedulerJobs.Services.UnitTests
         public async Task AllocateHearingsAsync_Should_Continue_To_Process_Other_Hearings_And_Log_Warning_When_Bad_Request_Returned()
         {
             // Arrange
+            _logger.Setup(x=> x.IsEnabled(LogLevel.Information)).Returns(true);
+            _logger.Setup(x=> x.IsEnabled(LogLevel.Warning)).Returns(true);
             var hearing1 = new HearingDetailsResponseV2 { Id = Guid.NewGuid() };
             var hearing2 = new HearingDetailsResponseV2 { Id = Guid.NewGuid() };
             var hearing3 = new HearingDetailsResponseV2 { Id = Guid.NewGuid() };
@@ -177,12 +182,17 @@ namespace SchedulerJobs.Services.UnitTests
             AssertMessageLogged("AllocateHearings: Completed allocation of hearings, 2 of 3 hearings allocated", LogLevel.Information);
         }
 
+        private void AssertMessageLogged2(object state, string message)
+        {
+            //Assert
+                    Assert.That(state!.ToString(), Does.Contain(message));
+        }
         private void AssertMessageLogged(string expectedMessage, LogLevel expectedLogLevel)
         {
             _logger.Verify(x => x.Log(
                 It.Is<LogLevel>(log => log == expectedLogLevel),
                 It.IsAny<EventId>(),
-                It.Is<It.IsAnyType>((@object, @type) => @object.ToString() == expectedMessage && @type.Name == "FormattedLogValues"),
+                It.Is<It.IsAnyType>((@object, @type) => @object.ToString() == expectedMessage),
                 It.Is<Exception>(x => x == null),
                 (Func<It.IsAnyType, Exception, string>)It.IsAny<object>()), Times.Once);
         }

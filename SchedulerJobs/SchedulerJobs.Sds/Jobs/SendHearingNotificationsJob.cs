@@ -1,5 +1,6 @@
 using SchedulerJobs.Sds.Caching;
 using SchedulerJobs.Services.Interfaces;
+using SchedulerJobs.Common.Logging;
 
 namespace SchedulerJobs.Sds.Jobs
 {
@@ -25,7 +26,7 @@ namespace SchedulerJobs.Sds.Jobs
             
             await hearingNotificationService.SendNotificationsAsync();
 
-            _logger.LogInformation("Send hearing notifications - Completed at: {DateTime}", DateTime.UtcNow);
+            _logger.LogInformationSendHearingNotifications(DateTime.UtcNow);
         }
     }
 }
