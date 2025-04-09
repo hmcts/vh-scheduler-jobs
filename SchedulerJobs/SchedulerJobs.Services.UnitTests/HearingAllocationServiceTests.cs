@@ -181,12 +181,7 @@ namespace SchedulerJobs.Services.UnitTests
             AssertWarningLogged(unknownException);
             AssertMessageLogged("AllocateHearings: Completed allocation of hearings, 2 of 3 hearings allocated", LogLevel.Information);
         }
-
-        private void AssertMessageLogged2(object state, string message)
-        {
-            //Assert
-                    Assert.That(state!.ToString(), Does.Contain(message));
-        }
+        
         private void AssertMessageLogged(string expectedMessage, LogLevel expectedLogLevel)
         {
             _logger.Verify(x => x.Log(

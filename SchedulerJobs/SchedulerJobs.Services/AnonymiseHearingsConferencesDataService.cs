@@ -21,7 +21,6 @@ namespace SchedulerJobs.Services
         private readonly ILogger<AnonymiseHearingsConferencesDataService> _logger;
         private readonly IUserApiClient _userApiClient;
         private readonly IVideoApiClient _videoApiClient;
-        private const string ProcessingUsernameExceptionMessage = "unknown exception when processing {username}";
 
 
         public AnonymiseHearingsConferencesDataService(IVideoApiClient videoApiClient,

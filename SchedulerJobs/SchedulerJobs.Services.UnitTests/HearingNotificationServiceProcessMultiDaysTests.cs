@@ -17,7 +17,6 @@ namespace SchedulerJobs.Services.UnitTests;
 
 public class HearingNotificationServiceProcessMultiDaysTests
 {
-    private AutoMock _mocker;
     private HearingNotificationService _sut;
     private static readonly Faker Faker = new();
     private Mock<ILogger<HearingNotificationService>> _logger;
