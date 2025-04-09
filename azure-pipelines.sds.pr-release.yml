@@ -17,7 +17,6 @@ variables:
   - group: vh-github-app-credentials
   - name: app_path
     value: 'SchedulerJobs'
-  - group: vh-scheduler-jobs
 
 pool: 
   vmImage: ubuntu-22.04
