@@ -29,10 +29,6 @@ namespace SchedulerJobs.Sds.UnitTests.Jobs
         [Test]
         public async Task Timer_should_log_message_heartbeat_for_older_conferences_were_deleted()
         {
-            // Arrange
-            Logger.IsEnabled(Microsoft.Extensions.Logging.LogLevel.Information);
-            
-            // Act
             await _sut.DoWorkAsync();
             
             // Assert

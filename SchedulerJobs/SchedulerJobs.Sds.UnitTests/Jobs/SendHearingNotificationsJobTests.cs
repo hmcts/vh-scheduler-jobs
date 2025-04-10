@@ -39,9 +39,6 @@ namespace SchedulerJobs.Sds.UnitTests.Jobs
         [Test]
         public async Task Timer_Should_Log_Finish_Message_()
         {
-            // Arrange
-            Logger.IsEnabled(Microsoft.Extensions.Logging.LogLevel.Information);
-            
             await _sut.DoWorkAsync();
 
             Logger.GetLoggedMessages().Last().Should().StartWith("Send hearing notifications - Completed at");
