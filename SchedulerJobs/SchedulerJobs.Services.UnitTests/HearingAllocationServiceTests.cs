@@ -15,13 +15,16 @@ namespace SchedulerJobs.Services.UnitTests
         private HearingAllocationService _service;
         private Mock<IBookingsApiClient> _bookingsApiClient;
         private Mock<ILogger<HearingAllocationService>> _logger;
-        
+
         [SetUp]
         public void Setup()
         {
             _bookingsApiClient = new Mock<IBookingsApiClient>();
             _logger = new Mock<ILogger<HearingAllocationService>>();
-            _service = new HearingAllocationService(_bookingsApiClient.Object, 
+            _logger.Setup(x => x.IsEnabled(LogLevel.Error)).Returns(true);
+            _logger.Setup(x => x.IsEnabled(LogLevel.Warning)).Returns(true);
+            _logger.Setup(x => x.IsEnabled(LogLevel.Information)).Returns(true);
+            _service = new HearingAllocationService(_bookingsApiClient.Object,
                 _logger.Object);
         }
 
@@ -29,7 +32,6 @@ namespace SchedulerJobs.Services.UnitTests
         public async Task AllocateHearingsAsync_Should_Call_Bookings_Api_For_Each_Unallocated_Hearing()
         {
             // Arrange
-            _logger.Setup(x=> x.IsEnabled(LogLevel.Information)).Returns(true);
             var hearing1 = new HearingDetailsResponseV2 { Id = Guid.NewGuid() };
             var hearing2 = new HearingDetailsResponseV2 { Id = Guid.NewGuid() };
             var hearing3 = new HearingDetailsResponseV2 { Id = Guid.NewGuid() };
@@ -81,8 +83,6 @@ namespace SchedulerJobs.Services.UnitTests
         public async Task AllocateHearingsAsync_Should_Continue_To_Process_Other_Hearings_When_Exception_Thrown_Allocating_A_Hearing()
         {
             // Arrange
-            _logger.Setup(x=> x.IsEnabled(LogLevel.Error)).Returns(true);
-            _logger.Setup(x=> x.IsEnabled(LogLevel.Information)).Returns(true);
             var hearing1 = new HearingDetailsResponseV2 { Id = Guid.NewGuid() };
             var hearing2 = new HearingDetailsResponseV2 { Id = Guid.NewGuid() };
             var hearing3 = new HearingDetailsResponseV2 { Id = Guid.NewGuid() };
@@ -119,23 +119,21 @@ namespace SchedulerJobs.Services.UnitTests
             _bookingsApiClient.Setup(x => x.GetUnallocatedHearingsV2Async()).ReturnsAsync(unallocatedHearings);
             _bookingsApiClient.Setup(x => x.AllocateHearingAutomaticallyAsync(It.Is<Guid>(hearingId => hearingId == hearingIdToThrowException)))
                 .ThrowsAsync(unknownException);
-   
+
             // Act
             await _service.AllocateHearingsAsync();
-            
+
             // Assert
             _bookingsApiClient.Verify(x => x.AllocateHearingAutomaticallyAsync(It.IsAny<Guid>()), Times.Exactly(unallocatedHearings.Count));
             AssertErrorLogged(unknownException);
             AssertMessageLogged("AllocateHearings: Completed allocation of hearings, 2 of 3 hearings allocated", LogLevel.Information);
         }
-        
-        
+
+
         [Test]
         public async Task AllocateHearingsAsync_Should_Continue_To_Process_Other_Hearings_And_Log_Warning_When_Bad_Request_Returned()
         {
             // Arrange
-            _logger.Setup(x=> x.IsEnabled(LogLevel.Information)).Returns(true);
-            _logger.Setup(x=> x.IsEnabled(LogLevel.Warning)).Returns(true);
             var hearing1 = new HearingDetailsResponseV2 { Id = Guid.NewGuid() };
             var hearing2 = new HearingDetailsResponseV2 { Id = Guid.NewGuid() };
             var hearing3 = new HearingDetailsResponseV2 { Id = Guid.NewGuid() };
@@ -172,16 +170,16 @@ namespace SchedulerJobs.Services.UnitTests
             _bookingsApiClient.Setup(x => x.GetUnallocatedHearingsV2Async()).ReturnsAsync(unallocatedHearings);
             _bookingsApiClient.Setup(x => x.AllocateHearingAutomaticallyAsync(It.Is<Guid>(hearingId => hearingId == hearingIdToThrowException)))
                 .ThrowsAsync(unknownException);
-   
+
             // Act
             await _service.AllocateHearingsAsync();
-            
+
             // Assert
             _bookingsApiClient.Verify(x => x.AllocateHearingAutomaticallyAsync(It.IsAny<Guid>()), Times.Exactly(unallocatedHearings.Count));
             AssertWarningLogged(unknownException);
             AssertMessageLogged("AllocateHearings: Completed allocation of hearings, 2 of 3 hearings allocated", LogLevel.Information);
         }
-        
+
         private void AssertMessageLogged(string expectedMessage, LogLevel expectedLogLevel)
         {
             _logger.Verify(x => x.Log(
@@ -201,7 +199,7 @@ namespace SchedulerJobs.Services.UnitTests
                 It.Is<Exception>(x => x == exception),
                 (Func<It.IsAnyType, Exception, string>)It.IsAny<object>()), Times.Once);
         }
-        
+
         private void AssertWarningLogged(Exception exception)
         {
             _logger.Verify(x => x.Log(

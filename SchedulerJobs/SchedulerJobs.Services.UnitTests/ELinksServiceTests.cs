@@ -43,9 +43,12 @@ namespace SchedulerJobs.Services.UnitTests
             _service = new Mock<IAzureStorageService>();
             _featureToggles = new Mock<IFeatureToggles>();
             _jobHistoryService = new Mock<IJobHistoryService>();
+            _logger.Setup(x => x.IsEnabled(LogLevel.Error)).Returns(true);
+            _logger.Setup(x => x.IsEnabled(LogLevel.Warning)).Returns(true);
+            _logger.Setup(x => x.IsEnabled(LogLevel.Information)).Returns(true);
             _eLinksService = new ELinksService(_peoplesClient.Object, _leaversClient.Object, _bookingsApiClient.Object,
                 _logger.Object, _service.Object, _featureToggles.Object, _jobHistoryService.Object);
-            
+
         }
 
         [Test]
@@ -84,13 +87,13 @@ namespace SchedulerJobs.Services.UnitTests
                 },
                 Results = new List<JudiciaryPersonModel>()
             };
-            
+
             var clientResponse = SerialiseClientResponse(expectedPeopleResponse);
-            
+
 
             _peoplesClient.Setup(x => x.GetPeopleJsonAsync(It.IsAny<DateTime>(), It.IsAny<int>(), It.IsAny<int>()))
                 .ReturnsAsync(clientResponse);
-            
+
             _featureToggles.Setup(x => x.StorePeopleIngestion())
                 .Returns(true);
 
@@ -99,7 +102,7 @@ namespace SchedulerJobs.Services.UnitTests
             _service.Verify(x => x.ClearBlobs(),
                 Times.Exactly(1));
         }
-        
+
         [Test]
         public async Task ImportJudiciaryPeopleAsync_Not_Clears_Existing_Json_Blobs()
         {
@@ -117,7 +120,7 @@ namespace SchedulerJobs.Services.UnitTests
             var clientResponse = SerialiseClientResponse(expectedPeopleResponse);
             _peoplesClient.Setup(x => x.GetPeopleJsonAsync(It.IsAny<DateTime>(), 2, It.IsAny<int>()))
                 .ReturnsAsync(clientResponse);
-            
+
             _featureToggles.Setup(x => x.StorePeopleIngestion())
                 .Returns(true);
 
@@ -126,7 +129,7 @@ namespace SchedulerJobs.Services.UnitTests
             _service.Verify(x => x.ClearBlobs(),
                 Times.Exactly(0));
         }
-        
+
         [Test]
         public async Task ImportJudiciaryPeopleAsync_Create_Combined_File()
         {
@@ -149,7 +152,7 @@ namespace SchedulerJobs.Services.UnitTests
                 Results = judiciaryPersonModels
             };
             var clientResponse = SerialiseClientResponse(expectedPeopleResponse);
-            
+
             _peoplesClient.Setup(x => x.GetPeopleJsonAsync(It.IsAny<DateTime>(), It.IsAny<int>(), It.IsAny<int>()))
                 .ReturnsAsync(clientResponse);
 
@@ -161,7 +164,7 @@ namespace SchedulerJobs.Services.UnitTests
             _service.Verify(x => x.UploadFile("combined.json", It.IsAny<byte[]>()),
                 Times.Exactly(1));
         }
-        
+
         [Test]
         public async Task ImportJudiciaryPeopleAsync_Not_Upload_With_FeautureFlag_Off()
         {
@@ -179,7 +182,7 @@ namespace SchedulerJobs.Services.UnitTests
 
             _peoplesClient.Setup(x => x.GetPeopleJsonAsync(It.IsAny<DateTime>(), It.IsAny<int>(), It.IsAny<int>()))
                 .ReturnsAsync(clientResponse);
-            
+
             _featureToggles.Setup(x => x.StorePeopleIngestion())
                 .Returns(false);
 
@@ -187,7 +190,7 @@ namespace SchedulerJobs.Services.UnitTests
 
             _service.Verify(x => x.ClearBlobs(),
                 Times.Exactly(0));
-            
+
             _peoplesClient.Verify(x => x.GetPeopleJsonAsync(It.IsAny<DateTime>(), 2, It.IsAny<int>()),
                 Times.Exactly(0));
 
@@ -276,8 +279,8 @@ namespace SchedulerJobs.Services.UnitTests
             };
             var clientResponse1 = SerialiseClientResponse(personPage1Response);
             var clientResponse2 = SerialiseClientResponse(personPage2Response);
-            
-            
+
+
             _peoplesClient.Setup(x => x.GetPeopleJsonAsync(It.IsAny<DateTime>(), 1, It.IsAny<int>()))
                 .ReturnsAsync(clientResponse1);
             _peoplesClient.Setup(x => x.GetPeopleJsonAsync(It.IsAny<DateTime>(), 2, It.IsAny<int>()))
@@ -314,12 +317,12 @@ namespace SchedulerJobs.Services.UnitTests
                 },
                 Results = new List<JudiciaryLeaverModel>()
             };
-            
+
             var clientResponse = SerialiseClientResponse(expectedPeopleResponse);
 
             _leaversClient.Setup(x => x.GetLeaversAsync(It.IsAny<DateTime>(), It.IsAny<int>(), It.IsAny<int>()))
                 .ReturnsAsync(expectedLeaverResponse);
-            
+
             _peoplesClient.Setup(x => x.GetPeopleJsonAsync(It.IsAny<DateTime>(), It.IsAny<int>(), It.IsAny<int>()))
                 .ReturnsAsync(clientResponse);
 
@@ -405,7 +408,7 @@ namespace SchedulerJobs.Services.UnitTests
                 .ReturnsAsync(leaverPage1Response);
             _leaversClient.Setup(x => x.GetLeaversAsync(It.IsAny<DateTime>(), 2, It.IsAny<int>()))
                 .ReturnsAsync(leaverPage2Response);
-            
+
             _peoplesClient.Setup(x => x.GetPeopleJsonAsync(It.IsAny<DateTime>(), 1, It.IsAny<int>()))
                 .ReturnsAsync(personPage1);
             _peoplesClient.Setup(x => x.GetPeopleJsonAsync(It.IsAny<DateTime>(), 2, It.IsAny<int>()))
@@ -468,7 +471,7 @@ namespace SchedulerJobs.Services.UnitTests
                     },
                     Results = judiciaryLeaverModels
                 });
-            
+
 
             await CommonActAndAssert(4, 5);
         }
@@ -494,7 +497,7 @@ namespace SchedulerJobs.Services.UnitTests
                 }
             };
             var clientResponse = SerialiseClientResponse(personPage1Response);
-            
+
             _leaversClient.Setup(x => x.GetLeaversAsync(It.IsAny<DateTime>(), 5, It.IsAny<int>())).ThrowsAsync(
                 new JsonSerializationException("Error converting value 1ad85664b - aab9 - 4a8d - 8e76 - 0affdcb5b90f"));
             _leaversClient.Setup(x => x.GetLeaversAsync(It.IsAny<DateTime>(), 6, It.IsAny<int>())).ReturnsAsync(
@@ -562,7 +565,7 @@ namespace SchedulerJobs.Services.UnitTests
                 .ThrowsAsync(
                     new JsonSerializationException(
                         "Error converting value 1ad85664b - aab9 - 4a8d - 8e76 - 0affdcb5b90f"));
-            
+
             await CommonActAndAssert(3, 4);
         }
 
@@ -591,8 +594,8 @@ namespace SchedulerJobs.Services.UnitTests
                 new JudiciaryPersonModel {PersonalCode = person2.PersonalCode, Email = "two"},
                 new JudiciaryPersonModel {PersonalCode = person3.PersonalCode, Email = "three"}
             };
-            
-            
+
+
 
             var judiciaryLeaverModels = new List<JudiciaryLeaverModel>
             {
@@ -616,7 +619,7 @@ namespace SchedulerJobs.Services.UnitTests
                 },
                 results = new List<JudiciaryPersonModel>()
             };
-            
+
             var clientResponse1 = SerialiseClientResponse(personPage1Response);
             var clientResponse2 = SerialiseClientResponse(personPage2Response);
             var leaverPage1Response = new LeaversResponse()
@@ -635,7 +638,7 @@ namespace SchedulerJobs.Services.UnitTests
                 },
                 Results = new List<JudiciaryLeaverModel>()
             };
-            
+
             _leaversClient.Setup(x => x.GetLeaversAsync(It.IsAny<DateTime>(), 1, It.IsAny<int>()))
                 .ReturnsAsync(leaverPage1Response);
             _leaversClient.Setup(x => x.GetLeaversAsync(It.IsAny<DateTime>(), 2, It.IsAny<int>()))
@@ -644,7 +647,7 @@ namespace SchedulerJobs.Services.UnitTests
                 .ReturnsAsync(clientResponse1);
             _peoplesClient.Setup(x => x.GetPeopleJsonAsync(It.IsAny<DateTime>(), 2, It.IsAny<int>()))
                 .ReturnsAsync(clientResponse2);
-            
+
             _bookingsApiClient.Setup(x => x.BulkJudiciaryPersonsAsync(It.IsAny<IEnumerable<JudiciaryPersonRequest>>()))
                 .ReturnsAsync(new BulkJudiciaryPersonResponse
                 {
@@ -664,20 +667,20 @@ namespace SchedulerJobs.Services.UnitTests
                 Times.Once);
         }
 
-        
+
         [Test]
         public async Task GetUpdatedSince_With_ImportAllJudiciaryUsers_Toggled_On_Returns_Minimum_DateTime()
         {
             // Arrange
             _featureToggles.Setup(x => x.ImportAllJudiciaryUsersToggle()).Returns(true);
-            
+
             // Act
             var updatedSince = await _eLinksService.GetUpdatedSince();
 
             // Assert
             Assert.That(updatedSince, Is.EqualTo(DateTime.Parse("0001-01-01")));
         }
-        
+
         [Test]
         public async Task GetUpdatedSince_With_ImportAllJudiciaryUsers_Toggled_Off_And_Previous_Successful_Run_Returns_Previous_Successful_Run_DateTime()
         {
@@ -685,14 +688,14 @@ namespace SchedulerJobs.Services.UnitTests
             _featureToggles.Setup(x => x.ImportAllJudiciaryUsersToggle()).Returns(false);
             _jobHistoryService.Setup(x => x.GetMostRecentSuccessfulRunDate(It.IsAny<string>()))
                 .ReturnsAsync(DateTime.Parse("2022-01-01"));
-            
+
             // Act
             var updatedSince = await _eLinksService.GetUpdatedSince();
-            
+
             // Assert
             Assert.That(updatedSince, Is.EqualTo(DateTime.Parse("2022-01-01")));
         }
-        
+
         [Test]
         public async Task GetUpdatedSince_With_ImportAllJudiciaryUsers_Toggled_Off_And_Previous_Successful_Run_Returns_Yesterdays_DateTime()
         {
@@ -700,10 +703,10 @@ namespace SchedulerJobs.Services.UnitTests
             _featureToggles.Setup(x => x.ImportAllJudiciaryUsersToggle()).Returns(false);
             _jobHistoryService.Setup(x => x.GetMostRecentSuccessfulRunDate(It.IsAny<string>()))
                 .ReturnsAsync((DateTime?)null);
-            
+
             // Act
             var updatedSince = await _eLinksService.GetUpdatedSince();
-            
+
             // Assert
             Assert.That(updatedSince.Date, Is.EqualTo(DateTime.UtcNow.AddDays(-1).Date));
         }
@@ -756,9 +759,9 @@ namespace SchedulerJobs.Services.UnitTests
                 },
                 results = new List<JudiciaryPersonModel>()
             };
-            
+
             var clientResponse2 = SerialiseClientResponse(clientNoMorePage);
-            
+
             var expectedLeaverResponse = new LeaversResponse()
             {
                 Pagination = new Pagination
@@ -775,9 +778,9 @@ namespace SchedulerJobs.Services.UnitTests
             _peoplesClient.Setup(x => x.GetPeopleJsonAsync(It.IsAny<DateTime>(), 4, It.IsAny<int>()))
                 .ReturnsAsync(clientResponse1);
             _peoplesClient.Setup(x => x.GetPeopleJsonAsync(It.IsAny<DateTime>(), 5, It.IsAny<int>())).ReturnsAsync(clientResponse2);
-            
-            
-            
+
+
+
             _leaversClient.Setup(x => x.GetLeaversAsync(It.IsAny<DateTime>(), 1, It.IsAny<int>()))
                 .ReturnsAsync(expectedLeaverResponse);
             _leaversClient.Setup(x => x.GetLeaversAsync(It.IsAny<DateTime>(), 2, It.IsAny<int>()))
