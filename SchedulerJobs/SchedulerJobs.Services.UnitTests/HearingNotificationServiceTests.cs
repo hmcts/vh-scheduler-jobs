@@ -30,6 +30,9 @@ namespace SchedulerJobs.Services.UnitTests
             _bookingApiClient = new Mock<IBookingsApiClient>();
             _notificationApiClient = new Mock<INotificationApiClient>();
             _logger = new Mock<ILogger<HearingNotificationService>>();
+            _logger.Setup(x => x.IsEnabled(LogLevel.Error)).Returns(true);
+            _logger.Setup(x => x.IsEnabled(LogLevel.Warning)).Returns(true);
+            _logger.Setup(x => x.IsEnabled(LogLevel.Information)).Returns(true);
             _hearingNotificationService = new HearingNotificationService(_bookingApiClient.Object, _notificationApiClient.Object, _logger.Object);
             _hearings = [CreateHearing()];
             _hearingsEjud = [CreateHearingWithEjud()];
@@ -40,7 +43,7 @@ namespace SchedulerJobs.Services.UnitTests
         public async Task should_not_call_notificationApi_when_no_bookings_are_returned()
         {
             _noHearings = [];
-            
+
             _bookingApiClient.Setup(x => x.GetHearingsForNotificationAsync()).ReturnsAsync(_noHearings);
 
             await _hearingNotificationService.SendNotificationsAsync();
@@ -91,11 +94,10 @@ namespace SchedulerJobs.Services.UnitTests
             _bookingApiClient.Verify(x => x.GetHearingsForNotificationAsync(), Times.Once);
             _notificationApiClient.Verify(x => x.SendSingleDayHearingReminderEmailAsync(It.IsAny<SingleDayHearingReminderRequest>()), Times.Exactly(expectedCount));
         }
-        
+
         [Test]
         public async Task should__log_error_and_continue_when_notificationApi_throws_exception()
         {
-            _logger.Setup(x=> x.IsEnabled(LogLevel.Error)).Returns(true);
             var notificationApiException = new NotificationApiException("Error", 400, "failed somewhere", null, null);
             var expectedCount = _hearings.SelectMany(x => x.Hearing.Participants).Count();
             _bookingApiClient.Setup(x => x.GetHearingsForNotificationAsync()).ReturnsAsync(_hearings);
@@ -106,7 +108,7 @@ namespace SchedulerJobs.Services.UnitTests
 
             _bookingApiClient.Verify(x => x.GetHearingsForNotificationAsync(), Times.Once);
             _notificationApiClient.Verify(x => x.SendSingleDayHearingReminderEmailAsync(It.IsAny<SingleDayHearingReminderRequest>()), Times.Exactly(expectedCount));
-            
+
             _logger.Verify(
                 x => x.Log(
                     LogLevel.Error,
@@ -120,7 +122,7 @@ namespace SchedulerJobs.Services.UnitTests
         {
             Guid id = Guid.NewGuid();
 
-            var hearing =  new HearingDetailsResponseV2
+            var hearing = new HearingDetailsResponseV2
             {
                 Id = id,
                 ScheduledDateTime = DateTime.UtcNow.AddDays(2),
@@ -345,7 +347,7 @@ namespace SchedulerJobs.Services.UnitTests
                 Endpoints = null,
                 GroupId = id
             };
-            
+
             var hearingResponse = new HearingNotificationResponseV2();
             hearingResponse.Hearing = hearing;
             hearingResponse.TotalDays = 1;
