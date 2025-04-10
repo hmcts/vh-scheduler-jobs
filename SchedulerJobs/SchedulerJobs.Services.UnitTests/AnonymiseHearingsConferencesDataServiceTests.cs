@@ -43,7 +43,9 @@ namespace SchedulerJobs.Services.UnitTests
             var userProfile = new UserProfile { UserRole = "Individual" };
             _userApiClient.Setup(x => x.GetUserByAdUserNameAsync(It.IsAny<string>())).ReturnsAsync(userProfile);
 
-            _logger.Setup(x=> x.IsEnabled(LogLevel.Information)).Returns(true);
+            _logger.Setup(x => x.IsEnabled(LogLevel.Error)).Returns(true);
+            _logger.Setup(x => x.IsEnabled(LogLevel.Warning)).Returns(true);
+            _logger.Setup(x => x.IsEnabled(LogLevel.Information)).Returns(true);
 
             _anonymiseHearingsConferencesDataService = new AnonymiseHearingsConferencesDataService(_videoApiClient.Object,
                 _bookingApiClient.Object, _userApiClient.Object, _logger.Object);
@@ -164,8 +166,6 @@ namespace SchedulerJobs.Services.UnitTests
         [Test]
         public async Task Logs_Unexpected_User_Api_Exception_And_Continues_To_Process_Other_User()
         {
-            _logger.Setup(x=> x.IsEnabled(LogLevel.Error)).Returns(true);
-
             var usernameToThrowException = "username1@hmcts.net";
 
             _anonymisationDataResponse.Usernames = new List<string>
@@ -199,8 +199,6 @@ namespace SchedulerJobs.Services.UnitTests
         [Test]
         public async Task Logs_Unexpected_User_Api_Exception_For_Get_User_By_Ad_Username_And_Continues_To_Process_Other_User()
         {
-            _logger.Setup(x=> x.IsEnabled(LogLevel.Error)).Returns(true);
-
             var usernameToThrowException = "username1@hmcts.net";
 
             _anonymisationDataResponse.Usernames = new List<string>
@@ -234,8 +232,6 @@ namespace SchedulerJobs.Services.UnitTests
         [Test]
         public async Task Logs_Unexpected_Video_Api_Exception__And_Continues_To_Process_Other_User()
         {
-            _logger.Setup(x=> x.IsEnabled(LogLevel.Error)).Returns(true);
-            
             var usernameToThrowException = "username1@hmcts.net";
 
             _anonymisationDataResponse.Usernames = new List<string>
@@ -269,8 +265,6 @@ namespace SchedulerJobs.Services.UnitTests
         [Test]
         public async Task Logs_Unexpected_Bookings_Api_Exception__And_Continues_To_Process_Other_User()
         {
-            _logger.Setup(x=> x.IsEnabled(LogLevel.Error)).Returns(true);
-
             var usernameToThrowException = "username1@hmcts.net";
 
             _anonymisationDataResponse.Usernames = new List<string>
