@@ -1,5 +1,6 @@
 using SchedulerJobs.Sds.Caching;
 using SchedulerJobs.Services;
+using SchedulerJobs.Common.Logging;
 
 namespace SchedulerJobs.Sds.Jobs
 {
@@ -34,7 +35,7 @@ namespace SchedulerJobs.Sds.Jobs
 
             await hearingAllocationService.AllocateHearingsAsync();
             
-            _logger.LogInformation($"Close hearings function executed");
+            _logger.LogInformationCloseHearingsFunctionExecuted();
         }
     }   
 }

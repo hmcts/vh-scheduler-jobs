@@ -10,6 +10,8 @@ using SchedulerJobs.Common.Configuration;
 using SchedulerJobs.Common.Models;
 using SchedulerJobs.Services.HttpClients;
 using SchedulerJobs.Services.Mappers;
+using SchedulerJobs.Common.Logging;
+
 
 namespace SchedulerJobs.Services
 {
@@ -53,7 +55,7 @@ namespace SchedulerJobs.Services
             StringBuilder peopleListString = new StringBuilder();
 
             
-            _logger.LogInformation("ImportJudiciaryPeople: Removing all records from JudiciaryPersonsStaging");
+            _logger.LogInformationImportJudiciaryPeopleRemoving();
             await _bookingsApiClient.RemoveAllJudiciaryPersonsStagingAsync();
             
             do
@@ -61,7 +63,7 @@ namespace SchedulerJobs.Services
                 try
                 {
                     
-                    _logger.LogInformation("ImportJudiciaryPeople: Executing page {CurrentPage}", currentPage);
+                    _logger.LogInformationImportJudiciaryPeopleExecutingPage(currentPage);
                     
                     var clientResponse = await _peoplesClient.GetPeopleJsonAsync(fromDate, currentPage);
                     
@@ -77,8 +79,7 @@ namespace SchedulerJobs.Services
                         // delete all the history only on the first page so we can keep the following file in storage
                         if (currentPage == 1) await _service.ClearBlobs();
                         await _service.UploadFile(fileName, fileToBytes);
-                        _logger.LogInformation(
-                            "ImportJudiciaryPeople: Create people json file page-'{currentPage}'", currentPage);
+                        _logger.LogInformationImportJudiciaryPeopleCreatePeopleJsonFile(currentPage);
                     }
 
                     morePages = peoples.Pagination.MorePages;
@@ -90,20 +91,18 @@ namespace SchedulerJobs.Services
                         .ToList();
                     if (peopleResult.Count == 0)
                     {
-                        _logger.LogWarning("ImportJudiciaryPeople: No results from api for page: {CurrentPage}",
-                            currentPage);
+                        _logger.LogWarningImportJudiciaryPeopleCountFromApi(currentPage);
                         break;
                     }
 
                     await BulkJudiciaryPersonStaging(peoples, invalidPeoplePersonalCode, currentPage, pages);
                     
-                    _logger.LogInformation(
-                        "ImportJudiciaryPeople: Calling bookings API with '{Count}' people", peopleResult.Count);
+                    _logger.LogInformationImportJudiciaryPeopleCallingApiWith(peopleResult.Count);
                     var response =
                         await _bookingsApiClient.BulkJudiciaryPersonsAsync(
                             peopleResult.Select(JudiciaryPersonRequestMapper.MapTo));
                     response?.ErroredRequests.ForEach(x =>
-                        _logger.LogError("ImportJudiciaryPeople: {ErrorResponseMessage}", x.Message));
+                        _logger.LogErrorImportJudiciaryPeopleMessage(x.Message));
                 }
                 catch (Exception ex)
                 {
@@ -121,21 +120,18 @@ namespace SchedulerJobs.Services
                 byte[] fileToBytes = Encoding.ASCII.GetBytes(peopleListString.ToString());
                 await _service.UploadFile(fileName, fileToBytes);
             }
-            _logger.LogInformation("Number of pagination results: {Results}", results);
-            _logger.LogWarning(
-                "ImportJudiciaryPeople: List of Personal code which are failed to insert '{invalidPeople}'", string.Join(",", invalidPeoplePersonalCode));
+            _logger.LogInformationNumberOfPaginationResults(results);
+            _logger.LogWarningImportJudiciaryPeopleListOfPersonalCode(string.Join(",", invalidPeoplePersonalCode));
         }
         private async Task BulkJudiciaryPersonStaging(PeopleResponse peoples, List<string> invalidPeoplePersonalCode, int currentPage, int pages)
         {
-            _logger.LogInformation("ImportJudiciaryPeople: Adding raw data to JudiciaryPersonStaging from page: {CurrentPage}, total records: {Records}", currentPage, peoples.Results.Count());
+            _logger.LogInformationImportJudiciaryAddingToJudiciaryPersonStaging(currentPage, peoples.Results.Count());
             await _bookingsApiClient.BulkJudiciaryPersonsStagingAsync(
                 peoples.Results.Select(JudiciaryPersonStagingRequestMapper.MapTo));
 
             var invalidPersonList = peoples.Results.Where(x => string.IsNullOrEmpty(x.PersonalCode)).ToList();
             invalidPersonList.ForEach(x => invalidPeoplePersonalCode.Add(x.PersonalCode));
-            _logger.LogWarning(
-                "ImportJudiciaryPeople: No of people who are invalid '{Count}' in page '{CurrentPage}'. Pages: {Pages}", 
-                invalidPersonList.Count, currentPage, pages);
+            _logger.LogWarningImportJudiciaryPeopleInvalidPeopleCount(invalidPersonList.Count, currentPage, pages);
         }
 
         public async Task ImportLeaversJudiciaryPeopleAsync(DateTime fromDate)
@@ -146,7 +142,7 @@ namespace SchedulerJobs.Services
             {
                 try
                 {
-                    _logger.LogInformation("ImportJudiciaryLeavers: Executing page {CurrentPage}", currentPage);
+                    _logger.LogInformationImportJudiciaryPeopleExecutingPage(currentPage);
                     var leavers = await _leaversClient.GetLeaversAsync(fromDate, currentPage);
                     morePages = leavers.Pagination.MorePages;
                     var leaversResult = leavers.Results
@@ -155,26 +151,23 @@ namespace SchedulerJobs.Services
 
                     if (leaversResult.Count == 0)
                     {
-                        _logger.LogWarning("ImportJudiciaryLeavers: No results from api for page: {CurrentPage}",
-                            currentPage);
+                        _logger.LogWarningImportJudiciaryPeopleCountFromApi(currentPage);
                         break;
                     }
 
                     var invalidCount = leavers.Results.Count(x => string.IsNullOrEmpty(x.Id));
-                    _logger.LogWarning(
-                        "ImportJudiciaryLeavers: No of leavers who are invalid '{invalidCount}' in page '{currentPage}'.", invalidCount, currentPage);
-                    _logger.LogInformation(
-                        "ImportJudiciaryLeavers: Calling bookings API with '{leaversResultCount}' leavers", leaversResult.Count);
+                    _logger.LogWarningImportJudiciaryPeopleInvalidPeopleCount(invalidCount, currentPage);
+                    _logger.LogInformationImportJudiciaryLeaversCallingApi(leaversResult.Count);
 
                     var response =
                         await _bookingsApiClient.BulkJudiciaryLeaversAsync(
                             leaversResult.Select(x => JudiciaryLeaverRequestMapper.MapTo(x)));
                     response?.ErroredRequests.ForEach(x =>
-                        _logger.LogError("ImportJudiciaryLeavers: {ErrorResponseMessage}", x.Message));
+                        _logger.LogErrorImportJudiciaryLeaversMessage(x.Message));
                 }
                 catch (Exception ex)
                 {
-                    _logger.LogError(ex, "There was a problem importing judiciary leavers in page: '{currentPage}'", currentPage);
+                    _logger.LogErrorImportJudiciaryLeaversException(ex, currentPage);
                 }
                 currentPage++;
                 

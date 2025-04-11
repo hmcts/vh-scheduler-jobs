@@ -4,6 +4,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using VideoApi.Client;
+using SchedulerJobs.Common.Logging;
 
 namespace SchedulerJobs.Services
 {
@@ -22,37 +23,37 @@ namespace SchedulerJobs.Services
         {
             var dateTimeStr = DateTime.Today.ToString("yyyy-MM-dd");
 
-           _logger.LogDebug("ReconcileAudiorecordingsWithConferencesAsync - Started");
+           _logger.LogDebugReconcileAudiorecordingsWithConferencesAsyncStarted();
 
            var conferences = await _videoApiClient.GetConferencesHearingRoomsAsync(dateTimeStr);
 
-           _logger.LogInformation("ReconcileAudiorecordingsWithConferencesAsync - Conferences count {ConferenceCount}", + conferences.Count);
+           _logger.LogInformationReconcileAudiorecordingsWithConferencesAsyncConferenceCount(conferences.Count);
 
            var audioConferenceItems = conferences.Select(x => x.FileNamePrefix).GroupBy(x => x).Select( g => new { Name = g.Key, Count = g.Count()});
 
            foreach (var item in audioConferenceItems)
            {
                Console.WriteLine("{0} - {1}", item.Name, item.Count);
-               _logger.LogInformation("ReconcileAudiorecordingsWithConferencesAsync - Processing conferences - {ItemName} {ItemCount}", item.Name, item.Count);
+               _logger.LogInformationReconcileAudiorecordingsWithConferencesAsyncProcessingConferences(item.Name, item.Count);
                     
                var filenamePrefix = item.Name;
 
-               _logger.LogInformation("ReconcileAudiorecordingsWithConferencesAsync - Processing conferences - filename prefix {FilenamePrefix}", filenamePrefix);
+               _logger.LogInformationReconcileAudiorecordingsWithConferencesAsyncProcessingConferencesPrefix(filenamePrefix);
 
                try
                {
                    var result = await _videoApiClient.ReconcileAudioFilesInStorageAsync(filenamePrefix, item.Count);
 
-                   _logger.LogInformation("ReconcileAudiorecordingsWithConferencesAsync - Processing conferences - result {Result}", result);
+                   _logger.LogInformationReconcileAudiorecordingsWithConferencesAsyncProcessingConferencesResult(result);
 
                }
                catch (Exception ex)
                {
-                   _logger.LogError(ex, "ReconcileAudiorecordingsWithConferencesAsync - missing wowza audio or empty files for conferences - {ItemName} Exception from Reconciliation - {Message}", item.Name, ex.Message);
+                   _logger.LogErrorReconcileAudiorecordingsWithConferencesAsync(ex, item.Name, ex.Message);
 
                }
            }
-           _logger.LogInformation("ReconcileAudiorecordingsWithConferencesAsync - Completed");
+           _logger.LogInformationReconcileAudiorecordingsWithConferencesAsyncCompleted();
         }
     }
 }

@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using NotificationApi.Client;
 using BookingsApi.Contract.V2.Responses;
 using NotificationApi.Contract.Requests;
+using SchedulerJobs.Common.Logging;
 
 namespace SchedulerJobs.Services
 {
@@ -18,13 +19,13 @@ namespace SchedulerJobs.Services
     {
         public async Task SendNotificationsAsync()
         {
-            logger.LogInformation("SendNotificationsAsync - Started");
+            logger.LogInformationSendNotificationsAsyncStarted();
 
             var hearings = await GetHearings();
 
             if (hearings.Count < 1)
             {
-                logger.LogInformation("SendNotificationsAsync - No hearings to send notifications");
+                logger.LogInformationSendNotificationsAsyncNoHearingsToNotify();
                 return;
             }
 
@@ -84,9 +85,7 @@ namespace SchedulerJobs.Services
             }
             catch (NotificationApiException ex)
             {
-                logger.LogError(ex,
-                    "Error sending multi day hearing reminder email for hearing {HearingId} and case number {CaseNumber} to participant {ParticipantId}",
-                    item.Hearing.Id, item.Hearing.Cases[0].Number, participant.Id);
+                logger.LogErrorSendingMultiDayEmail(ex, item.Hearing.Id, item.Hearing.Cases[0].Number, participant.Id);
             }
         }
 
@@ -111,9 +110,7 @@ namespace SchedulerJobs.Services
             }
             catch (NotificationApiException ex)
             {
-                logger.LogError(ex,
-                    "Error sending single day hearing reminder email for hearing {HearingId} and case number {CaseNumber} to participant {ParticipantId}",
-                    item.Hearing.Id, item.Hearing.Cases[0].Number, participant.Id);
+                logger.LogErrorSendingSingleDayEmail(ex, item.Hearing.Id, item.Hearing.Cases[0].Number, participant.Id);
             }
         }
 
@@ -138,9 +135,7 @@ namespace SchedulerJobs.Services
 
         private void LogUnsupportedParticipantForNotification(HearingNotificationResponseV2 item, ParticipantResponseV2 participant)
         {
-            logger.LogInformation(
-                "SendNotificationsAsync - Ignored Participant: {ParticipantId} has role {RoleName} which is not supported for notification in the hearing {HearingId}",
-                participant.Id, participant.UserRoleName, item.Hearing.Id);
+            logger.LogInformationSendNotificationsAsyncIgnoreParticipants(participant.Id, participant.UserRoleName, item.Hearing.Id);
         }
     }
 }

@@ -1,5 +1,6 @@
 using SchedulerJobs.Sds.Caching;
 using SchedulerJobs.Services;
+using SchedulerJobs.Common.Logging;
 
 namespace SchedulerJobs.Sds.Jobs
 {
@@ -24,7 +25,7 @@ namespace SchedulerJobs.Sds.Jobs
             var closeConferenceService = scope.ServiceProvider.GetRequiredService<ICloseConferenceService>();
 
             var conferencesCount = await closeConferenceService.CloseConferencesAsync();
-            _logger.LogInformation("Close hearings job executed and  {ConferencesCount} hearings closed", conferencesCount);
+            _logger.LogInformationCloseHearingsJobExecutedHearinsClosed(conferencesCount);
         }
     }   
 }

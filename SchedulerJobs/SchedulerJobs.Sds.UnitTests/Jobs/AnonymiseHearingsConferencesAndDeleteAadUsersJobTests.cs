@@ -50,7 +50,7 @@ namespace SchedulerJobs.Sds.UnitTests.Jobs
                 .Setup(e => e.AnonymiseHearingsConferencesDataAsync()).Throws<Exception>();
             try
             {
-                // Act
+                // Act 
                 await _sut.DoWorkAsync();
             }
             catch(Exception)

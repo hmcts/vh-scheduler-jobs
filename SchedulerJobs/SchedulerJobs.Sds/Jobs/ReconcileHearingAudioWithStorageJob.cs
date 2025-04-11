@@ -1,5 +1,6 @@
 using SchedulerJobs.Sds.Caching;
 using SchedulerJobs.Services.Interfaces;
+using SchedulerJobs.Common.Logging;
 
 namespace SchedulerJobs.Sds.Jobs
 {
@@ -25,7 +26,7 @@ namespace SchedulerJobs.Sds.Jobs
         
             await reconcileHearingAudioService.ReconcileAudiorecordingsWithConferencesAsync();
 
-            _logger.LogInformation("Reconcile audio recording files with number of conferences for the day - Done");
+            _logger.LogInformationReconcileAudioRecordingFilesForTheDay();
         }
     }
    

@@ -29,7 +29,6 @@ namespace SchedulerJobs.Sds.UnitTests.Jobs
         [Test]
         public async Task Timer_should_log_message()
         {
-            // Act
             await _sut.DoWorkAsync();
 
             // Assert

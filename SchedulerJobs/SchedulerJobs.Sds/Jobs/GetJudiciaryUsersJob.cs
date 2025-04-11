@@ -1,5 +1,6 @@
 using SchedulerJobs.Sds.Caching;
 using SchedulerJobs.Services;
+using SchedulerJobs.Common.Logging;
 
 namespace SchedulerJobs.Sds.Jobs
 {
@@ -26,7 +27,7 @@ namespace SchedulerJobs.Sds.Jobs
             var eLinksService = scope.ServiceProvider.GetRequiredService<IELinksService>();
 
             var updatedSince = await eLinksService.GetUpdatedSince();
-            _logger.LogInformation("Started GetJudiciaryUsers job at: {Now} - param UpdatedSince: {UpdatedSince}",
+            _logger.LogInformationStartedGetJudiciaryUsersJob(
                 DateTime.UtcNow, updatedSince.ToString("yyyy-MM-dd"));
 
             try
@@ -44,7 +45,7 @@ namespace SchedulerJobs.Sds.Jobs
             {
                 await jobHistoryService.UpdateJobHistory(GetType().Name, _jobSucceeded);
             }
-            _logger.LogInformation("Finished GetJudiciaryUsers job at: {Now} - param UpdatedSince: {UpdatedSince}",
+            _logger.LogInformationFinishedGetJudiciaryUsersJob(
                 DateTime.UtcNow, updatedSince.ToString("yyyy-MM-dd"));
         }
     }

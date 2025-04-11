@@ -5,8 +5,10 @@ using System.Threading.Tasks;
 using BookingsApi.Client;
 using Microsoft.Extensions.Logging;
 using SchedulerJobs.Common.Models;
+using SchedulerJobs.Common.Logging;
 using SchedulerJobs.Services.Extensions;
 using SchedulerJobs.Services.Mappers;
+
 
 namespace SchedulerJobs.Services
 {
@@ -23,14 +25,13 @@ namespace SchedulerJobs.Services
 
         public async Task ImportJudiciaryPeopleAsync(DateTime fromDate)
         {
-            _logger.LogDebug("ImportJudiciaryPeople: using stub");
-            _logger.LogInformation("ImportJudiciaryPeople: Removing all records from JudiciaryPersonsStaging");
+            _logger.LogDebugImportJudiciaryPeopleUsingStub();
+            _logger.LogInformationImportJudiciaryPeopleFromJudiciaryPersonsStaging();
             await _bookingsApiClient.RemoveAllJudiciaryPersonsStagingAsync();
             var peopleResult = RetrieveManualAccounts().Concat(RetrieveAutomationAccounts()).ToList();
             peopleResult.AddRange(RetrieveLeaverAccounts());
 
-            _logger.LogInformation("ImportJudiciaryPeople: Calling bookings API with {PeopleResultCount} people",
-                peopleResult.Count);
+            _logger.LogInformationImportJudiciaryPeopleTotalPeople(peopleResult.Count);
             var mappedForJudiciaryPersonsStaging = peopleResult.Select(JudiciaryPersonStagingRequestMapper.MapTo);
             var mappedForJudiciaryPersons = peopleResult.Select(JudiciaryPersonRequestMapper.MapTo);
             
@@ -38,12 +39,12 @@ namespace SchedulerJobs.Services
             
             var response = await _bookingsApiClient.BulkJudiciaryPersonsAsync(mappedForJudiciaryPersons); 
             response?.ErroredRequests.ForEach(x =>
-                _logger.LogError("ImportJudiciaryPeople: {ErrorResponseMessage}", x.Message));
+                _logger.LogErrorImportJudiciaryPeopleMessage(x.Message));
         }
 
         public Task ImportLeaversJudiciaryPeopleAsync(DateTime fromDate)
         {
-            _logger.LogInformation("No judiciary persons leaving: using stub");
+            _logger.LogInformationJudiciaryPeopleLeavingStub();
             return Task.CompletedTask;
         }
 

@@ -43,6 +43,10 @@ namespace SchedulerJobs.Services.UnitTests
             var userProfile = new UserProfile { UserRole = "Individual" };
             _userApiClient.Setup(x => x.GetUserByAdUserNameAsync(It.IsAny<string>())).ReturnsAsync(userProfile);
 
+            _logger.Setup(x => x.IsEnabled(LogLevel.Error)).Returns(true);
+            _logger.Setup(x => x.IsEnabled(LogLevel.Warning)).Returns(true);
+            _logger.Setup(x => x.IsEnabled(LogLevel.Information)).Returns(true);
+
             _anonymiseHearingsConferencesDataService = new AnonymiseHearingsConferencesDataService(_videoApiClient.Object,
                 _bookingApiClient.Object, _userApiClient.Object, _logger.Object);
         }
